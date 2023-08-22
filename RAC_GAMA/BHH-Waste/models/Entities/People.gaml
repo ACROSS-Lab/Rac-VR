@@ -38,10 +38,12 @@ species inhabitant {
 	float waste_for_a_day {
 		return solid_waste_day;
 	}
+	
+	//Propagate domestic waste in the canal and ground
 	action domestic_waste_production (float solid_waste_canal, float solid_waste_ground, float water_waste_canal, float water_waste_ground) {
 		if solid_waste_canal > 0 {
 				closest_canal.solid_waste_level <- closest_canal.solid_waste_level + solid_waste_canal;
-			}
+		}
 		if solid_waste_ground > 0 {
 			ask one_of(my_cells) {
 				solid_waste_level <- solid_waste_level + solid_waste_ground ;
@@ -55,13 +57,16 @@ species inhabitant {
 				water_waste_level <- water_waste_level + water_waste_ground ;
 			}
 		}
-		
 	}
+	
+	//Calculate values of domestic waste by inhabitants
 	list<float> typical_values_computation {
 		list<float> typical_values;
 	
+	// SOLID WASTE
 		float solid_waste_day_tmp <- waste_for_a_day();
 		
+		//Sensibilization effects
 		if (environmental_sensibility > 0) {
 			solid_waste_day_tmp <- solid_waste_day_tmp * ( 1 - world.sensibilisation_function(environmental_sensibility));
 		}
@@ -72,6 +77,8 @@ species inhabitant {
 			typical_values<< solid_waste_day_tmp - to_the_canal;
 		}
 		
+	// WATER WASTE
+		//Facility treatment effects
 		float rate_decrease_due_to_treatment <- 0.0;
 		if (my_village != nil and  my_village.treatment_facility_is_activated) {
 			rate_decrease_due_to_treatment <- treatment_facility_decrease[my_village.treatment_facility_year - 1];
