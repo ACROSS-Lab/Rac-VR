@@ -34,7 +34,7 @@ global {
 	string CHOOSE_WASTE_COLLECTION_FREQ <- "Choose a waste collection frenquency";
 	string PER_WEEK <- "per week";
 	string WISH_PAY_TREATMENT_FACILITY_MAINTENANCE <- "Do you wish to pay for the home treatment facility maintenance?";
-	string PAY_TRAETMENT_FACILITY_MAINTENANCE <- "Pay for treatment facility maintenance";
+	string PAY_TREATMENT_FACILITY_MAINTENANCE <- "Pay for treatment facility maintenance";
 	string TURN<- "turn"; 
 	string TURN_OF <- "Turn of";
 	string WASTE_MANAGEMENT_POLCITY <- "Waste management policy";
