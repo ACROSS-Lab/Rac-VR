@@ -31,7 +31,7 @@ grid cell height: 50 width: 50 {
 	 
 	aspect default {
 	 	if (display_total_waste) {
-			float pollution_level_display <- solid_waste_level + convertion_from_l_water_waste_to_kg_solid_waste / coeff_cell_pollution_display;
+			float pollution_level_display <- solid_waste_level +  water_waste_level * convertion_from_l_water_waste_to_kg_solid_waste / coeff_cell_pollution_display;
 			if pollution_level_display >= min_display_waste_value  {
 				draw shape color: blend(#red,#blue,pollution_level_display);
 			}
