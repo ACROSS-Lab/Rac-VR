@@ -74,13 +74,14 @@ global {
 	int base_budget_year_per_village <- 65; // total buget per year for a village (in token):
 	list<float> increase_urban_area_population_year_per_village <- [0.05,0.8,0.25,0.25] ; // increase of urban area per year per village (in terms of number of people)
 	
-	int compute_budget(int urban_pop, int agricultural_pop, float production_level, int day_ecolabel) {
+	int compute_budget(float production_level) {
+	//int compute_budget(int urban_pop, int agricultural_pop, float production_level, int day_ecolabel) {
 		//return  base_budget_year_per_village + round((urban_pop + agricultural_pop) / 30) ;
 		int v <-  base_budget_year_per_village + round((production_level)/46);
 		write sample(v);
 		int r <- v - (int(v/5) * 5);
 	 	if r = 0 {return v;}
-	 	if r > 5 -r {return (int(v/5) * 5);}
+	 	if r > 5 - r {return (int(v/5) * 5);}
 	 	else {return ((int(v/5) + 1) * 5);}
 	}
 	
@@ -145,9 +146,8 @@ global {
 	bool collect_only_urban_area <- true;
 	int token_increase_collection_frequency <- 40; //tokens/year - cost of "increasing the collection frequency"
 	float collection_team_collection_capacity_day <- 200.0; //quantity of solid waste remove during 1 day of work
-	
 	list<int> days_collects_default <- [2,5] ; //day of collects - 1 = monday, 7 = sunday
-	list<int> days_collects_increased <- [1, 3, 5,  7] ; //day of collects - 1 = monday, 7 = sunday
+	list<int> days_collects_increased <- [1, 3, 5, 7] ; //day of collects - 1 = monday, 7 = sunday
 	
 	int token_trimestrial_collective_action_strong <- 35; //per year
 	int token_trimestrial_collective_action_weak <- round(token_trimestrial_collective_action_strong / 1.75); //per year

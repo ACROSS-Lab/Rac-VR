@@ -153,6 +153,24 @@ global {
 			save "turn,player,budget,exra_turn,action" to: village_action_log_path format: text rewrite: true;
 		}
 	}
+	
+	
+	//ACTIONS
+	
+	action load_language {
+		matrix mat <- matrix(translation_game_csv_file);
+		int index_english <- max(1, (mat row_at 0) index_of ("English"));
+		int index_col <- max(1, (mat row_at 0) index_of (langage));
+		
+		loop i from: 1 to: mat.rows -1 {
+			string word_tlan <- mat[index_col,i];
+			string word_eng <- mat[index_english,i];
+			shape.attributes[mat[0,i]] <- mat[index_col,i];
+		//	to_english[word_tlan] <-word_eng; 
+		//	from_english[word_eng] <-word_tlan; 
+		}
+	}
+	
 	action generate_info_action {
 		actions_name <- [
 		"q"::ACT_DRAIN_DREDGE,
@@ -169,22 +187,6 @@ global {
 //	actions_name_short<- [A_DUMPHOLES::ACT_INSTALL_DUMPHOLES, A_PESTICIDES::ACT_PESTICIDE_REDUCTION, A_SENSIBILIZATION::ACT_SENSIBILIZATION, A_FILTERS::ACT_FACILITY_TREATMENT, A_COLLECTIVE_HIGH::ACTION_COLLECTIVE_ACTION, A_COLLECTIVE_LOW::ACTION_COLLECTIVE_ACTION, 
 // 		A_DRAIN_DREDGES_HIGH::ACT_DRAIN_DREDGE, A_DRAIN_DREDGES_LOW::ACT_DRAIN_DREDGE, A_FALLOW::ACT_IMPLEMENT_FALLOW, A_MATURES_HIGH::ACT_SUPPORT_MANURE, A_MATURES_LOW::ACT_SUPPORT_MANURE, A_FILTER_MAINTENANCE::ACT_FACILITY_TREATMENT_MAINTENANCE, A_COLLECTION_LOW::ACT_COLLECT, A_COLLECTION_HIGH::ACT_COLLECT, A_END_TURN::ACT_END_OF_TURN
 // 	];
-	}
-	
-	action before_start_turn{}
-	
-	action load_language {
-		matrix mat <- matrix(translation_game_csv_file);
-		int index_english <- max(1, (mat row_at 0) index_of ("English"));
-		int index_col <- max(1, (mat row_at 0) index_of (langage));
-		
-		loop i from: 1 to: mat.rows -1 {
-			string word_tlan <- mat[index_col,i];
-			string word_eng <- mat[index_english,i];
-			shape.attributes[mat[0,i]] <- mat[index_col,i];
-		//	to_english[word_tlan] <-word_eng; 
-		//	from_english[word_eng] <-word_tlan; 
-		}
 	}
 	
 	/*action load_actions_file {
@@ -242,18 +244,6 @@ global {
 		
 		
 	}*/
-	
-	action update_display {
-		if (stage = PLAYER_ACTION_TURN) {
-				ask experiment {
-				do update_outputs(true);
-				to_refresh <- true;
-			}
-		}
-	}
-	
-	action before_discussion_phase{} //Can be implemented in children
-		
 	
 	action create_canals {
 		create canal from: Hydrologie_shape_file with: (width:float(get("WIDTH")));	 
@@ -320,6 +310,7 @@ global {
 			}
 		}
 	}
+	
 	action create_landfill {
 		loop s over: Dumpyards_shape_file.contents {
 			string type <- s get ("TYPE");
@@ -396,7 +387,7 @@ global {
 			create collection_team with:(my_village:self) {
 				myself.collection_teams << self;
 			}
-			budget <- world.compute_budget(length(inhabitants), length(farmers), production_level, days_with_ecolabel);
+			budget <- world.compute_budget(production_level);
 			if without_player and not without_actions and players_actions_to_load = nil{
 				int id <- int(self);
 				player_actions <- list<map<string, map>>(players_actions = nil ? nil : players_actions[id]);
@@ -409,14 +400,13 @@ global {
 		village4_production <-  village[3].plots sum_of each.current_production ;	
 		total_production <- (village1_production + village2_production + village3_production + village4_production) ;	
 	
-	}
-
+	}	
 	
+	action before_discussion_phase{} //Can be implemented in children
 	
 	action action_executed(string action_name) {
 		// To be redefined for updates, etc. 
 	}
-	
 	
 	action execute_action(string action_name) {
 		if ((action_name in actions_name_short)){// and not(actions_name_short[action_name] in village[index_player].actions_done_this_year) and not(actions_name_short[action_name] in village[index_player].actions_done_total)) {
@@ -501,81 +491,16 @@ global {
 		
 	}
 	
-	// Old
-	action activate_act1 {
-		if stage = PLAYER_ACTION_TURN {
-			ask villages_order[index_player] {do drain_dredge;}
-			
-		}
-	}
-	// Old
-	action activate_act2 {
-		if stage = PLAYER_ACTION_TURN {
-			ask villages_order[index_player] {do install_facility_treatment_for_homes;}
-		}
-	}
-	// Old
-	action activate_act3 {
-		if stage = PLAYER_ACTION_TURN {
-			ask villages_order[index_player] {do sensibilization;}
-		}
-	}
-	// Old
-	action activate_act4 {
-		if stage = PLAYER_ACTION_TURN {
-			ask villages_order[index_player] {do trimestrial_collective_action;}
-		}
-	}
-	// Old
-	action activate_act5 {
-		if stage = PLAYER_ACTION_TURN {
-			ask villages_order[index_player] {do pesticide_reducing;}
-		} 
-	}
-	// Old
-	action activate_act6 {
-		if stage = PLAYER_ACTION_TURN {
-			ask villages_order[index_player] {do support_manure_buying;}
-		}
-			
-	}
-	// Old
-	action activate_act7 {
-		if stage = PLAYER_ACTION_TURN {
-			ask villages_order[index_player] {do implement_fallow;}
-		}
-	}
-	// Old
-	action activate_act8 {
-		if stage = PLAYER_ACTION_TURN {
-			ask villages_order[index_player] {do install_dumpholes;}
-		}
-	}
-	// Old
-	action activate_act9 {
-		if stage = PLAYER_ACTION_TURN {
-			ask villages_order[index_player] {do end_of_turn;}
-		}if stage = PLAYER_DISCUSSION_TURN {
-			stage <- PLAYER_ACTION_TURN;
-		 	ask villages_order[0] {do start_turn;}
-		}
-	}
-	
-	// Old
-	action act_management {
-		switch action_type {
-			match 2 {ask villages_order[index_player] {do end_of_turn;}}
-		}
-	}
-	
 	action manage_flow_canal {
 		ask canal parallel: parallel_computation{
 			do init_flow;
 		}
 		ask canal parallel: parallel_computation{
+
 			do flow;
 		}
 		ask canal parallel: parallel_computation{
+
 			do update_waste;
 		}	
 	}
@@ -584,6 +509,7 @@ global {
 		ask village parallel: parallel_computation{
 			list<float> typical_values_inhabitants <- first(inhabitants).typical_values_computation();
 			list<float> typical_values_farmers <- first(farmers).typical_values_computation();
+			
 			float s_to_c <- typical_values_inhabitants[0];
 			float s_to_g <- typical_values_inhabitants[1];
 			float w_to_c <- typical_values_inhabitants[2];
@@ -591,11 +517,11 @@ global {
 			ask inhabitants{
 				do domestic_waste_production(s_to_c,s_to_g,w_to_c,w_to_g);
 			}
+			
 			s_to_c <- typical_values_farmers[0];
 			s_to_g <- typical_values_farmers[1];
 			w_to_c <- typical_values_farmers[2];
 			w_to_g <- typical_values_farmers[3];
-			
 			ask farmers{
 				do domestic_waste_production(s_to_c,s_to_g,w_to_c,w_to_g);
 			}
@@ -806,6 +732,7 @@ global {
 	 		days_with_ecolabel_year[length(days_with_ecolabel_year) - 1] <- days_with_ecolabel_year[length(days_with_ecolabel_year) - 1]  + 1;
 	 	}
 	}
+	
 	action add_data {
 		int time_s <- turn * 365 + current_day;
 		time_step << time_s;
@@ -830,22 +757,6 @@ global {
 	 	
 	 }
 	
-	
-	
-	reflex indicators_computation when: stage = COMPUTE_INDICATORS {
-		do compute_indicators;
-		if (current_day mod data_frequency) = 0 {
-			do add_data;
-		}
-		do manage_individual_pollution;
-		do manage_flow_canal;
-		do manage_pollution_decrease;
-		do manage_landfill;
-		do manage_daily_indicator;
-		do manage_end_of_indicator_computation;
-		current_day <- current_day + 1;
-	}
-	
 	action choose_village_for_pool {
 			commune_money <- 0;
 			ask village {
@@ -859,10 +770,32 @@ global {
 			ask village[index] {
 				budget <- commune_money;
 			}
-
-			do before_start_turn();
 			commune_money <- 0;
 			to_refresh <- true;
+	}
+	
+	action update_display {
+		if (stage = PLAYER_ACTION_TURN) {
+				ask experiment {
+				do update_outputs(true);
+				to_refresh <- true;
+			}
+		}
+	}
+	
+	//REFLEXES
+	reflex indicators_computation when: stage = COMPUTE_INDICATORS {
+		do compute_indicators;
+		if (current_day mod data_frequency) = 0 {
+			do add_data;
+		}
+		do manage_individual_pollution;
+		do manage_flow_canal;
+		do manage_pollution_decrease;
+		do manage_landfill;
+		do manage_daily_indicator;
+		do manage_end_of_indicator_computation;
+		current_day <- current_day + 1;
 	}
 	
 	reflex playerturn when: stage = PLAYER_ACTION_TURN{
@@ -897,7 +830,7 @@ global {
 			
 		}
 	}
-	
+
 	reflex end_of_discussion_turn when: use_timer_for_discussion and stage = PLAYER_DISCUSSION_TURN {
 		remaining_time <- int(time_for_discussion - machine_time/1000.0  +start_discussion_turn_time/1000.0); 
 		if remaining_time <= 0 {
@@ -905,6 +838,7 @@ global {
 			do pause;
 		}
 	}
+	
 	reflex end_of_player_turn when: not without_player and  use_timer_player_turn and stage = PLAYER_ACTION_TURN {
 		remaining_time <- int(time_for_player_turn - machine_time/1000.0  + villages_order[index_player].start_turn_time/1000.0);
  
