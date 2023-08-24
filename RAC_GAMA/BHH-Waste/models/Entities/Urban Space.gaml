@@ -11,7 +11,6 @@ model UrbanSpace
 import "../Global.gaml"
 
 
-
 species urban_area { 
 	int population;  
 	list<geometry> geometry_history;
@@ -27,8 +26,10 @@ species urban_area {
 //			geometry g2 <- g - 20;
 			draw g  color: rgb(val,val,val) at: g.location + {0,0,i*0.1};
 //			draw (g - g2) color: #black;
+		}	
 	}
-}}
+}
+
 species house {
 	bool inhabitant_to_create <- false;
 	int create_inhabitant_day <- -1;
@@ -42,6 +43,7 @@ species house {
 		}
 		
 	}
+	
 	action create_inhabitants {
 		create inhabitant {
 			location <- myself.location;
@@ -57,6 +59,7 @@ species house {
 			my_village.diff_urban_inhabitants <- my_village.diff_urban_inhabitants + 1;
 		}
 	}
+	
 	aspect default {
 		draw shape color: color border: #black;
 	}

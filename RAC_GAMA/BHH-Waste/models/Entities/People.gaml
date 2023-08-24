@@ -23,9 +23,9 @@ species inhabitant {
 	rgb color <- #midnightblue;
 	cell my_house;
 	canal closest_canal;
-	float water_filtering <-water_waste_filtering_inhabitants;
-	float solid_waste_day <-  solid_waste_year_inhabitants / 365;
-	float water_waste_day <-  water_waste_year_inhabitants / 365;
+	float water_filtering <- water_waste_filtering_inhabitants;
+	float solid_waste_day <- solid_waste_year_inhabitants / 365;
+	float water_waste_day <- water_waste_year_inhabitants / 365;
 	float part_solid_waste_canal <- part_solid_waste_canal_inhabitants;
 	float part_water_waste_canal <- part_water_waste_canal_inhabitants;
 	list<cell> my_cells;

@@ -228,92 +228,88 @@ species village {
 		if (ACT_FACILITY_TREATMENT in actions_done_total) {
 			if not without_player {do tell_not_twice(ACT_FACILITY_TREATMENT);}
 		} else {
-
-				int max_budget_p1 <- village[0].budget ;
-				int max_budget_p2 <- village[1].budget;
-				int max_budget_p3 <- village[2].budget ;
-				int max_budget_p4 <- village[3].budget ;
-				int p1; int p2; int p3; int p4;
-				if without_player {
-					p1 <- min(max_budget_p1,int(money_paid["P1"]));
-					p2 <- min(max_budget_p2,int(money_paid["P2"]));
-					p3 <- min(max_budget_p3,int(money_paid["P3"]));
-					p4 <- min(max_budget_p4,int(money_paid["P4"]));
-				} else {
-
-					string p1_str <- PLAYER + " 1 (" + MAX_BUDGET + ": " + max_budget_p1 + ")";
-					string p2_str <- PLAYER + " 2 (" + MAX_BUDGET + ": " + max_budget_p2 + ")";
-					string p3_str <- PLAYER + " 3 (" + MAX_BUDGET + ": " + max_budget_p3 + ")";
-					string p4_str <- PLAYER + " 4 (" + MAX_BUDGET + ": " + max_budget_p4 + ")";
-					
-					map results <- user_input_dialog(ACT_FACILITY_TREATMENT + ". " + COST + ": " +token_install_filter_for_homes_construction +" " + TOKENS + ". " + NUMBER_TOKENS_PLAYER,[enter(p1_str,int,0),enter(p2_str,int,0),enter(p3_str,int,0),enter(p4_str,int,0)]);
-					p1 <- min(int(results[p1_str]), max_budget_p1);
-					p2 <- min(int(results[p2_str]), max_budget_p2);
-					p3 <- min(int(results[p3_str]), max_budget_p3);
-					p4 <- min(int(results[p4_str]), max_budget_p4);
-				
-				}
-				if p1 + p2 + p3 + p4 >= token_install_filter_for_homes_construction {
-					string cost_str <- "(" + COST + ": "; 
-					bool add_ok <- false;
-					if p1 > 0 {
-						cost_str <- cost_str + PLAYER + " 1:" + p1 + " " + TOKENS;
-						add_ok <- true;
-					}
-					if p2 > 0 {
-						cost_str <- cost_str + (add_ok ? ", " : "")+  PLAYER + "  2:" + p2 +  " " + TOKENS;
-						add_ok <- true;
-					}
-					if p3 > 0 {
-						cost_str <- cost_str  + (add_ok ? ", " : "")+ PLAYER + " 3:" + p3 +  " " + TOKENS;
-						add_ok <- true;
-					}
-					if p4 > 0 {
-						cost_str <- cost_str  + (add_ok ? ", " : "")+ PLAYER + " 4:" + p4 +  " " + TOKENS;
-					}
-					bool  is_ok <- (not confirmation_popup) or without_player or user_confirm(ACTION +" " + ACT_FACILITY_TREATMENT, PLAYER +" " + (int(self) + 1) +",  " + CONFIRM_ACTION + " " + ACT_FACILITY_TREATMENT + " " + cost_str +"?");
-					if is_ok {
-
-						if not without_player {
-							if (empty(player_actions)) {
-								player_actions << [];
-							}
-							player_actions[turn -1][ACT_FACILITY_TREATMENT] <- map(["P1"::p1, "P2"::p2, "P3"::p3, "P4"::p4]);
-							do save_actions_done("2a",["P1"::p1, "P2"::p2, "P3"::p3, "P4"::p4]);
-					
-							
-							if display_info_action_console{write "ACTION : " +ACT_FACILITY_TREATMENT ;}
-						}
-						create_facility_treatment <- true;
-						ask village {
-							actions_done_total << ACT_FACILITY_TREATMENT;
-							actions_done_this_year << ACT_FACILITY_TREATMENT;
-							treatment_facility_is_activated <- true;
-							treatment_facility_year <- 0;
-						
-						}
-						
-						list<int> ps <- [p1,p2,p3,p4];	
-						if (p1 + p2 + p3 + p4) > token_install_filter_for_homes_construction {
-							int to_remove <- token_install_filter_for_homes_construction - (p1 + p2 + p3 + p4) ;
-							loop while: to_remove > 0 and (p1 + p2 + p3 + p4) > 0{
-								int i <- rnd(3);
-								int c <- min(1, to_remove, ps[i] );
-								to_remove <- to_remove - c;
-								ps[i] <- ps[i] - c;
-							}
-						}
-						loop i from: 0 to: 3 {
-							village[i].budget <- village[i].budget - ps[i];
-						}
-						return true;
-					}
-				} else {
-
-					if not without_player {do tell(NOT_ENOUGH_BUDGET + " " +ACT_FACILITY_TREATMENT );}
+			int max_budget_p1 <- village[0].budget ;
+			int max_budget_p2 <- village[1].budget;
+			int max_budget_p3 <- village[2].budget ;
+			int max_budget_p4 <- village[3].budget ;
+			int p1; int p2; int p3; int p4;
 			
+			if without_player {
+				p1 <- min(max_budget_p1,int(money_paid["P1"]));
+				p2 <- min(max_budget_p2,int(money_paid["P2"]));
+				p3 <- min(max_budget_p3,int(money_paid["P3"]));
+				p4 <- min(max_budget_p4,int(money_paid["P4"]));
+			} else {
+				string p1_str <- PLAYER + " 1 (" + MAX_BUDGET + ": " + max_budget_p1 + ")";
+				string p2_str <- PLAYER + " 2 (" + MAX_BUDGET + ": " + max_budget_p2 + ")";
+				string p3_str <- PLAYER + " 3 (" + MAX_BUDGET + ": " + max_budget_p3 + ")";
+				string p4_str <- PLAYER + " 4 (" + MAX_BUDGET + ": " + max_budget_p4 + ")";
+				
+				map results <- user_input_dialog(ACT_FACILITY_TREATMENT + ". " + COST + ": " +token_install_filter_for_homes_construction +" " + TOKENS + ". " + NUMBER_TOKENS_PLAYER,[enter(p1_str,int,0),enter(p2_str,int,0),enter(p3_str,int,0),enter(p4_str,int,0)]);
+				p1 <- min(int(results[p1_str]), max_budget_p1);
+				p2 <- min(int(results[p2_str]), max_budget_p2);
+				p3 <- min(int(results[p3_str]), max_budget_p3);
+				p4 <- min(int(results[p4_str]), max_budget_p4);
+			}
+			
+			if p1 + p2 + p3 + p4 >= token_install_filter_for_homes_construction {
+				string cost_str <- "(" + COST + ": "; 
+				bool add_ok <- false;
+				if p1 > 0 {
+					cost_str <- cost_str + PLAYER + " 1:" + p1 + " " + TOKENS;
+					add_ok <- true;
 				}
-				return false;
+				if p2 > 0 {
+					cost_str <- cost_str + (add_ok ? ", " : "")+  PLAYER + "  2:" + p2 +  " " + TOKENS;
+					add_ok <- true;
+				}
+				if p3 > 0 {
+					cost_str <- cost_str  + (add_ok ? ", " : "")+ PLAYER + " 3:" + p3 +  " " + TOKENS;
+					add_ok <- true;
+				}
+				if p4 > 0 {
+					cost_str <- cost_str  + (add_ok ? ", " : "")+ PLAYER + " 4:" + p4 +  " " + TOKENS;
+				}
+				
+				bool  is_ok <- (not confirmation_popup) or without_player or user_confirm(ACTION +" " + ACT_FACILITY_TREATMENT, PLAYER +" " + (int(self) + 1) +",  " + CONFIRM_ACTION + " " + ACT_FACILITY_TREATMENT + " " + cost_str +"?");
+				if is_ok {
+					if not without_player {
+						if (empty(player_actions)) {
+							player_actions << [];
+						}
+						player_actions[turn -1][ACT_FACILITY_TREATMENT] <- map(["P1"::p1, "P2"::p2, "P3"::p3, "P4"::p4]);
+						do save_actions_done("2a",["P1"::p1, "P2"::p2, "P3"::p3, "P4"::p4]);
+				
+						if display_info_action_console{write "ACTION : " +ACT_FACILITY_TREATMENT ;}
+					}
+					
+					create_facility_treatment <- true;
+					ask village {
+						actions_done_total << ACT_FACILITY_TREATMENT;
+						actions_done_this_year << ACT_FACILITY_TREATMENT;
+						treatment_facility_is_activated <- true;
+						treatment_facility_year <- 0;
+					}
+					
+					list<int> ps <- [p1,p2,p3,p4];	
+					if (p1 + p2 + p3 + p4) > token_install_filter_for_homes_construction {
+						int to_remove <- token_install_filter_for_homes_construction - (p1 + p2 + p3 + p4) ;
+						loop while: to_remove > 0 and (p1 + p2 + p3 + p4) > 0{
+							int i <- rnd(3);
+							int c <- min(1, to_remove, ps[i] );
+							to_remove <- to_remove - c;
+							ps[i] <- ps[i] - c;
+						}
+					}
+					loop i from: 0 to: 3 {
+						village[i].budget <- village[i].budget - ps[i];
+					}
+					return true;
+				}
+			} else {
+				if not without_player {do tell(NOT_ENOUGH_BUDGET + " " +ACT_FACILITY_TREATMENT );}
+			}
+			return false;
 			
 		}
 	}
@@ -385,8 +381,7 @@ species village {
 			if not without_player {do tell_not_twice(ACT_PESTICIDE_REDUCTION);}
 		} else {
 			if budget >= token_pesticide_reducing {
-				bool  is_ok <-without_player or confirm_action(ACT_PESTICIDE_REDUCTION, token_pesticide_reducing);
-			
+				bool  is_ok <- without_player or confirm_action(ACT_PESTICIDE_REDUCTION, token_pesticide_reducing);
 				if is_ok {
 					if not without_player {
 						player_actions[turn -1][ACT_PESTICIDE_REDUCTION] <- nil;
@@ -419,6 +414,7 @@ species village {
 			if (budget >= token_trimestrial_collective_action_strong) {
 				possibilities << strong_str;
 			} 
+			
 			bool strong <- is_strong;
 			if selection_possible and not without_player {
 				map result <- user_input_dialog(PLAYER +" " + (int(self) + 1)+" - " + ACT_COLLECTIVE_ACTION  ,[choose(LEVEL,string,weak_str, possibilities)]);
@@ -444,6 +440,7 @@ species village {
 					if not strong {
 						impact_trimestrial_collective_action <- impact_trimestrial_collective_action_weak;
 					} 
+					
 					ask canals {
 						solid_waste_level <- solid_waste_level * (1 - impact_trimestrial_collective_action);
 					}
@@ -454,8 +451,7 @@ species village {
 				if not without_player {do tell(NOT_ENOUGH_BUDGET + " " +ACT_COLLECTIVE_ACTION );}
 			}
 		}
-		return false;
-		
+		return false;		
 	}
 	
 	//6:ACT_SENSIBILIZATION
@@ -523,6 +519,7 @@ species village {
 					is_drained_strong <- strong;
 					is_drained_weak <- not strong;
 					float impact_drain_dredge_waste <- strong ? impact_drain_dredge_waste_strong : impact_drain_dredge_waste_weak;
+					
 					ask canals {
 						//solid_waste_level <- solid_waste_level * (1 - impact_drain_dredge_waste);
 						water_waste_level <- water_waste_level * (1 - impact_drain_dredge_waste);
@@ -543,7 +540,6 @@ species village {
 		if (ACT_SUPPORT_MANURE in actions_done_this_year) {
 			if not without_player {do tell_not_twice(ACT_SUPPORT_MANURE);}
 		} else {
-			
 			string weak_str <- LOW_FOR + " " + token_support_manure_buying_weak + " " + TOKENS;
 			string strong_str <- HIGH_FOR + " " + token_support_manure_buying_strong + " " + TOKENS;
 			list<string> possibilities <- [weak_str];
@@ -564,15 +560,16 @@ species village {
 					if not without_player {
 						player_actions[turn -1][ACT_SUPPORT_MANURE] <- map([LEVEL::(strong ? "high":"low")]);
 						if display_info_action_console{write "ACTION : " +ACT_SUPPORT_MANURE + " " + (strong ? "high":"low");}
-				
 					}
 					//actions_done_total << ACT_SUPPORT_MANURE;
 					actions_done_this_year << ACT_SUPPORT_MANURE;
 					budget <- budget - token_support_manure_buying;
+					
 					ask plots {
 						use_more_manure_strong <- strong;
 						use_more_manure_weak <- not strong;
 					}
+					
 					return true;
 				}
 			}else {
@@ -588,50 +585,54 @@ species village {
 			if not without_player {do tell_not_twice(ACT_IMPLEMENT_FALLOW);}
 		} else {
 			if budget >= token_implement_fallow {
-			bool  is_ok <-without_player or confirm_action(ACT_IMPLEMENT_FALLOW, token_implement_fallow);
-			if is_ok {
-				if not without_player {
-					player_actions[turn -1][ACT_IMPLEMENT_FALLOW] <- nil;
-					if display_info_action_console{write "ACTION : " +ACT_IMPLEMENT_FALLOW;}
+				bool  is_ok <-without_player or confirm_action(ACT_IMPLEMENT_FALLOW, token_implement_fallow);
+				if is_ok {
+					if not without_player {
+						player_actions[turn -1][ACT_IMPLEMENT_FALLOW] <- nil;
+						if display_info_action_console{write "ACTION : " +ACT_IMPLEMENT_FALLOW;}
+						
+						do save_actions_done("9");
+					}
 					
-					do save_actions_done("9");
-				
-				}
-				
-				
-				budget <- budget - token_implement_fallow;
-				list<plot> plot_s <- plots sort_by (-1 * each.water_waste_pollution);
-				float area_t <- (plot_s sum_of each.shape.area) * part_of_plots_in_fallow;
-				/*float pp <- 0.0;
-				loop p over: plot_s {
-					loop ppp over: p.my_cells {
-						pp <- pp + ppp.water_waste_level;
+					budget <- budget - token_implement_fallow;
+					list<plot> plot_s <- plots sort_by (-1 * each.water_waste_pollution);
+					float area_t <- (plot_s sum_of each.shape.area) * part_of_plots_in_fallow;
+					
+					/*float pp <- 0.0;
+					loop p over: plot_s {
+						loop ppp over: p.my_cells {
+							pp <- pp + ppp.water_waste_level;
+						}
 					}
-				}
-				write "pollution avant: " + pp;*/
-				loop p over: plot_s {
-					ask p.my_cells {
-						water_waste_level <- 0.0;
+					write "pollution avant: " + pp;*/
+					
+					loop p over: plot_s {
+						ask p.my_cells {
+							water_waste_level <- 0.0;
+						}
+						p.does_implement_fallow <- true;
+						
+						area_t <- area_t - p.shape.area;
+						if area_t < 0 {
+							break;
+						}
 					}
-					p.does_implement_fallow <- true;
-					area_t <- area_t - p.shape.area;
-					if area_t < 0 {
-						break;
+					
+					/* pp <- 0.0;
+					loop p over: plot_s {
+						loop ppp over: p.my_cells {
+							pp <- pp + ppp.water_waste_level;
+						}
 					}
+					write "pollution apres: " + pp;*/
+					
+					//actions_done_total << ACT_IMPLEMENT_FALLOW;
+					actions_done_this_year << ACT_IMPLEMENT_FALLOW;
+					
+					return true;
 				}
-				/* pp <- 0.0;
-				loop p over: plot_s {
-					loop ppp over: p.my_cells {
-						pp <- pp + ppp.water_waste_level;
-					}
-				}
-				write "pollution apres: " + pp;*/
-				//actions_done_total << ACT_IMPLEMENT_FALLOW;
-				actions_done_this_year << ACT_IMPLEMENT_FALLOW;
 				
-				return true;
-				}
-			}else {
+			} else {
 				if not without_player {do tell(NOT_ENOUGH_BUDGET + " " +ACT_IMPLEMENT_FALLOW );}
 			}
 		}

@@ -147,7 +147,7 @@ global {
 				ask village[chosen_village] {
 					budget <- commune_money;
 				}
-				do before_start_turn();
+				//do before_start_turn();
 			} else {
 				commune_budget_dispatch <- true;
 			}
@@ -716,13 +716,16 @@ experiment Open {
 					do execute_action(A_9);
 				}
 			}
-
-			event "0" {
+			
+			/**
+			 event "0" {
 				ask simulation { 
 					do before_start_turn;
 				}
 			}
+			 */
 			
+	
 			event #mouse_exit {
 				next_selected <- false;
 				play_pause_selected <- false;				
