@@ -46,7 +46,7 @@ global {
 	
 	bool create_facility_treatment <- false;
 	
-	bool display_productivity_waste <- false parameter:"Display field productivity" category: "Display" ;
+	bool display_productivity <- false parameter:"Display field productivity" category: "Display" ;
 	
 	bool display_solid_waste <- false parameter:"Display solid waste" category: "Display" ;
 	bool display_water_waste <- false parameter:"Display water waste" category: "Display" ;
@@ -142,7 +142,7 @@ global {
 		do create_plots;
 		do init_villages;	
 		
-		do create_landfill;
+		//do create_landfill;
 		do add_data;
 		loop k over: actions_name.keys {
 			text_action <- text_action + k +":" + actions_name[k] + "\n"; 
@@ -659,7 +659,7 @@ global {
 			if collect_only_urban_area {
 				cells_to_clean <- remove_duplicates(urban_areas accumulate each.my_cells);  
 			} else {
-				cells_to_clean <-  cells;
+				cells_to_clean <- cells;
 			}
 			cells_to_clean <-  cells where (each.solid_waste_level > 0);
 			ask collection_teams {
@@ -792,7 +792,7 @@ global {
 		do manage_individual_pollution;
 		do manage_flow_canal;
 		do manage_pollution_decrease;
-		do manage_landfill;
+		//do manage_landfill;
 		do manage_daily_indicator;
 		do manage_end_of_indicator_computation;
 		current_day <- current_day + 1;
