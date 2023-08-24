@@ -152,7 +152,7 @@ global {
 				ask village[chosen_village] {
 					budget <- commune_money;
 				}
-				do before_start_turn();
+				//do before_start_turn();
 			} else {
 				commune_budget_dispatch <- true;
 			}
@@ -704,12 +704,6 @@ experiment Open {
 					do execute_action(A_9);
 				}
 			}
-
-			event "0" {
-				ask simulation { 
-					do before_start_turn;
-				}
-			}
 			
 			event #mouse_exit {
 				next_selected <- false;
@@ -834,10 +828,15 @@ experiment Open {
 				/*****/				
 				y <- y + y_gap;
 				x <- x_init;
+				
+				/** Legend landfill
 				draw garbage_icon at: {x*w_width,y*w_height} size:  icon_size;
 				x <- x + 2 * x_gap;
 				draw square(x_gap*w_width) color: landfill_color at: {x* w_width,y*w_height};
 				x <- x + 2 * x_gap;
+				 */
+				
+				//Legend Urban areas
 				draw city_icon at: {x*w_width,y*w_height} size:  icon_size;
 				x <- x + 2*x_gap;
 				draw square(x_gap*w_width) color: city_color at: {x* w_width,y*w_height};
