@@ -29,6 +29,7 @@ global {
 	rgb selected_color <- rgb(255,255,255);
 	rgb unselected_color <-rgb(200,200,200,0.7);
 	list<rgb> village_color <- [rgb(207, 41, 74), rgb(255, 201, 0), rgb(49, 69, 143), rgb(62, 184, 99)]; // color for the 4 villages
+	rgb color_col <- #pink;
 	rgb map_background <- dark_theme ? #black: #white;
 	rgb timer_background <- dark_theme ? rgb(60,60,60): rgb(200,200,200);
 	rgb legend_background <- dark_theme ? #black: #white; //rgb(60,60,60);
@@ -143,7 +144,6 @@ global {
 		}
 	}	
 	
-	
 	reflex end_of_choosing_village when: CHOOSING_VILLAGE_FOR_POOL {
 		remaining_time_for_choosing_village <- int(time_for_choosing_village - machine_time/1000.0  +start_choosing_village_time/1000.0); 
 		if remaining_time_for_choosing_village <= 0 or chosen_village > -1 or PASS_CHOOSING_VILLAGE{
@@ -184,18 +184,6 @@ global {
 		return smileys[0];
 	}
 	
-	int production_class_current(plot p) {
-		float w <- p.current_productivity; 
-		switch(w) {
-			match_between [0, 0.000079] {return 0;}
-			match_between [0.00008, 0.000012] {return 1;}
-			match_between [0.00013, 0.00019] {return 2;}
-			match_between [0.0002, 0.00029] {return 3;}
-			default {return 4;}	
-		}
-	}
-
-	
 	image_file water_pollution_smiley(float w) {
 		switch(w) {
 			match_between [0, 4999] {return smileys[0];}
@@ -215,7 +203,7 @@ global {
 		}
 		return smileys[0];
 	}
-	
+
 	image_file production_class (village v) {
 		float w <- village_production[int(v)];
 		if (int(v) = 0) {
@@ -238,6 +226,17 @@ global {
 		
 	}
 	
+		
+	int production_class_current(plot p) {
+		float w <- p.current_productivity; 
+		switch(w) {
+			match_between [0, 0.000079] {return 0;}
+			match_between [0.00008, 0.000012] {return 1;}
+			match_between [0.00013, 0.00019] {return 2;}
+			match_between [0.0002, 0.00029] {return 3;}
+			default {return 4;}	
+		}
+	}
 	
 	int water_pollution_class_current(canal p) {
 		float w <- p.pollution_density; 
@@ -263,14 +262,12 @@ global {
 		}
 
 	} 
-		
-	
+			
 	action tell (string msg, bool add_name <- false) {
 		 if (confirmation_popup) {
 		 	invoke tell(msg, add_name);
 		 }
 	}
-	
 	
 	action pause {
 		about_to_pause <- true;
@@ -297,9 +294,12 @@ global {
 		 	inf_or_sup <- ["Total"::true,"Water"::true, "Soil"::true, "Production"::false];
 		 	draw_smiley <- ["Total"::true,"Water"::false, "Soil"::false, "Production"::true];
 			
-			loop i from: 0 to: 3 {
+			/**
+			 loop i from: 0 to: 3 {
 				do add_element(village_color[i]);
-			}
+			 }
+			 */
+			
 		}
 		global_chart <- stacked_chart[0];
 
@@ -308,10 +308,16 @@ global {
 	reflex update_charts when: stage = COMPUTE_INDICATORS{
 		village_actions <- nil;
 		ask global_chart {
-			loop i from: 0 to: 3 {
-				do
-				update_all(village_color[i], ["Total"::(village_water_pollution[i] + village_solid_pollution[i]) / max_pollution_ecolabel, "Water"::village_water_pollution[i] / max_pollution_ecolabel, "Soil"::village_solid_pollution[i] / max_pollution_ecolabel, "Production"::village_production[i] / min_production_ecolabel]);
-			}
+			//loop i from: 0 to: 3 {
+				//do
+				//update_all(village_color[i], ["Total"::(village_water_pollution[i] + village_solid_pollution[i]) / max_pollution_ecolabel, "Water"::village_water_pollution[i] / max_pollution_ecolabel, "Soil"::village_solid_pollution[i] / max_pollution_ecolabel, "Production"::village_production[i] / min_production_ecolabel]);
+				//update_all(["Total"::(village_water_pollution[i] + village_solid_pollution[i]) / max_pollution_ecolabel, "Water"::village_water_pollution[i] / max_pollution_ecolabel, "Soil"::village_solid_pollution[i] / max_pollution_ecolabel, "Production"::village_production[i] / min_production_ecolabel]);
+			//}
+			float total_value <- (village_water_pollution sum_of(each) + village_solid_pollution sum_of(each)) / max_pollution_ecolabel;
+			float water_value <- village_water_pollution sum_of(each)/ max_pollution_ecolabel;
+			float soil_value <- village_solid_pollution sum_of(each) / max_pollution_ecolabel;
+			float production_value <- village_production sum_of(each) / min_production_ecolabel;
+			do update_all(["Total"::total_value, "Water"::water_value, "Soil"::soil_value, "Production"::production_value]);
 		}
 		// TODO remove this at some point ! 
 		time_for_discussion <- initial_time_for_discussion;
@@ -327,7 +333,6 @@ global {
 
 	}
 
-	
 	reflex add_waste when: display_water_flow and every(25 #cycle){
 		if canal_network_ = nil {
 			canal_network_ <- directed(as_edge_graph(canal));
@@ -889,17 +894,28 @@ experiment Open {
 				float smiley_size <- 2*size/3;
 				float x <- shape.centroid.x - spacing;
 				float y <- shape.centroid.y - spacing;
+				
+				/**
+				//Solid waste indication
 				draw soil_icon at: {x, y} size: size;
 				draw world.soil_pollution_class(self) at: {x - smiley_horizontal_spacing , y + smiley_vertical_spacing, 0.01} size: smiley_size;
+				
 				x <- x + 2*spacing;
+				
+				//Water waste indication
 				draw water_icon at: {x,  y} size: size;
 				draw world.water_pollution_class(self) at: {x + smiley_horizontal_spacing , y + smiley_vertical_spacing, 0.01} size: smiley_size;
+				
 				y <- y + 2*spacing;
-				draw tokens_icon at: {x,  y} size: size;
-				draw ""+budget at: {x, y + spacing} color: #white depth: 5 font: ui_font anchor: #bottom_center;
 				x <- x - 2*spacing;
+				
+				//Productivity indication
 				draw plant_icon at: {x, y} size: size;
 				draw world.production_class(self) at: {x - smiley_horizontal_spacing , y + smiley_vertical_spacing, 0.01} size: smiley_size;
+				*/
+				
+				draw tokens_icon at: {x,  y} size: size;
+				draw ""+budget at: {x, y + spacing} color: #white depth: 5 font: ui_font anchor: #center;
 			}
 			
 			event #mouse_down {
@@ -966,10 +982,10 @@ experiment Open {
 }
 
 
-
 species stacked_chart {
 	point location <- {w_width/2 ,w_height/2};
-	map<string, map<rgb,float>> data <- [];
+	//map<string, map<rgb,float>> data <- [];
+	map<string, float> data <- [];
 	map<string, image_file> icons <- [];
 	map<string, bool> inf_or_sup ;
 	map<string, bool> draw_smiley;
@@ -985,17 +1001,27 @@ species stacked_chart {
 		}
 	} 
 	
+	/**
 	action add_element(rgb element) {
 		loop c over: data.keys {
 			data[c][element] <- 0.0;
 		}
  	}
- 	
+	 */
+	
+ 	/**
  	action update_all(rgb element, map<string, float> values) {
  		loop col over: data.keys {
  			data[col][element] <- values[col];
  		}
  	}
+ 	*/
+ 	
+ 	action update_all(map<string, float> values) {
+ 		loop col over: data.keys {
+ 			data[col] <- values[col];
+ 		}
+ 	}	
  	
  	aspect horizontal {
  		float my_width <- chart_width;
@@ -1007,17 +1033,20 @@ species stacked_chart {
  		draw rectangle(2.5*original_col_width, chart_height/2) at: {location.x-original_col_width*1.5, location.y +chart_height/4} border: dark_theme ? #white : #black wireframe: true;
  		draw rectangle(2.5*original_col_width, chart_height/2) at: {location.x-original_col_width*1.5, location.y-chart_height/4} border: dark_theme ? #white : #black wireframe: true;
  		float current_x <- 0.0;
+ 		
  		loop col over: data.keys {
  			float current_y <-chart_height/6;
 
  			float total <- 0.0;
+ 			
  			if (!draw_smiley[col] and !gap_added) {
  				gap_added <- true;
  				col_width<-original_col_width/3;
  				current_x <- current_x + col_width;
  			}
-
- 			loop c over: data[col].keys {
+			
+			/**
+			loop c over: data[col].keys {
  				float v <- data[col][c];
  				total <- total+v;
  				float col_height <- (v * chart_height)/max_value;
@@ -1025,6 +1054,15 @@ species stacked_chart {
  				draw rectangle(col_width,col_height) wireframe: true border: dark_theme ? #black : #black width: 2 at: {current_x,my_height  + current_y -  col_height/2};
  				current_y <- current_y - col_height;
  			}
+			*/
+
+			float v <- data[col];
+			total <- total+v;
+			float col_height <- (v * chart_height)/max_value;
+			draw rectangle(col_width,col_height) color: color_col at: {current_x,my_height  + current_y - col_height/2};
+			draw rectangle(col_width,col_height) wireframe: true border: dark_theme ? #black : #black width: 2 at: {current_x,my_height  + current_y -  col_height/2};
+			current_y <- current_y - col_height;
+ 			
  			if (icons[col] != nil) {
  				draw icons[col] at: {current_x, gap_added ? my_height  + current_y - original_col_width/4 :( location.y - chart_height/2)} size: {original_col_width/(gap_added? 4:2), original_col_width/(gap_added? 4:2)};
  				if draw_smiley[col] {
