@@ -92,7 +92,7 @@ global {
 	bool show_chart_selected;
 	bool show_waterflow_selected;
 	bool show_geography <- true;
-	bool show_chart <- false;
+	bool show_chart <- true;
 	bool show_player_numbers <- true;
 	bool play_pause_selected <- false;
 	bool next_selected <- false;
@@ -638,6 +638,7 @@ experiment Open {
 				draw simulation.paused or about_to_pause ? play_icon : pause_icon at: pause_location color: play_pause_selected ? selected_color:unselected_color size: shape.width / 4;
 			}
 			
+			/** Button chart (WASTE_POLLUTION / PRODUCTION & stacked charts)
 			graphics "Button chart" {
 				float x <- 2.0;
 				float y <- 0.5;
@@ -656,6 +657,7 @@ experiment Open {
 				if (show_chart_selected) {
 					show_chart <- !show_chart;}
 			}
+			*/
 			
 			graphics "Button geography" {
 				float x <- -1.0;
@@ -691,87 +693,73 @@ experiment Open {
 //					display_water_flow <- !display_water_flow;
 //				}
 			}
-			
-			
-			
+				
 			event "1" {
 				ask simulation {
 					do execute_action(A_1);
 				}
 			}
-
 			event "2" {
 				ask simulation {
 					do execute_action(A_2a);
 				}
 			}
-
 			event "a" {
 				ask simulation {
 					do execute_action(A_2b);
 				}
 			}
-
 			event "3" {
 				ask simulation {
 					do execute_action(A_3);
 				}
 			}
-
 			event "4" {
 				ask simulation {
 					do execute_action(A_4);
 				}
 			}
-			
 			event "5" {
 				ask simulation {
 					do execute_action(A_5a);
 				}
 			}
-
 			event "r" {
 				ask simulation {
 					do execute_action(A_5b);
 				}
 			}
-
 			event "6" {
 				ask simulation {
 					do execute_action(A_6);
 				}
 			}
-
 			event "7" {
 				ask simulation {
 					do execute_action(A_7a);
 				}
 			}
-
 			event "y" {
 				ask simulation {
 					do execute_action(A_7b);
 				}
 			}
-
 			event "8" {
 				ask simulation {
 					do execute_action(A_8a);
 				}
 			}
-
 			event "u" {
 				ask simulation {
 					do execute_action(A_8b);
 				}
 			}
-
 			event "9" {
 				ask simulation {
 					do execute_action(A_9);
 				}
 			}
-			
+						
 			event #mouse_exit {
 				next_selected <- false;
 				play_pause_selected <- false;				
@@ -881,7 +869,7 @@ experiment Open {
 					x <- x + x_gap;
 				}
 				
-				/**
+				/** Legend canals
 				 y <- y + y_gap;
 				x <- x_init;
 				draw water_icon at: {x* w_width,y*w_height} size: icon_size;
@@ -891,8 +879,7 @@ experiment Open {
 					x <- x + x_gap;
 				}
 				*/
-				
-				/*****/				
+								
 				y <- y + y_gap;
 				x <- x_init;
 				
@@ -991,12 +978,13 @@ experiment Open {
 		
 
 		/********************** CHARTS DISPLAY ***************************************************/
-		
+
 		display "Chart 4" type: opengl axes: false background: legend_background refresh: stage = COMPUTE_INDICATORS and every(data_frequency#cycle) {
 			
 			light #ambient intensity: ambient_intensity;
 			camera #default locked: true;
-						
+			
+			/**	
 			chart WASTE_POLLUTION memorize: false tick_line_color:(dark_theme ? #white : #black) size:{0.8, 0.5} position: {0.1, 0} type: xy background: legend_background color: dark_theme ? #white : #black visible: !show_chart label_font: ui_font series_label_position: none y_tick_values_visible: false x_tick_values_visible: false x_tick_line_visible: true title_visible: false x_label: ""{
 				data SOLID_WASTE_POLLUTION value:rows_list(matrix([time_step,total_solid_pollution_values])) color: #orange marker: false thickness: chart_line_width ;
 				data WATER_WASTE_POLLUTION value: rows_list(matrix([time_step,total_water_pollution_values])) color: rgb(0,159,233) marker: false thickness: chart_line_width;
@@ -1007,9 +995,11 @@ experiment Open {
 			chart PRODUCTION memorize: false tick_line_color: (dark_theme ? #white : #black) type: xy position:{0.1, 0.5}  size:{0.8, 0.5} background: legend_background color: dark_theme ? #white : #black y_range:[0,6000] visible: !show_chart series_label_position: none y_tick_values_visible: false x_tick_values_visible: true x_tick_line_visible: true title_visible: false x_label: ""{
 				data TOTAL_PRODUCTION value: rows_list(matrix([time_step,total_production_values])) color: #green thickness: chart_line_width marker: false; 
 				data ECOLABEL_MIN_PRODUCTION value: rows_list(matrix([time_step,ecolabel_min_production_values])) thickness: chart_line_width color: is_production_ok ? (dark_theme ? #white : #black) : #red marker: false; 
-			}	
 			
-			 graphics "Chart Legend" position: {0, 0} transparency: 0 refresh: true visible: !show_chart and #fullscreen {
+			}
+			*/
+			
+			graphics "Chart Legend" position: {0, 0} transparency: 0 refresh: true visible: !show_chart and #fullscreen {
 				float x_gap <- 0.02;
 				float x_init <- 0.1;
 				float icon_size <-  w_height / 20;
@@ -1038,8 +1028,7 @@ experiment Open {
 			
 			agents "Global" value: [global_chart] aspect: horizontal visible: show_chart position: {0.25,0} size: {0.7,0.7};
 				
-		}
-		
+		}		
 	}
 }
 
