@@ -659,6 +659,7 @@ experiment Open {
 			}
 			*/
 			
+			/** Button geography
 			graphics "Button geography" {
 				float x <- -1.0;
 				float y <- 0.5;
@@ -693,6 +694,7 @@ experiment Open {
 //					display_water_flow <- !display_water_flow;
 //				}
 			}
+			*/
 				
 			event "1" {
 				ask simulation {
@@ -923,6 +925,7 @@ experiment Open {
 			species village visible: (!show_geography) {
 				draw shape color: color border: #black width: 2;
 			}
+			
 			species village transparency: 0.4  visible: ((show_geography) and show_player_numbers) or !show_geography  {
 				int divider <- (show_geography) ? 8 : 8; // 16:8;
 				draw circle(w_width/divider)	color: !show_geography ? #black :color at: shape.centroid + {0,0,0.4};
