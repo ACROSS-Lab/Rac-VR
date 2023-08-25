@@ -29,7 +29,7 @@ global {
 	rgb selected_color <- rgb(255,255,255);
 	rgb unselected_color <-rgb(200,200,200,0.7);
 	list<rgb> village_color <- [rgb(207, 41, 74), rgb(255, 201, 0), rgb(49, 69, 143), rgb(62, 184, 99)]; // color for the 4 villages
-	rgb color_col <- #pink;
+	rgb color_col <- #pink; //color used when indicators are not broken down by villages
 	rgb map_background <- dark_theme ? #black: #white;
 	rgb timer_background <- dark_theme ? rgb(60,60,60): rgb(200,200,200);
 	rgb legend_background <- dark_theme ? #black: #white; //rgb(60,60,60);
@@ -59,7 +59,7 @@ global {
 	bool about_to_pause <- false;
 	bool CHOOSING_VILLAGE_FOR_POOL <- false;
 	bool PASS_CHOOSING_VILLAGE <- false;
-	bool display_water_flow <- false;
+	bool display_water_flow <- true;
 	stacked_chart global_chart;
 	int chosen_village <- -1;
 	int number_of_days_passed <- 0;
@@ -373,6 +373,99 @@ species waste_on_canal skills: [moving]{
 	}
 }
 
+species stacked_chart {
+	point location <- {w_width/2 ,w_height/2};
+	//map<string, map<rgb,float>> data <- [];
+	map<string, float> data <- [];
+	map<string, image_file> icons <- [];
+	map<string, bool> inf_or_sup ;
+	map<string, bool> draw_smiley;
+	float chart_width <- 2* w_width;
+	float chart_height <- w_height - w_height/4;
+	float max_value;
+	float desired_value;
+	
+	
+	action add_column(string column) {
+		if (!(column in data.keys)) {
+			data[column] <- [];
+		}
+	} 
+	
+	/**
+	action add_element(rgb element) {
+		loop c over: data.keys {
+			data[c][element] <- 0.0;
+		}
+ 	}
+	 */
+	
+ 	/**
+ 	action update_all(rgb element, map<string, float> values) {
+ 		loop col over: data.keys {
+ 			data[col][element] <- values[col];
+ 		}
+ 	}
+ 	*/
+ 	
+ 	action update_all(map<string, float> values) {
+ 		loop col over: data.keys {
+ 			data[col] <- values[col];
+ 		}
+ 	}	
+ 	
+ 	aspect horizontal {
+ 		float my_width <- chart_width;
+ 		float my_height <- chart_height;
+ 		float original_col_width <- my_width / ((length(data) + 4));
+		float col_width <- original_col_width;
+ 		bool gap_added <- false;
+ 		
+ 		draw rectangle(2.5*original_col_width, chart_height/2) at: {location.x-original_col_width*1.5, location.y +chart_height/4} border: dark_theme ? #white : #black wireframe: true;
+ 		draw rectangle(2.5*original_col_width, chart_height/2) at: {location.x-original_col_width*1.5, location.y-chart_height/4} border: dark_theme ? #white : #black wireframe: true;
+ 		float current_x <- 0.0;
+ 		
+ 		loop col over: data.keys {
+ 			float current_y <-chart_height/6;
+
+ 			float total <- 0.0;
+ 			
+ 			if (!draw_smiley[col] and !gap_added) {
+ 				gap_added <- true;
+ 				col_width<-original_col_width/3;
+ 				current_x <- current_x + col_width;
+ 			}
+			
+			/**
+			loop c over: data[col].keys {
+ 				float v <- data[col][c];
+ 				total <- total+v;
+ 				float col_height <- (v * chart_height)/max_value;
+ 				draw rectangle(col_width,col_height) color: c at: {current_x,my_height  + current_y - col_height/2};
+ 				draw rectangle(col_width,col_height) wireframe: true border: dark_theme ? #black : #black width: 2 at: {current_x,my_height  + current_y -  col_height/2};
+ 				current_y <- current_y - col_height;
+ 			}
+			*/
+
+			float v <- data[col];
+			total <- total+v;
+			float col_height <- (v * chart_height)/max_value;
+			draw rectangle(col_width,col_height) color: color_col at: {current_x,my_height  + current_y - col_height/2};
+			draw rectangle(col_width,col_height) wireframe: true border: dark_theme ? #black : #black width: 2 at: {current_x,my_height  + current_y -  col_height/2};
+			current_y <- current_y - col_height;
+ 			
+ 			if (icons[col] != nil) {
+ 				draw icons[col] at: {current_x, gap_added ? my_height  + current_y - original_col_width/4 :( location.y - chart_height/2)} size: {original_col_width/(gap_added? 4:2), original_col_width/(gap_added? 4:2)};
+ 				if draw_smiley[col] {
+ 				if (total <= 1 and inf_or_sup[col] or total > 1 and !inf_or_sup[col]) {
+ 					draw smileys[0]  at: {current_x, my_height+original_col_width/2} size: {original_col_width/2, original_col_width/2};
+ 				} else {draw smileys[4]  at: {current_x, my_height+original_col_width/2} size: {original_col_width/2, original_col_width/2};}} 
+ 			}
+ 			current_x <- current_x + col_width;
+ 		}
+ 	}
+}
+
 
 experiment Open {
 	
@@ -398,12 +491,9 @@ experiment Open {
 	
 	output {
 		
-		/********************** LAYOUT ***********************************************************/
-		
-		
+		/********************** LAYOUT ***********************************************************/	
 		 layout vertical([0::82,horizontal([1::650,2::450])::368]) consoles: false tabs:false toolbars:false controls:false editors: false navigator: false tray: false parameters: false background: dark_theme ? #black : #white;
 		
-//		
 //		layout
 //		
 //		horizontal ([
@@ -413,7 +503,6 @@ experiment Open {
 //
 //		toolbars: false tabs: false parameters: false consoles: false navigator: false controls: false tray: false background: #white; //map_background;
 		
-
 
 
 		/********************** CENTER DISPLAY *************************************************/
@@ -435,8 +524,7 @@ experiment Open {
 				draw calendar_icon size: w_width / 6;
 				draw ""+value + " [" +value div 365 + "]" at: {location.x, location.y- 6*radius/10, 0.01}  color: dark_theme ? #white : #black font: ui_font anchor: #bottom_center;
 			}
-			
-			
+					
 			graphics "Score#" position: {w_width, 0}{
 				int value <- days_with_ecolabel;
 				float total <- 365.0 * end_of_game;
@@ -451,7 +539,6 @@ experiment Open {
 				draw ""+value  at: {location.x, location.y- 6*radius/10, 0.01}  color: dark_theme ? #white : #black font: ui_font anchor: #bottom_center;
 			}
 		
-			
 			graphics "Timer for the discussion" visible: stage = PLAYER_DISCUSSION_TURN and turn <= end_of_game {
 				float y <- location.y + w_height/5;
 				float left <- location.x - w_width/2;
@@ -462,7 +549,6 @@ experiment Open {
 				draw line({left, y}, {left + width, y}) buffer (100, 200) color: #darkgreen;
 				draw sandclock_icon /*rotate: (180 - remaining_time)*3*/ at: {left + width, y} size: w_height / 6;
 			}
-			
 			
 			graphics "Timer for the village choice" visible: CHOOSING_VILLAGE_FOR_POOL and turn <= end_of_game {
 				float y <- location.y + 3*w_height/8;
@@ -620,7 +706,7 @@ experiment Open {
 				}
 			}
 
-			event "b" {
+			event "a" {
 				ask simulation {
 					do execute_action(A_2b);
 				}
@@ -632,31 +718,19 @@ experiment Open {
 				}
 			}
 
-			event "c" {
-				ask simulation {
-					do execute_action(A_3);
-				}
-			}
-
 			event "4" {
 				ask simulation {
 					do execute_action(A_4);
 				}
 			}
-
-			event "d" {
-				ask simulation {
-					do execute_action(A_4);
-				}
-			}
-
+			
 			event "5" {
 				ask simulation {
 					do execute_action(A_5a);
 				}
 			}
 
-			event "e" {
+			event "r" {
 				ask simulation {
 					do execute_action(A_5b);
 				}
@@ -668,19 +742,13 @@ experiment Open {
 				}
 			}
 
-			event "f" {
-				ask simulation {
-					do execute_action(A_6);
-				}
-			}
-
 			event "7" {
 				ask simulation {
 					do execute_action(A_7a);
 				}
 			}
 
-			event "g" {
+			event "y" {
 				ask simulation {
 					do execute_action(A_7b);
 				}
@@ -692,19 +760,13 @@ experiment Open {
 				}
 			}
 
-			event "h" {
+			event "u" {
 				ask simulation {
 					do execute_action(A_8b);
 				}
 			}
 
 			event "9" {
-				ask simulation {
-					do execute_action(A_9);
-				}
-			}
-
-			event "i" {
 				ask simulation {
 					do execute_action(A_9);
 				}
@@ -797,10 +859,8 @@ experiment Open {
 
 			}
 	}
-		
-
-		
-		
+	
+	
 		/********************** MAIN MAP DISPLAY ***************************************************/
 		
 		display "MAIN MAP" type: opengl background:map_background axes: false {
@@ -820,8 +880,9 @@ experiment Open {
 					draw square(x_gap*w_width) color: c at: {x*w_width,y*w_height};
 					x <- x + x_gap;
 				}
-
-				y <- y + y_gap;
+				
+				/**
+				 y <- y + y_gap;
 				x <- x_init;
 				draw water_icon at: {x* w_width,y*w_height} size: icon_size;
 				x <- x + 2* x_gap;
@@ -829,7 +890,8 @@ experiment Open {
 					draw square(x_gap*w_width) color: c at: {x*w_width,y*w_height};
 					x <- x + x_gap;
 				}
-
+				*/
+				
 				/*****/				
 				y <- y + y_gap;
 				x <- x_init;
@@ -860,7 +922,7 @@ experiment Open {
 				draw shape color: greens[world.production_class_current(self)] border: false;
 			}
 			species canal visible: show_geography{
-				draw shape buffer (20,10) color: display_water_flow ? #darkblue : blues[world.water_pollution_class_current(self)]  ;
+				draw shape buffer (20,10) color: display_water_flow ? blues[0] : blues[world.water_pollution_class_current(self)]  ;
 			}
 			species local_landfill visible: show_geography{
 				draw  shape depth: waste_quantity / 100.0 color: landfill_color;
@@ -918,13 +980,13 @@ experiment Open {
 				draw ""+budget at: {x, y + spacing} color: #white depth: 5 font: ui_font anchor: #center;
 			}
 			
-			event #mouse_down {
+			/**
+			 event #mouse_down {
 				if (show_geography) {
 					display_water_flow <- !display_water_flow;
 				}
-			}
-			
-
+			}	
+			 */
 		}
 		
 
@@ -982,97 +1044,3 @@ experiment Open {
 }
 
 
-species stacked_chart {
-	point location <- {w_width/2 ,w_height/2};
-	//map<string, map<rgb,float>> data <- [];
-	map<string, float> data <- [];
-	map<string, image_file> icons <- [];
-	map<string, bool> inf_or_sup ;
-	map<string, bool> draw_smiley;
-	float chart_width <- 2* w_width;
-	float chart_height <- w_height - w_height/4;
-	float max_value;
-	float desired_value;
-	
-	
-	action add_column(string column) {
-		if (!(column in data.keys)) {
-			data[column] <- [];
-		}
-	} 
-	
-	/**
-	action add_element(rgb element) {
-		loop c over: data.keys {
-			data[c][element] <- 0.0;
-		}
- 	}
-	 */
-	
- 	/**
- 	action update_all(rgb element, map<string, float> values) {
- 		loop col over: data.keys {
- 			data[col][element] <- values[col];
- 		}
- 	}
- 	*/
- 	
- 	action update_all(map<string, float> values) {
- 		loop col over: data.keys {
- 			data[col] <- values[col];
- 		}
- 	}	
- 	
- 	aspect horizontal {
- 		float my_width <- chart_width;
- 		float my_height <- chart_height;
- 		float original_col_width <- my_width / ((length(data) + 4));
-		float col_width <- original_col_width;
- 		bool gap_added <- false;
- 		
- 		draw rectangle(2.5*original_col_width, chart_height/2) at: {location.x-original_col_width*1.5, location.y +chart_height/4} border: dark_theme ? #white : #black wireframe: true;
- 		draw rectangle(2.5*original_col_width, chart_height/2) at: {location.x-original_col_width*1.5, location.y-chart_height/4} border: dark_theme ? #white : #black wireframe: true;
- 		float current_x <- 0.0;
- 		
- 		loop col over: data.keys {
- 			float current_y <-chart_height/6;
-
- 			float total <- 0.0;
- 			
- 			if (!draw_smiley[col] and !gap_added) {
- 				gap_added <- true;
- 				col_width<-original_col_width/3;
- 				current_x <- current_x + col_width;
- 			}
-			
-			/**
-			loop c over: data[col].keys {
- 				float v <- data[col][c];
- 				total <- total+v;
- 				float col_height <- (v * chart_height)/max_value;
- 				draw rectangle(col_width,col_height) color: c at: {current_x,my_height  + current_y - col_height/2};
- 				draw rectangle(col_width,col_height) wireframe: true border: dark_theme ? #black : #black width: 2 at: {current_x,my_height  + current_y -  col_height/2};
- 				current_y <- current_y - col_height;
- 			}
-			*/
-
-			float v <- data[col];
-			total <- total+v;
-			float col_height <- (v * chart_height)/max_value;
-			draw rectangle(col_width,col_height) color: color_col at: {current_x,my_height  + current_y - col_height/2};
-			draw rectangle(col_width,col_height) wireframe: true border: dark_theme ? #black : #black width: 2 at: {current_x,my_height  + current_y -  col_height/2};
-			current_y <- current_y - col_height;
- 			
- 			if (icons[col] != nil) {
- 				draw icons[col] at: {current_x, gap_added ? my_height  + current_y - original_col_width/4 :( location.y - chart_height/2)} size: {original_col_width/(gap_added? 4:2), original_col_width/(gap_added? 4:2)};
- 				if draw_smiley[col] {
- 				if (total <= 1 and inf_or_sup[col] or total > 1 and !inf_or_sup[col]) {
- 					draw smileys[0]  at: {current_x, my_height+original_col_width/2} size: {original_col_width/2, original_col_width/2};
- 				} else {draw smileys[4]  at: {current_x, my_height+original_col_width/2} size: {original_col_width/2, original_col_width/2};}} 
- 			}
- 			current_x <- current_x + col_width;
- 		}
- 	}
-
- 	
-}
