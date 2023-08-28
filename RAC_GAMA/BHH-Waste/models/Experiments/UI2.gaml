@@ -130,7 +130,8 @@ global {
 	image_file city_icon <- image_file("../../includes/icons/city.png");
 	image_file score_icon <- image_file("../../includes/icons/trophy.png");
 	image_file danger_icon <- image_file("../../includes/icons/pollution.png");
-
+	image_file vr_icon <- image_file("../../includes/icons/VR.png");
+	image_file graph_icon <- image_file("../../includes/icons/graph.png");
 
 	
 	/********************** VARIOUS FUNCTIONS  ***************************/
@@ -654,6 +655,10 @@ experiment Open {
 					} else {
 						icon <- numbers[int(villages_order[index_player])];
 					}
+				} else if (stage = PLAYER_VR_EXPLORATION_TURN) {
+					icon <- vr_icon;
+				} else if (stage = PLAYER_VR_ESTIMATION_TURN) {
+					icon <- graph_icon;
 				} else {
 					icon <- computer_icon;
 				}
