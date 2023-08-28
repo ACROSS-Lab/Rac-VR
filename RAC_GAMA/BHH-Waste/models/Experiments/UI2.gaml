@@ -113,7 +113,7 @@ global {
 	
 	image_file label_icon <- image_file("../../includes/icons/eco.png");
 	image_file disabled_label_icon <- image_file("../../includes/icons/eco_disabled.png");
-	image_file soil_icon <- image_file("../../includes/icons/waste.png");
+	image_file waste_icon <- image_file("../../includes/icons/waste.png");
 	image_file tokens_icon <- image_file("../../includes/icons/tokens.png");
 	image_file water_icon <- image_file("../../includes/icons/water.png");
 	image_file plant_icon <- image_file("../../includes/icons/plant.png");
@@ -273,7 +273,7 @@ global {
 			do add_column("Water");
 			do add_column("Soil");
 
-			icons <- ["Total"::pollution_icon, "Water"::water_icon, "Soil"::soil_icon, "Production"::plant_icon];
+			icons <- ["Total"::pollution_icon, "Water"::water_icon, "Soil"::waste_icon, "Production"::plant_icon];
 		 	inf_or_sup <- ["Total"::true,"Water"::true, "Soil"::true, "Production"::false];
 		 	draw_smiley <- ["Total"::true,"Water"::false, "Soil"::false, "Production"::true];
 			
@@ -999,7 +999,7 @@ experiment Open {
 				
 				/**
 				//Solid waste indication
-				draw soil_icon at: {x, y} size: size;
+				draw waste_icon at: {x, y} size: size;
 				draw world.soil_pollution_class(self) at: {x - smiley_horizontal_spacing , y + smiley_vertical_spacing, 0.01} size: smiley_size;
 				
 				x <- x + 2*spacing;
@@ -1066,7 +1066,7 @@ experiment Open {
 				x <- x + 2* x_gap;
 				draw square(x_gap*w_width) color: #orange at: {x*w_width,y2*w_height};
 				x <- x + 2* x_gap;
-				draw soil_icon at: {x* w_width,y*w_height} size: icon_size;
+				draw waste_icon at: {x* w_width,y*w_height} size: icon_size;
 				x <- x + 2* x_gap;
 				draw square(x_gap*w_width) color: rgb(0,159,233) at: {x*w_width,y2*w_height};
 				x <- x + 2* x_gap;
