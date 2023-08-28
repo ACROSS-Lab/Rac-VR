@@ -271,11 +271,11 @@ global {
 			do add_column("Production");
 			do add_column("Total");
 			do add_column("Water");
-			do add_column("Soil");
+			do add_column("Solid");
 
-			icons <- ["Total"::pollution_icon, "Water"::water_icon, "Soil"::waste_icon, "Production"::plant_icon];
-		 	inf_or_sup <- ["Total"::true,"Water"::true, "Soil"::true, "Production"::false];
-		 	draw_smiley <- ["Total"::true,"Water"::false, "Soil"::false, "Production"::true];
+			icons <- ["Total"::pollution_icon, "Water"::water_icon, "Waste"::waste_icon, "Production"::plant_icon];
+		 	inf_or_sup <- ["Total"::true,"Water"::true, "Waste"::true, "Production"::false];
+		 	draw_smiley <- ["Total"::true,"Water"::false, "Waste"::false, "Production"::true];
 			
 			/**
 			 loop i from: 0 to: 3 {
@@ -293,14 +293,14 @@ global {
 		ask global_chart {
 			//loop i from: 0 to: 3 {
 				//do
-				//update_all(village_color[i], ["Total"::(village_water_pollution[i] + village_solid_pollution[i]) / max_pollution_ecolabel, "Water"::village_water_pollution[i] / max_pollution_ecolabel, "Soil"::village_solid_pollution[i] / max_pollution_ecolabel, "Production"::village_production[i] / min_production_ecolabel]);
-				//update_all(["Total"::(village_water_pollution[i] + village_solid_pollution[i]) / max_pollution_ecolabel, "Water"::village_water_pollution[i] / max_pollution_ecolabel, "Soil"::village_solid_pollution[i] / max_pollution_ecolabel, "Production"::village_production[i] / min_production_ecolabel]);
+				//update_all(village_color[i], ["Total"::(village_water_pollution[i] + village_solid_pollution[i]) / max_pollution_ecolabel, "Water"::village_water_pollution[i] / max_pollution_ecolabel, "Waste"::village_solid_pollution[i] / max_pollution_ecolabel, "Production"::village_production[i] / min_production_ecolabel]);
+				//update_all(["Total"::(village_water_pollution[i] + village_solid_pollution[i]) / max_pollution_ecolabel, "Water"::village_water_pollution[i] / max_pollution_ecolabel, "Waste"::village_solid_pollution[i] / max_pollution_ecolabel, "Production"::village_production[i] / min_production_ecolabel]);
 			//}
 			float total_value <- (village_water_pollution sum_of(each) + village_solid_pollution sum_of(each)) / max_pollution_ecolabel;
 			float water_value <- village_water_pollution sum_of(each)/ max_pollution_ecolabel;
-			float soil_value <- village_solid_pollution sum_of(each) / max_pollution_ecolabel;
+			float solid_value <- village_solid_pollution sum_of(each) / max_pollution_ecolabel;
 			float production_value <- village_production sum_of(each) / min_production_ecolabel;
-			do update_all(["Total"::total_value, "Water"::water_value, "Soil"::soil_value, "Production"::production_value]);
+			do update_all(["Total"::total_value, "Water"::water_value, "Waste"::solid_value, "Production"::production_value]);
 		}
 		// TODO remove this at some point ! 
 		time_for_discussion <- initial_time_for_discussion;
