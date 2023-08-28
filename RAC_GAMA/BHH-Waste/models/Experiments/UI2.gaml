@@ -665,9 +665,9 @@ experiment Open {
 				draw ""+commune_money  at: {location.x, location.y- 6*radius/10, 0.01}  color: dark_theme ? #gold : rgb (225, 126, 21, 255) font: ui_font anchor: #bottom_center;
 			}
 
-			graphics "Next" transparency: ((stage = PLAYER_DISCUSSION_TURN or stage = PLAYER_ACTION_TURN) and turn <= end_of_game) ? 0 : 0.6 {
+			graphics "Next" transparency: ((stage = PLAYER_DISCUSSION_TURN or stage = PLAYER_ACTION_TURN or stage = PLAYER_VR_EXPLORATION_TURN or stage = PLAYER_VR_ESTIMATION_TURN) and turn <= end_of_game) ? 0 : 0.6 {
 				next_location <- {location.x + w_width /2,  location.y-w_height/8};
-				draw next_icon at: next_location size: w_width / 4 color: (next_selected and ((stage = PLAYER_DISCUSSION_TURN or stage = PLAYER_ACTION_TURN) and turn <= end_of_game)) ? selected_color:unselected_color;
+				draw next_icon at: next_location size: w_width / 4 color: (next_selected and ((stage = PLAYER_DISCUSSION_TURN or stage = PLAYER_ACTION_TURN or stage = PLAYER_VR_EXPLORATION_TURN or stage = PLAYER_VR_ESTIMATION_TURN) and turn <= end_of_game)) ? selected_color:unselected_color;
 			}
 
 			graphics "Play Pause" visible: turn <= end_of_game {
@@ -851,6 +851,14 @@ experiment Open {
 						if (stage = PLAYER_DISCUSSION_TURN) {
 							ask simulation {
 								do end_of_discussion_phase;
+							}
+						} else if (stage = PLAYER_VR_ESTIMATION_TURN) {
+							ask simulation {
+								do end_of_estimation_phase;
+							}
+						} else if (stage = PLAYER_VR_EXPLORATION_TURN) {
+							ask simulation {
+								do end_of_exploration_phase;
 							}
 						} else if (stage != COMPUTE_INDICATORS) {
 							if (CHOOSING_VILLAGE_FOR_POOL) {
