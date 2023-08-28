@@ -78,7 +78,7 @@ global {
 	bool use_timer_for_estimation <- true;
 	bool timer_just_for_warning <- false; //if true, if the timer is finished, just a warning message is displayed; if false, the turn passes to the next player - for the moment, some issue with the automatic change of step
 	float initial_time_for_discussion <- 2.5 #mn const: true; // time before the player turns
-	float initial_time_for_exploration <- 3 #mn const: true;
+	float initial_time_for_exploration <- 5 #s const: true;
 	float initial_time_for_estimation <- 1 #mn const: true;
 	float initial_time_for_choosing_village <- 1#mn const: true;
 	float time_for_choosing_village <- initial_time_for_choosing_village;
@@ -96,7 +96,8 @@ global {
 	bool show_waterflow_selected;
 	bool show_geography <- true;
 	bool show_chart <- true;
-	bool show_detailed_chart <- false; //to show solid and water pollution indicators  
+	bool show_pol_chart_by_cat <- false; //to show solid and water pollution indicators
+	bool show_chart_by_vil <- false; 
 	bool show_player_numbers <- true;
 	bool play_pause_selected <- false;
 	bool next_selected <- false;
@@ -275,12 +276,9 @@ global {
 		 	inf_or_sup <- ["Total"::true,"Water"::true, "Solid"::true, "Production"::false];
 		 	draw_smiley <- ["Total"::true,"Water"::false, "Solid"::false, "Production"::true];
 			
-			/**
-			 loop i from: 0 to: 3 {
+			loop i from: 0 to: 3 {
 				do add_element(village_color[i]);
-			 }
-			 */
-			
+			}
 		}
 		global_chart <- stacked_chart[0];
 
@@ -289,21 +287,27 @@ global {
 	reflex update_charts when: stage = COMPUTE_INDICATORS{
 		village_actions <- nil;
 		ask global_chart {
-			//loop i from: 0 to: 3 {
-				//do
-				//update_all(village_color[i], ["Total"::(village_water_pollution[i] + village_solid_pollution[i]) / max_pollution_ecolabel, "Water"::village_water_pollution[i] / max_pollution_ecolabel, "Solid"::village_solid_pollution[i] / max_pollution_ecolabel, "Production"::village_production[i] / min_production_ecolabel]);
-				//update_all(["Total"::(village_water_pollution[i] + village_solid_pollution[i]) / max_pollution_ecolabel, "Water"::village_water_pollution[i] / max_pollution_ecolabel, "Solid"::village_solid_pollution[i] / max_pollution_ecolabel, "Production"::village_production[i] / min_production_ecolabel]);
-			//}
 			float total_value <- (village_water_pollution sum_of(each) + village_solid_pollution sum_of(each)) / max_pollution_ecolabel;
 			float production_value <- village_production sum_of(each) / min_production_ecolabel;
-			float water_value <- village_water_pollution sum_of(each)/ max_pollution_ecolabel;
-			float solid_value <- village_solid_pollution sum_of(each) / max_pollution_ecolabel;
-			if show_detailed_chart {
-				do update_all(["Total"::total_value, "Water"::water_value, "Solid"::solid_value, "Production"::production_value]);
+			if show_pol_chart_by_cat {
+				if show_chart_by_vil {
+					loop i from: 0 to: 3 {
+						do update_all2(village_color[i], ["Total"::(village_water_pollution[i] + village_solid_pollution[i]) / max_pollution_ecolabel, "Water"::village_water_pollution[i] / max_pollution_ecolabel, "Solid"::village_solid_pollution[i] / max_pollution_ecolabel, "Production"::village_production[i] / min_production_ecolabel]);
+					}
+				} else {
+					float water_value <- village_water_pollution sum_of(each)/ max_pollution_ecolabel;
+					float solid_value <- village_solid_pollution sum_of(each) / max_pollution_ecolabel;
+					do update_all(["Total"::total_value, "Water"::water_value, "Solid"::solid_value, "Production"::production_value]);
+				}
 			} else{
-				do update_all(["Total"::total_value, "Water"::0, "Solid"::0, "Production"::production_value]);
+				if show_chart_by_vil {
+					loop i from: 0 to: 3 {
+						do update_all2(village_color[i], ["Total"::(village_water_pollution[i] + village_solid_pollution[i]) / max_pollution_ecolabel, "Water"::0, "Solid"::0, "Production"::village_production[i] / min_production_ecolabel]);
+					}
+				} else {
+					do update_all(["Total"::total_value, "Water"::0, "Solid"::0, "Production"::production_value]);
+				}
 			}
-
 		}
 		// TODO remove this at some point ! 
 		time_for_discussion <- initial_time_for_discussion;
@@ -317,17 +321,22 @@ global {
 		remaining_time <- int(time_for_exploration - machine_time/1000.0 + start_exploration_turn_time/1000.0); 
 		if remaining_time <= 0 {
 			do end_of_exploration_phase;
-			if !show_detailed_chart {
+			if !show_pol_chart_by_cat {
 				ask global_chart {
-					float total_value <- (village_water_pollution sum_of(each) + village_solid_pollution sum_of(each)) / max_pollution_ecolabel;
-					float production_value <- village_production sum_of(each) / min_production_ecolabel;
-					float water_value <- village_water_pollution sum_of(each)/ max_pollution_ecolabel;
-					float solid_value <- village_solid_pollution sum_of(each) / max_pollution_ecolabel;
-					do update_all(["Total"::total_value, "Water"::water_value, "Solid"::solid_value, "Production"::production_value]);
+					if show_chart_by_vil {
+						loop i from: 0 to: 3 {
+							do update_all2(village_color[i], ["Total"::(village_water_pollution[i] + village_solid_pollution[i]) / max_pollution_ecolabel, "Water"::village_water_pollution[i] / max_pollution_ecolabel, "Solid"::village_solid_pollution[i] / max_pollution_ecolabel, "Production"::village_production[i] / min_production_ecolabel]);
+						}
+					} else {
+						float total_value <- (village_water_pollution sum_of(each) + village_solid_pollution sum_of(each)) / max_pollution_ecolabel;
+						float production_value <- village_production sum_of(each) / min_production_ecolabel;
+						float water_value <- village_water_pollution sum_of(each)/ max_pollution_ecolabel;
+						float solid_value <- village_solid_pollution sum_of(each) / max_pollution_ecolabel;
+						do update_all(["Total"::total_value, "Water"::water_value, "Solid"::solid_value, "Production"::production_value]);
+					}
 				}
 			}
 		}
-
 	}
 	
 	reflex end_of_estimation_turn when: use_timer_for_estimation and stage = PLAYER_VR_ESTIMATION_TURN {
@@ -404,8 +413,8 @@ species waste_on_canal skills: [moving]{
 
 species stacked_chart {
 	point location <- {w_width/2 ,w_height/2};
-	//map<string, map<rgb,float>> data <- [];
-	map<string, float> data <- [];
+	map<string, float> data <- [];	
+	map<string, map<rgb,float>> data2 <- [];
 	map<string, image_file> icons <- [];
 	map<string, bool> inf_or_sup ;
 	map<string, bool> draw_smiley;
@@ -417,24 +426,21 @@ species stacked_chart {
 	action add_column(string column) {
 		if (!(column in data.keys)) {
 			data[column] <- [];
+			data2[column] <- [];
 		}
 	} 
 	
-	/**
 	action add_element(rgb element) {
-		loop c over: data.keys {
-			data[c][element] <- 0.0;
+		loop c over: data2.keys {
+			data2[c][element] <- 0.0;
 		}
  	}
-	 */
 	
- 	/**
- 	action update_all(rgb element, map<string, float> values) {
+ 	action update_all2(rgb element, map<string, float> values) {
  		loop col over: data.keys {
- 			data[col][element] <- values[col];
+ 			data2[col][element] <- values[col];
  		}
  	}
- 	*/
  	
  	action update_all(map<string, float> values) {
  		loop col over: data.keys {
@@ -453,43 +459,63 @@ species stacked_chart {
  		draw rectangle(2.5*original_col_width, chart_height/2) at: {location.x-original_col_width*1.5, location.y-chart_height/4} border: dark_theme ? #white : #black wireframe: true;
  		float current_x <- 0.0;
  		
- 		loop col over: data.keys {
- 			float current_y <-chart_height/6;
-
- 			float total <- 0.0;
- 			
- 			if (!draw_smiley[col] and !gap_added) {
- 				gap_added <- true;
- 				col_width<-original_col_width/3;
- 				current_x <- current_x + col_width;
- 			}
-			
-			/**
-			loop c over: data[col].keys {
- 				float v <- data[col][c];
- 				total <- total+v;
- 				float col_height <- (v * chart_height)/max_value;
- 				draw rectangle(col_width,col_height) color: c at: {current_x,my_height  + current_y - col_height/2};
- 				draw rectangle(col_width,col_height) wireframe: true border: dark_theme ? #black : #black width: 2 at: {current_x,my_height  + current_y -  col_height/2};
- 				current_y <- current_y - col_height;
- 			}
-			*/
-
-			float v <- data[col];
-			total <- total+v;
-			float col_height <- (v * chart_height)/max_value;
-			draw rectangle(col_width,col_height) color: color_col at: {current_x,my_height  + current_y - col_height/2};
-			draw rectangle(col_width,col_height) wireframe: true border: dark_theme ? #black : #black width: 2 at: {current_x,my_height  + current_y -  col_height/2};
-			current_y <- current_y - col_height;
- 			
- 			if (icons[col] != nil) {
- 				draw icons[col] at: {current_x, gap_added ? my_height  + current_y - original_col_width/4 :( location.y - chart_height/2)} size: {original_col_width/(gap_added? 4:2), original_col_width/(gap_added? 4:2)};
- 				if draw_smiley[col] {
- 				if (total <= 1 and inf_or_sup[col] or total > 1 and !inf_or_sup[col]) {
- 					draw smileys[0]  at: {current_x, my_height+original_col_width/2} size: {original_col_width/2, original_col_width/2};
- 				} else {draw smileys[4]  at: {current_x, my_height+original_col_width/2} size: {original_col_width/2, original_col_width/2};}} 
- 			}
- 			current_x <- current_x + col_width;
+ 		if show_chart_by_vil {
+ 			loop col over: data2.keys {
+	 			float current_y <-chart_height/6;
+	 			float total <- 0.0;
+	 			
+	 			if (!draw_smiley[col] and !gap_added) {
+	 				gap_added <- true;
+	 				col_width<-original_col_width/3;
+	 				current_x <- current_x + col_width;
+	 			}
+	 			
+				loop c over: data2[col].keys {
+	 				float v <- data2[col][c];
+	 				total <- total+v;
+	 				float col_height <- (v * chart_height)/max_value;
+	 				draw rectangle(col_width,col_height) color: c at: {current_x,my_height  + current_y - col_height/2};
+	 				draw rectangle(col_width,col_height) wireframe: true border: dark_theme ? #black : #black width: 2 at: {current_x,my_height  + current_y -  col_height/2};
+	 				current_y <- current_y - col_height;
+	 			}
+	 			
+	 			if (icons[col] != nil) {
+	 				draw icons[col] at: {current_x, gap_added ? my_height  + current_y - original_col_width/4 :( location.y - chart_height/2)} size: {original_col_width/(gap_added? 4:2), original_col_width/(gap_added? 4:2)};
+	 				if draw_smiley[col] {
+	 				if (total <= 1 and inf_or_sup[col] or total > 1 and !inf_or_sup[col]) {
+	 					draw smileys[0]  at: {current_x, my_height+original_col_width/2} size: {original_col_width/2, original_col_width/2};
+	 				} else {draw smileys[4]  at: {current_x, my_height+original_col_width/2} size: {original_col_width/2, original_col_width/2};}} 
+	 			}
+	 			current_x <- current_x + col_width;
+	 		}
+ 		} else {
+ 			loop col over: data.keys {
+	 			float current_y <-chart_height/6;
+	
+	 			float total <- 0.0;
+	 			
+	 			if (!draw_smiley[col] and !gap_added) {
+	 				gap_added <- true;
+	 				col_width<-original_col_width/3;
+	 				current_x <- current_x + col_width;
+	 			}
+	
+				float v <- data[col];
+				total <- total+v;
+				float col_height <- (v * chart_height)/max_value;
+				draw rectangle(col_width,col_height) color: color_col at: {current_x,my_height  + current_y - col_height/2};
+				draw rectangle(col_width,col_height) wireframe: true border: dark_theme ? #black : #black width: 2 at: {current_x,my_height  + current_y -  col_height/2};
+				current_y <- current_y - col_height;
+	 			
+	 			if (icons[col] != nil) {
+	 				draw icons[col] at: {current_x, gap_added ? my_height  + current_y - original_col_width/4 :( location.y - chart_height/2)} size: {original_col_width/(gap_added? 4:2), original_col_width/(gap_added? 4:2)};
+	 				if draw_smiley[col] {
+	 				if (total <= 1 and inf_or_sup[col] or total > 1 and !inf_or_sup[col]) {
+	 					draw smileys[0]  at: {current_x, my_height+original_col_width/2} size: {original_col_width/2, original_col_width/2};
+	 				} else {draw smileys[4]  at: {current_x, my_height+original_col_width/2} size: {original_col_width/2, original_col_width/2};}} 
+	 			}
+	 			current_x <- current_x + col_width;
+	 		}
  		}
  	}
 }
@@ -876,13 +902,16 @@ experiment Open {
 						} else if (stage = PLAYER_VR_EXPLORATION_TURN) {
 							ask simulation {
 								do end_of_exploration_phase;
-								if !show_detailed_chart {
+								if !show_pol_chart_by_cat {
 									ask global_chart {
 										float total_value <- (village_water_pollution sum_of(each) + village_solid_pollution sum_of(each)) / max_pollution_ecolabel;
 										float production_value <- village_production sum_of(each) / min_production_ecolabel;
 										float water_value <- village_water_pollution sum_of(each)/ max_pollution_ecolabel;
 										float solid_value <- village_solid_pollution sum_of(each) / max_pollution_ecolabel;
 										do update_all(["Total"::total_value, "Water"::water_value, "Solid"::solid_value, "Production"::production_value]);
+										loop i from: 0 to: 3 {
+											do update_all2(village_color[i], ["Total"::(village_water_pollution[i] + village_solid_pollution[i]) / max_pollution_ecolabel, "Water"::village_water_pollution[i] / max_pollution_ecolabel, "Solid"::village_solid_pollution[i] / max_pollution_ecolabel, "Production"::village_production[i] / min_production_ecolabel]);
+										}
 									}
 								}
 							}

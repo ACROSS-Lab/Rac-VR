@@ -33,8 +33,8 @@ global {
 	
 	float time_for_player_turn <- 20#s;//2 #mn;
 	float time_for_discussion <- 20 #s;//3 #mn; // time before the player turns
-	float time_for_exploration <- 20 #s; //3 #mn;
-	float time_for_estimation <- 20 #s; //1 #mn;
+	float time_for_exploration <- 1 #mn; //3 #mn;
+	float time_for_estimation <- 1 #mn;
 	 
 	
 	/******************* LOG RESULTS *************************************/
