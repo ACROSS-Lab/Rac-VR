@@ -15,9 +15,8 @@ model UI1
 import "../Global.gaml"
  
 global {
-	
+
 	bool dark_theme;
-	
 	
 	/********************** COLORS ************************************************/
 	
@@ -97,6 +96,7 @@ global {
 	bool show_waterflow_selected;
 	bool show_geography <- true;
 	bool show_chart <- true;
+	bool show_detailed_chart <- false; //to show solid and water pollution indicators  
 	bool show_player_numbers <- true;
 	bool play_pause_selected <- false;
 	bool next_selected <- false;
@@ -106,8 +106,6 @@ global {
 	point pause_location <- {0,0};
 	string over_action;
 	int village_selected;
-
-
 	
 	/********************** ICONS *************************************************/
 	
@@ -133,7 +131,7 @@ global {
 	image_file vr_icon <- image_file("../../includes/icons/VR.png");
 	image_file graph_icon <- image_file("../../includes/icons/graph.png");
 
-	
+
 	/********************** VARIOUS FUNCTIONS  ***************************/
 	
 	image_file soil_pollution_smiley (float v) {
@@ -297,10 +295,15 @@ global {
 				//update_all(["Total"::(village_water_pollution[i] + village_solid_pollution[i]) / max_pollution_ecolabel, "Water"::village_water_pollution[i] / max_pollution_ecolabel, "Solid"::village_solid_pollution[i] / max_pollution_ecolabel, "Production"::village_production[i] / min_production_ecolabel]);
 			//}
 			float total_value <- (village_water_pollution sum_of(each) + village_solid_pollution sum_of(each)) / max_pollution_ecolabel;
+			float production_value <- village_production sum_of(each) / min_production_ecolabel;
 			float water_value <- village_water_pollution sum_of(each)/ max_pollution_ecolabel;
 			float solid_value <- village_solid_pollution sum_of(each) / max_pollution_ecolabel;
-			float production_value <- village_production sum_of(each) / min_production_ecolabel;
-			do update_all(["Total"::total_value, "Water"::water_value, "Solid"::solid_value, "Production"::production_value]);
+			if show_detailed_chart {
+				do update_all(["Total"::total_value, "Water"::water_value, "Solid"::solid_value, "Production"::production_value]);
+			} else{
+				do update_all(["Total"::total_value, "Water"::0, "Solid"::0, "Production"::production_value]);
+			}
+
 		}
 		// TODO remove this at some point ! 
 		time_for_discussion <- initial_time_for_discussion;
@@ -313,8 +316,18 @@ global {
 	reflex end_of_exploration_turn when: use_timer_for_exploration and stage = PLAYER_VR_EXPLORATION_TURN {
 		remaining_time <- int(time_for_exploration - machine_time/1000.0 + start_exploration_turn_time/1000.0); 
 		if remaining_time <= 0 {
-			do end_of_exploration_phase;		
+			do end_of_exploration_phase;
+			if !show_detailed_chart {
+				ask global_chart {
+					float total_value <- (village_water_pollution sum_of(each) + village_solid_pollution sum_of(each)) / max_pollution_ecolabel;
+					float production_value <- village_production sum_of(each) / min_production_ecolabel;
+					float water_value <- village_water_pollution sum_of(each)/ max_pollution_ecolabel;
+					float solid_value <- village_solid_pollution sum_of(each) / max_pollution_ecolabel;
+					do update_all(["Total"::total_value, "Water"::water_value, "Solid"::solid_value, "Production"::production_value]);
+				}
+			}
 		}
+
 	}
 	
 	reflex end_of_estimation_turn when: use_timer_for_estimation and stage = PLAYER_VR_ESTIMATION_TURN {
@@ -400,7 +413,6 @@ species stacked_chart {
 	float chart_height <- w_height - w_height/4;
 	float max_value;
 	float desired_value;
-	
 	
 	action add_column(string column) {
 		if (!(column in data.keys)) {
@@ -864,6 +876,15 @@ experiment Open {
 						} else if (stage = PLAYER_VR_EXPLORATION_TURN) {
 							ask simulation {
 								do end_of_exploration_phase;
+								if !show_detailed_chart {
+									ask global_chart {
+										float total_value <- (village_water_pollution sum_of(each) + village_solid_pollution sum_of(each)) / max_pollution_ecolabel;
+										float production_value <- village_production sum_of(each) / min_production_ecolabel;
+										float water_value <- village_water_pollution sum_of(each)/ max_pollution_ecolabel;
+										float solid_value <- village_solid_pollution sum_of(each) / max_pollution_ecolabel;
+										do update_all(["Total"::total_value, "Water"::water_value, "Solid"::solid_value, "Production"::production_value]);
+									}
+								}
 							}
 						} else if (stage != COMPUTE_INDICATORS) {
 							if (CHOOSING_VILLAGE_FOR_POOL) {
@@ -1028,7 +1049,7 @@ experiment Open {
 			}	
 			 */
 		}
-		
+	
 
 		/********************** CHARTS DISPLAY ***************************************************/
 
@@ -1078,7 +1099,6 @@ experiment Open {
 				x <- x + 2* x_gap;
 			}
 
-			
 			agents "Global" value: [global_chart] aspect: horizontal visible: show_chart position: {0.25,0} size: {0.7,0.7};
 				
 		}		
