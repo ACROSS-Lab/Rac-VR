@@ -28,9 +28,13 @@ global {
 	/******************* USE TIMERS *************************************/
 	bool use_timer_player_turn <- false;	
 	bool use_timer_for_discussion <- false;
+	bool use_timer_for_exploration <- true;
+	bool use_timer_for_estimation <- true;
 	
 	float time_for_player_turn <- 20#s;//2 #mn;
 	float time_for_discussion <- 20 #s;//3 #mn; // time before the player turns
+	float time_for_exploration <- 20 #s; //3 #mn;
+	float time_for_estimation <- 20 #s; //1 #mn;
 	 
 	
 	/******************* LOG RESULTS *************************************/

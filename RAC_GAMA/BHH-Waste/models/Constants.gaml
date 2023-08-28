@@ -244,7 +244,7 @@ global {
 	string ACT_INSTALL_DUMPHOLES <- "Making farmers participate in the installation of dumpholes for agricultural products";
 	string ACT_END_OF_TURN <- "end of turn";
 	string ACT_COLLECT <- "Increase solid waste collect frequency";
-	
+	string ACT_FACILITY_TREATMENT_MAINTENANCE <- "Maintenance of water treatment facilities";
 	
 	// 
 	
@@ -302,10 +302,12 @@ global {
 	string LEGEND <- "legend";
 	string RANKING <- "ranking";
 	
+	// STAGE
 	string PLAYER_ACTION_TURN <- "player action turn";
 	string PLAYER_DISCUSSION_TURN <- "player discussion turn";
+	string PLAYER_VR_ESTIMATION_TURN <- "player estimation turn";
+	string PLAYER_VR_EXPLORATION_TURN <- "player exploration turn";
 	string COMPUTE_INDICATORS <-  "compute indicators";
-	string ACT_FACILITY_TREATMENT_MAINTENANCE <- "Maintenance of water treatment facilities";
 		
 	string MAP_SOLID_WASTE <- "Map of solid waste";
 	string MAP_WATER_WASTE <- "Map of waster waste";

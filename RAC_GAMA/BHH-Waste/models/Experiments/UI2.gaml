@@ -64,7 +64,7 @@ global {
 	int chosen_village <- -1;
 	int number_of_days_passed <- 0;
 	map<village,list<string>> village_actions <- nil;
-		
+	
 	/****************** DISPLAY OF WATER DYNAMICS *****************************/ 
 	
 	graph canal_network_<- nil;
@@ -75,9 +75,13 @@ global {
 	
 	bool use_timer_player_turn <- false;	
 	bool use_timer_for_discussion <- true;
+	bool use_timer_for_exploration <- true;
+	bool use_timer_for_estimation <- true;
 	bool timer_just_for_warning <- false; //if true, if the timer is finished, just a warning message is displayed; if false, the turn passes to the next player - for the moment, some issue with the automatic change of step
 	float initial_time_for_discussion <- 2.5 #mn const: true; // time before the player turns
-	float initial_time_for_choosing_village <- 1#mn;
+	float initial_time_for_exploration <- 3 #mn const: true;
+	float initial_time_for_estimation <- 1 #mn const: true;
+	float initial_time_for_choosing_village <- 1#mn const: true;
 	float time_for_choosing_village <- initial_time_for_choosing_village;
 	float start_choosing_village_time;
 	int remaining_time_for_choosing_village <- 0;
@@ -130,39 +134,6 @@ global {
 
 	
 	/********************** VARIOUS FUNCTIONS  ***************************/
-	
-	action choose_village_for_pool {
-		if (not CHOOSING_VILLAGE_FOR_POOL) {
-			commune_money <- 0;
-			ask village {
-				commune_money <- commune_money + budget;
-				budget <- 0;
-			}
-			extra_turn <- true;
-			CHOOSING_VILLAGE_FOR_POOL <- true;
-			start_choosing_village_time <- gama.machine_time;
-		}
-	}	
-	
-	reflex end_of_choosing_village when: CHOOSING_VILLAGE_FOR_POOL {
-		remaining_time_for_choosing_village <- int(time_for_choosing_village - machine_time/1000.0  +start_choosing_village_time/1000.0); 
-		if remaining_time_for_choosing_village <= 0 or chosen_village > -1 or PASS_CHOOSING_VILLAGE{
-			if (chosen_village > -1){
-				villages_order << village[chosen_village];
-				ask village[chosen_village] {
-					budget <- commune_money;
-				}
-				//do before_start_turn();
-			} else {
-				commune_budget_dispatch <- true;
-			}
-			CHOOSING_VILLAGE_FOR_POOL <- false;
-			PASS_CHOOSING_VILLAGE <- false;
-			chosen_village  <- -1;
-			commune_money <- 0;
-			to_refresh <- true;
-		}
-	}
 	
 	image_file soil_pollution_smiley (float v) {
 		switch(v) {
@@ -225,8 +196,7 @@ global {
 		}
 		
 	}
-	
-		
+
 	int production_class_current(plot p) {
 		float w <- p.current_productivity; 
 		switch(w) {
@@ -249,6 +219,18 @@ global {
 		}
 	}
 
+	action choose_village_for_pool {
+		if (not CHOOSING_VILLAGE_FOR_POOL) {
+			commune_money <- 0;
+			ask village {
+				commune_money <- commune_money + budget;
+				budget <- 0;
+			}
+			extra_turn <- true;
+			CHOOSING_VILLAGE_FOR_POOL <- true;
+			start_choosing_village_time <- gama.machine_time;
+		}
+	}
 	
 	action action_executed(string action_name) {
 		if village_actions = nil or empty(village_actions) {
@@ -304,7 +286,7 @@ global {
 		global_chart <- stacked_chart[0];
 
 	}
-	
+
 	reflex update_charts when: stage = COMPUTE_INDICATORS{
 		village_actions <- nil;
 		ask global_chart {
@@ -321,16 +303,31 @@ global {
 		}
 		// TODO remove this at some point ! 
 		time_for_discussion <- initial_time_for_discussion;
+		time_for_exploration <- initial_time_for_exploration;
+		time_for_estimation <- initial_time_for_estimation;
 		pause_started_time <- 0.0;
 		number_of_days_passed <- number_of_days_passed + 1;
 	}
 	
-	reflex end_of_discussion_turn when:  stage = PLAYER_DISCUSSION_TURN {
-		remaining_time <- int(time_for_discussion - machine_time/1000.0  +start_discussion_turn_time/1000.0); 
+	reflex end_of_exploration_turn when: use_timer_for_exploration and stage = PLAYER_VR_EXPLORATION_TURN {
+		remaining_time <- int(time_for_exploration - machine_time/1000.0 + start_exploration_turn_time/1000.0); 
+		if remaining_time <= 0 {
+			do end_of_exploration_phase;		
+		}
+	}
+	
+	reflex end_of_estimation_turn when: use_timer_for_estimation and stage = PLAYER_VR_ESTIMATION_TURN {
+		remaining_time <- int(time_for_estimation - machine_time/1000.0 + start_estimation_turn_time/1000.0); 
+		if remaining_time <= 0 {
+			do end_of_estimation_phase;		
+		}
+	}
+	
+	reflex end_of_discussion_turn when: use_timer_for_discussion and stage = PLAYER_DISCUSSION_TURN {
+		remaining_time <- int(time_for_discussion - machine_time/1000.0 + start_discussion_turn_time/1000.0); 
 		if remaining_time <= 0 {
 			do end_of_discussion_phase;		
 		}
-
 	}
 
 	reflex add_waste when: display_water_flow and every(25 #cycle){
@@ -349,11 +346,29 @@ global {
 				possible_targets[s] <- ts;
 			}
 		}
-		
-		
 		create waste_on_canal number: number_to_add {
 			location <- one_of(possible_targets.keys);
 			target <- one_of (possible_targets[location]);
+		}
+	}
+	
+	reflex end_of_choosing_village when: CHOOSING_VILLAGE_FOR_POOL {
+		remaining_time_for_choosing_village <- int(time_for_choosing_village - machine_time/1000.0  +start_choosing_village_time/1000.0); 
+		if remaining_time_for_choosing_village <= 0 or chosen_village > -1 or PASS_CHOOSING_VILLAGE{
+			if (chosen_village > -1){
+				villages_order << village[chosen_village];
+				ask village[chosen_village] {
+					budget <- commune_money;
+				}
+				//do before_start_turn();
+			} else {
+				commune_budget_dispatch <- true;
+			}
+			CHOOSING_VILLAGE_FOR_POOL <- false;
+			PASS_CHOOSING_VILLAGE <- false;
+			chosen_village  <- -1;
+			commune_money <- 0;
+			to_refresh <- true;
 		}
 	}
 }
@@ -546,6 +561,28 @@ experiment Open {
 				draw "" + int(remaining_time) + "s" color: dark_theme ? #white : #black font: ui_font anchor: #left_center at: {right + 500, y};
 				draw line({left, y}, {right, y}) buffer (100, 200) color: dark_theme ? #white : #gray;
 				float width <- (initial_time_for_discussion - remaining_time) * (right - left) / (initial_time_for_discussion);
+				draw line({left, y}, {left + width, y}) buffer (100, 200) color: #darkgreen;
+				draw sandclock_icon /*rotate: (180 - remaining_time)*3*/ at: {left + width, y} size: w_height / 6;
+			}
+			
+			graphics "Timer for the estimation" visible: stage = PLAYER_VR_ESTIMATION_TURN and turn <= end_of_game {
+				float y <- location.y + w_height/5;
+				float left <- location.x - w_width/2;
+				float right <- location.x + w_width/2;
+				draw "" + int(remaining_time) + "s" color: dark_theme ? #white : #black font: ui_font anchor: #left_center at: {right + 500, y};
+				draw line({left, y}, {right, y}) buffer (100, 200) color: dark_theme ? #white : #gray;
+				float width <- (initial_time_for_estimation - remaining_time) * (right - left) / (initial_time_for_estimation);
+				draw line({left, y}, {left + width, y}) buffer (100, 200) color: #darkgreen;
+				draw sandclock_icon /*rotate: (180 - remaining_time)*3*/ at: {left + width, y} size: w_height / 6;
+			}
+			
+			graphics "Timer for the exploration" visible: stage = PLAYER_VR_EXPLORATION_TURN and turn <= end_of_game {
+				float y <- location.y + w_height/5;
+				float left <- location.x - w_width/2;
+				float right <- location.x + w_width/2;
+				draw "" + int(remaining_time) + "s" color: dark_theme ? #white : #black font: ui_font anchor: #left_center at: {right + 500, y};
+				draw line({left, y}, {right, y}) buffer (100, 200) color: dark_theme ? #white : #gray;
+				float width <- (initial_time_for_exploration - remaining_time) * (right - left) / (initial_time_for_exploration);
 				draw line({left, y}, {left + width, y}) buffer (100, 200) color: #darkgreen;
 				draw sandclock_icon /*rotate: (180 - remaining_time)*3*/ at: {left + width, y} size: w_height / 6;
 			}
