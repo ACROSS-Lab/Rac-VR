@@ -129,7 +129,7 @@ global {
 	image_file garbage_icon <- image_file("../../includes/icons/garbage.png");
 	image_file city_icon <- image_file("../../includes/icons/city.png");
 	image_file score_icon <- image_file("../../includes/icons/trophy.png");
-	image_file danger_icon <- image_file("../../includes/icons/pollution.png");
+	image_file pollution_icon <- image_file("../../includes/icons/pollution.png");
 	image_file vr_icon <- image_file("../../includes/icons/VR.png");
 	image_file graph_icon <- image_file("../../includes/icons/graph.png");
 
@@ -273,7 +273,7 @@ global {
 			do add_column("Water");
 			do add_column("Soil");
 
-			icons <- ["Total"::danger_icon, "Water"::water_icon, "Soil"::soil_icon, "Production"::plant_icon];
+			icons <- ["Total"::pollution_icon, "Water"::water_icon, "Soil"::soil_icon, "Production"::plant_icon];
 		 	inf_or_sup <- ["Total"::true,"Water"::true, "Soil"::true, "Production"::false];
 		 	draw_smiley <- ["Total"::true,"Water"::false, "Soil"::false, "Production"::true];
 			
@@ -1062,7 +1062,7 @@ experiment Open {
 				
 				draw square(x_gap*w_width) color: rgb(130,86,157) at: {x*w_width,y2*w_height};
 				x <- x + 2* x_gap;
-				draw danger_icon at: {x* w_width,y*w_height} size: icon_size;
+				draw pollution_icon at: {x* w_width,y*w_height} size: icon_size;
 				x <- x + 2* x_gap;
 				draw square(x_gap*w_width) color: #orange at: {x*w_width,y2*w_height};
 				x <- x + 2* x_gap;
