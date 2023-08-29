@@ -11,8 +11,10 @@ Material:
   m_Shader: {fileID: 4800000, guid: 80511e7c349a598459512aa59681707a, type: 3}
   m_Parent: {fileID: 0}
   m_ModifiedSerializedProperties: 0
-  m_ValidKeywords: []
-  m_InvalidKeywords: []
+  m_ValidKeywords:
+  - _WATERFLOW_ON
+  m_InvalidKeywords:
+  - _KEYWORD1_ON
   m_LightmapFlags: 4
   m_EnableInstancingVariants: 0
   m_DoubleSidedGI: 0
@@ -26,7 +28,8 @@ Material:
     m_Ints: []
     m_Floats:
     - _AlphaCutoff: 0.5
+    - _WaterFlow: 1
     m_Colors:
-    - _Color0: {r: 0.39622638, g: 0.3528218, b: 0.117746495, a: 0}
+    - _Color0: {r: 0.39622635, g: 0.35282177, b: 0.11774645, a: 0}
     - _EmissionColor: {r: 1, g: 1, b: 1, a: 1}
   m_BuildTextureStacks: []
