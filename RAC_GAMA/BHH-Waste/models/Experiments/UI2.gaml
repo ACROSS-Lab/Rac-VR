@@ -108,6 +108,7 @@ global {
 	point pause_location <- {0,0};
 	string over_action;
 	int village_selected;
+	int turn_see_indicators <- 1;
 	
 	/********************** ICONS *************************************************/
 	
@@ -312,6 +313,9 @@ global {
 	}
 	
 	reflex end_of_exploration_turn when: use_timer_for_exploration and stage = PLAYER_VR_EXPLORATION_TURN {
+		if turn = turn_see_indicators +1 {
+			show_chart_by_vil <- false;
+		}
 		remaining_time <- int(time_for_exploration - machine_time/1000.0 + start_exploration_turn_time/1000.0); 
 		if remaining_time <= 0 {
 			do end_of_exploration_phase;
@@ -680,7 +684,7 @@ experiment Open {
 				draw simulation.paused or about_to_pause ? play_icon : pause_icon at: pause_location color: play_pause_selected ? selected_color:unselected_color size: shape.width / 4;
 			}
 			
-			graphics "Button chart by village" {
+			graphics "Button chart by village" visible: turn <= turn_see_indicators {
 				float x <- 2.0;
 				float y <- 0.5;
 				show_chart_vil_button <-  circle(w_width/8) at_location {x*w_width, location.y- w_height/8};
