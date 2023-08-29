@@ -97,7 +97,6 @@ global {
 	bool show_waterflow_selected;
 	bool show_chart_vil_selected;
 	bool show_geography <- true;
-	bool show_chart_vil <- false;
 	bool show_chart <- true;
 	bool show_chart_by_vil <- false; 
 	bool show_player_numbers <- true;
@@ -685,7 +684,7 @@ experiment Open {
 				float x <- 2.0;
 				float y <- 0.5;
 				show_chart_vil_button <-  circle(w_width/8) at_location {x*w_width, location.y- w_height/8};
-				draw image_file(show_chart_vil ? "../../includes/icons/button_map_off.png":"../../includes/icons/button_map_on.png") color: show_chart_vil_selected ? selected_color:unselected_color size: w_width/4 at: show_chart_vil_button.location ;
+				draw image_file(show_chart_by_vil ? "../../includes/icons/eyes_hide.png":"../../includes/icons/eyes.png") color: show_chart_vil_selected ? selected_color:unselected_color size: w_width/4 at: show_chart_vil_button.location ;
 			}
 			
 			event #mouse_move {
