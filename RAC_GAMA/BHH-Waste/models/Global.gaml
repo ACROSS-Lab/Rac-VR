@@ -823,6 +823,7 @@ global {
 		current_day <- current_day + 1;
 	}
 	
+	/**
 	reflex end_of_discussion_turn when: use_timer_for_discussion and stage = PLAYER_DISCUSSION_TURN {
 		remaining_time <- int(time_for_discussion - machine_time/1000.0  +start_discussion_turn_time/1000.0); 
 		if remaining_time <= 0 {
@@ -830,6 +831,7 @@ global {
 			do pause;
 		}
 	}
+	*/
 		
 	reflex playerturn when: stage = PLAYER_ACTION_TURN{
 		if without_player or (index_player >= length(villages_order)) {
@@ -849,10 +851,11 @@ global {
 						}
 					}
 					stage <- COMPUTE_INDICATORS;
+					show_pol_chart_by_cat_glob <- false;
 					days_with_ecolabel_year << 0;
 					current_day <- 0;
 					step <- #day;
-						
+
 					if not without_player {do tell(INDICATOR_COMPUTATION);}
 					do increase_urban_area;
 				}
@@ -860,13 +863,15 @@ global {
 		}
 	}
 
-	reflex end_of_player_turn when: not without_player and  use_timer_player_turn and stage = PLAYER_ACTION_TURN {
+	/**
+	reflex end_of_player_turn when: not without_player and use_timer_player_turn and stage = PLAYER_ACTION_TURN {
 		remaining_time <- int(time_for_player_turn - machine_time/1000.0  + villages_order[index_player].start_turn_time/1000.0);
 		if remaining_time <= 0 {
 			do tell(TIME_PLAYER + " " + (int(villages_order[index_player]) + 1) +" " + FINISHED);
 			do pause;
 		}
 	}
+	*/
 
 }
 

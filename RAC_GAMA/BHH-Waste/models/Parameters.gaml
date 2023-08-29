@@ -195,6 +195,6 @@ global {
 	int token_installation_dumpholes <- 40; //
 	float impact_installation_dumpholes  <- 0.70 min: 0.0 max: 1.0; //decreasse the quantity of solid waste produced by people outside of urban areas (farmers)
 	
-	
+	bool show_pol_chart_by_cat_glob;
 	
 }
