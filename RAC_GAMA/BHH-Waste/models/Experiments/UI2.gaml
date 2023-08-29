@@ -96,7 +96,6 @@ global {
 	bool show_waterflow_selected;
 	bool show_geography <- true;
 	bool show_chart <- true;
-	bool always_display_sub_charts <- false const: true;
 	bool show_chart_by_vil <- false; 
 	bool show_player_numbers <- true;
 	bool play_pause_selected <- false;

@@ -851,7 +851,10 @@ global {
 						}
 					}
 					stage <- COMPUTE_INDICATORS;
-					show_pol_chart_by_cat_glob <- false;
+					if !always_display_sub_charts {
+						show_pol_chart_by_cat_glob <- false;
+					}
+	
 					days_with_ecolabel_year << 0;
 					current_day <- 0;
 					step <- #day;
