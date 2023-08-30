@@ -11,7 +11,7 @@ model UrbanSpace
 import "../Global.gaml"
 
 
-species urban_area { 
+species urban_area {
 	int population;  
 	list<geometry> geometry_history;
 	list<village> my_villages;
