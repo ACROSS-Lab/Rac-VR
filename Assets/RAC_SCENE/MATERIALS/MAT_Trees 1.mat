@@ -12,6 +12,7 @@ Material:
   m_Parent: {fileID: 0}
   m_ModifiedSerializedProperties: 0
   m_ValidKeywords:
+  - _PLANTS_ON
   - _TEXTURE_ON
   m_InvalidKeywords: []
   m_LightmapFlags: 4
@@ -35,9 +36,11 @@ Material:
     m_Ints: []
     m_Floats:
     - _AlphaCutoff: 0.5
+    - _Plants: 1
     - _Texture: 1
     m_Colors:
     - _BaseColor: {r: 1, g: 1, b: 1, a: 0}
     - _EmissionColor: {r: 1, g: 1, b: 1, a: 1}
+    - _Pollution_Color: {r: 1, g: 1, b: 1, a: 0}
     - _ShadowColor: {r: 0.66215736, g: 0.75608003, b: 0.9056604, a: 0}
   m_BuildTextureStacks: []
