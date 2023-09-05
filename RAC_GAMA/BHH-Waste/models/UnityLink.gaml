@@ -17,7 +17,7 @@ global skills: [network]{
 	 ***************************************************/
 	 
 	//Activate the unity connection; if activated, the model will wait for an connection from Unity to start
-	bool connect_to_unity <- true;
+	bool connect_to_unity <- false;
 	
 	// connection port
 	int port <- 8000;
@@ -120,17 +120,16 @@ global skills: [network]{
 	
 	//add background geometries from a list of geometries, their heights, their collider usage, their outline rendered usage 
 	action add_background_data(list<geometry> geoms, float height, bool collider) {
-		do  add_background_data_with_names(geoms, [],  height,collider) ;
-	
+		do add_background_data_with_names(geoms, [],  height,collider) ;
 	}
+	
 	//add background geometries from a list of geometries, their heights, their collider usage, their outline rendered usage 
 	action add_background_data_with_names(list<geometry> geoms, list<string> names, float height, bool collider) {
 		background_geoms <- background_geoms + geoms;
 		loop times: length(geoms) {
 			background_geoms_heights << height;
 			background_geoms_colliders << collider;
-		}
-		
+		}	
 		background_geoms_names  <- background_geoms_names +  names;
 	}
 	
@@ -352,13 +351,10 @@ species default_player {
 		if to_display {
 			if file_exists("../images/headset.png")  {
 				draw image("../images/headset.png")  size: {player_size_GAMA, player_size_GAMA} at: location + {0, 0, 5} rotate: rotation - 90;
-			
 			} else {
 				draw circle(player_size_GAMA/2.0) at: location + {0, 0, 5} color: color rotate: rotation - 90;
-			
 			}
 			draw cone(rotation - cone_amplitude/2,rotation + cone_amplitude/2) inter circle(cone_distance) translated_by ({cos(rotation), sin(rotation)} * (- player_size_GAMA/4.0)) translated_by {0,0,4.9} color: rgb(#mediumpurple, 0.75);
-		
 		}			
 	}
 }

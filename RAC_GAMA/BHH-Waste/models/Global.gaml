@@ -546,12 +546,11 @@ global {
 				}
 				do tell(mess);
 				//do tell(DISCUSSION_PHASE);
-				start_exploration_turn_time <- machine_time;
 				//start_discussion_turn_time <- machine_time;
 				ask world {
 					do update_display;
 					do resume;
-					do before_discussion_phase;
+					do before_exploration_phase;
 				}
 		
 			}
@@ -700,7 +699,10 @@ global {
 	
 	
 	
-	action before_discussion_phase{} //Can be implemented in children
+	action before_exploration_phase{
+		start_exploration_turn_time <- machine_time;
+		connect_to_unity <- true;
+	}
 	
 	/**
 	action action_executed(string action_name) {
