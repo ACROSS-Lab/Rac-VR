@@ -20,10 +20,10 @@ EditorBuildSettings:
   - enabled: 0
     path: Assets/TestAssets/CelShadingTest/Test_Cel_Shading.unity
     guid: 16788471c09cac9488d42bec1f8d9dbb
-  - enabled: 0
+  - enabled: 1
     path: Assets/Scenes/RAC_MainScene.unity
     guid: b38b46963063dc044b822dcaa19930e4
-  - enabled: 1
+  - enabled: 0
     path: Assets/PACKAGES/VRKeys/Scenes/Example Scene.unity
     guid: a34a374857facec4b8beb240f59fbe4f
   m_configObjects:
