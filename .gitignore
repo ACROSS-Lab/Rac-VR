@@ -75,3 +75,9 @@ crashlytics-build.properties
 /Testing_VR
 /[Aa]ssets/AmplifyShaderEditor*
 /[Aa]ssets/GRADIENT_SCENE*
+
+# Mai-An
+/[Aa]ssets/Oculus/*
+/[Aa]ssets/Oculus.meta*
+/[Aa]ssets/[Rr]esources/*
+/RAC_GAMA/BHH-Waste/results/*
