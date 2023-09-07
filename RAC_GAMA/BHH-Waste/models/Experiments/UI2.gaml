@@ -98,7 +98,7 @@ global {
 	bool show_chart_vil_selected;
 	bool show_geography <- true;
 	bool show_chart <- true;
-	bool show_chart_by_vil <- false; 
+	bool show_chart_by_vil <- true; 
 	bool show_player_numbers <- true;
 	bool play_pause_selected <- false;
 	bool next_selected <- false;
@@ -177,7 +177,7 @@ global {
 		return smileys[0];
 	}
 
-	image_file production_class (village v) {
+	image_file production_class_smiley (village v) {
 		float w <- village_production[int(v)];
 		if (int(v) = 0) {
 			switch(w) {
@@ -196,8 +196,8 @@ global {
 				default {return smileys[0];}
 			}
 		}
-		
 	}
+
 
 	int production_class_current(plot p) {
 		float w <- p.current_productivity; 
@@ -220,6 +220,7 @@ global {
 			default {return 4;}
 		}
 	}
+
 
 	action choose_village_for_pool {
 		if (not CHOOSING_VILLAGE_FOR_POOL) {
@@ -1039,7 +1040,7 @@ experiment Open {
 				
 				//Productivity indication
 				draw plant_icon at: {x, y} size: size;
-				draw world.production_class(self) at: {x - smiley_horizontal_spacing , y + smiley_vertical_spacing, 0.01} size: smiley_size;
+				draw world.production_class_smiley(self) at: {x - smiley_horizontal_spacing , y + smiley_vertical_spacing, 0.01} size: smiley_size;
 				*/
 				
 				draw tokens_icon at: {x,  y} size: size;

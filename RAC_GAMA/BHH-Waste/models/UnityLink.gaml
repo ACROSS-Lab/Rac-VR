@@ -51,6 +51,12 @@ global skills: [network]{
 	// for each geometry sent to Unity, its name in unity 
 	list<string> background_geoms_names;
 	
+	// Information to send to Unity
+	list<int> solidwasteClass;
+	list<int> waterwasteClass;
+	list<int> productionClass;
+	
+	bool classUpdatedTour <- false;
 	
 	
 	
@@ -172,8 +178,22 @@ global skills: [network]{
 		to_send <+ "world"::[world.shape.width * precision, world.shape.height * precision];
 		to_send <+ "delay"::delay_after_mes;
 		to_send <+ "physics"::use_physics_for_player;
-		
 		to_send <+ "position"::[int(location_init.x*precision), int(location_init.y*precision)];
+
+		if unity_client = nil {
+			write "no client to send to";
+		} else {
+			do send to: unity_client contents: as_json_string(to_send) + end_message_symbol;	
+		}
+	}
+	
+	//send indicators' class to the unity client
+	action send_class {
+		map to_send;
+		to_send <+ "solidwaste"::solidwasteClass;
+		to_send <+ "waterwaste"::waterwasteClass;
+		to_send <+ "production"::productionClass;
+		
 		if unity_client = nil {
 			write "no client to send to";
 		} else {
@@ -311,6 +331,10 @@ global skills: [network]{
 		}
 		if do_send_world {
 			do send_world;
+		}
+		if classUpdatedTour {
+			do send_class;
+			classUpdatedTour <- false;
 		}
 		
 	}

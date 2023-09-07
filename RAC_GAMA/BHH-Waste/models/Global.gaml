@@ -98,12 +98,15 @@ global {
 	float total_solid_pollution update: village1_solid_pollution + village2_solid_pollution + village3_solid_pollution + village4_solid_pollution  ;
 	float total_water_pollution update:  village1_water_pollution + village2_water_pollution + village3_water_pollution + village4_water_pollution   ;
 	
+	list<float> villages_solid_pollution update: [village1_solid_pollution, village2_solid_pollution, village3_solid_pollution, village4_solid_pollution] ;
+	list<float> villages_water_pollution update: [village1_water_pollution, village2_water_pollution, village3_water_pollution, village4_water_pollution] ;
 	 
 	float village1_production update: village[0].plots sum_of each.current_production ;	
 	float village2_production update: village[1].plots sum_of each.current_production ;
 	float village3_production update: village[2].plots sum_of each.current_production ;
 	float village4_production update: village[3].plots sum_of each.current_production ;
 	float total_production update: (village1_production + village2_production + village3_production + village4_production) ;
+	list<float> villages_production update: [village1_production, village2_production, village3_production, village4_production] ;
 	
 	list<float> village_solid_pollution <- [0.0, 0.0,0.0,0.0] update:[village1_solid_pollution,village2_solid_pollution,village3_solid_pollution,village4_solid_pollution] ;
 	list<float> village_water_pollution <- [0.0, 0.0,0.0,0.0] update:[village1_water_pollution,village2_water_pollution,village3_water_pollution,village4_water_pollution] ;
@@ -131,6 +134,8 @@ global {
 	
 	bool is_production_ok <- true;
 	bool is_pollution_ok <- true;
+	
+	int days <- 10;
 	/********************** INITIALIZATION OF THE GAME ****************************/
 
 	init {
@@ -501,7 +506,7 @@ global {
 	}
 	
 	action manage_end_of_indicator_computation {
-		if (current_day = 365) {
+		if (current_day = days) {
 			extra_turn <- false;
 			commune_budget_dispatch <- false;
 			ask village {
@@ -603,7 +608,7 @@ global {
 	}
 	
 	action add_data {
-		int time_s <- turn * 365 + current_day;
+		int time_s <- turn * days + current_day;
 		time_step << time_s;
 		village1_solid_pollution_values << village1_solid_pollution;
 	 	village2_solid_pollution_values << village2_solid_pollution;
@@ -701,7 +706,66 @@ global {
 	
 	action before_exploration_phase{
 		start_exploration_turn_time <- machine_time;
+		do update_indicators_unity;
 		connect_to_unity <- true;
+	}
+	
+	action update_indicators_unity{
+		 solidwasteClass <- solidwaste_class(villages_solid_pollution);
+		 waterwasteClass <- waterwaste_class(villages_water_pollution);
+		 productionClass <- production_class(villages_production);
+		 classUpdatedTour <- true;
+	}
+	
+	list<int> solidwaste_class(list<float> l){
+		list<int> class <- [];
+		loop v over: l {
+			switch(v) {
+				match_between [0, 19999] {class <- class + 0;}
+				match_between [20000, 29999] {class <- class + 1;}
+				match_between [30000, 64999] {class <- class + 2;}
+				match_between [65000, 90000] {class <- class + 3;}
+				default {class <- class + 4;}
+			}
+		}
+		return class;
+	}
+	
+	list<int> waterwaste_class(list<float> l){
+		list<int> class <- [];
+		loop v over: l {
+			switch(v) {
+				match_between [0, 4999] {class <- class + 0;}
+				match_between [5000, 14999] {class <- class + 1;}
+				match_between [15000, 29999] {class <- class + 2;}
+				match_between [30000, 44999] {class <- class + 3;}
+				default {class <- class + 4;}
+			}
+		}
+		return class;
+	}
+	
+	list<int> production_class(list<float> l){
+		list<int> class <- [];
+		
+		switch(l at 0) {
+			match_between [0, 199] {class <- class + 0;}
+			match_between [200, 499] {class <- class + 1;}
+			match_between [500, 799] {class <- class + 2;}
+			match_between [800, 1149] {class <- class + 3;}
+			default {class <- class + 4;}
+		}
+		
+		loop i from: 1 to: 3{
+			switch(l[i]) {
+				match_between [0, 299] {class <- class + 0;}
+				match_between [300, 699] {class <- class + 1;}
+				match_between [700, 999] {class <- class + 2;}
+				match_between [1000, 1499] {class <- class + 3;}
+				default {class <- class + 4;}
+			}
+		}
+		return class;
 	}
 	
 	/**

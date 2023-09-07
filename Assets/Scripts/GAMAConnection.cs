@@ -57,7 +57,7 @@ public class GlobalTest : TCPConnector
 
     private ConnectionParameter parameters = null;
 
-    private ConnectionClass class = null;
+    private ConnectionClass classIndicators = null;
 
     private List<GAMAGeometry> geoms;
 
@@ -66,6 +66,8 @@ public class GlobalTest : TCPConnector
     private CoordinateConverter converter;
 
     private PolygonGenerator polyGen;
+
+    private int village_id = 0;
 
     // Start is called before the first frame update
     void Start()
@@ -305,7 +307,11 @@ public class GlobalTest : TCPConnector
 
         }
         else if (mes.Contains("solidwaste")){
-            class = ConnectionParameter.CreateFromJSON(mes);
+            classIndicators = ConnectionClass.CreateFromJSON(mes);
+            Debug.Log(mes);
+            classIndicators.displaySolidClass(classIndicators.solidwaste[village_id]);
+            classIndicators.displayWaterClass(classIndicators.waterwaste[village_id]);
+            classIndicators.displayProductionClass(classIndicators.production[village_id]); 
         }
 
 
