@@ -30,6 +30,6 @@ Material:
     - _AlphaCutoff: 0.5
     - _WaterFlow: 1
     m_Colors:
-    - _Color0: {r: 0.39622635, g: 0.35282177, b: 0.11774645, a: 0}
+    - _Color0: {r: 0.42352942, g: 0.404148, b: 0.06666666, a: 0}
     - _EmissionColor: {r: 1, g: 1, b: 1, a: 1}
   m_BuildTextureStacks: []
