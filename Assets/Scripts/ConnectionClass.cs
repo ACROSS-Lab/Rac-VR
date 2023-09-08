@@ -105,7 +105,7 @@ public class ConnectionClass
         }
     }
 
-    private void displaylvl4(List<GameObject> lvl2, List<GameObject> lvl3, List<GameObject> lvl4, List<GameObject> lvl5)
+    private void displaylvl5(List<GameObject> lvl2, List<GameObject> lvl3, List<GameObject> lvl4, List<GameObject> lvl5)
     {
         if (!dm.UASolidWasteLvl5[0].activeSelf) {
             foreach(GameObject item in dm.UASolidWasteLvl5) {item.SetActive(true);}
@@ -203,12 +203,15 @@ public class ConnectionClass
                 displaylvl2(dm.CanalWasteWaterLvl2, dm.CanalWasteWaterLvl3, dm.CanalWasteWaterLvl4, dm.CanalWasteWaterLvl5);
                 break;
             case 2:
+                // Canals (Dead fish)
                 displaylvl3(dm.CanalWasteWaterLvl2, dm.CanalWasteWaterLvl3, dm.CanalWasteWaterLvl4, dm.CanalWasteWaterLvl5);
                 break;
             case 3:
+                // Canals (Dead fish)
                 displaylvl4(dm.CanalWasteWaterLvl2, dm.CanalWasteWaterLvl3, dm.CanalWasteWaterLvl4, dm.CanalWasteWaterLvl5);
                 break;
             default :
+                // Canals (Dead fish)
                 displaylvl5(dm.CanalWasteWaterLvl2, dm.CanalWasteWaterLvl3, dm.CanalWasteWaterLvl4, dm.CanalWasteWaterLvl5);
                 break;
         }
