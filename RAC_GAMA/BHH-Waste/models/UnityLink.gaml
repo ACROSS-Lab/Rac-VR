@@ -55,6 +55,7 @@ global skills: [network]{
 	list<int> solidwasteClass;
 	list<int> waterwasteClass;
 	list<int> productionClass;
+	list<float> waterwasteValue;
 	
 	bool classUpdatedTour <- false;
 	
@@ -188,11 +189,12 @@ global skills: [network]{
 	}
 	
 	//send indicators' class to the unity client
-	action send_class {
+	action send_indicators {
 		map to_send;
-		to_send <+ "solidwaste"::solidwasteClass;
-		to_send <+ "waterwaste"::waterwasteClass;
-		to_send <+ "production"::productionClass;
+		to_send <+ "solidwasteClass"::solidwasteClass;
+		to_send <+ "waterwasteClass"::waterwasteClass;
+		to_send <+ "productionClass"::productionClass;
+		to_send <+ "waterwaste"::waterwasteValue;
 		
 		if unity_client = nil {
 			write "no client to send to";
@@ -333,7 +335,7 @@ global skills: [network]{
 			do send_world;
 		}
 		if classUpdatedTour {
-			do send_class;
+			do send_indicators;
 			classUpdatedTour <- false;
 		}
 		

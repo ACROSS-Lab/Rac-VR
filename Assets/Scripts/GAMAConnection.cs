@@ -8,9 +8,9 @@ using TMPro;
 public class GlobalTest : TCPConnector
 {
 
- 
-  
-    public GameObject Player; 
+    public GameObject DD;
+
+    public GameObject Player;
 
     public GameObject Ground;
 
@@ -306,12 +306,13 @@ public class GlobalTest : TCPConnector
             infoWorld = WorldJSONInfo.CreateFromJSON(mes);
 
         }
-        else if (mes.Contains("solidwaste")){
-            classIndicators = ConnectionClass.CreateFromJSON(mes);
+        else if (mes.Contains("solidwasteClass")){
+
+            classIndicators = ConnectionClass.CreateFromJSON(mes, DD.GetComponent<DisplayManagement>());
             Debug.Log(mes);
-            classIndicators.displaySolidClass(classIndicators.solidwaste[village_id]);
-            classIndicators.displayWaterClass(classIndicators.waterwaste[village_id]);
-            classIndicators.displayProductionClass(classIndicators.production[village_id]); 
+            classIndicators.displaySolidClass(classIndicators.solidwasteClass[village_id]);
+            //classIndicators.displayWaterClass(classIndicators.waterwasteClass[village_id]);
+            classIndicators.displayProductionClass(classIndicators.productionClass[village_id]); 
         }
 
 
