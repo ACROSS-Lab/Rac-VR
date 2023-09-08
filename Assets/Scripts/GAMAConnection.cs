@@ -306,12 +306,12 @@ public class GlobalTest : TCPConnector
             infoWorld = WorldJSONInfo.CreateFromJSON(mes);
 
         }
-        else if (mes.Contains("solidwaste")){
+        else if (mes.Contains("solidwasteClass")){
             classIndicators = ConnectionClass.CreateFromJSON(mes);
             Debug.Log(mes);
-            classIndicators.displaySolidClass(classIndicators.solidwaste[village_id]);
-            classIndicators.displayWaterClass(classIndicators.waterwaste[village_id]);
-            classIndicators.displayProductionClass(classIndicators.production[village_id]); 
+            classIndicators.displaySolidClass(classIndicators.solidwasteClass[village_id]);
+            classIndicators.displayWaterClass(classIndicators.waterwasteClass[village_id]);
+            classIndicators.displayProductionClass(classIndicators.productionClass[village_id]); 
         }
 
 

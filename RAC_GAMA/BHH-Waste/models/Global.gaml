@@ -714,6 +714,7 @@ global {
 		 solidwasteClass <- solidwaste_class(villages_solid_pollution);
 		 waterwasteClass <- waterwaste_class(villages_water_pollution);
 		 productionClass <- production_class(villages_production);
+		 waterwasteValue <- villages_water_pollution;
 		 classUpdatedTour <- true;
 	}
 	
