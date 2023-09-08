@@ -105,7 +105,7 @@ public class ConnectionClass
         }
     }
 
-    private void displaylvl4(List<GameObject> lvl2, List<GameObject> lvl3, List<GameObject> lvl4, List<GameObject> lvl5)
+    private void displaylvl5(List<GameObject> lvl2, List<GameObject> lvl3, List<GameObject> lvl4, List<GameObject> lvl5)
     {
         if (!dm.UASolidWasteLvl5[0].activeSelf) {
             foreach(GameObject item in dm.UASolidWasteLvl5) {item.SetActive(true);}
