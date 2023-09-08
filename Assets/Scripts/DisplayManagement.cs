@@ -5,47 +5,54 @@ using UnityEngine;
 public class DisplayManagement : MonoBehaviour
 {   
     //Solid waste
-    public List<GameObject> UASolidWasteLvl1;
-    public List<GameObject> UASolidWasteLvl2;
-    public List<GameObject> UASolidWasteLvl3;
-    public List<GameObject> UASolidWasteLvl4;
-    public List<GameObject> UASolidWasteLvl5;
+    public GameObject UASolidWasteLvl1;
+    public GameObject UASolidWasteLvl2;
+    public GameObject UASolidWasteLvl3;
+    public GameObject UASolidWasteLvl4;
+    public GameObject UASolidWasteLvl5;
 
-    public List<GameObject> CanalSolidWasteLvl1;
-    public List<GameObject> CanalSolidWasteLvl2;
-    public List<GameObject> CanalSolidWasteLvl3;
-    public List<GameObject> CanalSolidWasteLvl4;
-    public List<GameObject> CanalSolidWasteLvl5;
-
-    public List<GameObject> FieldSolidWasteLvl1;
-    public List<GameObject> FieldSolidWasteLvl2;
-    public List<GameObject> FieldSolidWasteLvl3;
-    public List<GameObject> FieldSolidWasteLvl4;
-    public List<GameObject> FieldSolidWasteLvl5;
-
+    public GameObject CanalSolidWasteLvl1;
+    public GameObject CanalSolidWasteLvl2;
+    public GameObject CanalSolidWasteLvl3;
+    public GameObject CanalSolidWasteLvl4;
+    public GameObject CanalSolidWasteLvl5;
 
     //Wastewater
-    public List<GameObject> CanalWasteWaterLvl1;
-    public List<GameObject> CanalWasteWaterLvl2;
-    public List<GameObject> CanalWasteWaterLvl3;
-    public List<GameObject> CanalWasteWaterLvl4;
-    public List<GameObject> CanalWasteWaterLvl5;
-    /**
-    public Color TreeWasteWaterLvl1;
-    public Color TreeWasteWaterLvl2;
-    public Color TreeWasteWaterLvl3;
-    public Color TreeWasteWaterLvl4;
-    public Color TreeWasteWaterLvl5;
+        //UA
+    public Color TreeColorLvl1;
+    public Color TreeColorLvl2;
+    public Color TreeColorLvl3;
+    public Color TreeColorLvl4;
+    public Color TreeColorLvl5;
 
-    public Color FieldWasteWaterLvl1;
-    public Color FieldWasteWaterLvl2;
-    public Color FieldWasteWaterLvl3;
-    public Color FieldWasteWaterLvl4;
-    public Color FieldWasteWaterLvl5;
-    */
+        //Fields
+    public Color FieldWaterColorLvl1;
+    public Color FieldWaterColorLvl2;
+    public Color FieldWaterColorLvl3;
+    public Color FieldWaterColorLvl4;
+    public Color FieldWaterColorLvl5;
 
+    public Color FieldPlantColorLvl1;
+    public Color FieldPlantColorLvl2;
+    public Color FieldPlantColorLvl3;
+    public Color FieldPlantColorLvl4;
+    public Color FieldPlantColorLvl5;
+
+        //Canals
+    public GameObject CanalWasteWaterLvl1;
+    public GameObject CanalWasteWaterLvl2;
+    public GameObject CanalWasteWaterLvl3;
+    public GameObject CanalWasteWaterLvl4;
+    public GameObject CanalWasteWaterLvl5;
+    
+    public Color CanalWaterColorLvl1;
+    public Color CanalWaterColorLvl2;
+    public Color CanalWaterColorLvl3;
+    public Color CanalWaterColorLvl4;
+    public Color CanalWaterColorLvl5;
 
     //Production
+
 
     // Start is called before the first frame update
     void Start()

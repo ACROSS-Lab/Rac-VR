@@ -50,10 +50,10 @@ species village {
 	}
 	
 	action compute_indicators {
-		solid_pollution_level <- ((cells sum_of each.solid_waste_level) + (canals sum_of (each.solid_waste_level))) / 10000.0;
-		water_pollution_level <- ((cells sum_of each.water_waste_level) + (canals sum_of (each.water_waste_level)))/ 10000.0;
 		plots <- plots where not dead(each);
 		production_level <- (plots sum_of each.current_production);
+		solid_pollution_level <- ((cells sum_of each.solid_waste_level) + (canals sum_of (each.solid_waste_level))) / 10000.0;
+		water_pollution_level <- ((cells sum_of each.water_waste_level) + (canals sum_of (each.water_waste_level)))/ 10000.0;
 	}
 	
 	action start_turn {

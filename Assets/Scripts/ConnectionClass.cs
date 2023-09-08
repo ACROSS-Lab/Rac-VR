@@ -20,104 +20,97 @@ public class ConnectionClass
     }
 
 
-    private void displaylvl1(List<GameObject> lvl2, List<GameObject> lvl3, List<GameObject> lvl4, List<GameObject> lvl5)
+    private void displaylvl1(GameObject lvl2, GameObject lvl3, GameObject lvl4, GameObject lvl5)
     {
-        if (lvl2[0].activeSelf)
+        if (lvl2.activeSelf)
         {
-            foreach (GameObject item in lvl2) { item.SetActive(false); }
-
-            if (lvl3[0].activeSelf)
+            lvl2.SetActive(false);
+            if (lvl3.activeSelf)
             {
-                foreach (GameObject item in lvl3) { item.SetActive(false); }
-
-                if (lvl4[0].activeSelf)
+                lvl3.SetActive(false);
+                if (lvl4.activeSelf)
                 {
-                    foreach (GameObject item in lvl4) { item.SetActive(false); }
-
-                    if (lvl5[0].activeSelf)
+                    lvl4.SetActive(false);
+                    if (lvl5.activeSelf)
                     {
-                        foreach (GameObject item in lvl5) { item.SetActive(false); }
+                        lvl5.SetActive(false);
                     }
                 }
             }
         }
     }
 
-    private void displaylvl2(List<GameObject> lvl2, List<GameObject> lvl3, List<GameObject> lvl4, List<GameObject> lvl5)
+    private void displaylvl2(GameObject lvl2, GameObject lvl3, GameObject lvl4, GameObject lvl5)
     {
-        if (lvl2[0].activeSelf) {
-            if (lvl3[0].activeSelf) {
-                foreach(GameObject item in lvl3) {item.SetActive(false);}
-
-                if (lvl4[0].activeSelf) {
-                    foreach(GameObject item in lvl4) {item.SetActive(false);}
-
-                    if (lvl5[0].activeSelf) {
-                        foreach(GameObject item in lvl5) {item.SetActive(false);}
+        if (lvl2.activeSelf) {
+            if (lvl3.activeSelf) {
+                lvl3.SetActive(false);
+                if (lvl4.activeSelf) {
+                    lvl4.SetActive(false);
+                    if (lvl5.activeSelf) {
+                        lvl5.SetActive(false);
                     }
                 }
             }
         } 
         else {
-            foreach(GameObject item in lvl2) {item.SetActive(true);}
+            lvl2.SetActive(true);
         }
     }
-    private void displaylvl3(List<GameObject> lvl2, List<GameObject> lvl3, List<GameObject> lvl4, List<GameObject> lvl5)
-    {
-        if (lvl2[0].activeSelf) {
-                    if (lvl3[0].activeSelf) {
-                        if (lvl4[0].activeSelf) {
-                            foreach(GameObject item in lvl4) {item.SetActive(false);}
 
-                            if (lvl5[0].activeSelf) {
-                                foreach(GameObject item in lvl5) {item.SetActive(false);}
-                            }
-                        }
+    private void displaylvl3(GameObject lvl2, GameObject lvl3, GameObject lvl4, GameObject lvl5)
+    {
+        if (lvl2.activeSelf) {
+            if (lvl3.activeSelf) {
+                if (lvl4.activeSelf) {
+                    lvl4.SetActive(false);
+                    if (lvl5.activeSelf) {
+                        lvl5.SetActive(false);
                     }
-                    else 
-                    {
-                        foreach(GameObject item in lvl3) {item.SetActive(true);}
-                    }
-                } 
-                else {
-                    foreach(GameObject item in lvl2) {item.SetActive(true);}
-                    foreach(GameObject item in lvl3) {item.SetActive(true);}
                 }
+            }
+            else 
+            {
+                lvl3.SetActive(true);
+            }
+        } 
+        else {
+            lvl2.SetActive(true);
+            lvl3.SetActive(true);
+        }
     }
 
-    private void displaylvl4(List<GameObject> lvl2, List<GameObject> lvl3, List<GameObject> lvl4, List<GameObject> lvl5)
+    private void displaylvl4(GameObject lvl2, GameObject lvl3, GameObject lvl4, GameObject lvl5)
     {
-        if (!dm.UASolidWasteLvl5[0].activeSelf) {
-            if (!dm.UASolidWasteLvl4[0].activeSelf) {
-                foreach(GameObject item in dm.UASolidWasteLvl4) {item.SetActive(true);}
-
-                if (!dm.UASolidWasteLvl3[0].activeSelf) {
-                    foreach(GameObject item in dm.UASolidWasteLvl3) {item.SetActive(true);}
-
-                    if (!dm.UASolidWasteLvl2[0].activeSelf) {
-                        foreach(GameObject item in dm.UASolidWasteLvl2) {item.SetActive(true);}
+        if (!lvl5.activeSelf) {
+            if (!lvl4.activeSelf) {
+                lvl4.SetActive(true);
+                if (!lvl3.activeSelf) {
+                    lvl3.SetActive(true);
+                    if (!lvl2.activeSelf) {
+                        lvl2.SetActive(true);
                     }
                 } 
             }
         } 
         else {
-            foreach(GameObject item in dm.UASolidWasteLvl5) {item.SetActive(false);}
+            lvl5.SetActive(false);
         }
     }
 
-    private void displaylvl5(List<GameObject> lvl2, List<GameObject> lvl3, List<GameObject> lvl4, List<GameObject> lvl5)
+    private void displaylvl5(GameObject lvl2, GameObject lvl3, GameObject lvl4, GameObject lvl5)
     {
-        if (!dm.UASolidWasteLvl5[0].activeSelf) {
-            foreach(GameObject item in dm.UASolidWasteLvl5) {item.SetActive(true);}
+        if (!lvl5.activeSelf) {
+            lvl5.SetActive(true);
 
-            if (!dm.UASolidWasteLvl4[0].activeSelf) {
-                foreach(GameObject item in dm.UASolidWasteLvl4) {item.SetActive(true);}
+            if (!lvl4.activeSelf) {
+                lvl4.SetActive(true);
 
-                if (!dm.UASolidWasteLvl3[0].activeSelf) {
-                    foreach(GameObject item in dm.UASolidWasteLvl3) {item.SetActive(true);}
+                if (!lvl3.activeSelf) {
+                    lvl3.SetActive(true);
 
-                    if (!dm.UASolidWasteLvl2[0].activeSelf) {
-                        foreach(GameObject item in dm.UASolidWasteLvl2) {item.SetActive(true);}
+                    if (!lvl2.activeSelf) {
+                        lvl2.SetActive(true);
                     }
                 } 
             }
@@ -135,10 +128,6 @@ public class ConnectionClass
                 // Canals
                 displaylvl1(dm.CanalSolidWasteLvl2, dm.CanalSolidWasteLvl3, dm.CanalSolidWasteLvl4, dm.CanalSolidWasteLvl5);
 
-
-                // Fields
-                displaylvl1(dm.FieldSolidWasteLvl2, dm.FieldSolidWasteLvl3, dm.FieldSolidWasteLvl4, dm.FieldSolidWasteLvl5);
-
                 break;
 
             case 1:
@@ -148,10 +137,6 @@ public class ConnectionClass
                 // Canals
                 displaylvl2(dm.CanalSolidWasteLvl2, dm.CanalSolidWasteLvl3, dm.CanalSolidWasteLvl4, dm.CanalSolidWasteLvl5);
 
-
-                // Fields
-                displaylvl2(dm.FieldSolidWasteLvl2, dm.FieldSolidWasteLvl3, dm.FieldSolidWasteLvl4, dm.FieldSolidWasteLvl5);
-                
                 break;
             case 2:
                 // Urban Areas
@@ -160,10 +145,6 @@ public class ConnectionClass
                 // Canals
                 displaylvl3(dm.CanalSolidWasteLvl2, dm.CanalSolidWasteLvl3, dm.CanalSolidWasteLvl4, dm.CanalSolidWasteLvl5);
 
-
-                // Fields
-                displaylvl3(dm.FieldSolidWasteLvl2, dm.FieldSolidWasteLvl3, dm.FieldSolidWasteLvl4, dm.FieldSolidWasteLvl5);
-                
                 break;
             case 3:
                 // Urban Areas
@@ -172,10 +153,6 @@ public class ConnectionClass
                 // Canals
                 displaylvl4(dm.CanalSolidWasteLvl2, dm.CanalSolidWasteLvl3, dm.CanalSolidWasteLvl4, dm.CanalSolidWasteLvl5);
 
-
-                // Fields
-                displaylvl4(dm.FieldSolidWasteLvl2, dm.FieldSolidWasteLvl3, dm.FieldSolidWasteLvl4, dm.FieldSolidWasteLvl5);
-                
                 break;
             default :
                 // Urban Areas
@@ -184,10 +161,6 @@ public class ConnectionClass
                 // Canals
                 displaylvl5(dm.CanalSolidWasteLvl2, dm.CanalSolidWasteLvl3, dm.CanalSolidWasteLvl4, dm.CanalSolidWasteLvl5);
 
-
-                // Fields
-                displaylvl5(dm.FieldSolidWasteLvl2, dm.FieldSolidWasteLvl3, dm.FieldSolidWasteLvl4, dm.FieldSolidWasteLvl5);
-                
                 break;
         }
     }

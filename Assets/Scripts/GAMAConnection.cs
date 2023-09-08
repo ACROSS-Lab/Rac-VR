@@ -311,7 +311,7 @@ public class GlobalTest : TCPConnector
             classIndicators = ConnectionClass.CreateFromJSON(mes, DD.GetComponent<DisplayManagement>());
             Debug.Log(mes);
             classIndicators.displaySolidClass(classIndicators.solidwasteClass[village_id]);
-            //classIndicators.displayWaterClass(classIndicators.waterwasteClass[village_id]);
+            classIndicators.displayWaterClass(classIndicators.waterwasteClass[village_id]);
             classIndicators.displayProductionClass(classIndicators.productionClass[village_id]); 
         }
 

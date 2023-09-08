@@ -52,11 +52,18 @@ global skills: [network]{
 	list<string> background_geoms_names;
 	
 	// Information to send to Unity
+	list<int> solidwasteVillageClass;
+	list<int> solidwasteCanalClass;
+	list<int> waterwasteCanalClass;
+	list<float> waterwasteVillageValue;
+	list<float> waterwasteCanalValue;
+	
 	list<int> solidwasteClass;
 	list<int> waterwasteClass;
 	list<int> productionClass;
-	list<float> waterwasteValue;
 	
+	list<float> waterwasteValue;
+		
 	bool classUpdatedTour <- false;
 	
 	
@@ -193,8 +200,17 @@ global skills: [network]{
 		map to_send;
 		to_send <+ "solidwasteClass"::solidwasteClass;
 		to_send <+ "waterwasteClass"::waterwasteClass;
-		to_send <+ "productionClass"::productionClass;
 		to_send <+ "waterwaste"::waterwasteValue;
+		
+		to_send <+ "productionClass"::productionClass;
+		
+		/** To use, define categories
+		to_send <+ "solidwasteVillageClass"::solidwasteVillageClass;
+		to_send <+ "solidwasteCanalClass"::solidwasteCanalClass;
+		to_send <+ "waterwasteVillage"::waterwasteVillageValue;
+		to_send <+ "waterwasteCanal"::waterwasteCanalValue;
+		to_send <+ "waterwasteCanalClass"::waterwasteCanalClass;
+		*/
 		
 		if unity_client = nil {
 			write "no client to send to";
