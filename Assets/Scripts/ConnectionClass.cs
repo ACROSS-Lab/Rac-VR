@@ -10,292 +10,184 @@ public class ConnectionClass
     public List<int> productionClass;
     public List<float> waterwaste;
 
-    public static ConnectionClass CreateFromJSON(string jsonString)
+    public  DisplayManagement dm;
+
+    public static ConnectionClass CreateFromJSON(string jsonString, DisplayManagement dm)
     {
-        return JsonUtility.FromJson<ConnectionClass>(jsonString);
+        ConnectionClass cc = JsonUtility.FromJson<ConnectionClass>(jsonString);
+        cc.dm = dm;
+        return cc;
     }
+
+
+    private void displaylvl1(List<GameObject> lvl2, List<GameObject> lvl3, List<GameObject> lvl4, List<GameObject> lvl5)
+    {
+        if (lvl2[0].activeSelf)
+        {
+            foreach (GameObject item in lvl2) { item.SetActive(false); }
+
+            if (lvl3[0].activeSelf)
+            {
+                foreach (GameObject item in lvl3) { item.SetActive(false); }
+
+                if (lvl4[0].activeSelf)
+                {
+                    foreach (GameObject item in lvl4) { item.SetActive(false); }
+
+                    if (lvl5[0].activeSelf)
+                    {
+                        foreach (GameObject item in lvl5) { item.SetActive(false); }
+                    }
+                }
+            }
+        }
+    }
+
+    private void displaylvl2(List<GameObject> lvl2, List<GameObject> lvl3, List<GameObject> lvl4, List<GameObject> lvl5)
+    {
+        if (lvl2[0].activeSelf) {
+            if (lvl3[0].activeSelf) {
+                foreach(GameObject item in lvl3) {item.SetActive(false);}
+
+                if (lvl4[0].activeSelf) {
+                    foreach(GameObject item in lvl4) {item.SetActive(false);}
+
+                    if (lvl5[0].activeSelf) {
+                        foreach(GameObject item in lvl5) {item.SetActive(false);}
+                    }
+                }
+            }
+        } 
+        else {
+            foreach(GameObject item in lvl2) {item.SetActive(true);}
+        }
+    }
+    private void displaylvl3(List<GameObject> lvl2, List<GameObject> lvl3, List<GameObject> lvl4, List<GameObject> lvl5)
+    {
+        if (lvl2[0].activeSelf) {
+                    if (lvl3[0].activeSelf) {
+                        if (lvl4[0].activeSelf) {
+                            foreach(GameObject item in lvl4) {item.SetActive(false);}
+
+                            if (lvl5[0].activeSelf) {
+                                foreach(GameObject item in lvl5) {item.SetActive(false);}
+                            }
+                        }
+                    }
+                    else 
+                    {
+                        foreach(GameObject item in lvl3) {item.SetActive(true);}
+                    }
+                } 
+                else {
+                    foreach(GameObject item in lvl2) {item.SetActive(true);}
+                    foreach(GameObject item in lvl3) {item.SetActive(true);}
+                }
+    }
+
+    private void displaylvl4(List<GameObject> lvl2, List<GameObject> lvl3, List<GameObject> lvl4, List<GameObject> lvl5)
+    {
+        if (!dm.UASolidWasteLvl5[0].activeSelf) {
+            if (!dm.UASolidWasteLvl4[0].activeSelf) {
+                foreach(GameObject item in dm.UASolidWasteLvl4) {item.SetActive(true);}
+
+                if (!dm.UASolidWasteLvl3[0].activeSelf) {
+                    foreach(GameObject item in dm.UASolidWasteLvl3) {item.SetActive(true);}
+
+                    if (!dm.UASolidWasteLvl2[0].activeSelf) {
+                        foreach(GameObject item in dm.UASolidWasteLvl2) {item.SetActive(true);}
+                    }
+                } 
+            }
+        } 
+        else {
+            foreach(GameObject item in dm.UASolidWasteLvl5) {item.SetActive(false);}
+        }
+    }
+
+    private void displaylvl4(List<GameObject> lvl2, List<GameObject> lvl3, List<GameObject> lvl4, List<GameObject> lvl5)
+    {
+        if (!dm.UASolidWasteLvl5[0].activeSelf) {
+            foreach(GameObject item in dm.UASolidWasteLvl5) {item.SetActive(true);}
+
+            if (!dm.UASolidWasteLvl4[0].activeSelf) {
+                foreach(GameObject item in dm.UASolidWasteLvl4) {item.SetActive(true);}
+
+                if (!dm.UASolidWasteLvl3[0].activeSelf) {
+                    foreach(GameObject item in dm.UASolidWasteLvl3) {item.SetActive(true);}
+
+                    if (!dm.UASolidWasteLvl2[0].activeSelf) {
+                        foreach(GameObject item in dm.UASolidWasteLvl2) {item.SetActive(true);}
+                    }
+                } 
+            }
+        }
+    }
+
+
 
     public void displaySolidClass(int classValue){
         switch(classValue){
             case 0:
                 // Urban Areas
-                if (UASolidWasteLvl2[0].activeSelf) {
-                    foreach(GameObject item in UASolidWasteLvl2) {item.SetActive(false);}
-
-                    if (UASolidWasteLvl3[0].activeSelf) {
-                        foreach(GameObject item in UASolidWasteLvl3) {item.SetActive(false);}
-
-                        if (UASolidWasteLvl4[0].activeSelf) {
-                            foreach(GameObject item in UASolidWasteLvl4) {item.SetActive(false);}
-
-                            if (UASolidWasteLvl5[0].activeSelf) {
-                                foreach(GameObject item in UASolidWasteLvl5) {item.SetActive(false);}
-                            }
-                        }
-                    }
-                }
-
+                displaylvl1(dm.UASolidWasteLvl2, dm.UASolidWasteLvl3, dm.UASolidWasteLvl4, dm.UASolidWasteLvl5);
 
                 // Canals
-                if (CanalSolidWasteLvl2[0].activeSelf) {
-                    foreach(GameObject item in CanalSolidWasteLvl2) {item.SetActive(false);}
+                displaylvl1(dm.CanalSolidWasteLvl2, dm.CanalSolidWasteLvl3, dm.CanalSolidWasteLvl4, dm.CanalSolidWasteLvl5);
 
-                    if (CanalSolidWasteLvl3[0].activeSelf) {
-                        foreach(GameObject item in CanalSolidWasteLvl3) {item.SetActive(false);}
-
-                        if (CanalSolidWasteLvl4[0].activeSelf) {
-                            foreach(GameObject item in CanalSolidWasteLvl4) {item.SetActive(false);}
-
-                            if (CanalSolidWasteLvl5[0].activeSelf) {
-                                foreach(GameObject item in CanalSolidWasteLvl5) {item.SetActive(false);}
-                            }
-                        }
-                    }
-                }
 
                 // Fields
-                if (FieldSolidWasteLvl2[0].activeSelf) {
-                    foreach(GameObject item in FieldSolidWasteLvl2) {item.SetActive(false);}
+                displaylvl1(dm.FieldSolidWasteLvl2, dm.FieldSolidWasteLvl3, dm.FieldSolidWasteLvl4, dm.FieldSolidWasteLvl5);
 
-                    if (FieldSolidWasteLvl3[0].activeSelf) {
-                        foreach(GameObject item in FieldSolidWasteLvl3) {item.SetActive(false);}
-
-                        if (FieldSolidWasteLvl4[0].activeSelf) {
-                            foreach(GameObject item in FieldSolidWasteLvl4) {item.SetActive(false);}
-
-                            if (FieldSolidWasteLvl5[0].activeSelf) {
-                                foreach(GameObject item in FieldSolidWasteLvl5) {item.SetActive(false);}
-                            }
-                        }
-                    }
-                }
                 break;
 
             case 1:
                 // Urban Areas
-                if (UASolidWasteLvl2[0].activeSelf) {
-                    if (UASolidWasteLvl3[0].activeSelf) {
-                        foreach(GameObject item in UASolidWasteLvl3) {item.SetActive(false);}
-
-                        if (UASolidWasteLvl4[0].activeSelf) {
-                            foreach(GameObject item in UASolidWasteLvl4) {item.SetActive(false);}
-
-                            if (UASolidWasteLvl5[0].activeSelf) {
-                                foreach(GameObject item in UASolidWasteLvl5) {item.SetActive(false);}
-                            }
-                        }
-                    }
-                } 
-                else {
-                    foreach(GameObject item in UASolidWasteLvl2) {item.SetActive(true);}
-                }
+                displaylvl2(dm.UASolidWasteLvl2, dm.UASolidWasteLvl3, dm.UASolidWasteLvl4, dm.UASolidWasteLvl5);
 
                 // Canals
-                if (CanalSolidWasteLvl2[0].activeSelf) {
-                    if (CanalSolidWasteLvl3[0].activeSelf) {
-                        foreach(GameObject item in CanalSolidWasteLvl3) {item.SetActive(false);}
+                displaylvl2(dm.CanalSolidWasteLvl2, dm.CanalSolidWasteLvl3, dm.CanalSolidWasteLvl4, dm.CanalSolidWasteLvl5);
 
-                        if (CanalSolidWasteLvl4[0].activeSelf) {
-                            foreach(GameObject item in CanalSolidWasteLvl4) {item.SetActive(false);}
-
-                            if (CanalSolidWasteLvl5[0].activeSelf) {
-                                foreach(GameObject item in CanalSolidWasteLvl5) {item.SetActive(false);}
-                            }
-                        }
-                    }
-                } 
-                else {
-                    foreach(GameObject item in CanalSolidWasteLvl2) {item.SetActive(true);}
-                }
 
                 // Fields
-                if (FieldSolidWasteLvl2[0].activeSelf) {
-                    if (FieldSolidWasteLvl3[0].activeSelf) {
-                        foreach(GameObject item in FieldSolidWasteLvl3) {item.SetActive(false);}
-
-                        if (FieldSolidWasteLvl4[0].activeSelf) {
-                            foreach(GameObject item in FieldSolidWasteLvl4) {item.SetActive(false);}
-
-                            if (FieldSolidWasteLvl5[0].activeSelf) {
-                                foreach(GameObject item in FieldSolidWasteLvl5) {item.SetActive(false);}
-                            }
-                        }
-                    }
-                } 
-                else {
-                    foreach(GameObject item in FieldSolidWasteLvl2) {item.SetActive(true);}
-                }
+                displaylvl2(dm.FieldSolidWasteLvl2, dm.FieldSolidWasteLvl3, dm.FieldSolidWasteLvl4, dm.FieldSolidWasteLvl5);
+                
                 break;
             case 2:
                 // Urban Areas
-                if (UASolidWasteLvl2[0].activeSelf) {
-                    if (UASolidWasteLvl3[0].activeSelf) {
-                        if (UASolidWasteLvl4[0].activeSelf) {
-                            foreach(GameObject item in UASolidWasteLvl4) {item.SetActive(false);}
-
-                            if (UASolidWasteLvl5[0].activeSelf) {
-                                foreach(GameObject item in UASolidWasteLvl5) {item.SetActive(false);}
-                            }
-                        }
-                    }
-                    else 
-                    {
-                        foreach(GameObject item in UASolidWasteLvl3) {item.SetActive(true);}
-                    }
-                } 
-                else {
-                    foreach(GameObject item in UASolidWasteLvl2) {item.SetActive(true);}
-                    foreach(GameObject item in UASolidWasteLvl3) {item.SetActive(true);}
-                }
+                displaylvl3(dm.UASolidWasteLvl2, dm.UASolidWasteLvl3, dm.UASolidWasteLvl4, dm.UASolidWasteLvl5);
 
                 // Canals
-                if (CanalSolidWasteLvl2[0].activeSelf) {
-                    if (CanalSolidWasteLvl3[0].activeSelf) {
-                        if (CanalSolidWasteLvl4[0].activeSelf) {
-                            foreach(GameObject item in CanalSolidWasteLvl4) {item.SetActive(false);}
+                displaylvl3(dm.CanalSolidWasteLvl2, dm.CanalSolidWasteLvl3, dm.CanalSolidWasteLvl4, dm.CanalSolidWasteLvl5);
 
-                            if (CanalSolidWasteLvl5[0].activeSelf) {
-                                foreach(GameObject item in CanalSolidWasteLvl5) {item.SetActive(false);}
-                            }
-                        }
-                    }
-                    else 
-                    {
-                        foreach(GameObject item in CanalSolidWasteLvl3) {item.SetActive(true);}
-                    }
-                } 
-                else {
-                    foreach(GameObject item in CanalSolidWasteLvl2) {item.SetActive(true);}
-                    foreach(GameObject item in CanalSolidWasteLvl3) {item.SetActive(true);}
-                }
 
                 // Fields
-                if (FieldSolidWasteLvl2[0].activeSelf) {
-                    if (FieldSolidWasteLvl3[0].activeSelf) {
-                        if (FieldSolidWasteLvl4[0].activeSelf) {
-                            foreach(GameObject item in FieldSolidWasteLvl4) {item.SetActive(false);}
-
-                            if (FieldSolidWasteLvl5[0].activeSelf) {
-                                foreach(GameObject item in FieldSolidWasteLvl5) {item.SetActive(false);}
-                            }
-                        }
-                    }
-                    else 
-                    {
-                        foreach(GameObject item in FieldSolidWasteLvl3) {item.SetActive(true);}
-                    }
-                } 
-                else {
-                    foreach(GameObject item in FieldSolidWasteLvl2) {item.SetActive(true);}
-                    foreach(GameObject item in FieldSolidWasteLvl3) {item.SetActive(true);}
-                }
+                displaylvl3(dm.FieldSolidWasteLvl2, dm.FieldSolidWasteLvl3, dm.FieldSolidWasteLvl4, dm.FieldSolidWasteLvl5);
+                
                 break;
             case 3:
                 // Urban Areas
-                if (!UASolidWasteLvl5[0].activeSelf) {
-                    if (!UASolidWasteLvl4[0].activeSelf) {
-                        foreach(GameObject item in UASolidWasteLvl4) {item.SetActive(true);}
-
-                        if (!UASolidWasteLvl3[0].activeSelf) {
-                            foreach(GameObject item in UASolidWasteLvl3) {item.SetActive(true);}
-
-                            if (!UASolidWasteLvl2[0].activeSelf) {
-                                foreach(GameObject item in UASolidWasteLvl2) {item.SetActive(true);}
-                            }
-                        } 
-                    }
-                } 
-                else {
-                    foreach(GameObject item in UASolidWasteLvl5) {item.SetActive(false);}
-                }
+                displaylvl4(dm.UASolidWasteLvl2, dm.UASolidWasteLvl3, dm.UASolidWasteLvl4, dm.UASolidWasteLvl5);
 
                 // Canals
-                if (!CanalSolidWasteLvl5[0].activeSelf) {
-                    if (!CanalSolidWasteLvl4[0].activeSelf) {
-                        foreach(GameObject item in CanalSolidWasteLvl4) {item.SetActive(true);}
+                displaylvl4(dm.CanalSolidWasteLvl2, dm.CanalSolidWasteLvl3, dm.CanalSolidWasteLvl4, dm.CanalSolidWasteLvl5);
 
-                        if (!CanalSolidWasteLvl3[0].activeSelf) {
-                            foreach(GameObject item in CanalSolidWasteLvl3) {item.SetActive(true);}
-
-                            if (!CanalSolidWasteLvl2[0].activeSelf) {
-                                foreach(GameObject item in CanalSolidWasteLvl2) {item.SetActive(true);}
-                            }
-                        } 
-                    }
-                } 
-                else {
-                    foreach(GameObject item in CanalSolidWasteLvl5) {item.SetActive(false);}
-                }
 
                 // Fields
-                if (!FieldSolidWasteLvl5[0].activeSelf) {
-                    if (!FieldSolidWasteLvl4[0].activeSelf) {
-                        foreach(GameObject item in FieldSolidWasteLvl4) {item.SetActive(true);}
-
-                        if (!FieldSolidWasteLvl3[0].activeSelf) {
-                            foreach(GameObject item in FieldSolidWasteLvl3) {item.SetActive(true);}
-
-                            if (!FieldSolidWasteLvl2[0].activeSelf) {
-                                foreach(GameObject item in FieldSolidWasteLvl2) {item.SetActive(true);}
-                            }
-                        } 
-                    }
-                } 
-                else {
-                    foreach(GameObject item in FieldSolidWasteLvl5) {item.SetActive(false);}
-                }
+                displaylvl4(dm.FieldSolidWasteLvl2, dm.FieldSolidWasteLvl3, dm.FieldSolidWasteLvl4, dm.FieldSolidWasteLvl5);
+                
                 break;
             default :
-                //Urban Areas
-                if (!UASolidWasteLvl5[0].activeSelf) {
-                    foreach(GameObject item in UASolidWasteLvl5) {item.SetActive(true);}
+                // Urban Areas
+                displaylvl5(dm.UASolidWasteLvl2, dm.UASolidWasteLvl3, dm.UASolidWasteLvl4, dm.UASolidWasteLvl5);
 
-                    if (!UASolidWasteLvl4[0].activeSelf) {
-                        foreach(GameObject item in UASolidWasteLvl4) {item.SetActive(true);}
+                // Canals
+                displaylvl5(dm.CanalSolidWasteLvl2, dm.CanalSolidWasteLvl3, dm.CanalSolidWasteLvl4, dm.CanalSolidWasteLvl5);
 
-                        if (!UASolidWasteLvl3[0].activeSelf) {
-                            foreach(GameObject item in UASolidWasteLvl3) {item.SetActive(true);}
 
-                            if (!UASolidWasteLvl2[0].activeSelf) {
-                                foreach(GameObject item in UASolidWasteLvl2) {item.SetActive(true);}
-                            }
-                        } 
-                    }
-                } 
+                // Fields
+                displaylvl5(dm.FieldSolidWasteLvl2, dm.FieldSolidWasteLvl3, dm.FieldSolidWasteLvl4, dm.FieldSolidWasteLvl5);
                 
-                //Canals
-                if (!CanalSolidWasteLvl5[0].activeSelf) {
-                    foreach(GameObject item in CanalSolidWasteLvl5) {item.SetActive(true);}
-
-                    if (!CanalSolidWasteLvl4[0].activeSelf) {
-                        foreach(GameObject item in CanalSolidWasteLvl4) {item.SetActive(true);}
-
-                        if (!CanalSolidWasteLvl3[0].activeSelf) {
-                            foreach(GameObject item in CanalSolidWasteLvl3) {item.SetActive(true);}
-
-                            if (!CanalSolidWasteLvl2[0].activeSelf) {
-                                foreach(GameObject item in CanalSolidWasteLvl2) {item.SetActive(true);}
-                            }
-                        } 
-                    }
-                } 
-
-                //Fields
-                if (!FieldSolidWasteLvl5[0].activeSelf) {
-                    foreach(GameObject item in FieldSolidWasteLvl5) {item.SetActive(true);}
-
-                    if (!FieldSolidWasteLvl4[0].activeSelf) {
-                        foreach(GameObject item in FieldSolidWasteLvl4) {item.SetActive(true);}
-
-                        if (!FieldSolidWasteLvl3[0].activeSelf) {
-                            foreach(GameObject item in FieldSolidWasteLvl3) {item.SetActive(true);}
-
-                            if (!FieldSolidWasteLvl2[0].activeSelf) {
-                                foreach(GameObject item in FieldSolidWasteLvl2) {item.SetActive(true);}
-                            }
-                        } 
-                    }
-                } 
                 break;
         }
     }
@@ -304,96 +196,20 @@ public class ConnectionClass
         switch(classValue){
             case 0:
                 // Canals (Dead fish)
-                if (CanalWasteWaterLvl2[0].activeSelf) {
-                    foreach(GameObject item in CanalWasteWaterLvl2) {item.SetActive(false);}
-
-                    if (CanalWasteWaterLvl3[0].activeSelf) {
-                        foreach(GameObject item in CanalWasteWaterLvl3) {item.SetActive(false);}
-
-                        if (CanalWasteWaterLvl4[0].activeSelf) {
-                            foreach(GameObject item in CanalWasteWaterLvl4) {item.SetActive(false);}
-
-                            if (CanalWasteWaterLvl5[0].activeSelf) {
-                                foreach(GameObject item in CanalWasteWaterLvl5) {item.SetActive(false);}
-                            }
-                        }
-                    }
-                }
+                displaylvl1(dm.CanalWasteWaterLvl2, dm.CanalWasteWaterLvl3, dm.CanalWasteWaterLvl4, dm.CanalWasteWaterLvl5);
                 break;
             case 1:
                 // Canals (Dead fish)
-                if (CanalWasteWaterLvl2[0].activeSelf) {
-                    if (CanalWasteWaterLvl3[0].activeSelf) {
-                        foreach(GameObject item in CanalWasteWaterLvl3) {item.SetActive(false);}
-
-                        if (CanalWasteWaterLvl4[0].activeSelf) {
-                            foreach(GameObject item in CanalWasteWaterLvl4) {item.SetActive(false);}
-
-                            if (CanalWasteWaterLvl5[0].activeSelf) {
-                                foreach(GameObject item in CanalWasteWaterLvl5) {item.SetActive(false);}
-                            }
-                        }
-                    }
-                } 
-                else {
-                    foreach(GameObject item in CanalWasteWaterLvl2) {item.SetActive(true);}
-                }
+                displaylvl2(dm.CanalWasteWaterLvl2, dm.CanalWasteWaterLvl3, dm.CanalWasteWaterLvl4, dm.CanalWasteWaterLvl5);
                 break;
             case 2:
-                if (CanalWasteWaterLvl2[0].activeSelf) {
-                    if (CanalWasteWaterLvl3[0].activeSelf) {
-                        if (CanalWasteWaterLvl4[0].activeSelf) {
-                            foreach(GameObject item in CanalWasteWaterLvl4) {item.SetActive(false);}
-
-                            if (CanalWasteWaterLvl5[0].activeSelf) {
-                                foreach(GameObject item in CanalWasteWaterLvl5) {item.SetActive(false);}
-                            }
-                        }
-                    }
-                    else 
-                    {
-                        foreach(GameObject item in CanalWasteWaterLvl3) {item.SetActive(true);}
-                    }
-                } 
-                else {
-                    foreach(GameObject item in CanalWasteWaterLvl2) {item.SetActive(true);}
-                    foreach(GameObject item in CanalWasteWaterLvl3) {item.SetActive(true);}
-                }
+                displaylvl3(dm.CanalWasteWaterLvl2, dm.CanalWasteWaterLvl3, dm.CanalWasteWaterLvl4, dm.CanalWasteWaterLvl5);
                 break;
             case 3:
-                if (!CanalWasteWaterLvl5[0].activeSelf) {
-                    if (!CanalWasteWaterLvl4[0].activeSelf) {
-                        foreach(GameObject item in CanalWasteWaterLvl4) {item.SetActive(true);}
-
-                        if (!CanalWasteWaterLvl3[0].activeSelf) {
-                            foreach(GameObject item in CanalWasteWaterLvl3) {item.SetActive(true);}
-
-                            if (!CanalWasteWaterLvl2[0].activeSelf) {
-                                foreach(GameObject item in CanalWasteWaterLvl2) {item.SetActive(true);}
-                            }
-                        } 
-                    }
-                } 
-                else {
-                    foreach(GameObject item in CanalWasteWaterLvl5) {item.SetActive(false);}
-                }
+                displaylvl4(dm.CanalWasteWaterLvl2, dm.CanalWasteWaterLvl3, dm.CanalWasteWaterLvl4, dm.CanalWasteWaterLvl5);
                 break;
             default :
-                if (!CanalWasteWaterLvl5[0].activeSelf) {
-                    foreach(GameObject item in CanalWasteWaterLvl5) {item.SetActive(true);}
-
-                    if (!CanalWasteWaterLvl4[0].activeSelf) {
-                        foreach(GameObject item in CanalWasteWaterLvl4) {item.SetActive(true);}
-
-                        if (!CanalWasteWaterLvl3[0].activeSelf) {
-                            foreach(GameObject item in CanalWasteWaterLvl3) {item.SetActive(true);}
-
-                            if (!CanalWasteWaterLvl2[0].activeSelf) {
-                                foreach(GameObject item in CanalWasteWaterLvl2) {item.SetActive(true);}
-                            }
-                        } 
-                    }
-                } 
+                displaylvl5(dm.CanalWasteWaterLvl2, dm.CanalWasteWaterLvl3, dm.CanalWasteWaterLvl4, dm.CanalWasteWaterLvl5);
                 break;
         }
     }

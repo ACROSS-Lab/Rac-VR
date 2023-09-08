@@ -50,6 +50,7 @@ public class DisplayManagement : MonoBehaviour
     // Start is called before the first frame update
     void Start()
     {   
+        /**
         // Solid Waste Init
         foreach(GameObject item in UASolidWasteLvl1) {item.SetActive(true);}
         foreach(GameObject item in UASolidWasteLvl2) {item.SetActive(false);}
@@ -76,6 +77,7 @@ public class DisplayManagement : MonoBehaviour
         foreach(GameObject item in CanalWasteWaterLvl3) {item.SetActive(false);}
         foreach(GameObject item in CanalWasteWaterLvl4) {item.SetActive(false);}
         foreach(GameObject item in CanalWasteWaterLvl5) {item.SetActive(false);}
+        */
     }
 
     // Update is called once per frame
