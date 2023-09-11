@@ -51,8 +51,8 @@ public class DisplayManagement : MonoBehaviour
     public GameObject ProductionLvl1;
     public GameObject ProductionLvl2;
     public GameObject ProductionLvl3;
-    public GameObject ProductionLvl4;
-    public GameObject ProductionLvl5;
+    //public GameObject ProductionLvl4;
+    //public GameObject ProductionLvl5;
 
 
     // Start is called before the first frame update

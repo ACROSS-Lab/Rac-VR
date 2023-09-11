@@ -117,6 +117,10 @@ public class ConnectionClass
         }
     }
 
+    private void displaylvlonly(int lvl, GameObject lvl2, GameObject lvl3, GameObject lvl4, GameObject lvl5)
+    {
+        
+    }
 
 
     public void displaySolidClass(int classValue){
@@ -237,19 +241,28 @@ public class ConnectionClass
     public void displayProductionClass(int classValue){
         switch(classValue){
             case 0:
-                displaylvl1(dm.ProductionLvl2, dm.ProductionLvl3, dm.ProductionLvl4, dm.ProductionLvl5);
+                if (!dm.ProductionLvl1.activeSelf)
+                {
+                    dm.ProductionLvl1.SetActive(true);
+                    dm.ProductionLvl2.SetActive(false);
+                    dm.ProductionLvl3.SetActive(false);
+                }
                 break;
             case 1:
-                displaylvl2(dm.ProductionLvl2, dm.ProductionLvl3, dm.ProductionLvl4, dm.ProductionLvl5);
-                break;
-            case 2:
-                displaylvl3(dm.ProductionLvl2, dm.ProductionLvl3, dm.ProductionLvl4, dm.ProductionLvl5);
-                break;
-            case 3:
-                displaylvl4(dm.ProductionLvl2, dm.ProductionLvl3, dm.ProductionLvl4, dm.ProductionLvl5);
+                if (!dm.ProductionLvl2.activeSelf)
+                {
+                    dm.ProductionLvl1.SetActive(false);
+                    dm.ProductionLvl2.SetActive(true);
+                    dm.ProductionLvl3.SetActive(false);
+                }
                 break;
             default :
-                displaylvl5(dm.ProductionLvl2, dm.ProductionLvl3, dm.ProductionLvl4, dm.ProductionLvl5);
+                if (!dm.ProductionLvl3.activeSelf)
+                {
+                    dm.ProductionLvl1.SetActive(false);
+                    dm.ProductionLvl2.SetActive(false);
+                    dm.ProductionLvl3.SetActive(true);
+                }
                 break;
         }
     }
