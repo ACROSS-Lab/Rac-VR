@@ -19,6 +19,7 @@ public class DisplayManagement : MonoBehaviour
 
     //Wastewater
         //UA
+    
     public Color TreeColorLvl1;
     public Color TreeColorLvl2;
     public Color TreeColorLvl3;
@@ -32,18 +33,13 @@ public class DisplayManagement : MonoBehaviour
     public Color FieldWaterColorLvl4;
     public Color FieldWaterColorLvl5;
 
-    public Color FieldPlantColorLvl1;
-    public Color FieldPlantColorLvl2;
-    public Color FieldPlantColorLvl3;
-    public Color FieldPlantColorLvl4;
-    public Color FieldPlantColorLvl5;
-
         //Canals
     public GameObject CanalWasteWaterLvl1;
     public GameObject CanalWasteWaterLvl2;
     public GameObject CanalWasteWaterLvl3;
     public GameObject CanalWasteWaterLvl4;
     public GameObject CanalWasteWaterLvl5;
+    
     
     public Color CanalWaterColorLvl1;
     public Color CanalWaterColorLvl2;
@@ -52,12 +48,17 @@ public class DisplayManagement : MonoBehaviour
     public Color CanalWaterColorLvl5;
 
     //Production
+    public GameObject ProductionLvl1;
+    public GameObject ProductionLvl2;
+    public GameObject ProductionLvl3;
+    public GameObject ProductionLvl4;
+    public GameObject ProductionLvl5;
 
 
     // Start is called before the first frame update
     void Start()
-    {   
-        
+    {
+
     }
 
     // Update is called once per frame

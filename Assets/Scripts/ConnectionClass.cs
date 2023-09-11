@@ -190,22 +190,66 @@ public class ConnectionClass
         }
     }
 
+    public Color computeTreesColor(float colorValue){
+        Color c = new Color(0, 0, 0, 0);
+        return c;
+    }
+
+    public void displayWaterColor(int classValue){
+        Renderer renderer_tree1 = GameObject.Find("SM_Arbre_002").GetComponent<Renderer>();
+        Material sharedMaterial_tree1 = renderer_tree1.sharedMaterial;
+
+        Renderer renderer_tree2 = GameObject.Find("SM_Bananier_004").GetComponent<Renderer>();
+        Material sharedMaterial_tree2 = renderer_tree2.sharedMaterial;
+
+        Renderer renderer_plant = GameObject.Find("SM_GardenPlants_001").GetComponent<Renderer>();
+        Material sharedMaterial_plant = renderer_plant.sharedMaterial;
+
+        switch(classValue){
+            case 0:
+                sharedMaterial_tree1.SetColor("_Pollution_Color1", dm.TreeColorLvl1);
+                sharedMaterial_tree2.SetColor("_Pollution_Color", dm.TreeColorLvl1);
+                sharedMaterial_plant.SetColor("_Pollution_Color", dm.TreeColorLvl1);
+                break;
+            case 1:
+                sharedMaterial_tree1.SetColor("_Pollution_Color1", dm.TreeColorLvl2);
+                sharedMaterial_tree2.SetColor("_Pollution_Color", dm.TreeColorLvl2);
+                sharedMaterial_plant.SetColor("_Pollution_Color", dm.TreeColorLvl2);
+                break;
+            case 2:
+                sharedMaterial_tree1.SetColor("_Pollution_Color1", dm.TreeColorLvl3);
+                sharedMaterial_tree2.SetColor("_Pollution_Color", dm.TreeColorLvl3);
+                sharedMaterial_plant.SetColor("_Pollution_Color", dm.TreeColorLvl3);
+                break;
+            case 3:
+                sharedMaterial_tree1.SetColor("_Pollution_Color1", dm.TreeColorLvl4);
+                sharedMaterial_tree2.SetColor("_Pollution_Color", dm.TreeColorLvl4);
+                sharedMaterial_plant.SetColor("_Pollution_Color", dm.TreeColorLvl4);
+                break;
+            default :
+                sharedMaterial_tree1.SetColor("_Pollution_Color1", dm.TreeColorLvl5);
+                sharedMaterial_tree2.SetColor("_Pollution_Color", dm.TreeColorLvl5);
+                sharedMaterial_plant.SetColor("_Pollution_Color", dm.TreeColorLvl5);
+                break;
+        }  
+    }
+
     public void displayProductionClass(int classValue){
         switch(classValue){
             case 0:
-                // code block
+                displaylvl1(dm.ProductionLvl2, dm.ProductionLvl3, dm.ProductionLvl4, dm.ProductionLvl5);
                 break;
             case 1:
-                // code block
+                displaylvl2(dm.ProductionLvl2, dm.ProductionLvl3, dm.ProductionLvl4, dm.ProductionLvl5);
                 break;
             case 2:
-                // code block
+                displaylvl3(dm.ProductionLvl2, dm.ProductionLvl3, dm.ProductionLvl4, dm.ProductionLvl5);
                 break;
             case 3:
-                // code block
+                displaylvl4(dm.ProductionLvl2, dm.ProductionLvl3, dm.ProductionLvl4, dm.ProductionLvl5);
                 break;
             default :
-                // code block
+                displaylvl5(dm.ProductionLvl2, dm.ProductionLvl3, dm.ProductionLvl4, dm.ProductionLvl5);
                 break;
         }
     }

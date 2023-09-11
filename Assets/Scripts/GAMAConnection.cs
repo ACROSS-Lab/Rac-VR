@@ -101,6 +101,7 @@ public class GlobalTest : TCPConnector
             classIndicators.displaySolidClass(classIndicators.solidwasteClass[village_id]);
             classIndicators.displayWaterClass(classIndicators.waterwasteClass[village_id]);
             classIndicators.displayProductionClass(classIndicators.productionClass[village_id]);
+            classIndicators.displayWaterColor(classIndicators.waterwasteClass[village_id]);
         }
              
         //DisplayMessage("Update");

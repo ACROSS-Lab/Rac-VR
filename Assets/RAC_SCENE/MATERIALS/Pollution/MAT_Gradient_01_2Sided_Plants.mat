@@ -38,9 +38,10 @@ Material:
     - _AlphaCutoff: 0.5
     - _Plants: 1
     - _Texture: 1
+    - __dirty: 1
     m_Colors:
     - _BaseColor: {r: 1, g: 1, b: 1, a: 0}
     - _EmissionColor: {r: 1, g: 1, b: 1, a: 1}
-    - _Pollution_Color: {r: 1, g: 1, b: 1, a: 0}
+    - _Pollution_Color: {r: 0.6037736, g: 0.33321467, b: 0.33321467, a: 0}
     - _ShadowColor: {r: 0.66215736, g: 0.75608003, b: 0.9056604, a: 0}
   m_BuildTextureStacks: []
