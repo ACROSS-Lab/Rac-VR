@@ -17,7 +17,7 @@ global skills: [network]{
 	 ***************************************************/
 	 
 	//Activate the unity connection; if activated, the model will wait for an connection from Unity to start
-	bool connect_to_unity <- false;
+	bool connect_to_unity <- true;
 	
 	// connection port
 	int port <- 8000;

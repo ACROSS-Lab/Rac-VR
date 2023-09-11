@@ -5,6 +5,8 @@ using System.Net.Sockets;
 using System.Threading;
 using System.Timers;
 using TMPro;
+
+
 public class GlobalTest : TCPConnector
 {
 
@@ -69,6 +71,8 @@ public class GlobalTest : TCPConnector
 
     private int village_id = 0;
 
+    private static DisplayManagement dm;
+
     // Start is called before the first frame update
     void Start()
     {
@@ -82,6 +86,8 @@ public class GlobalTest : TCPConnector
         Debug.Log("START WORLD");
         DisplayMessage("IP: " + ip + " port: " + port);
         ConnectToTcpServer();
+
+       dm = DD.GetComponent<DisplayManagement>();        
     }
 
 
@@ -89,6 +95,14 @@ public class GlobalTest : TCPConnector
 
     private void Update()
     {
+
+        if (classIndicators != null)
+        {
+            classIndicators.displaySolidClass(classIndicators.solidwasteClass[village_id]);
+            classIndicators.displayWaterClass(classIndicators.waterwasteClass[village_id]);
+            classIndicators.displayProductionClass(classIndicators.productionClass[village_id]);
+        }
+             
         //DisplayMessage("Update");
         if (text != null && message != null)
         {
@@ -308,11 +322,8 @@ public class GlobalTest : TCPConnector
         }
         else if (mes.Contains("solidwasteClass")){
 
-            classIndicators = ConnectionClass.CreateFromJSON(mes, DD.GetComponent<DisplayManagement>());
+            classIndicators = ConnectionClass.CreateFromJSON(mes, dm);
             Debug.Log(mes);
-            classIndicators.displaySolidClass(classIndicators.solidwasteClass[village_id]);
-            classIndicators.displayWaterClass(classIndicators.waterwasteClass[village_id]);
-            classIndicators.displayProductionClass(classIndicators.productionClass[village_id]); 
         }
 
 

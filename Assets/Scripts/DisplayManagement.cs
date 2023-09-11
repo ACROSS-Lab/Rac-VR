@@ -57,34 +57,7 @@ public class DisplayManagement : MonoBehaviour
     // Start is called before the first frame update
     void Start()
     {   
-        /**
-        // Solid Waste Init
-        foreach(GameObject item in UASolidWasteLvl1) {item.SetActive(true);}
-        foreach(GameObject item in UASolidWasteLvl2) {item.SetActive(false);}
-        foreach(GameObject item in UASolidWasteLvl3) {item.SetActive(false);}
-        foreach(GameObject item in UASolidWasteLvl4) {item.SetActive(false);}
-        foreach(GameObject item in UASolidWasteLvl5) {item.SetActive(false);}
-            
-        foreach(GameObject item in CanalSolidWasteLvl1) {item.SetActive(true);}
-        foreach(GameObject item in CanalSolidWasteLvl2) {item.SetActive(false);}
-        foreach(GameObject item in CanalSolidWasteLvl3) {item.SetActive(false);}
-        foreach(GameObject item in CanalSolidWasteLvl4) {item.SetActive(false);}
-        foreach(GameObject item in CanalSolidWasteLvl5) {item.SetActive(false);}
-
-        foreach(GameObject item in FieldSolidWasteLvl1) {item.SetActive(true);}
-        foreach(GameObject item in FieldSolidWasteLvl2) {item.SetActive(false);}
-        foreach(GameObject item in FieldSolidWasteLvl3) {item.SetActive(false);}
-        foreach(GameObject item in FieldSolidWasteLvl4) {item.SetActive(false);}
-        foreach(GameObject item in FieldSolidWasteLvl5) {item.SetActive(false);}
-
-
-        // Wastewater Init
-        foreach(GameObject item in CanalWasteWaterLvl1) {item.SetActive(true);}
-        foreach(GameObject item in CanalWasteWaterLvl2) {item.SetActive(false);}
-        foreach(GameObject item in CanalWasteWaterLvl3) {item.SetActive(false);}
-        foreach(GameObject item in CanalWasteWaterLvl4) {item.SetActive(false);}
-        foreach(GameObject item in CanalWasteWaterLvl5) {item.SetActive(false);}
-        */
+        
     }
 
     // Update is called once per frame
