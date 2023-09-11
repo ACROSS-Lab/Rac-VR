@@ -137,7 +137,7 @@ global {
 	bool is_production_ok <- true;
 	bool is_pollution_ok <- true;
 	
-	int days <- 10;
+	int days <- 365;
 	/********************** INITIALIZATION OF THE GAME ****************************/
 
 	init {
@@ -761,6 +761,27 @@ global {
 		return class;
 	}
 	
+	//3 production class
+	list<int> production_class(list<float> l){
+		list<int> class <- [];
+		
+		switch(l at 0) {
+			match_between [0, 499] {class <- class + 0;}
+			match_between [500, 799] {class <- class + 1;}
+			default {class <- class + 3;}
+		}
+		
+		loop i from: 1 to: 3{
+			switch(l[i]) {
+				match_between [0, 599] {class <- class + 0;}
+				match_between [600, 899] {class <- class + 1;}
+				default {class <- class + 3;}
+			}
+		}
+		return class;
+	}
+	
+	/** 5 class
 	list<int> production_class(list<float> l){
 		list<int> class <- [];
 		
@@ -783,6 +804,7 @@ global {
 		}
 		return class;
 	}
+	*/
 	
 	/**
 	action action_executed(string action_name) {
