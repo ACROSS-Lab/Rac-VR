@@ -200,40 +200,41 @@ public class ConnectionClass
     }
 
     public void displayWaterColor(int classValue){
-        Renderer renderer_tree1 = GameObject.Find("SM_Arbre_002").GetComponent<Renderer>();
-        Material sharedMaterial_tree1 = renderer_tree1.sharedMaterial;
-
-        Renderer renderer_tree2 = GameObject.Find("SM_Bananier_004").GetComponent<Renderer>();
-        Material sharedMaterial_tree2 = renderer_tree2.sharedMaterial;
-
-        Renderer renderer_plant = GameObject.Find("SM_GardenPlants_001").GetComponent<Renderer>();
-        Material sharedMaterial_plant = renderer_plant.sharedMaterial;
-
         switch(classValue){
             case 0:
-                sharedMaterial_tree1.SetColor("_Pollution_Color1", dm.TreeColorLvl1);
-                sharedMaterial_tree2.SetColor("_Pollution_Color", dm.TreeColorLvl1);
-                sharedMaterial_plant.SetColor("_Pollution_Color", dm.TreeColorLvl1);
+                dm.material_tree1.SetColor("_Pollution_Color1", dm.TreeColorLvl1);
+                dm.material_tree2.SetColor("_Pollution_Color", dm.TreeColorLvl1);
+                dm.material_plant.SetColor("_Pollution_Color", dm.TreeColorLvl1);
+                dm.material_canalWater.SetColor("_Color0", dm.CanalWaterColorLvl1);
+                dm.material_fieldWater.SetColor("_Color0", dm.FieldWaterColorLvl1);
                 break;
             case 1:
-                sharedMaterial_tree1.SetColor("_Pollution_Color1", dm.TreeColorLvl2);
-                sharedMaterial_tree2.SetColor("_Pollution_Color", dm.TreeColorLvl2);
-                sharedMaterial_plant.SetColor("_Pollution_Color", dm.TreeColorLvl2);
+                dm.material_tree1.SetColor("_Pollution_Color1", dm.TreeColorLvl2);
+                dm.material_tree2.SetColor("_Pollution_Color", dm.TreeColorLvl2);
+                dm.material_plant.SetColor("_Pollution_Color", dm.TreeColorLvl2);
+                dm.material_canalWater.SetColor("_Color0", dm.CanalWaterColorLvl2);
+                dm.material_fieldWater.SetColor("_Color0", dm.FieldWaterColorLvl2);
                 break;
             case 2:
-                sharedMaterial_tree1.SetColor("_Pollution_Color1", dm.TreeColorLvl3);
-                sharedMaterial_tree2.SetColor("_Pollution_Color", dm.TreeColorLvl3);
-                sharedMaterial_plant.SetColor("_Pollution_Color", dm.TreeColorLvl3);
+                dm.material_tree1.SetColor("_Pollution_Color1", dm.TreeColorLvl3);
+                dm.material_tree2.SetColor("_Pollution_Color", dm.TreeColorLvl3);
+                dm.material_plant.SetColor("_Pollution_Color", dm.TreeColorLvl3);
+                dm.material_canalWater.SetColor("_Color0", dm.CanalWaterColorLvl3);
+                dm.material_fieldWater.SetColor("_Color0", dm.FieldWaterColorLvl3);
                 break;
             case 3:
-                sharedMaterial_tree1.SetColor("_Pollution_Color1", dm.TreeColorLvl4);
-                sharedMaterial_tree2.SetColor("_Pollution_Color", dm.TreeColorLvl4);
-                sharedMaterial_plant.SetColor("_Pollution_Color", dm.TreeColorLvl4);
+                dm.material_tree1.SetColor("_Pollution_Color1", dm.TreeColorLvl4);
+                dm.material_tree2.SetColor("_Pollution_Color", dm.TreeColorLvl4);
+                dm.material_plant.SetColor("_Pollution_Color", dm.TreeColorLvl4);
+                dm.material_canalWater.SetColor("_Color0", dm.CanalWaterColorLvl4);
+                dm.material_fieldWater.SetColor("_Color0", dm.FieldWaterColorLvl4);
                 break;
             default :
-                sharedMaterial_tree1.SetColor("_Pollution_Color1", dm.TreeColorLvl5);
-                sharedMaterial_tree2.SetColor("_Pollution_Color", dm.TreeColorLvl5);
-                sharedMaterial_plant.SetColor("_Pollution_Color", dm.TreeColorLvl5);
+                dm.material_tree1.SetColor("_Pollution_Color1", dm.TreeColorLvl5);
+                dm.material_tree2.SetColor("_Pollution_Color", dm.TreeColorLvl5);
+                dm.material_plant.SetColor("_Pollution_Color", dm.TreeColorLvl5);
+                dm.material_canalWater.SetColor("_Color0", dm.CanalWaterColorLvl5);
+                dm.material_fieldWater.SetColor("_Color0", dm.FieldWaterColorLvl5);
                 break;
         }  
     }

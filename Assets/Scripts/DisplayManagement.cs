@@ -55,6 +55,13 @@ public class DisplayManagement : MonoBehaviour
     //public GameObject ProductionLvl5;
 
 
+    public Material material_tree1 ;
+    public Material material_tree2 ;
+    public Material material_plant ;
+    public Material material_canalWater ;
+    public Material material_fieldWater ;
+
+
     // Start is called before the first frame update
     void Start()
     {
