@@ -5,27 +5,12 @@ EditorBuildSettings:
   m_ObjectHideFlags: 0
   serializedVersion: 2
   m_Scenes:
-  - enabled: 0
-    path: Assets/Scenes/SampleScene.unity
-    guid: 55daccc09a3b69647bbab145b54a3ab3
-  - enabled: 0
-    path: Assets/Scenes/Scene_TestingEloi.unity
-    guid: 896784a105eb8384eaaaf29037d0989a
-  - enabled: 0
-    path: Assets/Scenes/Scene_TestingEloi 1.unity
-    guid: 9e518889bef935242b2ef7b1a314e6ff
-  - enabled: 0
-    path: Assets/Scenes/Scene_TestingEloi 2.unity
-    guid: 4d16eeb58c0fcb349a05cb2afada53bc
-  - enabled: 0
-    path: Assets/TestAssets/CelShadingTest/Test_Cel_Shading.unity
-    guid: 16788471c09cac9488d42bec1f8d9dbb
+  - enabled: 1
+    path: Assets/Scenes/RAC_MENU.unity
+    guid: 1c775d20c6b119a469b636503fbd0c2b
   - enabled: 1
     path: Assets/Scenes/RAC_MainScene.unity
     guid: b38b46963063dc044b822dcaa19930e4
-  - enabled: 0
-    path: Assets/PACKAGES/VRKeys/Scenes/Example Scene.unity
-    guid: a34a374857facec4b8beb240f59fbe4f
   m_configObjects:
     Unity.XR.Oculus.Settings: {fileID: 11400000, guid: bfa1182bd221b4ca89619141f66f1260, type: 2}
     Unity.XR.WindowsMR.Settings: {fileID: 11400000, guid: dc5a169419fa04987b057f65238cf3ba, type: 2}
