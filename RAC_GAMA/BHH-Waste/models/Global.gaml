@@ -806,11 +806,11 @@ global {
 	}
 	*/
 	
-	/**
+	
 	action action_executed(string action_name) {
 		// To be redefined for updates, etc. 
 	}
-	*/
+	
 	
 	action execute_action(string action_name) {
 		if ((action_name in actions_name_short)){// and not(actions_name_short[action_name] in village[index_player].actions_done_this_year) and not(actions_name_short[action_name] in village[index_player].actions_done_total)) {
@@ -888,11 +888,11 @@ global {
 					}
 				}
 			}
-			/**
+			
 			 if is_ok {
 				do action_executed(action_name);
 			}
-			*/
+			
 		}
 		
 	}
