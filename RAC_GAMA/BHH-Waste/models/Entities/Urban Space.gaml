@@ -21,10 +21,12 @@ species urban_area {
 	aspect default {
 		int nb <- length(geometry_history) - 1;
 		loop i from: 0 to: nb {
-			float val <- 75 + (i/end_of_game) * 150; 
+			float val1 <- 228 + (i/end_of_game) * 150; 
+			float val2 <- 141 + (i/end_of_game) * 150; 
+			float val3 <- 104 + (i/end_of_game) * 150; 
 			geometry g <- geometry_history[i];
 //			geometry g2 <- g - 20;
-			draw g  color: rgb(val,val,val) at: g.location + {0,0,i*0.1};
+			draw g  color: rgb(val1,val2,val3) at: g.location + {0,0,i*0.1};
 //			draw (g - g2) color: #black;
 		}	
 	}

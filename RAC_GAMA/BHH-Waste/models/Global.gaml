@@ -709,7 +709,7 @@ global {
 	action before_exploration_phase{
 		start_exploration_turn_time <- machine_time;
 		do update_indicators_unity;
-		connect_to_unity <- true;
+		//connect_to_unity <- true;
 	}
 	
 	action update_indicators_unity{
@@ -751,8 +751,8 @@ global {
 		list<int> class <- [];
 		loop v over: l {
 			switch(v) {
-				match_between [0, 4999] {class <- class + 0;}
-				match_between [5000, 14999] {class <- class + 1;}
+				match_between [0, 14999] {class <- class + 0;}
+				match_between [15000, 14999] {class <- class + 1;}
 				match_between [15000, 29999] {class <- class + 2;}
 				match_between [30000, 44999] {class <- class + 3;}
 				default {class <- class + 4;}
@@ -773,8 +773,8 @@ global {
 		
 		loop i from: 1 to: 3{
 			switch(l[i]) {
-				match_between [0, 599] {class <- class + 0;}
-				match_between [600, 899] {class <- class + 1;}
+				match_between [0, 699] {class <- class + 0;}
+				match_between [700, 899] {class <- class + 1;}
 				default {class <- class + 3;}
 			}
 		}
@@ -908,8 +908,10 @@ global {
 	}
 	
 	action end_of_exploration_phase {
-		stage <- PLAYER_VR_ESTIMATION_TURN;
-		start_estimation_turn_time <- machine_time;
+		//stage <- PLAYER_VR_ESTIMATION_TURN;
+		//start_estimation_turn_time <- machine_time;
+		stage <- PLAYER_DISCUSSION_TURN;
+		start_discussion_turn_time <- machine_time;
 	}
 	
 	
