@@ -65,7 +65,9 @@ public class DisplayManagement : MonoBehaviour
     // Start is called before the first frame update
     void Start()
     {
-
+        ProductionLvl1.SetActive(false);
+        ProductionLvl2.SetActive(false);
+        ProductionLvl3.SetActive(true);
     }
 
     // Update is called once per frame
