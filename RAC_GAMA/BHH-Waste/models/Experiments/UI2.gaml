@@ -54,7 +54,7 @@ global {
 	
 	/********************** FONTS ************************************************/
 	// UNCOMMENT FOR THE LATEST VERSION IN GAMA 
-	int text_size -> #hidpi ? (#fullscreen ? 100 : 30) : (#fullscreen ? 60 : 30);
+	int text_size -> #hidpi ? (#fullscreen ? 100 : 30) : (#fullscreen ? 50 : 30);
 	font ui_font -> font("Helvetica", text_size, #bold);
 	
 	/******************* GENERAL PARAMETERS *************************************/
@@ -83,9 +83,9 @@ global {
 	bool use_timer_for_exploration <- true;
 	bool use_timer_for_estimation <- true;
 	bool timer_just_for_warning <- false; //if true, if the timer is finished, just a warning message is displayed; if false, the turn passes to the next player - for the moment, some issue with the automatic change of step
-	float initial_time_for_discussion <- 5 #s const: true; // time before the player turns
-	float initial_time_for_exploration <- 5 #s const: true;
-	float initial_time_for_estimation <- 5 #s const: true;
+	float initial_time_for_discussion <- 2 #mn const: true; // time before the player turns
+	float initial_time_for_exploration <- 2 #mn const: true;
+	float initial_time_for_estimation <- 2 #mn const: true;
 	float initial_time_for_choosing_village <- 5#s const: true;
 	float time_for_choosing_village <- initial_time_for_choosing_village;
 	float start_choosing_village_time;
@@ -119,7 +119,6 @@ global {
 	/********************** ICONS *************************************************/
 	
 	image_file label_icon <- image_file("../../includes/icons/Logo jour de label.png");
-	image_file disabled_label_icon <- image_file("../../includes/icons/Logo jour de label disabled.png");
 	image_file waste_icon <- image_file("../../includes/icons/solidwaste.png");
 	image_file tokens_icon <- image_file("../../includes/icons/logo argent.png");
 	image_file water_icon <- image_file("../../includes/icons/waterwaste.png");
@@ -142,6 +141,8 @@ global {
 	image_file graph_icon <- image_file("../../includes/icons/graph.png");
 	image_file background <- image_file("../../includes/icons/fond.jpeg");
 	image_file line_threshold <- image_file("../../includes/icons/Line.png");
+	image_file ecolabel_icon <- image_file("../../includes/icons/Ecolabel_On.png");
+	image_file no_ecolabel_icon <- image_file("../../includes/icons/Ecolabel_Off.png");
 
 	/********************** VARIOUS FUNCTIONS  ***************************/
 	
@@ -456,16 +457,17 @@ species stacked_chart {
 		float gap <- 200.0;
  		bool gap_added <- false;
  		map<string,float> max_heights <- ["Production"::chart_height, "Total"::chart_height, "Water"::chart_height/2, "Solid"::chart_height/2];
- 		map<string,float> y_rect <- ["Production"::my_height  - chart_height/3, "Total"::my_height  - chart_height/3, "Water":: my_height  - chart_height/12, "Solid":: my_height - chart_height/12];
+ 		map<string,float> y_rect <- ["Production"::my_height, "Total"::my_height, "Water":: 1.25*my_height, "Solid":: 1.25*my_height];
  		
- 		draw rectangle(2.5*original_col_width, chart_height/2) at: {location.x-original_col_width*1.5, location.y +chart_height/4} border: dark_theme ? #white : #black wireframe: true;
- 		draw rectangle(2.5*original_col_width, chart_height/2) at: {location.x-original_col_width*1.5, location.y-chart_height/4} border: dark_theme ? #white : #black wireframe: true;
+ 		//draw rectangle(2.5*original_col_width, chart_height/2) at: {location.x-original_col_width*1.5, location.y +chart_height/4} border: dark_theme ? #white : #black wireframe: true;
+ 		//draw rectangle(2.5*original_col_width, chart_height/2) at: {location.x-original_col_width*1.5, location.y-chart_height/4} border: dark_theme ? #white : #black wireframe: true;
  		
  		float current_x <- 0.0;
- 		//float current_y <-chart_height/2;
+ 		float total_prod ;
+ 		float total_pol ;
 		
 		loop col over: show_pol_chart_by_cat_glob ? data.keys : ["Production", "Total"]{
- 			float current_y <-chart_height/6;
+ 			float current_y <-chart_height/2;
  			float total <- 0.0;
  			
  			if (!draw_smiley[col] and !gap_added) {
@@ -475,7 +477,7 @@ species stacked_chart {
  			}
  			
  			if show_chart_by_vil {
- 				//draw rectangle(col_width,max_heights[col]) color: map_background2 at: {current_x, y_rect[col]};
+ 				draw rectangle(col_width,max_heights[col]) color: map_background2 at: {current_x, y_rect[col]};
 				loop c over: data2[col].keys {
 	 				float v <- data2[col][c];
 	 				total <- total+v;
@@ -488,23 +490,45 @@ species stacked_chart {
  				float v <- data[col];
 				total <- total+v;
 				float col_height <- (v * chart_height)/max_value;
-				//draw rectangle(col_width,max_heights[col]) color: color_col_back[col] at: {current_x, y_rect[col]};
+				draw rectangle(col_width,max_heights[col]) color: color_col_back[col] at: {current_x, y_rect[col]};
 				draw rectangle(col_width,col_height) color: color_col[col] at: {current_x,my_height  + current_y - col_height/2};
 				//draw rectangle(col_width,col_height) wireframe: true border: dark_theme ? #black : #black width: 2 at: {current_x,my_height  + current_y -  col_height/2};
 				current_y <- current_y - col_height;
 			}
+			
+			if (col = "Production") 
+			{
+				total_prod <- total;
+			} 
+			else if (col = "Total") 
+			{
+				total_pol <- total;
+			}
  			
  			if (icons[col] != nil) {
- 				draw icons[col] at: {current_x, gap_added ? my_height  + current_y - original_col_width/4 :( location.y - chart_height/2)} size: {original_col_width/(gap_added? 4:2), original_col_width/(gap_added? 4:2)};
+ 				draw icons[col] at: {current_x, my_height+chart_height/1.5 } size: {original_col_width/(gap_added? 4:2), original_col_width/(gap_added? 4:2)};
+ 				/**
  				if draw_smiley[col] {
- 				if (total <= 1 and inf_or_sup[col] or total > 1 and !inf_or_sup[col]) {
- 					draw smileys[0]  at: {current_x, my_height+original_col_width/2} size: {original_col_width/2, original_col_width/2};
- 				} else {draw smileys[4]  at: {current_x, my_height+original_col_width/2} size: {original_col_width/2, original_col_width/2};}} 
+	 				if (total <= 1 and inf_or_sup[col] or total > 1 and !inf_or_sup[col]) {
+	 					draw smileys[0]  at: {current_x, my_height+original_col_width/2} size: {original_col_width/2, original_col_width/2};
+	 				} 
+	 				else {
+	 					draw smileys[4]  at: {current_x, my_height+original_col_width/2} size: {original_col_width/2, original_col_width/2};
+	 				}
+ 				}
+ 				*/
  			}
  			current_x <- current_x + col_width + gap;
  		}
- 		//draw line({-original_col_width/2, location.y}, {original_col_width/2, location.y}) width:50 color: map_background ;
- 		//draw line({original_col_width/2 + gap, my_height + current_y - col_height/2}, {3*original_col_width/2 + gap, my_height + current_y - col_height/2}) buffer(20) color: map_background;
+ 		if (total_pol <= 1 and total_prod > 1) {
+			draw ecolabel_icon at: {original_col_width*1.75, my_height-2.25*original_col_width} size: 1500;
+		} 
+		else {
+			draw no_ecolabel_icon at: {original_col_width*1.75, my_height-2.25*original_col_width} size: 1500;
+		}
+ 				
+ 		draw line({-original_col_width/2, 3* chart_height / 2 - max_heights["Production"]/2}, {original_col_width/2, 3* chart_height / 2 - max_heights["Production"]/2}) width:20 color: map_background ;
+ 		draw line({original_col_width/2 + gap, 3* chart_height / 2 - max_heights["Production"]/2}, {3*original_col_width/2 + gap, 3* chart_height / 2 - max_heights["Production"]/2}) width:20 color: map_background;
  	}
 }
 
@@ -580,7 +604,7 @@ experiment Open {
 				arc_angle <- (total - value) * 180/total;
 				draw arc(radius, start_angle + arc_angle/2, arc_angle) color: rgb(174, 224, 128);
 				draw arc(radius/2, -90, 180) color: #white;
-				draw (is_pollution_ok and is_production_ok) ? label_icon:disabled_label_icon size: w_width / 5;
+				draw label_icon size: w_width / 5;
 				draw ""+value  at: {location.x, location.y- 6*radius/10, 0.01}  color: rgb(97, 180, 31) font: ui_font anchor: #bottom_center;
 			}
 		
@@ -649,7 +673,7 @@ experiment Open {
 				}
 
 			}		
-
+			
 			graphics "Actions of players" visible: stage = PLAYER_ACTION_TURN and !CHOOSING_VILLAGE_FOR_POOL {
 				village v <- villages_order[index_player];
 				float y <- location.y + w_height/5 + 500 + y_centerdis;
@@ -663,11 +687,11 @@ experiment Open {
 				loop s over: (sort(actions_name_without_end, each)) {
 
 					bool selected <- village_actions[v] != nil and village_actions[v] contains s;
+					write sample(selected) + " " + sample(village_actions[v]) + " " + sample(s) + " " + sample(village_actions) + " " + sample(v);
 					draw s color:  s = over_action or selected ? (dark_theme ? #white : #black) : (dark_theme ? rgb(255, 255, 255, 130) : rgb(0, 0, 0, 130)) font: ui_font anchor: #center at: {left + gap * index, y} depth: 1;
 					if (selected) {
-						draw circle(w_width / 10) wireframe: true width: 2 color: dark_theme ? #white : #black at: {left + gap * index, y, 0.1};
+						draw circle(w_width / 10) wireframe: true width: 2 color: #black at: {left + gap * index, y, 0.1};
 					}
-
 					action_locations[s] <- {left + gap * index, y};
 					index <- index + 1;
 				}

@@ -751,8 +751,8 @@ global {
 		list<int> class <- [];
 		loop v over: l {
 			switch(v) {
-				match_between [0, 14999] {class <- class + 0;}
-				match_between [15000, 14999] {class <- class + 1;}
+				match_between [0, 4999] {class <- class + 0;}
+				match_between [5000, 14999] {class <- class + 1;}
 				match_between [15000, 29999] {class <- class + 2;}
 				match_between [30000, 44999] {class <- class + 3;}
 				default {class <- class + 4;}
