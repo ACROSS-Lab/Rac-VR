@@ -83,10 +83,10 @@ global {
 	bool use_timer_for_exploration <- true;
 	bool use_timer_for_estimation <- true;
 	bool timer_just_for_warning <- false; //if true, if the timer is finished, just a warning message is displayed; if false, the turn passes to the next player - for the moment, some issue with the automatic change of step
-	float initial_time_for_discussion <- 2 #mn const: true; // time before the player turns
-	float initial_time_for_exploration <- 2 #mn const: true;
-	float initial_time_for_estimation <- 2 #mn const: true;
-	float initial_time_for_choosing_village <- 5#s const: true;
+	float initial_time_for_discussion <- 0 #s const: true; // time before the player turns
+	float initial_time_for_exploration <- 0 #s const: true;
+	float initial_time_for_estimation <- 0 #mn const: true;
+	float initial_time_for_choosing_village <- 20 #s const: true;
 	float time_for_choosing_village <- initial_time_for_choosing_village;
 	float start_choosing_village_time;
 	int remaining_time_for_choosing_village <- 0;
@@ -292,7 +292,7 @@ global {
 		create stacked_chart {
 			show_pol_chart_by_cat_glob <- always_display_sub_charts ? true : false ;
 			desired_value <- 1.0;
-			max_value <- 2.0;
+			max_value <- ["Production"::2.0, "Total"::2.0, "Water"::0.70, "Solid"::1.78];
 			do add_column("Production");
 			do add_column("Total");
 			do add_column("Water");
@@ -416,7 +416,7 @@ species stacked_chart {
 	map<string, bool> draw_smiley;
 	float chart_width <- 2 * w_width;
 	float chart_height <- 3 * w_height/4;
-	float max_value;
+	map<string,float> max_value;
 	float desired_value;
 	bool show_pol_chart_by_cat; //to show solid and water pollution indicators
 	
@@ -456,8 +456,8 @@ species stacked_chart {
 		float col_width <- original_col_width;
 		float gap <- 200.0;
  		bool gap_added <- false;
- 		map<string,float> max_heights <- ["Production"::chart_height, "Total"::chart_height, "Water"::chart_height/2, "Solid"::chart_height/2];
- 		map<string,float> y_rect <- ["Production"::my_height, "Total"::my_height, "Water":: 1.25*my_height, "Solid":: 1.25*my_height];
+ 		map<string,float> max_heights <- ["Production"::my_height, "Total"::my_height, "Water"::my_height/2/2.54, "Solid"::my_height/2];
+ 		map<string,float> y_rect <- ["Production"::my_height, "Total"::my_height, "Water":: 1.405*my_height, "Solid":: 1.25*my_height];
  		
  		//draw rectangle(2.5*original_col_width, chart_height/2) at: {location.x-original_col_width*1.5, location.y +chart_height/4} border: dark_theme ? #white : #black wireframe: true;
  		//draw rectangle(2.5*original_col_width, chart_height/2) at: {location.x-original_col_width*1.5, location.y-chart_height/4} border: dark_theme ? #white : #black wireframe: true;
@@ -481,7 +481,7 @@ species stacked_chart {
 				loop c over: data2[col].keys {
 	 				float v <- data2[col][c];
 	 				total <- total+v;
-	 				float col_height <- (v * chart_height)/max_value;
+	 				float col_height <- (v * max_heights[col])/max_value[col];
 	 				draw rectangle(col_width,col_height) color: c at: {current_x, my_height + current_y - col_height/2};
 	 				//draw rectangle(col_width,col_height) wireframe: true border: dark_theme ? #black : #black width: 2 at: {current_x,my_height  + current_y -  col_height/2};
 	 				current_y <- current_y - col_height;
@@ -489,7 +489,7 @@ species stacked_chart {
  			} else {
  				float v <- data[col];
 				total <- total+v;
-				float col_height <- (v * chart_height)/max_value;
+				float col_height <- (v * max_heights[col])/max_value[col];
 				draw rectangle(col_width,max_heights[col]) color: color_col_back[col] at: {current_x, y_rect[col]};
 				draw rectangle(col_width,col_height) color: color_col[col] at: {current_x,my_height  + current_y - col_height/2};
 				//draw rectangle(col_width,col_height) wireframe: true border: dark_theme ? #black : #black width: 2 at: {current_x,my_height  + current_y -  col_height/2};
@@ -1116,10 +1116,8 @@ experiment Open {
 			
 			light #ambient intensity: ambient_intensity;
 			camera #default locked: true;
-//			graphics "Background" position: {0, 0}  size:{1,1}{
-//				draw square(1000) color: map_background at:{0,0};
-//			}
-			/**	
+
+			/**
 			chart WASTE_POLLUTION memorize: false tick_line_color:(dark_theme ? #white : #black) size:{0.8, 0.5} position: {0.1, 0} type: xy background: legend_background color: dark_theme ? #white : #black visible: !show_chart label_font: ui_font series_label_position: none y_tick_values_visible: false x_tick_values_visible: false x_tick_line_visible: true title_visible: false x_label: ""{
 				data SOLID_WASTE_POLLUTION value:rows_list(matrix([time_step,total_solid_pollution_values])) color: #orange marker: false thickness: chart_line_width ;
 				data WATER_WASTE_POLLUTION value: rows_list(matrix([time_step,total_water_pollution_values])) color: rgb(0,159,233) marker: false thickness: chart_line_width;
@@ -1131,6 +1129,13 @@ experiment Open {
 				data TOTAL_PRODUCTION value: rows_list(matrix([time_step,total_production_values])) color: #green thickness: chart_line_width marker: false; 
 				data ECOLABEL_MIN_PRODUCTION value: rows_list(matrix([time_step,ecolabel_min_production_values])) thickness: chart_line_width color: is_production_ok ? (dark_theme ? #white : #black) : #red marker: false; 
 			
+			}
+			
+			chart "wastewater" memorize: false tick_line_color: (dark_theme ? #white : #black) size:{0.8, 0.5} position: {0.1, 0} type: xy background: legend_background color: dark_theme ? #white : #black visible: !show_chart label_font: ui_font series_label_position: none y_tick_values_visible: false x_tick_values_visible: false x_tick_line_visible: true title_visible: false x_label: ""{
+				data "vil1" value:rows_list(matrix([time_step,village1_water_pollution_values])) color: #red marker: false thickness: chart_line_width ;
+				data "vil2" value:rows_list(matrix([time_step,village2_water_pollution_values])) color: #yellow marker: false thickness: chart_line_width;
+		 		data "vil3" value:rows_list(matrix([time_step,village3_water_pollution_values])) color: #blue marker: false thickness: chart_line_width;
+		 		data "vil4" value:rows_list(matrix([time_step,village4_water_pollution_values])) color: #green marker: false thickness: chart_line_width ;
 			}
 			*/
 			
