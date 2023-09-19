@@ -8,23 +8,31 @@ Material:
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
   m_Name: MAT_Character
-  m_Shader: {fileID: 4800000, guid: 41b25ff5e5040ab4ab0e6b7a2ceec28a, type: 3}
+  m_Shader: {fileID: 4800000, guid: fba774939d0c3564da99ffe67f464cd9, type: 3}
   m_Parent: {fileID: 0}
   m_ModifiedSerializedProperties: 0
-  m_ValidKeywords:
-  - _TEXTURE_ON
+  m_ValidKeywords: []
   m_InvalidKeywords:
   - _TEXTURE1_ON
+  - _TEXTURE_ON
   m_LightmapFlags: 4
   m_EnableInstancingVariants: 0
-  m_DoubleSidedGI: 1
-  m_CustomRenderQueue: -1
+  m_DoubleSidedGI: 0
+  m_CustomRenderQueue: 3000
   stringTagMap: {}
   disabledShaderPasses: []
   m_LockedProperties: 
   m_SavedProperties:
     serializedVersion: 3
     m_TexEnvs:
+    - _Alpha:
+        m_Texture: {fileID: 2800000, guid: 751406e2113a2b446891d0d78734c759, type: 3}
+        m_Scale: {x: 1, y: 1}
+        m_Offset: {x: 0, y: 0}
+    - _MainTex:
+        m_Texture: {fileID: 0}
+        m_Scale: {x: 1, y: 1}
+        m_Offset: {x: 0, y: 0}
     - _TextureSample1:
         m_Texture: {fileID: 2800000, guid: 44370579e6c63e847a993a19f740a63a, type: 3}
         m_Scale: {x: 1, y: 1}
@@ -40,6 +48,7 @@ Material:
     m_Ints: []
     m_Floats:
     - _AlphaCutoff: 0.5
+    - _Float0: 0.35
     - _Plants: 0
     - _Plants1: 0
     - _Texture: 1
@@ -47,6 +56,7 @@ Material:
     m_Colors:
     - _BaseColor: {r: 1, g: 1, b: 1, a: 0}
     - _BaseColor1: {r: 1, g: 1, b: 1, a: 0}
+    - _Color: {r: 1, g: 1, b: 1, a: 1}
     - _EmissionColor: {r: 1, g: 1, b: 1, a: 1}
     - _Pollution_Color: {r: 0.27990386, g: 0.43809888, b: 0.6981132, a: 0}
     - _Pollution_Color1: {r: 1, g: 1, b: 1, a: 0}
