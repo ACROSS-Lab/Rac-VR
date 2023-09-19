@@ -553,23 +553,8 @@ experiment Open {
 	}
 
 	output {
-		
 		/********************** LAYOUT ***********************************************************/	
 		layout vertical([0::82,horizontal([1::650,2::450])::368]) consoles: false tabs:false toolbars:false controls:false editors: false navigator: false tray: false parameters: false background: map_background;
-		
-
-
-		
-//		layout
-//		
-//		horizontal ([
-//			vertical([0::small_horizontal_prop, 1::large_horizontal_prop])::small_vertical_prop,
-//			2::large_vertical_prop]
-//		)
-//
-//		toolbars: false tabs: false parameters: false consoles: false navigator: false controls: false tray: false background: #white; //map_background;
-		
-
 
 		/********************** CENTER DISPLAY *************************************************/
 		display "Controls" type: opengl axes: false background: map_background2  {
@@ -651,7 +636,7 @@ experiment Open {
 				draw line({left, y}, {left + width, y}) buffer (100, 200) color: rgb(29, 98, 223);
 				draw sandclock_icon at: {left + width, y} size: w_height / 6;
 			}	
-
+	
 			graphics "Choose village" visible: CHOOSING_VILLAGE_FOR_POOL {
 				float y <- location.y + w_height/5 + y_centerdis;
 				float left <- location.x - w_width/2;
@@ -668,10 +653,10 @@ experiment Open {
 					if (selected) {
 						draw village_buttons[village_index] wireframe: true width: 2 color: dark_theme ? #white : #black;
 					}
-
+	
 					index <- index + 1;
 				}
-
+	
 			}		
 			
 			graphics "Actions of players" visible: stage = PLAYER_ACTION_TURN and !CHOOSING_VILLAGE_FOR_POOL {
@@ -685,7 +670,7 @@ experiment Open {
 				draw rectangle(right-left,w_width / 8) color: legend_background at: {location.x, y};
 				
 				loop s over: (sort(actions_name_without_end, each)) {
-
+	
 					bool selected <- village_actions[v] != nil and village_actions[v] contains s;
 					write sample(selected) + " " + sample(village_actions[v]) + " " + sample(s) + " " + sample(village_actions) + " " + sample(v);
 					draw s color:  s = over_action or selected ? (dark_theme ? #white : #black) : (dark_theme ? rgb(255, 255, 255, 130) : rgb(0, 0, 0, 130)) font: ui_font anchor: #center at: {left + gap * index, y} depth: 1;
@@ -695,9 +680,9 @@ experiment Open {
 					action_locations[s] <- {left + gap * index, y};
 					index <- index + 1;
 				}
-
+	
 			}
-
+	
 			graphics "Stage"  {
 				image_file icon;
 				if (stage = PLAYER_DISCUSSION_TURN) {
@@ -722,13 +707,13 @@ experiment Open {
 				float radius <- w_width/2;
 				draw ""+commune_money  at: {location.x, location.y- 6*radius/10 + y_centerdis, 0.01}  color: dark_theme ? #gold : rgb (225, 126, 21, 255) font: ui_font anchor: #bottom_center;
 			}
-
+	
 			graphics "Next" transparency: ((stage = PLAYER_DISCUSSION_TURN or stage = PLAYER_ACTION_TURN or stage = PLAYER_VR_EXPLORATION_TURN or stage = PLAYER_VR_ESTIMATION_TURN) and turn <= end_of_game) ? 0 : 0.6 {
 				next_location <- {location.x + w_width / 2.5,  location.y-w_height/8};
 				draw button_background at: next_location + {0, y_centerdis} color: (next_selected and ((stage = PLAYER_DISCUSSION_TURN or stage = PLAYER_ACTION_TURN or stage = PLAYER_VR_EXPLORATION_TURN or stage = PLAYER_VR_ESTIMATION_TURN) and turn <= end_of_game)) ? selected_color:unselected_color size: shape.width / 4;
 				draw next_icon at: next_location + {100, y_centerdis} size: w_width / 8 color: (next_selected and ((stage = PLAYER_DISCUSSION_TURN or stage = PLAYER_ACTION_TURN or stage = PLAYER_VR_EXPLORATION_TURN or stage = PLAYER_VR_ESTIMATION_TURN) and turn <= end_of_game)) ? selected_color:unselected_color;
 			}
-
+	
 			graphics "Play Pause" visible: turn <= end_of_game {
 				pause_location <- {location.x - w_width / 2.5, location.y- w_height/8};
 				draw button_background at: pause_location + {0, y_centerdis} color: play_pause_selected ? selected_color:unselected_color size: shape.width / 4;
@@ -780,41 +765,41 @@ experiment Open {
 			*/
 			
 			/** Button geography
-			graphics "Button geography" {
-				float x <- -1.0;
-				float y <- 0.5;
-				show_map_button <-  circle(w_width/8) at_location {x*w_width, location.y- w_height/8};
-				draw image_file(show_geography ? "../../includes/icons/button_map_off.png":"../../includes/icons/button_map_on.png") color: show_map_selected ? selected_color:unselected_color size: w_width/4 at: show_map_button.location ;
-			}
-			
-//			graphics "Button flow" visible: show_geography{
-//				float x <- -0.25;
-//				float y <- 0.85;
-//				show_waterflow_button <- circle(w_width/8) at_location {x*w_width,y*w_height};
-//				draw image_file(display_water_flow ? "../../includes/icons/button_waterflow_off.png":"../../includes/icons/button_waterflow_on.png") color: show_waterflow_selected ? selected_color:unselected_color size: w_width/4 at: {x*w_width,y*w_height} ;
-//			}
-			
-			event #mouse_move {
-				using topology(simulation) {
-					show_map_selected <- (show_map_button covers #user_location) ;
-					//show_waterflow_selected <- (show_waterflow_button covers #user_location) ;
+				graphics "Button geography" {
+					float x <- -1.0;
+					float y <- 0.5;
+					show_map_button <-  circle(w_width/8) at_location {x*w_width, location.y- w_height/8};
+					draw image_file(show_geography ? "../../includes/icons/button_map_off.png":"../../includes/icons/button_map_on.png") color: show_map_selected ? selected_color:unselected_color size: w_width/4 at: show_map_button.location ;
 				}
-			}
-			
-			event #mouse_exit {
-					show_map_selected <- false;
-					//show_waterflow_selected <- false;
-			}
-			
-			event #mouse_down {
-				if (show_map_selected) {
-					show_geography <- !show_geography;
-				} 
-//				else if (show_waterflow_selected) {
-//					display_water_flow <- !display_water_flow;
-//				}
-			}
-			*/
+				
+	//			graphics "Button flow" visible: show_geography{
+	//				float x <- -0.25;
+	//				float y <- 0.85;
+	//				show_waterflow_button <- circle(w_width/8) at_location {x*w_width,y*w_height};
+	//				draw image_file(display_water_flow ? "../../includes/icons/button_waterflow_off.png":"../../includes/icons/button_waterflow_on.png") color: show_waterflow_selected ? selected_color:unselected_color size: w_width/4 at: {x*w_width,y*w_height} ;
+	//			}
+				
+				event #mouse_move {
+					using topology(simulation) {
+						show_map_selected <- (show_map_button covers #user_location) ;
+						//show_waterflow_selected <- (show_waterflow_button covers #user_location) ;
+					}
+				}
+				
+				event #mouse_exit {
+						show_map_selected <- false;
+						//show_waterflow_selected <- false;
+				}
+				
+				event #mouse_down {
+					if (show_map_selected) {
+						show_geography <- !show_geography;
+					} 
+	//				else if (show_waterflow_selected) {
+	//					display_water_flow <- !display_water_flow;
+	//				}
+				}
+				*/
 				
 			event "1" {
 				ask simulation {
@@ -886,7 +871,7 @@ experiment Open {
 				next_selected <- false;
 				play_pause_selected <- false;				
 			}
-
+	
 			event #mouse_move {
 				using topology(simulation) {
 					if (stage = PLAYER_ACTION_TURN) {
@@ -912,7 +897,7 @@ experiment Open {
 					village_selected <- -1;
 				}
 			}
-
+	
 			event #mouse_down {
 				if (stage = PLAYER_ACTION_TURN and over_action != nil) {
 					ask simulation {
@@ -957,7 +942,7 @@ experiment Open {
 								}
 							}
 						}
-
+	
 					} else if (pause_location distance_to #user_location) < w_width / 5 {
 						ask simulation {
 							if paused or about_to_pause {
@@ -990,7 +975,7 @@ experiment Open {
 				float y <- 0.2/3;
 				float x <- x_init;
 				
-
+	
 				draw plant_icon at: {x* w_width,y*w_height} size: icon_size;
 				x <- x + 2* x_gap;
 				loop c over: reverse(greens) {
@@ -1023,22 +1008,22 @@ experiment Open {
 				draw city_icon at: {x*w_width,y*w_height} size:  icon_size;
 				x <- x + 2*x_gap;
 				draw square(x_gap*w_width) color: city_color at: {x* w_width,y*w_height};
-
+	
 			}
 			camera 'default' location: {3154.8761,3145.9738,7969.9466} target: {3154.8761,3145.8347,0.0};
 			light #ambient intensity: ambient_intensity;
 			//camera 'default' location: {3170.7531,5600.8795,5037.7866} target: {3170.7531,2957.9814,0.0};
 			//camera 'default' location: {3213.0194,2444.8489,6883.1631} target: {3213.0194,2444.7288,0.0};
 			
-			species waste_on_canal visible: (show_geography) and display_water_flow  {
-					draw sphere(20) color: #lightblue;
-			}
-
+			
 			species plot visible: show_geography {
 				draw shape color: greens[world.production_class_current(self)] border: false;
 			}
 			species canal visible: show_geography{
 				draw shape buffer (20,10) color: display_water_flow ? rgb(178, 193, 149) : blues[world.water_pollution_class_current(self)]  ;
+			}
+			species waste_on_canal visible: (show_geography) and display_water_flow  {
+					draw sphere(20) color: #lightblue;
 			}
 			species local_landfill visible: show_geography{
 				draw  shape depth: waste_quantity / 100.0 color: landfill_color;
@@ -1108,62 +1093,14 @@ experiment Open {
 			 */
 		}
 	
-
+	
 		/********************** CHARTS DISPLAY ***************************************************/
-
+	
 		//display "Chart 4" type: opengl axes: false background: legend_background refresh: stage = COMPUTE_INDICATORS and every(data_frequency#cycle) {
 		display "Chart 4"  type: 3d axes: false background: map_background refresh: (stage = COMPUTE_INDICATORS and every(data_frequency#cycle)) or (stage = PLAYER_VR_ESTIMATION_TURN and !always_display_sub_charts)  {
 			
 			light #ambient intensity: ambient_intensity;
 			camera #default locked: true;
-
-			/**
-			chart WASTE_POLLUTION memorize: false tick_line_color:(dark_theme ? #white : #black) size:{0.8, 0.5} position: {0.1, 0} type: xy background: legend_background color: dark_theme ? #white : #black visible: !show_chart label_font: ui_font series_label_position: none y_tick_values_visible: false x_tick_values_visible: false x_tick_line_visible: true title_visible: false x_label: ""{
-				data SOLID_WASTE_POLLUTION value:rows_list(matrix([time_step,total_solid_pollution_values])) color: #orange marker: false thickness: chart_line_width ;
-				data WATER_WASTE_POLLUTION value: rows_list(matrix([time_step,total_water_pollution_values])) color: rgb(0,159,233) marker: false thickness: chart_line_width;
-		 		data TOTAL_POLLUTION value:rows_list(matrix([time_step,total_pollution_values])) color:rgb(130,86,157) marker: false thickness: chart_line_width;
-		 		data ECOLABEL_MAX_POLLUTION value:rows_list(matrix([time_step,ecolabel_max_pollution_values])) color: is_pollution_ok ? (dark_theme ? #white : #black) : #red marker: false thickness: chart_line_width;
-			}
-			
-			chart PRODUCTION memorize: false tick_line_color: (dark_theme ? #white : #black) type: xy position:{0.1, 0.5}  size:{0.8, 0.5} background: legend_background color: dark_theme ? #white : #black y_range:[0,6000] visible: !show_chart series_label_position: none y_tick_values_visible: false x_tick_values_visible: true x_tick_line_visible: true title_visible: false x_label: ""{
-				data TOTAL_PRODUCTION value: rows_list(matrix([time_step,total_production_values])) color: #green thickness: chart_line_width marker: false; 
-				data ECOLABEL_MIN_PRODUCTION value: rows_list(matrix([time_step,ecolabel_min_production_values])) thickness: chart_line_width color: is_production_ok ? (dark_theme ? #white : #black) : #red marker: false; 
-			
-			}
-			
-			chart "wastewater" memorize: false tick_line_color: (dark_theme ? #white : #black) size:{0.8, 0.5} position: {0.1, 0} type: xy background: legend_background color: dark_theme ? #white : #black visible: !show_chart label_font: ui_font series_label_position: none y_tick_values_visible: false x_tick_values_visible: false x_tick_line_visible: true title_visible: false x_label: ""{
-				data "vil1" value:rows_list(matrix([time_step,village1_water_pollution_values])) color: #red marker: false thickness: chart_line_width ;
-				data "vil2" value:rows_list(matrix([time_step,village2_water_pollution_values])) color: #yellow marker: false thickness: chart_line_width;
-		 		data "vil3" value:rows_list(matrix([time_step,village3_water_pollution_values])) color: #blue marker: false thickness: chart_line_width;
-		 		data "vil4" value:rows_list(matrix([time_step,village4_water_pollution_values])) color: #green marker: false thickness: chart_line_width ;
-			}
-			*/
-			
-//			graphics "Chart Legend" position: {0, 0} transparency: 0 refresh: true visible: !show_chart and #fullscreen {
-//				float x_gap <- 0.02;
-//				float x_init <- 0.1;
-//				float icon_size <-  w_height / 20;
-//				float y <- 0.95;
-//				float x <- x_init;
-//				float y2 <- 0.95;
-//				
-//				draw square(x_gap*w_width) color: rgb(130,86,157) at: {x*w_width,y2*w_height};
-//				x <- x + 2* x_gap;
-//				draw pollution_icon at: {x* w_width,y*w_height} size: icon_size;
-//				x <- x + 2* x_gap;
-//				draw square(x_gap*w_width) color: #orange at: {x*w_width,y2*w_height};
-//				x <- x + 2* x_gap;
-//				draw waste_icon at: {x* w_width,y*w_height} size: icon_size;
-//				x <- x + 2* x_gap;
-//				draw square(x_gap*w_width) color: rgb(0,159,233) at: {x*w_width,y2*w_height};
-//				x <- x + 2* x_gap;
-//				draw water_icon at: {x* w_width,y*w_height} size: icon_size;
-//				x <- x + 2* x_gap;
-//				draw square(x_gap*w_width) color: #green at: {x*w_width,y2*w_height};
-//				x <- x + 2* x_gap;
-//				draw plant_icon at: {x* w_width,y*w_height} size: icon_size;
-//				x <- x + 2* x_gap;
-//			}
 			
 			agents "Global" value: [global_chart] aspect: horizontal visible: show_chart position: {0.25,0} size: {0.7,0.7} transparency:0;
 			
