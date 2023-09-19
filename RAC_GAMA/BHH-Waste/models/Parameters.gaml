@@ -40,9 +40,11 @@ global {
 	/******************* LOG RESULTS *************************************/
 	
 	bool save_log <- true;
+	bool save_log_dailySteps <- false;
 	string id_game <- ""+ (#now).year + "_" + (#now).month + "_" + (#now).day+"-" + (#now).hour + "_" + (#now).minute;
 	string village_action_log_path <- "../../results/" + id_game+"/village_action.csv";
 	string systeme_evolution_log_path <- "../../results/" + id_game+"/system_evolution.csv";
+	string log_path <- "../../results/" + id_game+"/indicator_evolution_steps.csv";
 	
 	/******************* GEOGRAPHICAL DATA USED *************************************/
 	shape_file Limites_commune_shape_file <- shape_file("../includes/Definitive_versions/Limites_communesV2.shp");
@@ -71,7 +73,7 @@ global {
 	
 	float convertion_from_l_water_waste_to_kg_solid_waste <- 1.0;
 	float min_production_ecolabel <- 3000.0;// minimum threshold of production to get EcoLabel, unities are tons of rice produced
-	float max_pollution_ecolabel <- 300000.0;// maximum threshold of production to get ecolabel, unities are converted in 
+	float max_pollution_ecolabel <- 300000.0;// maximum threshold of pollution to get ecolabel, unities are converted in kg
 	
 	/************* PARAMETERS RELATED TO DEMOGRAPHIC AND ECONOMIC ASPECT  ***************/
 	
@@ -196,5 +198,5 @@ global {
 	float impact_installation_dumpholes  <- 0.70 min: 0.0 max: 1.0; //decreasse the quantity of solid waste produced by people outside of urban areas (farmers)
 	
 	bool show_pol_chart_by_cat_glob;
-	bool always_display_sub_charts <- false const: true;
+	bool always_display_sub_charts <- true const: true;
 }

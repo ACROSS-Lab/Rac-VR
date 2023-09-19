@@ -162,6 +162,10 @@ global {
 		if save_log {
 			save "turn,player,productivity,solid_pollution,water_pollution,days_with_ecolabel"  to: systeme_evolution_log_path format: text rewrite: true;
 			save "turn,player,budget,exra_turn,action" to: village_action_log_path format: text rewrite: true;
+			if save_log_dailySteps {
+				save "days,solid_pollution, water_pollution, productivity" to: log_path format: text rewrite: true;
+			}
+			
 		}
 	}
 	
@@ -751,10 +755,10 @@ global {
 		list<int> class <- [];
 		loop v over: l {
 			switch(v) {
-				match_between [0, 4999] {class <- class + 0;}
-				match_between [5000, 14999] {class <- class + 1;}
-				match_between [15000, 29999] {class <- class + 2;}
-				match_between [30000, 44999] {class <- class + 3;}
+				match_between [0, 19999] {class <- class + 0;}
+				match_between [20000, 31999] {class <- class + 1;}
+				match_between [32000, 48999] {class <- class + 2;}
+				match_between [49000, 64999] {class <- class + 3;}
 				default {class <- class + 4;}
 			}
 		}
@@ -928,6 +932,9 @@ global {
 		//do manage_landfill;
 		do manage_daily_indicator;
 		do manage_end_of_indicator_computation;
+		if save_log_dailySteps {
+			save ("" + current_day + ","+  total_solid_pollution + ","+  total_water_pollution + ","+  total_production)  to: log_path format: text rewrite: false;
+		}
 		current_day <- current_day + 1;
 	}
 	
@@ -964,7 +971,7 @@ global {
 					}
 	
 					days_with_ecolabel_year << 0;
-					current_day <- 0;
+					current_day <- 1;
 					step <- #day;
 
 					if not without_player {do tell(INDICATOR_COMPUTATION);}
