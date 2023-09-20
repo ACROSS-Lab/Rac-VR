@@ -449,10 +449,10 @@ species stacked_chart {
  			current_x <- current_x + col_width + gap;
  		}
  		if (total_pol <= 1 and total_prod > 1) {
-			draw ecolabel_icon at: {original_col_width*1.75, my_height-2.25*original_col_width} size: 1500;
+			draw ecolabel_icon at: {original_col_width*1.75, my_height-2.25*original_col_width} size: {1300, 1600};
 		} 
 		else {
-			draw no_ecolabel_icon at: {original_col_width*1.75, my_height-2.25*original_col_width} size: 1500;
+			draw no_ecolabel_icon at: {original_col_width*1.75, my_height-2.25*original_col_width} size: {1300, 1600};
 		}
  				
  		draw line({-original_col_width/2, 3* chart_height / 2 - max_heights["Production"]/2}, {original_col_width/2, 3* chart_height / 2 - max_heights["Production"]/2}) width:20 color: map_background ;
@@ -839,11 +839,10 @@ experiment Open {
 		display "MAIN MAP" type: 3d background:map_background axes: false {
 			
 			overlay position: {0.5, 1} size: {0,0} transparency: 0 visible: !(stage = PLAYER_VR_EXPLORATION_TURN) {
-				float y_gap <- 0.25/3;
 				float x_gap <- 0.1/3;
-				float x_init <- 0.35/10;
+				float x_init <- 0.35/3;
 				float icon_size <-  w_height / 18;
-				float y <- 0.2/3;
+				float y <- 0.2/1.1;
 				float x <- x_init;
 				
 	
@@ -862,10 +861,8 @@ experiment Open {
 				draw square(x_gap*w_width) color: city_color at: {x* w_width,y*w_height};
 			}
 			
-			camera 'default' location: {3154.8761,3145.9738,7969.9466} target: {3154.8761,3145.8347,0.0};
 			light #ambient intensity: ambient_intensity;
-			//camera 'default' location: {3170.7531,5600.8795,5037.7866} target: {3170.7531,2957.9814,0.0};
-			//camera 'default' location: {3213.0194,2444.8489,6883.1631} target: {3213.0194,2444.7288,0.0};
+			camera 'default' distance: 7700 location: #from_above target: {3000,2700,0};
 			
 			/********************** MAIN MAP DISPLAY ******************************/
 			species plot visible: !(stage = PLAYER_VR_EXPLORATION_TURN)  {
@@ -896,7 +893,7 @@ experiment Open {
 			}
 			
 			/********************** MINI MAP DISPLAY ******************************/
-			image minimap size: {0.99,0.85} position:{0.1,0} visible: stage = PLAYER_VR_EXPLORATION_TURN;
+			image minimap size: {0.95,0.99} position:{0.1,0} visible: stage = PLAYER_VR_EXPLORATION_TURN;
 			
 		}
 	
