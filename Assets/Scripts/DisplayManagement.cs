@@ -60,6 +60,7 @@ public class DisplayManagement : MonoBehaviour
     public Material material_plant ;
     public Material material_canalWater ;
     public Material material_fieldWater ;
+    public Material material_grass ;
 
 
     // Start is called before the first frame update

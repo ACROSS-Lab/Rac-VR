@@ -207,6 +207,7 @@ public class ConnectionClass
                 dm.material_plant.SetColor("_Pollution_Color", dm.TreeColorLvl1);
                 dm.material_canalWater.SetColor("_Color0", dm.CanalWaterColorLvl1);
                 dm.material_fieldWater.SetColor("_Color0", dm.FieldWaterColorLvl1);
+                dm.material_grass.SetColor("_PollutionColor", dm.TreeColorLvl1);
                 break;
             case 1:
                 dm.material_tree1.SetColor("_Pollution_Color1", dm.TreeColorLvl2);
@@ -214,6 +215,7 @@ public class ConnectionClass
                 dm.material_plant.SetColor("_Pollution_Color", dm.TreeColorLvl2);
                 dm.material_canalWater.SetColor("_Color0", dm.CanalWaterColorLvl2);
                 dm.material_fieldWater.SetColor("_Color0", dm.FieldWaterColorLvl2);
+                dm.material_grass.SetColor("_PollutionColor", dm.TreeColorLvl2);
                 break;
             case 2:
                 dm.material_tree1.SetColor("_Pollution_Color1", dm.TreeColorLvl3);
@@ -221,6 +223,7 @@ public class ConnectionClass
                 dm.material_plant.SetColor("_Pollution_Color", dm.TreeColorLvl3);
                 dm.material_canalWater.SetColor("_Color0", dm.CanalWaterColorLvl3);
                 dm.material_fieldWater.SetColor("_Color0", dm.FieldWaterColorLvl3);
+                dm.material_grass.SetColor("_PollutionColor", dm.TreeColorLvl3);
                 break;
             case 3:
                 dm.material_tree1.SetColor("_Pollution_Color1", dm.TreeColorLvl4);
@@ -228,6 +231,7 @@ public class ConnectionClass
                 dm.material_plant.SetColor("_Pollution_Color", dm.TreeColorLvl4);
                 dm.material_canalWater.SetColor("_Color0", dm.CanalWaterColorLvl4);
                 dm.material_fieldWater.SetColor("_Color0", dm.FieldWaterColorLvl4);
+                dm.material_grass.SetColor("_PollutionColor", dm.TreeColorLvl4);
                 break;
             default :
                 dm.material_tree1.SetColor("_Pollution_Color1", dm.TreeColorLvl5);
@@ -235,6 +239,7 @@ public class ConnectionClass
                 dm.material_plant.SetColor("_Pollution_Color", dm.TreeColorLvl5);
                 dm.material_canalWater.SetColor("_Color0", dm.CanalWaterColorLvl5);
                 dm.material_fieldWater.SetColor("_Color0", dm.FieldWaterColorLvl5);
+                dm.material_grass.SetColor("_PollutionColor", dm.TreeColorLvl5);
                 break;
         }  
     }
