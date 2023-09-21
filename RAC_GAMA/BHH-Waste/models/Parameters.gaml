@@ -199,4 +199,5 @@ global {
 	
 	bool show_pol_chart_by_cat_glob;
 	bool always_display_sub_charts <- true const: true;
+	bool always_display_chart_by_vil <- true const: true;
 }
