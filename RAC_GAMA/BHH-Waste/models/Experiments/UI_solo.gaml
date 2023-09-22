@@ -243,6 +243,7 @@ global {
 			}
 		}
 		global_chart <- stacked_chart[0];
+		//create default_player;
 	}
 
 	reflex update_charts when: stage = COMPUTE_INDICATORS{
@@ -462,6 +463,10 @@ species stacked_chart {
 
 
 experiment Open {
+	
+	action affiche_coord {
+		write sample(#user_location);
+	}
 	
 	int ambient_intensity <- 100;
 	
@@ -893,7 +898,9 @@ experiment Open {
 			}
 			
 			/********************** MINI MAP DISPLAY ******************************/
-			image minimap size: {0.95,0.99} position:{0.1,0} visible: stage = PLAYER_VR_EXPLORATION_TURN;
+			image minimap size: {0.83,0.99} position:{0.1,0} visible: stage = PLAYER_VR_EXPLORATION_TURN;
+			species default_player visible: stage = PLAYER_VR_EXPLORATION_TURN;
+			event #mouse_down action: affiche_coord;
 			
 		}
 	

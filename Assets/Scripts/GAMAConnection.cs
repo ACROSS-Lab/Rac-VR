@@ -45,7 +45,7 @@ public class GlobalTest : TCPConnector
     private Thread clientReceiveThread;
 
     private bool initialized = false;
-    private bool playerPositionUpdate = false;
+    private bool playerPositionUpdate = false; //Uppdate position of player in Unity from GAMA
 
     private string message ="";
 
@@ -72,6 +72,7 @@ public class GlobalTest : TCPConnector
     private int village_id = 0;
 
     private static DisplayManagement dm;
+
 
     // Start is called before the first frame update
     void Start()
@@ -153,7 +154,7 @@ public class GlobalTest : TCPConnector
 
             Ground.transform.position = ps;
             defineGroundSize = true;
-            if (Player != null)
+            if (Player != null && playerPositionUpdate)
             {
                 Vector3 pos = converter.fromGAMACRS(parameters.position[0], parameters.position[1]);
                 Player.transform.position = pos;
@@ -164,7 +165,8 @@ public class GlobalTest : TCPConnector
                 {
                     Player.AddComponent<Rigidbody>();
                 }
-            } else
+            } 
+            else
             {
                 if (Player.GetComponent<Rigidbody>() != null)
                 {
@@ -183,7 +185,7 @@ public class GlobalTest : TCPConnector
        
         if (Player != null && playerPositionUpdate && parameters != null)
         {
-           Player.transform.position = converter.fromGAMACRS(parameters.position[0], parameters.position[1]);
+            Player.transform.position = converter.fromGAMACRS(parameters.position[0], parameters.position[1]);
             playerPositionUpdate = false;
             receiveInformation = false;
             if (parameters.delay > 0)
@@ -216,17 +218,18 @@ public class GlobalTest : TCPConnector
    
     private void SendPlayerPosition()
     {
-        Vector2 vF = new Vector2(Camera.main.transform.forward.x, Camera.main.transform.forward.z);
-        Vector2 vR = new Vector2(transform.forward.x, transform.forward.z);
-        vF.Normalize();
-        vR.Normalize();
-        float c = vF.x * vR.x + vF.y * vR.y;
-        float s = vF.x * vR.y - vF.y * vR.x;
+        // Vector2 vF = new Vector2(Camera.main.transform.forward.x, Camera.main.transform.forward.z);
+        // Vector2 vR = new Vector2(transform.forward.x, transform.forward.z);
+        // vF.Normalize();
+        // vR.Normalize();
+        // float c = vF.x * vR.x + vF.y * vR.y;
+        // float s = vF.x * vR.y - vF.y * vR.x;
 
-        double angle = ((s > 0) ? -1.0 : 1.0) * (180 / Math.PI) * Math.Acos(c) * parameters.precision;
+        // double angle = ((s > 0) ? -1.0 : 1.0) * (180 / Math.PI) * Math.Acos(c) * parameters.precision;
 
         List<int> p = converter.toGAMACRS(Player.transform.position); 
-        SendMessageToServer("{\"position\":[" + p[0] + "," + p[1] + "],\"rotation\": " + (int)angle + "}");
+        //SendMessageToServer("{\"position\":[" + p[0] + "," + p[1] + "],\"rotation\": " + (int)angle + "}");
+        SendMessageToServer("{\"position\":[" + p[0] + "," + p[1] + "]" + "}");
     }
 
     private void UpdateAgentList()
@@ -302,7 +305,7 @@ public class GlobalTest : TCPConnector
             converter = new CoordinateConverter(parameters.precision, GamaCRSCoefX, GamaCRSCoefY, GamaCRSOffsetX, GamaCRSOffsetY);
             SendMessageToServer("ok");
             initialized = true;
-            playerPositionUpdate = true;
+            //playerPositionUpdate = true;
 
         }
         else if (mes.Contains("points"))
