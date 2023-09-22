@@ -139,6 +139,8 @@ global {
 	image_file ecolabel_icon <- image_file("../../includes/icons/Ecolabel_On.png");
 	image_file no_ecolabel_icon <- image_file("../../includes/icons/Ecolabel_Off.png");
 	image_file minimap <- image_file("../../includes/icons/mini_map.png");
+	image_file player <- image_file("../../includes/icons/Icone_Player.png");
+	image_file interest <- image_file("../../includes/icons/Icone_PointOfInterest.png");
 
 	/********************** VARIOUS FUNCTIONS  ***************************/
 
@@ -843,27 +845,46 @@ experiment Open {
 		
 		display "MAIN MAP" type: 3d background:map_background axes: false {
 			
-			overlay position: {0.5, 1} size: {0,0} transparency: 0 visible: !(stage = PLAYER_VR_EXPLORATION_TURN) {
+			overlay position: {0.5, 1} size: {0,0} transparency: 0 {
 				float x_gap <- 0.1/3;
 				float x_init <- 0.35/3;
 				float icon_size <-  w_height / 18;
 				float y <- 0.2/1.1;
 				float x <- x_init;
 				
-	
-				draw plant_icon at: {x* w_width,y*w_height} size: icon_size;
-				x <- x + 2* x_gap;
-				loop c over: reverse(greens) {
-					draw square(x_gap*w_width) color: c at: {x*w_width,y*w_height};
-					x <- x + x_gap;
+				if (stage = PLAYER_VR_EXPLORATION_TURN) {
+					
+					//Legend Player position
+					draw player at: {x* w_width,y*w_height} size: icon_size*1.5;
+					x <- x + 2.3* x_gap;
+					draw "Player" at: {x* w_width,y*w_height} color: rgb(223, 204, 76) depth: 0 font: ui_font anchor: #center;
+					
+					x <- x_init + x_gap * 8.5;
+					
+					//Legend Point of interest
+					draw interest at: {x*w_width,y*w_height} size: icon_size*1.5;
+					x <- x + 4*x_gap;
+					draw "Point Of Interest" at: {x* w_width,y*w_height} color: rgb(217, 104, 76) depth: 0 font: ui_font anchor: #center;
+					
+				} else {
+					
+					//Legend Productivity
+					draw plant_icon at: {x* w_width,y*w_height} size: icon_size;
+					x <- x + 2* x_gap;
+					loop c over: reverse(greens) {
+						draw square(x_gap*w_width) color: c at: {x*w_width,y*w_height};
+						x <- x + x_gap;
+					}
+					
+					x <- x_init + x_gap * 8.5;
+					
+					//Legend Urban areas
+					draw city_icon at: {x*w_width,y*w_height} size:  icon_size;
+					x <- x + 2*x_gap;
+					draw square(x_gap*w_width) color: city_color at: {x* w_width,y*w_height};
+					
 				}
 				
-				x <- x_init + x_gap * 8.5;
-				
-				//Legend Urban areas
-				draw city_icon at: {x*w_width,y*w_height} size:  icon_size;
-				x <- x + 2*x_gap;
-				draw square(x_gap*w_width) color: city_color at: {x* w_width,y*w_height};
 			}
 			
 			light #ambient intensity: ambient_intensity;
@@ -900,6 +921,7 @@ experiment Open {
 			/********************** MINI MAP DISPLAY ******************************/
 			image minimap size: {0.83,0.99} position:{0.1,0} visible: stage = PLAYER_VR_EXPLORATION_TURN;
 			species default_player visible: stage = PLAYER_VR_EXPLORATION_TURN;
+			
 			event #mouse_down action: affiche_coord;
 			
 		}
