@@ -89,7 +89,7 @@ global skills: [network]{
 	float player_size_GAMA <- 300.0;
 	
 	//player rotation - only used for displaying the player in GAMA
-	int rotation_player <- 90;
+	int rotation_player <- 0;
 
 	
 
@@ -121,13 +121,28 @@ global skills: [network]{
 	//the last received position of the player ([x,y,rotation])
 	list<int> player_position <- [];
 	
-
+	point translate_coord(point p){
+		point o <- {2802.2, 3128.5};
+		
+		float a <- 102.0821;
+		float b <- -2.2820;
+		float c <- 2.7507;
+		float d <- -113.9149;
+		
+		float x <- a*p.x + b*p.y + o.x;
+		float y <- c*p.x + d*p.y + o.y;
+		return {x,y} ;
+	}
+	
+	float transform_rot(float r){
+		return r - 90;
+	}
 	
 	//creation of the player agent - can be overrided
 	action init_player {
 		create default_player  {
 			the_player <- self;
-			location <- translate_coord(location_init);
+			location <- world.translate_coord(location_init);
 		}
 	}
 	
@@ -365,10 +380,10 @@ global skills: [network]{
 	    	let answer <- map(s.contents);
 			list<int> position <- answer["position"];
 			if position != nil and length(position) = 2  {
-				//the_player.rotation <- int(int(answer["rotation"])/precision + rotation_player);
-				the_player.location <- the_player.translate_coord({position[0]/precision, position[1]/precision});
+				the_player.rotation <- int(transform_rot(int(answer["rotation"])/precision));
+				the_player.location <- translate_coord({position[0]/precision, position[1]/precision});
 				the_player.to_display <- true;
-//				write sample(the_player.location);
+				write sample(the_player.rotation);
 			}
 		}
 	}
@@ -387,30 +402,18 @@ species default_player {
 	rgb color <- #red;
 	int rotation;
 	bool to_display <- true;
-	float cone_distance <- 10.0 * player_size_GAMA;
+	float cone_distance <- 2 * player_size_GAMA;
 	int cone_amplitude <- 90;
 	
-	point translate_coord(point p){
-		point o <- {2802.2, 3128.5};
-		
-		float a <- 102.0821;
-		float b <- -2.2820;
-		float c <- 2.7507;
-		float d <- -113.9149;
-		
-		float x <- a*p.x + b*p.y + o.x;
-		float y <- c*p.x + d*p.y + o.y;
-		return {x,y} ;
-	}
 	
 	aspect default {
 		if to_display {
+			draw cone(rotation - cone_amplitude/2,rotation + cone_amplitude/2) inter circle(cone_distance) /**translated_by ({cos(rotation), sin(rotation)} * (- player_size_GAMA/4.0))**/ translated_by {0,0,4.9} color: rgb(223, 204, 76, 0.5);
 			if file_exists("../../includes/icons/Icone_Player.png")  {
 				draw image("../../includes/icons/Icone_Player.png")  size: {player_size_GAMA, player_size_GAMA} at: location + {0, 0, 5} /**rotate: rotation - 90*/;
 			} else {
-				draw circle(player_size_GAMA/2) at: location + {0, 0, 5} color: color /**rotate: rotation - 90*/;
+				draw circle(player_size_GAMA/2) at: location + {0, 0, 5} color: color rotate: rotation - 90;
 			}
-			//draw cone(rotation - cone_amplitude/2,rotation + cone_amplitude/2) inter circle(cone_distance) translated_by ({cos(rotation), sin(rotation)} * (- player_size_GAMA/4.0)) translated_by {0,0,4.9} color: rgb(#mediumpurple, 0.75);
 		}			
 	}
 }

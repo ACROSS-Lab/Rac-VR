@@ -218,18 +218,21 @@ public class GlobalTest : TCPConnector
    
     private void SendPlayerPosition()
     {
-        // Vector2 vF = new Vector2(Camera.main.transform.forward.x, Camera.main.transform.forward.z);
-        // Vector2 vR = new Vector2(transform.forward.x, transform.forward.z);
-        // vF.Normalize();
-        // vR.Normalize();
-        // float c = vF.x * vR.x + vF.y * vR.y;
-        // float s = vF.x * vR.y - vF.y * vR.x;
+        Vector2 vF = new Vector2(Camera.main.transform.forward.x, Camera.main.transform.forward.z);
+        Debug.Log(vF);
+        Vector2 vR = new Vector2(transform.forward.x, transform.forward.z);
+        Debug.Log(vR);
+        vF.Normalize();
+        vR.Normalize();
+        float c = vF.x * vR.x + vF.y * vR.y;
+        float s = vF.x * vR.y - vF.y * vR.x;
 
-        // double angle = ((s > 0) ? -1.0 : 1.0) * (180 / Math.PI) * Math.Acos(c) * parameters.precision;
+        double angle = ((s >= 0) ? 1.0 : -1.0) * (180 / Math.PI) * Math.Acos(c) * parameters.precision;
 
         List<int> p = converter.toGAMACRS(Player.transform.position); 
-        //SendMessageToServer("{\"position\":[" + p[0] + "," + p[1] + "],\"rotation\": " + (int)angle + "}");
-        SendMessageToServer("{\"position\":[" + p[0] + "," + p[1] + "]" + "}");
+        Debug.Log((int)angle);
+        SendMessageToServer("{\"position\":[" + p[0] + "," + p[1] + "],\"rotation\": " + (int)angle + "}");
+        // SendMessageToServer("{\"position\":[" + p[0] + "," + p[1] + "]" + "}");
     }
 
     private void UpdateAgentList()
