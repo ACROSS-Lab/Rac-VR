@@ -1531,15 +1531,6 @@
                     "initialStateCheck": true
                 },
                 {
-                    "name": "Grab Move",
-                    "type": "Button",
-                    "id": "cfb29d37-3db0-4e5d-a73b-7d48a19e279e",
-                    "expectedControlType": "Button",
-                    "processors": "",
-                    "interactions": "",
-                    "initialStateCheck": false
-                },
-                {
                     "name": "Snap Turn",
                     "type": "Value",
                     "id": "44441ad6-5762-466d-ad54-aa44fcd61a5c",
@@ -1613,17 +1604,6 @@
                     "processors": "",
                     "groups": "Noncontinuous Move",
                     "action": "Teleport Direction",
-                    "isComposite": false,
-                    "isPartOfComposite": false
-                },
-                {
-                    "name": "",
-                    "id": "7ecb549e-ab98-4a4b-b979-38068fe3b811",
-                    "path": "<XRController>{RightHand}/gripPressed",
-                    "interactions": "",
-                    "processors": "",
-                    "groups": "Generic XR Controller",
-                    "action": "Grab Move",
                     "isComposite": false,
                     "isPartOfComposite": false
                 },
