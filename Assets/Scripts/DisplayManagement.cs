@@ -69,6 +69,13 @@ public class DisplayManagement : MonoBehaviour
         ProductionLvl1.SetActive(false);
         ProductionLvl2.SetActive(false);
         ProductionLvl3.SetActive(true);
+
+        material_tree1.SetColor("_Pollution_Color1", TreeColorLvl1);
+        material_tree2.SetColor("_Pollution_Color", TreeColorLvl1);
+        material_plant.SetColor("_Pollution_Color", TreeColorLvl1);
+        material_canalWater.SetColor("_Color0", CanalWaterColorLvl1);
+        material_fieldWater.SetColor("_Color0", FieldWaterColorLvl1);
+        material_grass.SetColor("_PollutionColor", TreeColorLvl1);
     }
 
     // Update is called once per frame
