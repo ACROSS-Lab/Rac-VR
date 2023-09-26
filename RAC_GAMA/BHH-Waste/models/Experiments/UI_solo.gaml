@@ -77,11 +77,9 @@ global {
 	bool use_timer_player_turn <- false;	
 	bool use_timer_for_discussion <- true;
 	bool use_timer_for_exploration <- true;
-	bool use_timer_for_estimation <- true;
 	bool timer_just_for_warning <- false; //if true, if the timer is finished, just a warning message is displayed; if false, the turn passes to the next player - for the moment, some issue with the automatic change of step
-	float initial_time_for_discussion <- 0 #s const: true; // time before the player turns
+	float initial_time_for_discussion <- 1 #mn const: true; // time before the player turns
 	float initial_time_for_exploration <- 2 #mn const: true;
-	float initial_time_for_estimation <- 0 #mn const: true;
 	float initial_time_for_choosing_village <- 20 #s const: true;
 	float time_for_choosing_village <- initial_time_for_choosing_village;
 	float start_choosing_village_time;
@@ -245,7 +243,7 @@ global {
 			}
 		}
 		global_chart <- stacked_chart[0];
-		//create default_player;
+		isDemo <- true;
 	}
 
 	reflex update_charts when: stage = COMPUTE_INDICATORS{
@@ -254,7 +252,6 @@ global {
  
 		time_for_discussion <- initial_time_for_discussion;
 		time_for_exploration <- initial_time_for_exploration;
-		time_for_estimation <- initial_time_for_estimation;
 		pause_started_time <- 0.0;
 		number_of_days_passed <- number_of_days_passed + 1;
 	}
@@ -264,7 +261,7 @@ global {
 		if turn = turn_see_indicators +1 and !always_display_chart_by_vil{
 			show_chart_by_vil <- false;
 		}
-		remaining_time <- int(time_for_exploration - machine_time/1000.0 + start_exploration_turn_time/1000.0); 
+		remaining_time <- int(time_for_exploration - machine_time/1000.0 + start_exploration_turn_time/1000.0);
 		if remaining_time <= 0 {
 			do end_of_exploration_phase;
 			if !always_display_sub_charts {
@@ -461,8 +458,7 @@ species stacked_chart {
  		draw line({-original_col_width/2, 3* chart_height / 2 - max_heights["Production"]/2}, {original_col_width/2, 3* chart_height / 2 - max_heights["Production"]/2}) width:20 color: map_background ;
  		draw line({original_col_width/2 + gap, 3* chart_height / 2 - max_heights["Production"]/2}, {3*original_col_width/2 + gap, 3* chart_height / 2 - max_heights["Production"]/2}) width:20 color: map_background;
  	}
-}
-
+} 
 
 experiment Open {
 	
@@ -475,7 +471,7 @@ experiment Open {
 	action _init_ {
 		//Requires latest version of GAMA 1.8.2
 		//map<string, unknown> params <- user_input_dialog("Welcome to RÁC",[enter("Dark theme",true), choose("Language", string, "English",["English","Français","Tiếng Việt"])], font("Helvetica",18, #bold), nil, false);
-		map<string, unknown> params <- user_input_dialog("Welcome to RÁC",[enter("Dark theme",true), choose("Language", string, "English",["English","Français","Tiếng Việt"])], font("Helvetica",18, #bold), #white);
+		map<string, unknown> params <- user_input_dialog("Welcome to RÁC",[choose("Language", string, "English",["English","Français","Tiếng Việt"])], font(ui_font,18, #bold), #white);
 		gama.pref_display_slice_number <- 12; /* 128 too slow ! */
 		gama.pref_display_show_rotation <- false;
 		gama.pref_display_show_errors <- false;
@@ -535,17 +531,6 @@ experiment Open {
 				draw "" + int(remaining_time) + "s" color: dark_theme ? #white : #black font: ui_font anchor: #left_center at: {right + 500, y};
 				draw line({left, y}, {right, y}) buffer (100, 200) color: rgb(205, 226, 242);
 				float width <- (initial_time_for_discussion - remaining_time) * (right - left) / (initial_time_for_discussion);
-				draw line({left, y}, {left + width, y}) buffer (100, 200) color: rgb(29, 98, 223);
-				draw sandclock_icon /*rotate: (180 - remaining_time)*3*/ at: {left + width, y} size: w_height / 6;
-			}
-			
-			graphics "Timer for the estimation" visible: stage = PLAYER_VR_ESTIMATION_TURN and turn <= end_of_game {
-				float y <- location.y + w_height/5 + y_centerdis;
-				float left <- location.x - w_width/2;
-				float right <- location.x + w_width/2;
-				draw "" + int(remaining_time) + "s" color: dark_theme ? #white : #black font: ui_font anchor: #left_center at: {right + 500, y};
-				draw line({left, y}, {right, y}) buffer (100, 200) color: rgb(205, 226, 242);
-				float width <- (initial_time_for_estimation - remaining_time) * (right - left) / (initial_time_for_estimation);
 				draw line({left, y}, {left + width, y}) buffer (100, 200) color: rgb(29, 98, 223);
 				draw sandclock_icon /*rotate: (180 - remaining_time)*3*/ at: {left + width, y} size: w_height / 6;
 			}
@@ -630,8 +615,6 @@ experiment Open {
 					}
 				} else if (stage = PLAYER_VR_EXPLORATION_TURN) {
 					icon <- vr_icon;
-				} else if (stage = PLAYER_VR_ESTIMATION_TURN) {
-					icon <- graph_icon;
 				} else {
 					icon <- computer_icon;
 				}
@@ -643,10 +626,10 @@ experiment Open {
 				draw ""+commune_money  at: {location.x, location.y- 6*radius/10 + y_centerdis, 0.01}  color: dark_theme ? #gold : rgb (225, 126, 21, 255) font: ui_font anchor: #bottom_center;
 			}
 	
-			graphics "Next" transparency: ((stage = PLAYER_DISCUSSION_TURN or stage = PLAYER_ACTION_TURN or stage = PLAYER_VR_EXPLORATION_TURN or stage = PLAYER_VR_ESTIMATION_TURN) and turn <= end_of_game) ? 0 : 0.6 {
+			graphics "Next" transparency: ((stage = PLAYER_DISCUSSION_TURN or stage = PLAYER_ACTION_TURN or stage = PLAYER_VR_EXPLORATION_TURN) and turn <= end_of_game) ? 0 : 0.6 {
 				next_location <- {location.x + w_width / 2.5,  location.y-w_height/8};
-				draw button_background at: next_location + {0, y_centerdis} color: (next_selected and ((stage = PLAYER_DISCUSSION_TURN or stage = PLAYER_ACTION_TURN or stage = PLAYER_VR_EXPLORATION_TURN or stage = PLAYER_VR_ESTIMATION_TURN) and turn <= end_of_game)) ? selected_color:unselected_color size: shape.width / 4;
-				draw next_icon at: next_location + {100, y_centerdis} size: w_width / 8 color: (next_selected and ((stage = PLAYER_DISCUSSION_TURN or stage = PLAYER_ACTION_TURN or stage = PLAYER_VR_EXPLORATION_TURN or stage = PLAYER_VR_ESTIMATION_TURN) and turn <= end_of_game)) ? selected_color:unselected_color;
+				draw button_background at: next_location + {0, y_centerdis} color: (next_selected and ((stage = PLAYER_DISCUSSION_TURN or stage = PLAYER_ACTION_TURN or stage = PLAYER_VR_EXPLORATION_TURN) and turn <= end_of_game)) ? selected_color:unselected_color size: shape.width / 4;
+				draw next_icon at: next_location + {100, y_centerdis} size: w_width / 8 color: (next_selected and ((stage = PLAYER_DISCUSSION_TURN or stage = PLAYER_ACTION_TURN or stage = PLAYER_VR_EXPLORATION_TURN) and turn <= end_of_game)) ? selected_color:unselected_color;
 			}
 	
 			graphics "Play Pause" visible: turn <= end_of_game {
@@ -797,10 +780,6 @@ experiment Open {
 						if (stage = PLAYER_DISCUSSION_TURN) {
 							ask simulation {
 								do end_of_discussion_phase;
-							}
-						} else if (stage = PLAYER_VR_ESTIMATION_TURN) {
-							ask simulation {
-								do end_of_estimation_phase;
 							}
 						} else if (stage = PLAYER_VR_EXPLORATION_TURN) {
 							ask simulation {

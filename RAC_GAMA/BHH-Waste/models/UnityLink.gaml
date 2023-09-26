@@ -52,7 +52,7 @@ global skills: [network]{
 	list<string> background_geoms_names;
 	
 	// Information to send to Unity
-	list<int> solidwasteVillageClass;
+	list<int> solidwasteSoilClass;
 	list<int> solidwasteCanalClass;
 	list<int> waterwasteCanalClass;
 	list<float> waterwasteVillageValue;
@@ -66,7 +66,7 @@ global skills: [network]{
 		
 	bool classUpdatedTour <- false;
 	
-	bool do_send_world <- true;
+	bool do_send_world <- false;
 	/*************************************** 
 	 *
 	 * PARAMETERS ABOUT THE PLAYER
@@ -91,7 +91,17 @@ global skills: [network]{
 	//player rotation - only used for displaying the player in GAMA
 	int rotation_player <- 0;
 
-	
+		
+	float t1;
+	float t2;
+	float t3;
+	float t4;
+	float t5;
+	float t6;
+	float t7;
+	float t8;
+	float t9;
+	float t10;
 
 	/* 
 	 * PRIVATE VARIABLES ONLY USED INTERNALLY
@@ -212,15 +222,13 @@ global skills: [network]{
 	//send indicators' class to the unity client
 	action send_indicators {
 		map to_send;
-		to_send <+ "solidwasteClass"::solidwasteClass;
+		to_send <+ "solidwasteSoilClass"::solidwasteSoilClass;
+		to_send <+ "solidwasteCanalClass"::solidwasteCanalClass;
 		to_send <+ "waterwasteClass"::waterwasteClass;
-		to_send <+ "waterwaste"::waterwasteValue;
 		
 		to_send <+ "productionClass"::productionClass;
 		
 		/** To use, define categories
-		to_send <+ "solidwasteVillageClass"::solidwasteVillageClass;
-		to_send <+ "solidwasteCanalClass"::solidwasteCanalClass;
 		to_send <+ "waterwasteVillage"::waterwasteVillageValue;
 		to_send <+ "waterwasteCanal"::waterwasteCanalValue;
 		to_send <+ "waterwasteCanalClass"::waterwasteCanalClass;
@@ -354,6 +362,7 @@ global skills: [network]{
 
 	//send the new world situtation to the Unity client
 	reflex send_update_to_unity when: connect_to_unity {
+		float t <- machine_time;
 		if !initialized {
 			if create_player {
 				do init_player;
@@ -369,8 +378,13 @@ global skills: [network]{
 			classUpdatedTour <- false;
 		}
 		
+		t1<- t1 + machine_time - t;
+		
 	}
 	
+//	reflex info when: cycle mod 100 =0 {
+//		write (sample(t1) + "  " + sample(t2) + "  " + sample(t3));
+//	}
 	
 	action manage_message_from_unity(message s) {
 //		write "s: " + s.contents;
@@ -383,16 +397,23 @@ global skills: [network]{
 				the_player.rotation <- int(transform_rot(int(answer["rotation"])/precision));
 				the_player.location <- translate_coord({position[0]/precision, position[1]/precision});
 				the_player.to_display <- true;
-				write sample(the_player.rotation);
+//				write sample(the_player.rotation);
 			}
 		}
 	}
 	//received informtation about the player from Unity
-	reflex messages_from_unity when: has_more_message() {
+	reflex messages_from_unity  {
+		float t <- machine_time;
+		if has_more_message(){
+			
 		loop while: has_more_message() {
 			message s <- fetch_message();
 			do manage_message_from_unity(s);
 		}
+		
+		}
+		t2<- t2 + machine_time - t;
+		
 	}	
 }
 

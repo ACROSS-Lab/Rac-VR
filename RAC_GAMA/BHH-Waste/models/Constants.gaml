@@ -305,7 +305,6 @@ global {
 	// STAGE
 	string PLAYER_ACTION_TURN <- "player action turn";
 	string PLAYER_DISCUSSION_TURN <- "player discussion turn";
-	string PLAYER_VR_ESTIMATION_TURN <- "player estimation turn";
 	string PLAYER_VR_EXPLORATION_TURN <- "player exploration turn";
 	string COMPUTE_INDICATORS <-  "compute indicators";
 		

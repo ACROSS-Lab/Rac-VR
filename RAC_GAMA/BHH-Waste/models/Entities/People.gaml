@@ -41,12 +41,19 @@ species inhabitant {
 	
 	//Propagate domestic waste in the canal and ground
 	action domestic_waste_production (float solid_waste_canal, float solid_waste_ground, float water_waste_canal, float water_waste_ground) {
+		
 		if solid_waste_canal > 0 {
-				closest_canal.solid_waste_level <- closest_canal.solid_waste_level + solid_waste_canal;
+			if collect_in_canal {
+				closest_canal.solid_waste_level <- closest_canal.solid_waste_level * collection_canal_solid_waste_rate ;
+			}
+			closest_canal.solid_waste_level <- closest_canal.solid_waste_level + solid_waste_canal;
 		}
 		if solid_waste_ground > 0 {
 			ask one_of(my_cells) {
-				solid_waste_level <- solid_waste_level + solid_waste_ground ;
+				if collect_on_ground {
+					solid_waste_level <- solid_waste_level * collection_ground_solid_waste_rate ;
+				}
+				solid_waste_level <- solid_waste_level + solid_waste_ground;
 			}
 		}
 		if water_waste_canal > 0 {

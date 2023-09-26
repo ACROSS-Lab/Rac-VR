@@ -69,7 +69,7 @@ public class GlobalTest : TCPConnector
 
     private PolygonGenerator polyGen;
 
-    private int village_id = 0;
+    private int village_id = 2;
 
     private static DisplayManagement dm;
 
@@ -99,7 +99,7 @@ public class GlobalTest : TCPConnector
 
         if (classIndicators != null)
         {
-            classIndicators.displaySolidClass(classIndicators.solidwasteClass[village_id]);
+            classIndicators.displaySolidClass(classIndicators.solidwasteSoilClass[village_id], classIndicators.solidwasteCanalClass[village_id]);
             classIndicators.displayWaterClass(classIndicators.waterwasteClass[village_id]);
             classIndicators.displayProductionClass(classIndicators.productionClass[village_id]);
             classIndicators.displayWaterColor(classIndicators.waterwasteClass[village_id]);
@@ -219,9 +219,7 @@ public class GlobalTest : TCPConnector
     private void SendPlayerPosition()
     {
         Vector2 vF = new Vector2(Camera.main.transform.forward.x, Camera.main.transform.forward.z);
-        Debug.Log(vF);
         Vector2 vR = new Vector2(transform.forward.x, transform.forward.z);
-        Debug.Log(vR);
         vF.Normalize();
         vR.Normalize();
         float c = vF.x * vR.x + vF.y * vR.y;
@@ -230,7 +228,6 @@ public class GlobalTest : TCPConnector
         double angle = ((s >= 0) ? 1.0 : -1.0) * (180 / Math.PI) * Math.Acos(c) * parameters.precision;
 
         List<int> p = converter.toGAMACRS(Player.transform.position); 
-        Debug.Log((int)angle);
         SendMessageToServer("{\"position\":[" + p[0] + "," + p[1] + "],\"rotation\": " + (int)angle + "}");
         // SendMessageToServer("{\"position\":[" + p[0] + "," + p[1] + "]" + "}");
     }
@@ -327,7 +324,7 @@ public class GlobalTest : TCPConnector
             infoWorld = WorldJSONInfo.CreateFromJSON(mes);
 
         }
-        else if (mes.Contains("solidwasteClass")){
+        else if (mes.Contains("solidwasteSoilClass")){
 
             classIndicators = ConnectionClass.CreateFromJSON(mes, dm);
             Debug.Log(mes);

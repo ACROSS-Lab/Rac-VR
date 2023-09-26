@@ -29,18 +29,15 @@ global {
 	bool use_timer_player_turn <- false;	
 	bool use_timer_for_discussion <- false;
 	bool use_timer_for_exploration <- true;
-	bool use_timer_for_estimation <- true;
 	
 	float time_for_player_turn <- 20#s;//2 #mn;
 	float time_for_discussion <- 20 #s;//3 #mn; // time before the player turns
 	float time_for_exploration <- 1 #mn; //3 #mn;
-	float time_for_estimation <- 1 #mn;
-	 
 	
 	/******************* LOG RESULTS *************************************/
 	
-	bool save_log <- true;
-	bool save_log_dailySteps <- false;
+	bool save_log <- false;
+	bool save_log_2 <- false;
 	string id_game <- ""+ (#now).year + "_" + (#now).month + "_" + (#now).day+"-" + (#now).hour + "_" + (#now).minute;
 	string village_action_log_path <- "../../results/" + id_game+"/village_action.csv";
 	string systeme_evolution_log_path <- "../../results/" + id_game+"/system_evolution.csv";
@@ -99,6 +96,9 @@ global {
 	float coeff_cell_pollution_display <- 10.0;  //coeff used to define the color of the cell according to the pollution
 	float coeff_visu_canal <- 3.0;  //coeff used to define the color of the canal according to the pollution
 	float coeff_visu_productivity <- 150 /factor_productivity;
+	bool show_pol_chart_by_cat_glob;
+	bool always_display_sub_charts <- true const: true;
+	bool always_display_chart_by_vil <- true const: true;
 	
 	/********* PARAMETERS RELATED TO WATER FLOW (WASTE DIFFUSION) IN THE CANAL *******/
 	
@@ -197,7 +197,11 @@ global {
 	int token_installation_dumpholes <- 40; //
 	float impact_installation_dumpholes  <- 0.70 min: 0.0 max: 1.0; //decreasse the quantity of solid waste produced by people outside of urban areas (farmers)
 	
-	bool show_pol_chart_by_cat_glob;
-	bool always_display_sub_charts <- true const: true;
-	bool always_display_chart_by_vil <- true const: true;
+	/********************** PARAMETERS RELATED TO DEMO ****************************/
+	
+	bool isDemo;
+	bool collect_on_ground <- false;
+	bool collect_in_canal <- false;
+	float collection_ground_solid_waste_rate <- 0.9925 min: 0.0 max: 1.0;
+	float collection_canal_solid_waste_rate <- 0.999 min: 0.0 max: 1.0;
 }
