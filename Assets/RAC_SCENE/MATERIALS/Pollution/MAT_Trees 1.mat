@@ -41,6 +41,6 @@ Material:
     m_Colors:
     - _BaseColor: {r: 1, g: 1, b: 1, a: 0}
     - _EmissionColor: {r: 1, g: 1, b: 1, a: 1}
-    - _Pollution_Color: {r: 1, g: 1, b: 1, a: 0}
+    - _Pollution_Color: {r: 0.6886792, g: 0.6126508, b: 0.51001245, a: 0}
     - _ShadowColor: {r: 0.66215736, g: 0.75608003, b: 0.9056604, a: 0}
   m_BuildTextureStacks: []
