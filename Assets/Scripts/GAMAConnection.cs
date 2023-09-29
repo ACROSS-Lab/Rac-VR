@@ -13,7 +13,9 @@ public class GlobalTest : TCPConnector
     public GameObject DD;
 
     public GameObject Player;
-
+    public bool choice = false;
+    public bool ground_choice = false;
+    public bool river_choice = false;
     public GameObject Ground;
 
     public List<GameObject> Agents;
@@ -207,6 +209,11 @@ public class GlobalTest : TCPConnector
         {
             SendPlayerPosition();
         }
+        if (initialized && choice && receiveInformation)
+        {
+            SendChoice();
+            choice = false;
+        }
         if (infoWorld != null && receiveInformation)
         {
             UpdateAgentList();
@@ -231,6 +238,20 @@ public class GlobalTest : TCPConnector
         List<int> p = converter.toGAMACRS(Player.transform.position); 
         SendMessageToServer("{\"position\":[" + p[0] + "," + p[1] + "],\"rotation\": " + (int)angle + "}");
         // SendMessageToServer("{\"position\":[" + p[0] + "," + p[1] + "]" + "}");
+    }
+
+    private void SendChoice()
+    {
+        int choice_int = -1; // 0 : ground, 1 : river, -1 : default
+        if (ground_choice) 
+        {
+            choice_int = 0;
+        } 
+        else if (river_choice)
+        {
+            choice_int = 1;
+        }
+        SendMessageToServer("{\"choice\": " + choice_int + "}");
     }
 
     private void UpdateAgentList()

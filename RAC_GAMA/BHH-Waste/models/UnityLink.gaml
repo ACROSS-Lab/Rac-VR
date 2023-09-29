@@ -63,6 +63,8 @@ global skills: [network]{
 	list<int> productionClass;
 	
 	list<float> waterwasteValue;
+	
+	int choice;
 		
 	bool classUpdatedTour <- false;
 	bool enter_or_exit_VR <- false;
@@ -400,14 +402,27 @@ global skills: [network]{
 		write "s: " + s.contents;
 		if (waiting_message != nil and string(s.contents) = waiting_message) {
 	    	receive_information <- true;
-	    } else if  the_player != nil and move_player_from_unity and receive_information {
-	    	let answer <- map(s.contents);
-			list<int> position <- answer["position"];
-			if position != nil and length(position) = 2  {
-				the_player.rotation <- int(transform_rot(int(answer["rotation"])/precision));
-				the_player.location <- translate_coord({position[0]/precision, position[1]/precision});
-				the_player.to_display <- true;
-//				write sample(the_player.rotation);
+//	    } else if  the_player != nil and move_player_from_unity and receive_information {
+//	    	let answer <- map(s.contents);
+//			list<int> position <- answer["position"];
+//			if position != nil and length(position) = 2  {
+//				the_player.rotation <- int(transform_rot(int(answer["rotation"])/precision));
+//				the_player.location <- translate_coord({position[0]/precision, position[1]/precision});
+//				the_player.to_display <- true;
+////				write sample(the_player.rotation);
+//			}
+		} else if the_player != nil and receive_information {
+			let answer <- map(s.contents);
+			if move_player_from_unity and answer contains_key "position" {
+				list<int> position <- answer["position"];
+				if position != nil and length(position) = 2  {
+					the_player.rotation <- int(transform_rot(int(answer["rotation"])/precision));
+					the_player.location <- translate_coord({position[0]/precision, position[1]/precision});
+					the_player.to_display <- true;
+	//				write sample(the_player.rotation);
+				}
+			} else if answer contains_key "choice" {
+				choice <- int(answer["choice"]);
 			}
 		}
 	}

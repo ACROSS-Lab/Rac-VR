@@ -715,11 +715,6 @@ global {
 		do update_indicators_unity;
 		connect_to_unity <- true;
 		enter_or_exit_VR <- true;
-		
-		if isDemo{
-//			collect_on_ground <- true;
-			collect_in_canal <- true;
-		}
 	}
 	
 	action update_indicators_unity{
@@ -916,6 +911,15 @@ global {
 	
 	action end_of_exploration_phase {
 		if isDemo {
+			if isDemo{
+				if choice = 0 {
+					collect_on_ground <- true;
+				} else if choice = 1 {
+					collect_in_canal <- true;
+				}
+			}
+			write sample(collect_on_ground);
+			write sample(collect_in_canal);
 			stage <- COMPUTE_INDICATORS;
 			if !always_display_sub_charts {
 				show_pol_chart_by_cat_glob <- false;
