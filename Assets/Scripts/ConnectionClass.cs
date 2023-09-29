@@ -10,7 +10,7 @@ public class ConnectionClass
     public List<int> waterwasteClass;
     public List<int> productionClass;
 
-    public  DisplayManagement dm;
+    public DisplayManagement dm;
 
     public static ConnectionClass CreateFromJSON(string jsonString, DisplayManagement dm)
     {

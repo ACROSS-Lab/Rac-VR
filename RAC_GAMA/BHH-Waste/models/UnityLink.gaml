@@ -64,7 +64,7 @@ global skills: [network]{
 	
 	list<float> waterwasteValue;
 	
-	int choice;
+	int choice <- -1;
 	int nb_waste;
 		
 	bool classUpdatedTour <- false;

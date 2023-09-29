@@ -10,10 +10,10 @@ using TMPro;
 public class GlobalTest : TCPConnector
 {
 
-    public GameObject wasteDisplayM;
-
     public GameObject Player;
     public GameObject Ground;
+    public GameObject WasteDisplayM;
+    public GameObject WasteCollectionI;
 
     public List<GameObject> Agents;
 
@@ -35,13 +35,6 @@ public class GlobalTest : TCPConnector
 
     //Y-offset to apply to the background geometries
     public float offsetYBackgroundGeom = 0.1f;
-
-    public bool choice = false;
-    public bool ground_choice = false;
-    public bool river_choice = false;
-    public int nb_waste = 0;
-    bool sendNbWaste = false;
-    bool sendInfoWasteCollection = false;
 
     private List<Dictionary<int, GameObject>> agentMapList ;
 
@@ -78,6 +71,8 @@ public class GlobalTest : TCPConnector
 
     private static DisplayManagement dm;
 
+    private WasteCollectionInfo wci;
+
 
     // Start is called before the first frame update
     void Start()
@@ -93,8 +88,9 @@ public class GlobalTest : TCPConnector
         DisplayMessage("IP: " + ip + " port: " + port);
         ConnectToTcpServer();
 
-       dm = wasteDisplayM.GetComponent<DisplayManagement>();        
-    }
+       dm = WasteDisplayM.GetComponent<DisplayManagement>();
+       wci = WasteCollectionI.GetComponent<WasteCollectionInfo>();
+       }
 
 
 
@@ -211,15 +207,11 @@ public class GlobalTest : TCPConnector
         {
             SendPlayerPosition();
         }
-        if (initialized && choice && receiveInformation)
+        if (initialized && wci.sendInfoWasteCollection && receiveInformation)
         {
             SendChoice();
-            choice = false;
-        }
-        if (initialized && sendNbWaste && receiveInformation)
-        {
             SendNbWaste();
-            sendNbWaste = false;
+            wci.sendInfoWasteCollection = false;
         }
         if (infoWorld != null && receiveInformation)
         {
@@ -250,11 +242,11 @@ public class GlobalTest : TCPConnector
     private void SendChoice()
     {
         int choice_int = -1; // 0 : ground, 1 : river, -1 : default
-        if (ground_choice) 
+        if (wci.ground_choice) 
         {
             choice_int = 0;
         } 
-        else if (river_choice)
+        else if (wci.river_choice)
         {
             choice_int = 1;
         }
@@ -263,7 +255,7 @@ public class GlobalTest : TCPConnector
 
     private void SendNbWaste()
     {
-        SendMessageToServer("{\"nb_waste\": " + nb_waste + "}");
+        SendMessageToServer("{\"nb_waste\": " + wci.nb_waste + "}");
     }
     private void UpdateAgentList()
     {
