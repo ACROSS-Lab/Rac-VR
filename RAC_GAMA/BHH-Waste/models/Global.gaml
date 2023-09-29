@@ -62,7 +62,7 @@ global {
 	
 	
 	//string type_of_map_display <- MAP_SOLID_WASTE;// category: "Display" among: ["Map of solid waste", "Map of waster waste", "Map of total pollution", "Map of agricultural productivity"] parameter: "Type of map display" ;//on_change: update_display;
-	string stage <-COMPUTE_INDICATORS;
+	string stage <- COMPUTE_INDICATORS;
 	int commune_money <- 0;
 	int index_player <- 0;
 	int action_type <- -1;	
@@ -72,7 +72,6 @@ global {
 	int remaining_time min: 0;
 	float start_discussion_turn_time;
 	float start_exploration_turn_time;
-	float start_estimation_turn_time;
 	
 	communal_landfill the_communal_landfill;
 	
@@ -138,6 +137,7 @@ global {
 	bool is_pollution_ok <- true;
 	
 	int days <- 365;
+
 	/********************** INITIALIZATION OF THE GAME ****************************/
 
 	init {
@@ -162,10 +162,9 @@ global {
 		if save_log {
 			save "turn,player,productivity,solid_pollution,water_pollution,days_with_ecolabel"  to: systeme_evolution_log_path format: text rewrite: true;
 			save "turn,player,budget,exra_turn,action" to: village_action_log_path format: text rewrite: true;
-			if save_log_dailySteps {
-				save "days,solid_pollution, water_pollution, productivity" to: log_path format: text rewrite: true;
-			}
-			
+		}
+		if save_log_2 {
+			save "turn, solid_pollution_canal_1, solid_pollution_canal_2, solid_pollution_canal_3, solid_pollution_canal_4, solid_pollution_soil_1, solid_pollution_soil_2, solid_pollution_soil_3, solid_pollution_soil_4, water_pollution_1, water_pollution_2, water_pollution_3, water_pollution_4" to: log_path format: text rewrite: true;
 		}
 	}
 	
@@ -301,7 +300,6 @@ global {
 				}
 			}
 			population <- nb;
-		
 		} 
 		
 	}
@@ -482,7 +480,7 @@ global {
 			} else {
 				cells_to_clean <- cells;
 			}
-			cells_to_clean <-  cells where (each.solid_waste_level > 0);
+			cells_to_clean <- cells where (each.solid_waste_level > 0);
 			ask collection_teams {
 				if (d in collection_days) {
 					do collect_waste(cells_to_clean);
@@ -524,8 +522,7 @@ global {
 				}
 			}
 			create_facility_treatment <- false;
-			//stage <- without_player ? PLAYER_ACTION_TURN : PLAYER_DISCUSSION_TURN;
-			stage <- without_player ? PLAYER_ACTION_TURN : PLAYER_VR_EXPLORATION_TURN;
+			stage <- PLAYER_VR_EXPLORATION_TURN;
 			index_player <- 0;
 			step <- 0.000000000001;
 			ask village {
@@ -573,6 +570,10 @@ global {
 				save ("" + turn  + ",3," + village3_production + ","+ village3_solid_pollution + "," + village3_water_pollution+ "," + days_with_ecolabel)  to: systeme_evolution_log_path format: text rewrite: false;
 				save ("" + turn  + ",4," + village4_production + ","+ village4_solid_pollution + "," + village4_water_pollution+ "," + days_with_ecolabel)  to: systeme_evolution_log_path format: text rewrite: false;
 			}
+			if save_log_2 {
+				save ("" + turn + "," + village_canal_solid_pollution  + ","+ village_soil_solid_pollution + "," + village_water_pollution)  to: log_path format: text rewrite: false;
+			}
+
 		}
 	}
 	
@@ -709,26 +710,26 @@ global {
 	}
 	
 	
-	
 	action before_exploration_phase{
 		start_exploration_turn_time <- machine_time;
 		do update_indicators_unity;
-		//connect_to_unity <- true;
+		connect_to_unity <- true;
+		enter_or_exit_VR <- true;
 	}
 	
 	action update_indicators_unity{
 		
+//		write sample(village_soil_solid_pollution);
+//		write sample(village_canal_solid_pollution);
+		
 		productionClass <- production_class(village_production);
 		
-		solidwasteClass <- solidwaste_class(village_solid_pollution);
 		waterwasteClass <- waterwaste_class(village_water_pollution);
-		waterwasteValue <- village_water_pollution;
-		
+		solidwasteSoilClass <- solidwaste_soil_class(village_soil_solid_pollution);
+		solidwasteCanalClass <- solidwaste_canal_class(village_canal_solid_pollution);
 
 		/** To use, define categories
 		 * define fcts : solidwaste_soil_class(), solidwaste_canal_class(), waterwaste_canal_class()
-		solidwasteVillageClass <- solidwaste_soil_class(village_soil_solid_pollution);
-		solidwasteCanalClass <- solidwaste_canal_class(village_canal_solid_pollution);
 		waterwasteVillageValue <- list(village_soil_water_pollution);
 		waterwasteCanalValue <- list(village_canal_water_pollution);
 		waterwasteCanalClass <- waterwaste_canal_class(list(village_canal_water_pollution));
@@ -737,19 +738,47 @@ global {
 		classUpdatedTour <- true;
 	}
 	
-	list<int> solidwaste_class(list<float> l){
+	list<int> solidwaste_soil_class(list<float> l) {
 		list<int> class <- [];
 		loop v over: l {
 			switch(v) {
-				match_between [0, 19999] {class <- class + 0;}
-				match_between [20000, 29999] {class <- class + 1;}
-				match_between [30000, 64999] {class <- class + 2;}
-				match_between [65000, 90000] {class <- class + 3;}
+				match_between [0, 7999] {class <- class + 0;}
+				match_between [8000,15999] {class <- class + 1;}
+				match_between [16000, 23999] {class <- class + 2;}
+				match_between [24000, 32999] {class <- class + 3;}
 				default {class <- class + 4;}
 			}
 		}
 		return class;
 	}
+	
+	list<int> solidwaste_canal_class(list<float> l) {
+		list<int> class <- [];
+		loop v over: l {
+			switch(v) {
+				match_between [0, 6599] {class <- class + 0;}
+				match_between [6600, 13199] {class <- class + 1;}
+				match_between [13200, 19799] {class <- class + 2;}
+				match_between [19800, 26399] {class <- class + 3;}
+				default {class <- class + 4;}
+			}
+		}
+		return class;
+	}
+	
+//	list<int> solidwaste_class(list<float> l){
+//		list<int> class <- [];
+//		loop v over: l {
+//			switch(v) {
+//				match_between [0, 19999] {class <- class + 0;}
+//				match_between [20000, 29999] {class <- class + 1;}
+//				match_between [30000, 64999] {class <- class + 2;}
+//				match_between [65000, 90000] {class <- class + 3;}
+//				default {class <- class + 4;}
+//			}
+//		}
+//		return class;
+//	}
 	
 	list<int> waterwaste_class(list<float> l){
 		list<int> class <- [];
@@ -785,36 +814,10 @@ global {
 		return class;
 	}
 	
-	/** 5 class
-	list<int> production_class(list<float> l){
-		list<int> class <- [];
-		
-		switch(l at 0) {
-			match_between [0, 199] {class <- class + 0;}
-			match_between [200, 499] {class <- class + 1;}
-			match_between [500, 799] {class <- class + 2;}
-			match_between [800, 1149] {class <- class + 3;}
-			default {class <- class + 4;}
-		}
-		
-		loop i from: 1 to: 3{
-			switch(l[i]) {
-				match_between [0, 299] {class <- class + 0;}
-				match_between [300, 699] {class <- class + 1;}
-				match_between [700, 999] {class <- class + 2;}
-				match_between [1000, 1499] {class <- class + 3;}
-				default {class <- class + 4;}
-			}
-		}
-		return class;
-	}
-	*/
-	
 	
 	action action_executed(string action_name) {
 		// To be redefined for updates, etc. 
 	}
-	
 	
 	action execute_action(string action_name) {
 		if ((action_name in actions_name_short)){// and not(actions_name_short[action_name] in village[index_player].actions_done_this_year) and not(actions_name_short[action_name] in village[index_player].actions_done_total)) {
@@ -906,22 +909,46 @@ global {
 		ask villages_order[0] {do start_turn;}
 	}
 	
-	action end_of_estimation_phase {
-		stage <- PLAYER_DISCUSSION_TURN;
-		start_discussion_turn_time <- machine_time;
-	}
-	
 	action end_of_exploration_phase {
-		//stage <- PLAYER_VR_ESTIMATION_TURN;
-		//start_estimation_turn_time <- machine_time;
-		stage <- PLAYER_DISCUSSION_TURN;
-		start_discussion_turn_time <- machine_time;
+		if isDemo {
+			if isDemo{
+				if choice = 0 {
+					collect_on_ground <- true;
+				} else if choice = 1 {
+					collect_in_canal <- true;
+				}
+			}
+			write sample(collect_on_ground);
+			write sample(collect_in_canal);
+			stage <- COMPUTE_INDICATORS;
+			if !always_display_sub_charts {
+				show_pol_chart_by_cat_glob <- false;
+			}
+			if (turn >= end_of_game) {
+				do pause;
+			} else {
+				days_with_ecolabel_year << 0;
+				current_day <- 1;
+				step <- #day;
+	
+				if not without_player {do tell(INDICATOR_COMPUTATION);}
+				do increase_urban_area;
+			}
+			enter_or_exit_VR <- true;
+		}
+		else {
+			stage <- PLAYER_DISCUSSION_TURN;
+			start_discussion_turn_time <- machine_time;
+		}
+		
 	}
 	
 	
 	
 //REFLEXES
 	reflex indicators_computation when: stage = COMPUTE_INDICATORS {
+		float t <- machine_time;
+		
 		do compute_indicators;
 		if (current_day mod data_frequency) = 0 {
 			do add_data;
@@ -932,10 +959,10 @@ global {
 		//do manage_landfill;
 		do manage_daily_indicator;
 		do manage_end_of_indicator_computation;
-		if save_log_dailySteps {
-			save ("" + current_day + ","+  total_solid_pollution + ","+  total_water_pollution + ","+  total_production)  to: log_path format: text rewrite: false;
-		}
-		current_day <- current_day + 1;
+		
+		current_day <- current_day + 1; 
+		
+		t3<- t3 + machine_time - t;
 	}
 	
 	/**

@@ -5,12 +5,12 @@ using UnityEngine;
 [System.Serializable]
 public class ConnectionClass
 {
-    public List<int> solidwasteClass;
+    public List<int> solidwasteSoilClass;
+    public List<int> solidwasteCanalClass;
     public List<int> waterwasteClass;
     public List<int> productionClass;
-    public List<float> waterwaste;
 
-    public  DisplayManagement dm;
+    public DisplayManagement dm;
 
     public static ConnectionClass CreateFromJSON(string jsonString, DisplayManagement dm)
     {
@@ -123,14 +123,11 @@ public class ConnectionClass
     }
 
 
-    public void displaySolidClass(int classValue){
-        switch(classValue){
+    public void displaySolidClass(int classValueSoil, int classValueCanal){
+        switch(classValueSoil){
             case 0:
                 // Urban Areas
                 displaylvl1(dm.UASolidWasteLvl2, dm.UASolidWasteLvl3, dm.UASolidWasteLvl4, dm.UASolidWasteLvl5);
-
-                // Canals
-                displaylvl1(dm.CanalSolidWasteLvl2, dm.CanalSolidWasteLvl3, dm.CanalSolidWasteLvl4, dm.CanalSolidWasteLvl5);
 
                 break;
 
@@ -138,30 +135,47 @@ public class ConnectionClass
                 // Urban Areas
                 displaylvl2(dm.UASolidWasteLvl2, dm.UASolidWasteLvl3, dm.UASolidWasteLvl4, dm.UASolidWasteLvl5);
 
-                // Canals
-                displaylvl2(dm.CanalSolidWasteLvl2, dm.CanalSolidWasteLvl3, dm.CanalSolidWasteLvl4, dm.CanalSolidWasteLvl5);
-
                 break;
             case 2:
                 // Urban Areas
                 displaylvl3(dm.UASolidWasteLvl2, dm.UASolidWasteLvl3, dm.UASolidWasteLvl4, dm.UASolidWasteLvl5);
-
-                // Canals
-                displaylvl3(dm.CanalSolidWasteLvl2, dm.CanalSolidWasteLvl3, dm.CanalSolidWasteLvl4, dm.CanalSolidWasteLvl5);
 
                 break;
             case 3:
                 // Urban Areas
                 displaylvl4(dm.UASolidWasteLvl2, dm.UASolidWasteLvl3, dm.UASolidWasteLvl4, dm.UASolidWasteLvl5);
 
-                // Canals
-                displaylvl4(dm.CanalSolidWasteLvl2, dm.CanalSolidWasteLvl3, dm.CanalSolidWasteLvl4, dm.CanalSolidWasteLvl5);
-
                 break;
             default :
                 // Urban Areas
                 displaylvl5(dm.UASolidWasteLvl2, dm.UASolidWasteLvl3, dm.UASolidWasteLvl4, dm.UASolidWasteLvl5);
 
+                break;
+        }
+
+        switch(classValueCanal){
+            case 0:
+                // Canals
+                displaylvl1(dm.CanalSolidWasteLvl2, dm.CanalSolidWasteLvl3, dm.CanalSolidWasteLvl4, dm.CanalSolidWasteLvl5);
+
+                break;
+
+            case 1:
+                // Canals
+                displaylvl2(dm.CanalSolidWasteLvl2, dm.CanalSolidWasteLvl3, dm.CanalSolidWasteLvl4, dm.CanalSolidWasteLvl5);
+
+                break;
+            case 2:
+                // Canals
+                displaylvl3(dm.CanalSolidWasteLvl2, dm.CanalSolidWasteLvl3, dm.CanalSolidWasteLvl4, dm.CanalSolidWasteLvl5);
+
+                break;
+            case 3:
+                // Canals
+                displaylvl4(dm.CanalSolidWasteLvl2, dm.CanalSolidWasteLvl3, dm.CanalSolidWasteLvl4, dm.CanalSolidWasteLvl5);
+
+                break;
+            default :
                 // Canals
                 displaylvl5(dm.CanalSolidWasteLvl2, dm.CanalSolidWasteLvl3, dm.CanalSolidWasteLvl4, dm.CanalSolidWasteLvl5);
 

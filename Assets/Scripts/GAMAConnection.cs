@@ -10,11 +10,10 @@ using TMPro;
 public class GlobalTest : TCPConnector
 {
 
-    public GameObject DD;
-
     public GameObject Player;
-
     public GameObject Ground;
+    public GameObject WasteDisplayM;
+    public GameObject WasteCollectionI;
 
     public List<GameObject> Agents;
 
@@ -37,21 +36,20 @@ public class GlobalTest : TCPConnector
     //Y-offset to apply to the background geometries
     public float offsetYBackgroundGeom = 0.1f;
 
-
-
     private List<Dictionary<int, GameObject>> agentMapList ;
 
     private TcpClient socketConnection;
     private Thread clientReceiveThread;
 
     private bool initialized = false;
-    private bool playerPositionUpdate = false;
+    private bool playerPositionUpdate = false; //Uppdate position of player in Unity from GAMA
 
     private string message ="";
 
     private bool defineGroundSize = false;
 
     private static bool receiveInformation = true;
+    private static bool readySendPlayerPosition = false;
 
     private static bool timerFinish = false;
 
@@ -69,9 +67,12 @@ public class GlobalTest : TCPConnector
 
     private PolygonGenerator polyGen;
 
-    private int village_id = 0;
+    private int village_id = 2;
 
     private static DisplayManagement dm;
+
+    private WasteCollectionInfo wci;
+
 
     // Start is called before the first frame update
     void Start()
@@ -87,8 +88,9 @@ public class GlobalTest : TCPConnector
         DisplayMessage("IP: " + ip + " port: " + port);
         ConnectToTcpServer();
 
-       dm = DD.GetComponent<DisplayManagement>();        
-    }
+       dm = WasteDisplayM.GetComponent<DisplayManagement>();
+       wci = WasteCollectionI.GetComponent<WasteCollectionInfo>();
+       }
 
 
 
@@ -98,7 +100,7 @@ public class GlobalTest : TCPConnector
 
         if (classIndicators != null)
         {
-            classIndicators.displaySolidClass(classIndicators.solidwasteClass[village_id]);
+            classIndicators.displaySolidClass(classIndicators.solidwasteSoilClass[village_id], classIndicators.solidwasteCanalClass[village_id]);
             classIndicators.displayWaterClass(classIndicators.waterwasteClass[village_id]);
             classIndicators.displayProductionClass(classIndicators.productionClass[village_id]);
             classIndicators.displayWaterColor(classIndicators.waterwasteClass[village_id]);
@@ -153,7 +155,7 @@ public class GlobalTest : TCPConnector
 
             Ground.transform.position = ps;
             defineGroundSize = true;
-            if (Player != null)
+            if (Player != null && playerPositionUpdate)
             {
                 Vector3 pos = converter.fromGAMACRS(parameters.position[0], parameters.position[1]);
                 Player.transform.position = pos;
@@ -164,7 +166,8 @@ public class GlobalTest : TCPConnector
                 {
                     Player.AddComponent<Rigidbody>();
                 }
-            } else
+            } 
+            else
             {
                 if (Player.GetComponent<Rigidbody>() != null)
                 {
@@ -183,7 +186,7 @@ public class GlobalTest : TCPConnector
        
         if (Player != null && playerPositionUpdate && parameters != null)
         {
-           Player.transform.position = converter.fromGAMACRS(parameters.position[0], parameters.position[1]);
+            Player.transform.position = converter.fromGAMACRS(parameters.position[0], parameters.position[1]);
             playerPositionUpdate = false;
             receiveInformation = false;
             if (parameters.delay > 0)
@@ -200,9 +203,15 @@ public class GlobalTest : TCPConnector
            
 
         }
-        if (initialized && Player != null && receiveInformation)
+        if (initialized && Player != null && receiveInformation && readySendPlayerPosition)
         {
             SendPlayerPosition();
+        }
+        if (initialized && wci.sendInfoWasteCollection && receiveInformation)
+        {
+            SendChoice();
+            SendNbWaste();
+            wci.sendInfoWasteCollection = false;
         }
         if (infoWorld != null && receiveInformation)
         {
@@ -223,12 +232,31 @@ public class GlobalTest : TCPConnector
         float c = vF.x * vR.x + vF.y * vR.y;
         float s = vF.x * vR.y - vF.y * vR.x;
 
-        double angle = ((s > 0) ? -1.0 : 1.0) * (180 / Math.PI) * Math.Acos(c) * parameters.precision;
+        double angle = ((s >= 0) ? 1.0 : -1.0) * (180 / Math.PI) * Math.Acos(c) * parameters.precision;
 
         List<int> p = converter.toGAMACRS(Player.transform.position); 
         SendMessageToServer("{\"position\":[" + p[0] + "," + p[1] + "],\"rotation\": " + (int)angle + "}");
+        // SendMessageToServer("{\"position\":[" + p[0] + "," + p[1] + "]" + "}");
     }
 
+    private void SendChoice()
+    {
+        int choice_int = -1; // 0 : ground, 1 : river, -1 : default
+        if (wci.ground_choice) 
+        {
+            choice_int = 0;
+        } 
+        else if (wci.river_choice)
+        {
+            choice_int = 1;
+        }
+        SendMessageToServer("{\"choice\": " + choice_int + "}");
+    }
+
+    private void SendNbWaste()
+    {
+        SendMessageToServer("{\"nb_waste\": " + wci.nb_waste + "}");
+    }
     private void UpdateAgentList()
     {
         if (infoWorld.position.Count == 2)
@@ -296,13 +324,14 @@ public class GlobalTest : TCPConnector
 
     protected override void ManageMessage(string mes)
     {
+        Debug.Log(mes);
         if (mes.Contains("precision"))
         {
             parameters = ConnectionParameter.CreateFromJSON(mes);
             converter = new CoordinateConverter(parameters.precision, GamaCRSCoefX, GamaCRSCoefY, GamaCRSOffsetX, GamaCRSOffsetY);
             SendMessageToServer("ok");
             initialized = true;
-            playerPositionUpdate = true;
+            //playerPositionUpdate = true;
 
         }
         else if (mes.Contains("points"))
@@ -321,10 +350,12 @@ public class GlobalTest : TCPConnector
             infoWorld = WorldJSONInfo.CreateFromJSON(mes);
 
         }
-        else if (mes.Contains("solidwasteClass")){
+        else if (mes.Contains("solidwasteSoilClass")){
 
             classIndicators = ConnectionClass.CreateFromJSON(mes, dm);
-            Debug.Log(mes);
+        }
+        else if (mes.Contains("Enter_or_exit_VR")){
+            readySendPlayerPosition = !readySendPlayerPosition;
         }
 
 

@@ -46,7 +46,7 @@ public abstract class TCPConnector : MonoBehaviour
                 // Write byte array to socketConnection stream.                 
                 stream.Write(clientMessageAsByteArray, 0, clientMessageAsByteArray.Length);
                 //stream.Flush();
-                  Debug.Log("Client sent his message - should be received by server");
+                //Debug.Log("Client sent his message - should be received by server");
             }
         }
         catch (SocketException socketException)
