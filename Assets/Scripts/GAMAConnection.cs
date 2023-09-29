@@ -41,6 +41,7 @@ public class GlobalTest : TCPConnector
     public bool river_choice = false;
     public int nb_waste = 0;
     bool sendNbWaste = false;
+    bool sendInfoWasteCollection = false;
 
     private List<Dictionary<int, GameObject>> agentMapList ;
 
