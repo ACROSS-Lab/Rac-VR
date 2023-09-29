@@ -65,6 +65,7 @@ global skills: [network]{
 	list<float> waterwasteValue;
 		
 	bool classUpdatedTour <- false;
+	bool enter_or_exit_VR <- false;
 	
 	bool do_send_world <- false;
 	/*************************************** 
@@ -377,6 +378,15 @@ global skills: [network]{
 			do send_indicators;
 			classUpdatedTour <- false;
 		}
+		if enter_or_exit_VR {
+			if unity_client = nil {
+				write "no client to send to";
+			} else {
+				do send to: unity_client contents: "Enter_or_exit_VR" + end_message_symbol;	
+			}
+			enter_or_exit_VR <- false;
+		}
+		
 		
 		t1<- t1 + machine_time - t;
 		
@@ -387,7 +397,7 @@ global skills: [network]{
 //	}
 	
 	action manage_message_from_unity(message s) {
-//		write "s: " + s.contents;
+		write "s: " + s.contents;
 		if (waiting_message != nil and string(s.contents) = waiting_message) {
 	    	receive_information <- true;
 	    } else if  the_player != nil and move_player_from_unity and receive_information {

@@ -714,6 +714,7 @@ global {
 		start_exploration_turn_time <- machine_time;
 		do update_indicators_unity;
 		connect_to_unity <- true;
+		enter_or_exit_VR <- true;
 		
 		if isDemo{
 //			collect_on_ground <- true;
@@ -929,6 +930,7 @@ global {
 				if not without_player {do tell(INDICATOR_COMPUTATION);}
 				do increase_urban_area;
 			}
+			enter_or_exit_VR <- true;
 		}
 		else {
 			stage <- PLAYER_DISCUSSION_TURN;

@@ -52,6 +52,7 @@ public class GlobalTest : TCPConnector
     private bool defineGroundSize = false;
 
     private static bool receiveInformation = true;
+    private static bool readySendPlayerPosition = false;
 
     private static bool timerFinish = false;
 
@@ -202,7 +203,7 @@ public class GlobalTest : TCPConnector
            
 
         }
-        if (initialized && Player != null && receiveInformation)
+        if (initialized && Player != null && receiveInformation && readySendPlayerPosition)
         {
             SendPlayerPosition();
         }
@@ -299,6 +300,7 @@ public class GlobalTest : TCPConnector
 
     protected override void ManageMessage(string mes)
     {
+        Debug.Log(mes);
         if (mes.Contains("precision"))
         {
             parameters = ConnectionParameter.CreateFromJSON(mes);
@@ -327,7 +329,9 @@ public class GlobalTest : TCPConnector
         else if (mes.Contains("solidwasteSoilClass")){
 
             classIndicators = ConnectionClass.CreateFromJSON(mes, dm);
-            Debug.Log(mes);
+        }
+        else if (mes.Contains("Enter_or_exit_VR")){
+            readySendPlayerPosition = !readySendPlayerPosition;
         }
 
 
