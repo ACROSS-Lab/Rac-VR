@@ -65,6 +65,7 @@ global skills: [network]{
 	list<float> waterwasteValue;
 	
 	int choice;
+	int nb_waste;
 		
 	bool classUpdatedTour <- false;
 	bool enter_or_exit_VR <- false;
@@ -423,6 +424,8 @@ global skills: [network]{
 				}
 			} else if answer contains_key "choice" {
 				choice <- int(answer["choice"]);
+			} else if answer contains_key "nb_waste" {
+				nb_waste <- int(answer['nb_waste']);
 			}
 		}
 	}

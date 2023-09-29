@@ -10,12 +10,9 @@ using TMPro;
 public class GlobalTest : TCPConnector
 {
 
-    public GameObject DD;
+    public GameObject wasteDisplayM;
 
     public GameObject Player;
-    public bool choice = false;
-    public bool ground_choice = false;
-    public bool river_choice = false;
     public GameObject Ground;
 
     public List<GameObject> Agents;
@@ -39,7 +36,11 @@ public class GlobalTest : TCPConnector
     //Y-offset to apply to the background geometries
     public float offsetYBackgroundGeom = 0.1f;
 
-
+    public bool choice = false;
+    public bool ground_choice = false;
+    public bool river_choice = false;
+    public int nb_waste = 0;
+    bool sendNbWaste = false;
 
     private List<Dictionary<int, GameObject>> agentMapList ;
 
@@ -91,7 +92,7 @@ public class GlobalTest : TCPConnector
         DisplayMessage("IP: " + ip + " port: " + port);
         ConnectToTcpServer();
 
-       dm = DD.GetComponent<DisplayManagement>();        
+       dm = wasteDisplayM.GetComponent<DisplayManagement>();        
     }
 
 
@@ -214,6 +215,11 @@ public class GlobalTest : TCPConnector
             SendChoice();
             choice = false;
         }
+        if (initialized && sendNbWaste && receiveInformation)
+        {
+            SendNbWaste();
+            sendNbWaste = false;
+        }
         if (infoWorld != null && receiveInformation)
         {
             UpdateAgentList();
@@ -254,6 +260,10 @@ public class GlobalTest : TCPConnector
         SendMessageToServer("{\"choice\": " + choice_int + "}");
     }
 
+    private void SendNbWaste()
+    {
+        SendMessageToServer("{\"nb_waste\": " + nb_waste + "}");
+    }
     private void UpdateAgentList()
     {
         if (infoWorld.position.Count == 2)
