@@ -55,22 +55,25 @@ global skills: [network]{
 	list<int> solidwasteSoilClass;
 	list<int> solidwasteCanalClass;
 	list<int> waterwasteCanalClass;
-	list<float> waterwasteVillageValue;
-	list<float> waterwasteCanalValue;
+//	list<float> waterwasteVillageValue;
+//	list<float> waterwasteCanalValue;
 	
 	list<int> solidwasteClass;
 	list<int> waterwasteClass;
 	list<int> productionClass;
+//	list<float> waterwasteValue;
 	
-	list<float> waterwasteValue;
-	
+	// Information received from Unity
 	int choice <- -1;
 	int nb_waste;
-		
-	bool classUpdatedTour <- false;
-	bool enter_or_exit_VR <- false;
+	
+	//allows to manage during which phase GAMA sends/receives information
+	bool classUpdatedTour <- false; //for sending the indicators information only once after the indicators computation stage
+	bool enter_or_exit_VR <- false; //for receiving position only in the VR phase
 	
 	bool do_send_world <- false;
+	
+	
 	/*************************************** 
 	 *
 	 * PARAMETERS ABOUT THE PLAYER
@@ -94,23 +97,14 @@ global skills: [network]{
 	
 	//player rotation - only used for displaying the player in GAMA
 	int rotation_player <- 0;
-
-		
-	float t1;
-	float t2;
-	float t3;
-	float t4;
-	float t5;
-	float t6;
-	float t7;
-	float t8;
-	float t9;
-	float t10;
-
-	/* 
-	 * PRIVATE VARIABLES ONLY USED INTERNALLY
-	 */
 	
+	
+	/*************************************** 
+	 *
+	 * PRIVATE VARIABLES ONLY USED INTERNALLY
+	 * 
+	 ***************************************/
+	 
 	//message send by Unity to tell GAMA that it is ready
 	string READY <- "ready" const: true;
 
@@ -135,6 +129,19 @@ global skills: [network]{
 	//the last received position of the player ([x,y,rotation])
 	list<int> player_position <- [];
 	
+	//Benchmark	
+	float t1;
+	float t2;
+	float t3;
+	
+	
+	/*************************************** 
+	 *
+	 * ACTIONS
+	 * 
+	 ***************************************/
+	
+	//transformation of the position send by unity for the minimap on GAMA
 	point translate_coord(point p){
 		point o <- {2802.2, 3128.5};
 		
@@ -148,6 +155,7 @@ global skills: [network]{
 		return {x,y} ;
 	}
 	
+	//used to display well the cone of vision
 	float transform_rot(float r){
 		return r - 90;
 	}
@@ -400,7 +408,7 @@ global skills: [network]{
 //	}
 	
 	action manage_message_from_unity(message s) {
-		write "s: " + s.contents;
+//		write "s: " + s.contents;
 		if (waiting_message != nil and string(s.contents) = waiting_message) {
 	    	receive_information <- true;
 //	    } else if  the_player != nil and move_player_from_unity and receive_information {
@@ -423,8 +431,10 @@ global skills: [network]{
 	//				write sample(the_player.rotation);
 				}
 			} else if answer contains_key "choice" {
+				write "s: " + s.contents;
 				choice <- int(answer["choice"]);
 			} else if answer contains_key "nb_waste" {
+				write "s: " + s.contents;
 				nb_waste <- int(answer['nb_waste']);
 			}
 		}
