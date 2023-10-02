@@ -200,8 +200,13 @@ global {
 	/********************** PARAMETERS RELATED TO DEMO ****************************/
 	
 	bool isDemo;
-	bool collect_on_ground <- false;
-	bool collect_in_canal <- false;
-	float collection_ground_solid_waste_rate <- 0.9925 min: 0.0 max: 1.0;
-	float collection_canal_solid_waste_rate <- 0.999 min: 0.0 max: 1.0;
-}
+	bool collect_on_ground <- false; //player chose to collect waste on the ground
+	bool collect_in_canal <- false; //player chose to collect waste in the canal
+	float high_collection_ground_solid_waste <- 0.0075 min: 0.0 max: 1.0; //proportion of waste collected on the ground per inhabitants in a high collection scenario
+	float mid_collection_ground_solid_waste <- 0.0035 min: 0.0 max: 1.0; //proportion of waste collected on the ground per inhabitants in a mid collection scenario
+	float low_collection_ground_solid_waste <- 0.0017 min: 0.0 max: 1.0; //proportion of waste collected on the ground per inhabitants in a low collection scenario
+	
+	float high_collection_canal_solid_waste <- 0.00100 min: 0.0 max: 1.0; //proportion of waste collected in the canal per inhabitants in a high collection scenario
+	float mid_collection_canal_solid_waste <- 0.00050 min: 0.0 max: 1.0; //proportion of waste collected in the canal per inhabitants in a mid collection scenario
+	float low_collection_canal_solid_waste <- 0.00015 min: 0.0 max: 1.0; //proportion of waste collected in the canal per inhabitants in a low collection scenario
+	}
