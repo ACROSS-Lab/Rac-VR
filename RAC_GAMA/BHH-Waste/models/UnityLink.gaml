@@ -428,14 +428,13 @@ global skills: [network]{
 					the_player.rotation <- int(transform_rot(int(answer["rotation"])/precision));
 					the_player.location <- translate_coord({position[0]/precision, position[1]/precision});
 					the_player.to_display <- true;
-	//				write sample(the_player.rotation);
+//					write sample(the_player.location);
 				}
 			} else if answer contains_key "choice" {
 				write "s: " + s.contents;
 				choice <- int(answer["choice"]);
-			} else if answer contains_key "nb_waste" {
-				write "s: " + s.contents;
-				nb_waste <- int(answer['nb_waste']);
+				nb_waste <- int(answer["nb_waste"]);
+				write sample(nb_waste);
 			}
 		}
 	}

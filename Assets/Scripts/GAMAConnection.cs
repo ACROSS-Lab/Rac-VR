@@ -209,11 +209,7 @@ public class GlobalTest : TCPConnector
         }
         if (initialized && wci.sendInfoWasteCollection && receiveInformation)
         {
-            SendChoice();
-        }
-        if (initialized && wci.sendInfoWasteCollection && receiveInformation)
-        {
-            SendNbWaste();
+            SendChoiceAndNbWaste();
             wci.sendInfoWasteCollection = false;
         }
         if (infoWorld != null && receiveInformation)
@@ -242,10 +238,8 @@ public class GlobalTest : TCPConnector
         // SendMessageToServer("{\"position\":[" + p[0] + "," + p[1] + "]" + "}");
     }
 
-    private void SendChoice()
+    private void SendChoiceAndNbWaste()
     {   
-        Debug.Log(wci.ground_choice);
-        Debug.Log(wci.river_choice);
         int choice_int = -1; // 0 : ground, 1 : river, -1 : default
         if (wci.ground_choice) 
         {
@@ -255,14 +249,9 @@ public class GlobalTest : TCPConnector
         {
             choice_int = 1;
         }
-        SendMessageToServer("{\"choice\": " + choice_int + "}");
+        SendMessageToServer("{\"choice\": " + choice_int + ",\"nb_waste\": " + wci.nb_waste + "}");
     }
 
-    private void SendNbWaste()
-    {
-        Debug.Log(wci.nb_waste);
-        SendMessageToServer("{\"nb_waste\": " + wci.nb_waste + "}");
-    }
     private void UpdateAgentList()
     {
         if (infoWorld.position.Count == 2)
