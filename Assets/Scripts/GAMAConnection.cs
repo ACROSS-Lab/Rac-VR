@@ -210,6 +210,8 @@ public class GlobalTest : TCPConnector
         if (initialized && wci.sendInfoWasteCollection && receiveInformation)
         {
             SendChoice();
+        if (initialized && wci.sendInfoWasteCollection && receiveInformation)
+        {
             SendNbWaste();
             wci.sendInfoWasteCollection = false;
         }
@@ -240,7 +242,9 @@ public class GlobalTest : TCPConnector
     }
 
     private void SendChoice()
-    {
+    {   
+        Debug.Log(wci.ground_choice);
+        Debug.Log(wci.river_choice);
         int choice_int = -1; // 0 : ground, 1 : river, -1 : default
         if (wci.ground_choice) 
         {
@@ -255,6 +259,7 @@ public class GlobalTest : TCPConnector
 
     private void SendNbWaste()
     {
+        Debug.Log(wci.nb_waste);
         SendMessageToServer("{\"nb_waste\": " + wci.nb_waste + "}");
     }
     private void UpdateAgentList()
