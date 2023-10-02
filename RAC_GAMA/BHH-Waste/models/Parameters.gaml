@@ -97,8 +97,8 @@ global {
 	float coeff_visu_canal <- 3.0;  //coeff used to define the color of the canal according to the pollution
 	float coeff_visu_productivity <- 150 /factor_productivity;
 	bool show_pol_chart_by_cat_glob;
-	bool always_display_sub_charts <- true const: true;
-	bool always_display_chart_by_vil <- true const: true;
+	bool always_display_sub_charts <- true; //true when testing, false for a game: sub charts appear in the dsicussion phase
+	bool always_display_chart_by_vil <- true const: true; //give the possibility to see the chart divided by village
 	
 	/********* PARAMETERS RELATED TO WATER FLOW (WASTE DIFFUSION) IN THE CANAL *******/
 	
@@ -199,7 +199,7 @@ global {
 	
 	/********************** PARAMETERS RELATED TO DEMO ****************************/
 	
-	bool isDemo;
+	bool isDemo <- true;
 	bool collect_on_ground <- false; //player chose to collect waste on the ground
 	bool collect_in_canal <- false; //player chose to collect waste in the canal
 	float high_collection_ground_solid_waste <- 0.0075 min: 0.0 max: 1.0; //proportion of waste collected on the ground per inhabitants in a high collection scenario

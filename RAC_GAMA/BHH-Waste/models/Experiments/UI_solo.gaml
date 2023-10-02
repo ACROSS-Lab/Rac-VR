@@ -150,6 +150,7 @@ global {
 
 	/********************** VARIOUS FUNCTIONS  ***************************/
 
+	//for display on main map
 	int production_class_current(plot p) {
 		float w <- p.current_productivity; 
 		switch(w) {
@@ -161,6 +162,7 @@ global {
 		}
 	}
 	
+	//for display on main map
 	int water_pollution_class_current(canal p) {
 		float w <- p.pollution_density; 
 		switch(w) {
@@ -251,7 +253,9 @@ global {
 			}
 		}
 		global_chart <- stacked_chart[0];
-		isDemo <- true;
+		if isDemo {
+			always_display_sub_charts <- true;
+		}
 	}
 
 	reflex update_charts when: stage = COMPUTE_INDICATORS{
@@ -328,7 +332,6 @@ global {
 	}
 }
 
-
 species waste_on_canal skills: [moving]{
 	point target;
 	point prev_loc <- copy(location);
@@ -345,8 +348,8 @@ species waste_on_canal skills: [moving]{
 
 species stacked_chart {
 	point location <- {w_width/2 ,w_height/2};
-	map<string, float> data <- [];	
-	map<string, map<rgb,float>> data2 <- [];
+	map<string, float> data <- [];	//not by village
+	map<string, map<rgb,float>> data2 <- []; //by village
 	map<string, image_file> icons <- [];
 	map<string, bool> inf_or_sup ;
 	map<string, bool> draw_smiley;
@@ -369,12 +372,14 @@ species stacked_chart {
 		}
  	}
 	
+	//update values by villages
  	action update_all2(rgb element, map<string, float> values) {
  		loop col over: data2.keys {
  			data2[col][element] <- values[col];
  		}
  	}
  	
+ 	//update values not by villages
  	action update_all(map<string, float> values) {
  		loop col over: data.keys {
  			data[col] <- values[col];
@@ -479,7 +484,7 @@ experiment Open {
 	action _init_ {
 		//Requires latest version of GAMA 1.8.2
 		//map<string, unknown> params <- user_input_dialog("Welcome to RÁC",[enter("Dark theme",true), choose("Language", string, "English",["English","Français","Tiếng Việt"])], font("Helvetica",18, #bold), nil, false);
-		map<string, unknown> params <- user_input_dialog("Welcome to RÁC",[choose("Language", string, "English",["English","Français","Tiếng Việt"])], font(ui_font,18, #bold), #white);
+		map<string, unknown> params <- user_input_dialog("Welcome to RÁC",[choose("Language", string, "English",["English","Français","Tiếng Việt"])], ui_font, map_background, false);
 		gama.pref_display_slice_number <- 12; /* 128 too slow ! */
 		gama.pref_display_show_rotation <- false;
 		gama.pref_display_show_errors <- false;
