@@ -210,6 +210,7 @@ public class GlobalTest : TCPConnector
         if (initialized && wci.sendInfoWasteCollection && receiveInformation)
         {
             SendChoice();
+        }
         if (initialized && wci.sendInfoWasteCollection && receiveInformation)
         {
             SendNbWaste();
