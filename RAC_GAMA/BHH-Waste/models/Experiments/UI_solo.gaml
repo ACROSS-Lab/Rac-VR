@@ -84,7 +84,7 @@ global {
 	
 	bool use_timer_player_turn <- false;	
 	bool use_timer_for_discussion <- true;
-	bool use_timer_for_exploration <- true;
+	bool use_timer_for_exploration <- false;
 	bool timer_just_for_warning <- false; //if true, if the timer is finished, just a warning message is displayed; if false, the turn passes to the next player - for the moment, some issue with the automatic change of step
 	float initial_time_for_discussion <- 1 #mn const: true; // time before the player turns
 	float initial_time_for_exploration <- 5 #mn const: true;
@@ -537,7 +537,7 @@ experiment Open {
 				draw ""+value  at: {location.x, location.y- 6*radius/10, 0.01}  color: ecolabel font: ui_font anchor: #bottom_center;
 			}
 		
-			graphics "Timer for the discussion" visible: stage = PLAYER_DISCUSSION_TURN and turn <= end_of_game {
+			graphics "Timer for the discussion" visible: stage = PLAYER_DISCUSSION_TURN and turn <= end_of_game and use_timer_for_discussion {
 				float y <- location.y + w_height/5 + y_centerdis;
 				float left <- location.x - w_width/2;
 				float right <- location.x + w_width/2;
@@ -548,7 +548,7 @@ experiment Open {
 				draw sandclock_icon /*rotate: (180 - remaining_time)*3*/ at: {left + width, y} size: w_height / 6;
 			}
 			
-			graphics "Timer for the exploration" visible: stage = PLAYER_VR_EXPLORATION_TURN and turn <= end_of_game {
+			graphics "Timer for the exploration" visible: stage = PLAYER_VR_EXPLORATION_TURN and turn <= end_of_game and use_timer_for_exploration{
 				float y <- location.y + w_height/5 + y_centerdis;
 				float left <- location.x - w_width/2;
 				float right <- location.x + w_width/2;
