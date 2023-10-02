@@ -713,7 +713,7 @@ global {
 	action before_exploration_phase{
 		start_exploration_turn_time <- machine_time;
 		do update_indicators_unity;
-		connect_to_unity <- true;
+//		connect_to_unity <- true;
 		enter_or_exit_VR <- true;
 	}
 	
@@ -727,6 +727,9 @@ global {
 		waterwasteClass <- waterwaste_class(village_water_pollution);
 		solidwasteSoilClass <- solidwaste_soil_class(village_soil_solid_pollution);
 		solidwasteCanalClass <- solidwaste_canal_class(village_canal_solid_pollution);
+		
+		write sample(solidwasteSoilClass);
+		write sample(solidwasteCanalClass);
 
 		/** To use, define categories
 		 * define fcts : solidwaste_soil_class(), solidwaste_canal_class(), waterwaste_canal_class()
@@ -911,15 +914,16 @@ global {
 	
 	action end_of_exploration_phase {
 		if isDemo {
-			if isDemo{
-				if choice = 0 {
-					collect_on_ground <- true;
-				} else if choice = 1 {
-					collect_in_canal <- true;
-				}
+			
+			choice <- 0;
+			if choice = 0 {
+				collect_on_ground <- true;
+			} else if choice = 1 {
+				collect_in_canal <- true;
 			}
 			write sample(collect_on_ground);
 			write sample(collect_in_canal);
+			
 			stage <- COMPUTE_INDICATORS;
 			if !always_display_sub_charts {
 				show_pol_chart_by_cat_glob <- false;

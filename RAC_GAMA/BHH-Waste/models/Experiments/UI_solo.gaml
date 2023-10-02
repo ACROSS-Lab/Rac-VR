@@ -26,11 +26,19 @@ global {
 	rgb unselected_color <-rgb(200,200,200,0.7);
 	list<rgb> village_color <- [rgb(183, 73, 77), rgb(255, 217, 67), rgb(65, 149, 205), rgb(80, 174, 76)]; // color for the 4 villages
 	map<string, rgb> color_col <- ["Production":: rgb(118, 189, 30), "Total"::rgb(253, 161, 69), "Water"::rgb(120, 172, 217), "Solid"::rgb(137, 100, 73)]; //color used when indicators are not broken down by villages
-	map<string, rgb> color_col_back <- ["Production":: rgb(231, 255, 140), "Total"::rgb(255, 225, 177), "Water"::rgb(213, 243, 243), "Solid"::rgb(229, 194, 163)];
+	map<string, rgb> color_col_background <- ["Production":: rgb(231, 255, 140), "Total"::rgb(255, 225, 177), "Water"::rgb(213, 243, 243), "Solid"::rgb(229, 194, 163)];
 	rgb map_background <- rgb(248, 246, 245);
-	rgb map_background2 <- rgb(237, 234, 233);
-	rgb timer_background <- dark_theme ? rgb(60,60,60): rgb(200,200,200);
+	rgb map_background2 <- rgb(237, 234, 233); //bandeau
 	rgb legend_background <- dark_theme ? #black: #white; //rgb(60,60,60);
+	rgb timer_main <- rgb(29, 98, 223);
+	rgb timer_second <- rgb(205, 226, 242);
+	rgb calendar <- rgb(202, 56, 40);
+	rgb calendar_second <- rgb(236, 187, 175);
+	rgb ecolabel <- rgb(97, 180, 31);
+	rgb ecolabel_second <- rgb(174, 224, 128);
+	rgb river <- rgb(178, 193, 149);
+	rgb point_of_interest <- rgb(217, 104, 76);
+	rgb player_color <- rgb(223, 204, 76);
 	
 	/********************** PROPORTION OF THE DISPLAYS ****************************/
 	
@@ -79,7 +87,7 @@ global {
 	bool use_timer_for_exploration <- true;
 	bool timer_just_for_warning <- false; //if true, if the timer is finished, just a warning message is displayed; if false, the turn passes to the next player - for the moment, some issue with the automatic change of step
 	float initial_time_for_discussion <- 1 #mn const: true; // time before the player turns
-	float initial_time_for_exploration <- 2 #mn const: true;
+	float initial_time_for_exploration <- 5 #mn const: true;
 	float initial_time_for_choosing_village <- 20 #s const: true;
 	float time_for_choosing_village <- initial_time_for_choosing_village;
 	float start_choosing_village_time;
@@ -142,6 +150,7 @@ global {
 
 	/********************** VARIOUS FUNCTIONS  ***************************/
 
+	//for display on main map
 	int production_class_current(plot p) {
 		float w <- p.current_productivity; 
 		switch(w) {
@@ -153,6 +162,7 @@ global {
 		}
 	}
 	
+	//for display on main map
 	int water_pollution_class_current(canal p) {
 		float w <- p.pollution_density; 
 		switch(w) {
@@ -243,7 +253,9 @@ global {
 			}
 		}
 		global_chart <- stacked_chart[0];
-		isDemo <- true;
+		if isDemo {
+			always_display_sub_charts <- true;
+		}
 	}
 
 	reflex update_charts when: stage = COMPUTE_INDICATORS{
@@ -320,7 +332,6 @@ global {
 	}
 }
 
-
 species waste_on_canal skills: [moving]{
 	point target;
 	point prev_loc <- copy(location);
@@ -337,8 +348,8 @@ species waste_on_canal skills: [moving]{
 
 species stacked_chart {
 	point location <- {w_width/2 ,w_height/2};
-	map<string, float> data <- [];	
-	map<string, map<rgb,float>> data2 <- [];
+	map<string, float> data <- [];	//not by village
+	map<string, map<rgb,float>> data2 <- []; //by village
 	map<string, image_file> icons <- [];
 	map<string, bool> inf_or_sup ;
 	map<string, bool> draw_smiley;
@@ -361,12 +372,14 @@ species stacked_chart {
 		}
  	}
 	
+	//update values by villages
  	action update_all2(rgb element, map<string, float> values) {
  		loop col over: data2.keys {
  			data2[col][element] <- values[col];
  		}
  	}
  	
+ 	//update values not by villages
  	action update_all(map<string, float> values) {
  		loop col over: data.keys {
  			data[col] <- values[col];
@@ -418,7 +431,7 @@ species stacked_chart {
  				float v <- data[col];
 				total <- total+v;
 				float col_height <- (v * max_heights[col])/max_value[col];
-				draw rectangle(col_width,max_heights[col]) color: color_col_back[col] at: {current_x, y_rect[col]};
+				draw rectangle(col_width,max_heights[col]) color: color_col_background[col] at: {current_x, y_rect[col]};
 				draw rectangle(col_width,col_height) color: color_col[col] at: {current_x,my_height  + current_y - col_height/2};
 				//draw rectangle(col_width,col_height) wireframe: true border: dark_theme ? #black : #black width: 2 at: {current_x,my_height  + current_y -  col_height/2};
 				current_y <- current_y - col_height;
@@ -471,7 +484,7 @@ experiment Open {
 	action _init_ {
 		//Requires latest version of GAMA 1.8.2
 		//map<string, unknown> params <- user_input_dialog("Welcome to RÁC",[enter("Dark theme",true), choose("Language", string, "English",["English","Français","Tiếng Việt"])], font("Helvetica",18, #bold), nil, false);
-		map<string, unknown> params <- user_input_dialog("Welcome to RÁC",[choose("Language", string, "English",["English","Français","Tiếng Việt"])], font(ui_font,18, #bold), #white);
+		map<string, unknown> params <- user_input_dialog("Welcome to RÁC",[choose("Language", string, "English",["English","Français","Tiếng Việt"])], ui_font, map_background, false);
 		gama.pref_display_slice_number <- 12; /* 128 too slow ! */
 		gama.pref_display_show_rotation <- false;
 		gama.pref_display_show_errors <- false;
@@ -500,13 +513,13 @@ experiment Open {
 				float radius <- w_width/1.5;
 				float start_angle <-  - 180.0;
 				float arc_angle <- (value * 180/total);
-				draw arc(radius, start_angle + arc_angle/2, arc_angle) color: rgb(202, 56, 40);
+				draw arc(radius, start_angle + arc_angle/2, arc_angle) color: calendar;
 				start_angle <- start_angle + arc_angle;
 				arc_angle <- (total - value) * 180/total;
-				draw arc(radius, start_angle + arc_angle/2, arc_angle) color: rgb(236, 187, 175);
+				draw arc(radius, start_angle + arc_angle/2, arc_angle) color: calendar_second;
 				draw arc(radius/2, -90, 180) color: #white;
 				draw calendar_icon size: w_width / 6;
-				draw ""+value + " [" +value div 365 + "]" at: {location.x, location.y- 6*radius/10, 0.01}  color: rgb(202, 56, 40) font: ui_font anchor: #bottom_center;
+				draw ""+value + " [" +value div 365 + "]" at: {location.x, location.y- 6*radius/10, 0.01}  color: calendar font: ui_font anchor: #bottom_center;
 			}
 					
 			graphics "Score#" position: {w_width, y_centerdis}{
@@ -515,23 +528,23 @@ experiment Open {
 				float radius <- w_width/1.5;
 				float start_angle <-  - 180.0;
 				float arc_angle <- (value * 180/total);
-				draw arc(radius, start_angle + arc_angle/2, arc_angle) color: rgb(97, 180, 31);
+				draw arc(radius, start_angle + arc_angle/2, arc_angle) color: ecolabel;
 				start_angle <- start_angle + arc_angle;
 				arc_angle <- (total - value) * 180/total;
-				draw arc(radius, start_angle + arc_angle/2, arc_angle) color: rgb(174, 224, 128);
+				draw arc(radius, start_angle + arc_angle/2, arc_angle) color: ecolabel_second;
 				draw arc(radius/2, -90, 180) color: #white;
 				draw label_icon size: w_width / 5;
-				draw ""+value  at: {location.x, location.y- 6*radius/10, 0.01}  color: rgb(97, 180, 31) font: ui_font anchor: #bottom_center;
+				draw ""+value  at: {location.x, location.y- 6*radius/10, 0.01}  color: ecolabel font: ui_font anchor: #bottom_center;
 			}
 		
 			graphics "Timer for the discussion" visible: stage = PLAYER_DISCUSSION_TURN and turn <= end_of_game {
 				float y <- location.y + w_height/5 + y_centerdis;
 				float left <- location.x - w_width/2;
 				float right <- location.x + w_width/2;
-				draw "" + int(remaining_time) + "s" color: dark_theme ? #white : #black font: ui_font anchor: #left_center at: {right + 500, y};
-				draw line({left, y}, {right, y}) buffer (100, 200) color: rgb(205, 226, 242);
+				draw "" + int(remaining_time) + " s" color: timer_main font: ui_font anchor: #left_center at: {right + 500, y};
+				draw line({left, y}, {right, y}) buffer (100, 200) color: timer_second;
 				float width <- (initial_time_for_discussion - remaining_time) * (right - left) / (initial_time_for_discussion);
-				draw line({left, y}, {left + width, y}) buffer (100, 200) color: rgb(29, 98, 223);
+				draw line({left, y}, {left + width, y}) buffer (100, 200) color: timer_main;
 				draw sandclock_icon /*rotate: (180 - remaining_time)*3*/ at: {left + width, y} size: w_height / 6;
 			}
 			
@@ -539,10 +552,10 @@ experiment Open {
 				float y <- location.y + w_height/5 + y_centerdis;
 				float left <- location.x - w_width/2;
 				float right <- location.x + w_width/2;
-				draw "" + int(remaining_time) + "s" color: dark_theme ? #white : #black font: ui_font anchor: #left_center at: {right + 500, y};
-				draw line({left, y}, {right, y}) buffer (100, 200) color: rgb(205, 226, 242);
+				draw "" + int(remaining_time) + " s" color: timer_main font: ui_font anchor: #left_center at: {right + 500, y};
+				draw line({left, y}, {right, y}) buffer (100, 200) color: timer_second;
 				float width <- (initial_time_for_exploration - remaining_time) * (right - left) / (initial_time_for_exploration);
-				draw line({left, y}, {left + width, y}) buffer (100, 200) color: rgb(29, 98, 223);
+				draw line({left, y}, {left + width, y}) buffer (100, 200) color: timer_main;
 				draw sandclock_icon /*rotate: (180 - remaining_time)*3*/ at: {left + width, y} size: w_height / 6;
 			}
 			
@@ -550,10 +563,10 @@ experiment Open {
 				float y <- location.y + 3*w_height/8 + y_centerdis;
 				float left <- location.x - w_width/2;
 				float right <- location.x + w_width/2;
-				draw "" + int(remaining_time_for_choosing_village) + "s" color: rgb(205, 226, 242) font: ui_font anchor: #left_center at: {right + 500, y};
-				draw line({left, y}, {right, y}) buffer (100, 200) color: dark_theme ? #white : #gray;
+				draw "" + int(remaining_time_for_choosing_village) + " s" color: timer_main font: ui_font anchor: #left_center at: {right + 500, y};
+				draw line({left, y}, {right, y}) buffer (100, 200) color: timer_second ;
 				float width <- (initial_time_for_choosing_village - remaining_time_for_choosing_village) * (right - left) / (initial_time_for_choosing_village);
-				draw line({left, y}, {left + width, y}) buffer (100, 200) color: rgb(29, 98, 223);
+				draw line({left, y}, {left + width, y}) buffer (100, 200) color: timer_main;
 				draw sandclock_icon at: {left + width, y} size: w_height / 6;
 			}	
 	
@@ -836,14 +849,14 @@ experiment Open {
 					//Legend Player position
 					draw player at: {x* w_width,y*w_height} size: icon_size*1.5;
 					x <- x + 2.3* x_gap;
-					draw "Player" at: {x* w_width,y*w_height} color: rgb(223, 204, 76) depth: 0 font: ui_font anchor: #center;
+					draw "Player" at: {x* w_width,y*w_height} color: player_color depth: 0 font: ui_font anchor: #center;
 					
 					x <- x_init + x_gap * 8.5;
 					
 					//Legend Point of interest
 					draw interest at: {x*w_width,y*w_height} size: icon_size*1.5;
 					x <- x + 4*x_gap;
-					draw "Point Of Interest" at: {x* w_width,y*w_height} color: rgb(217, 104, 76) depth: 0 font: ui_font anchor: #center;
+					draw "Point Of Interest" at: {x* w_width,y*w_height} color: point_of_interest depth: 0 font: ui_font anchor: #center;
 					
 				} else {
 					
@@ -874,7 +887,7 @@ experiment Open {
 				draw shape color: greens[world.production_class_current(self)] border: false;
 			}
 			species canal visible: !(stage = PLAYER_VR_EXPLORATION_TURN) {
-				draw shape buffer (20,10) color: display_water_flow ? rgb(178, 193, 149) : blues[world.water_pollution_class_current(self)]  ;
+				draw shape buffer (20,10) color: display_water_flow ? river : blues[world.water_pollution_class_current(self)]  ;
 			}
 			species waste_on_canal visible: !(stage = PLAYER_VR_EXPLORATION_TURN) and display_water_flow  {
 					draw sphere(20) color: #lightblue;
