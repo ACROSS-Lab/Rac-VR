@@ -434,7 +434,11 @@ global skills: [network]{
 				write "s: " + s.contents;
 				choice <- int(answer["choice"]);
 				nb_waste <- int(answer["nb_waste"]);
-				write sample(nb_waste);
+			} else if answer contains_key "point_of_interest" {
+				write "s: " + s.contents;
+				ask pointInterestManager {
+					do changeState(int(answer["point_of_interest"]));
+				}
 			}
 		}
 	}
@@ -454,6 +458,35 @@ global skills: [network]{
 	}	
 }
 
+species pointInterestManager {
+	list<pointInterest> points <- [];
+	
+	action changeState(int i) {
+		points[i].visited <- true;
+	}
+}
+
+species pointInterest {
+	rgb color <- rgb(217, 104, 76);
+	point location;
+	float size <- 300.0;
+	bool visited <- false;
+	pointInterestManager manager;
+	
+	action addSelfToManager {
+		add self to: manager.points;
+	}
+	
+	aspect default {
+		if !visited {
+			if file_exists("../../includes/icons/Icone_PointOfInterest.png")  {
+				draw image("../../includes/icons/Icone_PointOfInterest.png") size: {size, size} at: location + {0, 0, 5};
+			} else {
+				draw circle(size/2) at: location + {0, 0, 5} color: color;
+			}
+		}	
+	}
+}
 
 //Defaut species for the player
 species default_player {

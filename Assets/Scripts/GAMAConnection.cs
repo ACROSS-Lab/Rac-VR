@@ -212,6 +212,12 @@ public class GlobalTest : TCPConnector
             SendChoiceAndNbWaste();
             wci.sendInfoWasteCollection = false;
         }
+        if (initialized && wci.pointInterstVisited && receiveInformation)
+        {
+            Debug.Log("enter");
+            SendEndDialogue();
+            wci.pointInterstVisited = false;
+        }
         if (infoWorld != null && receiveInformation)
         {
             UpdateAgentList();
@@ -250,6 +256,10 @@ public class GlobalTest : TCPConnector
             choice_int = 1;
         }
         SendMessageToServer("{\"choice\": " + choice_int + ",\"nb_waste\": " + wci.nb_waste + "}");
+    }
+
+    private void SendEndDialogue(){
+        SendMessageToServer("{\"point_of_interest\": " + wci.pointInterestIndex + "}");
     }
 
     private void UpdateAgentList()
@@ -337,8 +347,6 @@ public class GlobalTest : TCPConnector
                 geoms = new List<GAMAGeometry>();
             }
             geoms.Add(g);
-
-
         }
         else if (mes.Contains("agents") && parameters != null)
         {

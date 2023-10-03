@@ -255,9 +255,12 @@ global {
 		global_chart <- stacked_chart[0];
 		if isDemo {
 			always_display_sub_charts <- true;
+			
+			create pointInterestManager;
 			create pointInterest {
 				location <- {2769.2, 2741.2};
-				to_display <- true;
+				manager <- first(pointInterestManager);
+				do addSelfToManager;
 			}
 		}
 	}
@@ -476,23 +479,6 @@ species stacked_chart {
  		draw line({original_col_width/2 + gap, 3* chart_height / 2 - max_heights["Production"]/2}, {3*original_col_width/2 + gap, 3* chart_height / 2 - max_heights["Production"]/2}) width:20 color: map_background;
  	}
 } 
-
-species pointInterest {
-	rgb color <- point_of_interest_color;
-	bool to_display;
-	point location;
-	float size <- 300.0;
-	
-	aspect default {
-		if to_display {
-			if file_exists("../../includes/icons/Icone_PointOfInterest.png")  {
-				draw image("../../includes/icons/Icone_PointOfInterest.png") size: {size, size} at: location + {0, 0, 5};
-			} else {
-				draw circle(size/2) at: location + {0, 0, 5} color: color;
-			}
-		}			
-	}
-}
 
 experiment Open {
 	
@@ -934,7 +920,8 @@ experiment Open {
 			/********************** MINI MAP DISPLAY ******************************/
 			image minimap size: {0.835,0.99} position:{0.1,0} visible: stage = PLAYER_VR_EXPLORATION_TURN;
 			species default_player visible: stage = PLAYER_VR_EXPLORATION_TURN;
-			species pointInterest ;
+			species pointInterest;
+			
 			
 			event #mouse_down action: affiche_coord;
 			
