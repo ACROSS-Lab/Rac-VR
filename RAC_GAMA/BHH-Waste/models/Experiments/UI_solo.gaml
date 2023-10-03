@@ -37,7 +37,7 @@ global {
 	rgb ecolabel <- rgb(97, 180, 31);
 	rgb ecolabel_second <- rgb(174, 224, 128);
 	rgb river <- rgb(178, 193, 149);
-	rgb point_of_interest <- rgb(217, 104, 76);
+	rgb point_of_interest_color <- rgb(217, 104, 76);
 	rgb player_color <- rgb(223, 204, 76);
 	
 	/********************** PROPORTION OF THE DISPLAYS ****************************/
@@ -255,6 +255,10 @@ global {
 		global_chart <- stacked_chart[0];
 		if isDemo {
 			always_display_sub_charts <- true;
+			create pointInterest {
+				location <- {2769.2, 2741.2};
+				to_display <- true;
+			}
 		}
 	}
 
@@ -472,6 +476,23 @@ species stacked_chart {
  		draw line({original_col_width/2 + gap, 3* chart_height / 2 - max_heights["Production"]/2}, {3*original_col_width/2 + gap, 3* chart_height / 2 - max_heights["Production"]/2}) width:20 color: map_background;
  	}
 } 
+
+species pointInterest {
+	rgb color <- point_of_interest_color;
+	bool to_display;
+	point location;
+	float size <- 300.0;
+	
+	aspect default {
+		if to_display {
+			if file_exists("../../includes/icons/Icone_PointOfInterest.png")  {
+				draw image("../../includes/icons/Icone_PointOfInterest.png") size: {size, size} at: location + {0, 0, 5};
+			} else {
+				draw circle(size/2) at: location + {0, 0, 5} color: color;
+			}
+		}			
+	}
+}
 
 experiment Open {
 	
@@ -856,7 +877,7 @@ experiment Open {
 					//Legend Point of interest
 					draw interest at: {x*w_width,y*w_height} size: icon_size*1.5;
 					x <- x + 4*x_gap;
-					draw "Point Of Interest" at: {x* w_width,y*w_height} color: point_of_interest depth: 0 font: ui_font anchor: #center;
+					draw "Point Of Interest" at: {x* w_width,y*w_height} color: point_of_interest_color depth: 0 font: ui_font anchor: #center;
 					
 				} else {
 					
@@ -911,8 +932,9 @@ experiment Open {
 			}
 			
 			/********************** MINI MAP DISPLAY ******************************/
-			image minimap size: {0.83,0.99} position:{0.1,0} visible: stage = PLAYER_VR_EXPLORATION_TURN;
+			image minimap size: {0.835,0.99} position:{0.1,0} visible: stage = PLAYER_VR_EXPLORATION_TURN;
 			species default_player visible: stage = PLAYER_VR_EXPLORATION_TURN;
+			species pointInterest ;
 			
 			event #mouse_down action: affiche_coord;
 			
