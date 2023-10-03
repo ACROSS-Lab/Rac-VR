@@ -258,7 +258,7 @@ global {
 			
 			create pointInterestManager;
 			create pointInterest {
-				location <- {2769.2, 2741.2};
+				location <- {2950.5, 2798.9};
 				manager <- first(pointInterestManager);
 				do addSelfToManager;
 			}
@@ -918,7 +918,7 @@ experiment Open {
 			}
 			
 			/********************** MINI MAP DISPLAY ******************************/
-			image minimap size: {0.89,0.99} position:{0.1,0} visible: stage = PLAYER_VR_EXPLORATION_TURN;
+			image minimap size: {0.885,0.99} position:{0.1,0} visible: stage = PLAYER_VR_EXPLORATION_TURN;
 			species default_player visible: stage = PLAYER_VR_EXPLORATION_TURN;
 			species pointInterest visible: stage = PLAYER_VR_EXPLORATION_TURN;
 			
