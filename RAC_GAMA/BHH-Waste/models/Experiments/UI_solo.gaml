@@ -918,9 +918,9 @@ experiment Open {
 			}
 			
 			/********************** MINI MAP DISPLAY ******************************/
-			image minimap size: {0.835,0.99} position:{0.1,0} visible: stage = PLAYER_VR_EXPLORATION_TURN;
+			image minimap size: {0.89,0.99} position:{0.1,0} visible: stage = PLAYER_VR_EXPLORATION_TURN;
 			species default_player visible: stage = PLAYER_VR_EXPLORATION_TURN;
-			species pointInterest;
+			species pointInterest visible: stage = PLAYER_VR_EXPLORATION_TURN;
 			
 			
 			event #mouse_down action: affiche_coord;
