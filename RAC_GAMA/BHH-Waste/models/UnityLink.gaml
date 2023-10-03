@@ -145,10 +145,10 @@ global skills: [network]{
 	point translate_coord(point p){
 		point o <- {2802.2, 3128.5};
 		
-		float a <- 102.0821;
-		float b <- -2.2820;
-		float c <- 2.7507;
-		float d <- -113.9149;
+		float a <- 103.9642;
+		float b <- 3.0232;
+		float c <- 2.114;
+		float d <- -114.2174;
 		
 		float x <- a*p.x + b*p.y + o.x;
 		float y <- c*p.x + d*p.y + o.y;
@@ -457,7 +457,7 @@ global skills: [network]{
 
 //Defaut species for the player
 species default_player {
-	rgb color <- #red;
+	rgb color <- rgb(223, 204, 76);
 	int rotation;
 	bool to_display <- true;
 	float cone_distance <- 2 * player_size_GAMA;
