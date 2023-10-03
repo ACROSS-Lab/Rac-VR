@@ -136,7 +136,7 @@ global {
 	bool is_production_ok <- true;
 	bool is_pollution_ok <- true;
 	
-	int days <- 365;
+	int days <- 10;
 
 	/********************** INITIALIZATION OF THE GAME ****************************/
 
@@ -727,9 +727,6 @@ global {
 		waterwasteClass <- waterwaste_class(village_water_pollution);
 		solidwasteSoilClass <- solidwaste_soil_class(village_soil_solid_pollution);
 		solidwasteCanalClass <- solidwaste_canal_class(village_canal_solid_pollution);
-		
-		write sample(solidwasteSoilClass);
-		write sample(solidwasteCanalClass);
 
 		/** To use, define categories
 		 * define fcts : solidwaste_soil_class(), solidwaste_canal_class(), waterwaste_canal_class()
@@ -914,16 +911,15 @@ global {
 	
 	action end_of_exploration_phase {
 		if isDemo {
-			
-			choice <- 0;
-			if choice = 0 {
-				collect_on_ground <- true;
-			} else if choice = 1 {
-				collect_in_canal <- true;
+			if isDemo{
+				if choice = 0 {
+					collect_on_ground <- true;
+				} else if choice = 1 {
+					collect_in_canal <- true;
+				}
 			}
 			write sample(collect_on_ground);
 			write sample(collect_in_canal);
-			
 			stage <- COMPUTE_INDICATORS;
 			if !always_display_sub_charts {
 				show_pol_chart_by_cat_glob <- false;
@@ -954,6 +950,7 @@ global {
 		float t <- machine_time;
 		
 		do compute_indicators;
+		
 		if (current_day mod data_frequency) = 0 {
 			do add_data;
 		}
@@ -964,9 +961,10 @@ global {
 		do manage_daily_indicator;
 		do manage_end_of_indicator_computation;
 		
-		current_day <- current_day + 1; 
+		current_day <- current_day + 1;
 		
-		t3<- t3 + machine_time - t;
+		
+//		t3<- t3 + machine_time - t;
 	}
 	
 	/**

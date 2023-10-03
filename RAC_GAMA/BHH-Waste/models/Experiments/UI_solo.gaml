@@ -647,22 +647,22 @@ experiment Open {
 			}
 	
 			graphics "Next" transparency: ((stage = PLAYER_DISCUSSION_TURN or stage = PLAYER_ACTION_TURN or stage = PLAYER_VR_EXPLORATION_TURN) and turn <= end_of_game) ? 0 : 0.6 {
-				next_location <- {location.x + w_width / 2.5,  location.y-w_height/8};
-				draw button_background at: next_location + {0, y_centerdis} color: (next_selected and ((stage = PLAYER_DISCUSSION_TURN or stage = PLAYER_ACTION_TURN or stage = PLAYER_VR_EXPLORATION_TURN) and turn <= end_of_game)) ? selected_color:unselected_color size: shape.width / 4;
-				draw next_icon at: next_location + {100, y_centerdis} size: w_width / 8 color: (next_selected and ((stage = PLAYER_DISCUSSION_TURN or stage = PLAYER_ACTION_TURN or stage = PLAYER_VR_EXPLORATION_TURN) and turn <= end_of_game)) ? selected_color:unselected_color;
+				next_location <- {location.x + w_width / 2.5,  location.y-w_height/8} + {0, y_centerdis};
+				draw button_background at: next_location color: (next_selected and ((stage = PLAYER_DISCUSSION_TURN or stage = PLAYER_ACTION_TURN or stage = PLAYER_VR_EXPLORATION_TURN) and turn <= end_of_game)) ? selected_color:unselected_color size: shape.width / 4;
+				draw next_icon at: next_location + {100, 0} size: w_width / 8 color: (next_selected and ((stage = PLAYER_DISCUSSION_TURN or stage = PLAYER_ACTION_TURN or stage = PLAYER_VR_EXPLORATION_TURN) and turn <= end_of_game)) ? selected_color:unselected_color;
 			}
 	
 			graphics "Play Pause" visible: turn <= end_of_game {
-				pause_location <- {location.x - w_width / 2.5, location.y- w_height/8};
-				draw button_background at: pause_location + {0, y_centerdis} color: play_pause_selected ? selected_color:unselected_color size: shape.width / 4;
-				draw simulation.paused or about_to_pause ? play_icon : pause_icon at: simulation.paused or about_to_pause ? pause_location + {100,y_centerdis}: pause_location + {0, y_centerdis} color: play_pause_selected ? selected_color:unselected_color size: shape.width / 8;
+				pause_location <- {location.x - w_width / 2.5, location.y- w_height/8} + {0, y_centerdis};
+				draw button_background at: pause_location color: play_pause_selected ? selected_color:unselected_color size: shape.width / 4;
+				draw simulation.paused or about_to_pause ? play_icon : pause_icon at: simulation.paused or about_to_pause ? pause_location + {100,0}: pause_location color: play_pause_selected ? selected_color:unselected_color size: shape.width / 8;
 			}
 			
 			graphics "Button chart by village" visible: turn <= turn_see_indicators or always_display_chart_by_vil {
 				float x <- 2.0;
 				float y <- 0.5;
-				show_chart_vil_button <-  circle(w_width/8) at_location {x*w_width, location.y- w_height/8 + y_centerdis};
-				draw image_file(show_chart_by_vil ? "../../includes/icons/Visibility_off.png":"../../includes/icons/Visibility_on.png") color: show_chart_vil_selected ? selected_color:unselected_color size: w_width/3.5 at: show_chart_vil_button.location + {400,0};
+				show_chart_vil_button <-  circle(w_width/6) at_location {x*w_width + 400, location.y- w_height/8 + y_centerdis};
+				draw image_file(show_chart_by_vil ? "../../includes/icons/Visibility_off.png":"../../includes/icons/Visibility_on.png") color: show_chart_vil_selected ? selected_color:unselected_color size: w_width/3.5 at: show_chart_vil_button.location ;
 			}
 			
 			event #mouse_move {
