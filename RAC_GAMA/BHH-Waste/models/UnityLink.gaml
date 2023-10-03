@@ -143,12 +143,12 @@ global skills: [network]{
 	
 	//transformation of the position send by unity for the minimap on GAMA
 	point translate_coord(point p){
-		point o <- {2925.8, 3136.8};
+		point o <- {3148.3, 3186.2};
 		
-		float a <- 108.1418;
-		float b <- -6.1049;
-		float c <- 2.7580;
-		float d <- -113.8979;
+		float a <- 121.4599;
+		float b <- -2.5249;
+		float c <- 8.4725;
+		float d <- -103.2179;
 		
 		float x <- a*p.x + b*p.y + o.x;
 		float y <- c*p.x + d*p.y + o.y;

@@ -713,7 +713,7 @@ global {
 	action before_exploration_phase{
 		start_exploration_turn_time <- machine_time;
 		do update_indicators_unity;
-//		connect_to_unity <- true;
+		connect_to_unity <- true;
 		enter_or_exit_VR <- true;
 	}
 	
