@@ -10,7 +10,8 @@ public class ConnectionParameter
     public List<int> position;
     public List<int> world;
     public bool physics;
-
+    public string language;
+    public string mode;
 
     public static ConnectionParameter CreateFromJSON(string jsonString)
     {

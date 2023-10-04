@@ -14,6 +14,7 @@ public class GlobalTest : TCPConnector
     public GameObject Ground;
     public GameObject WasteDisplayM;
     public GameObject WasteCollectionI;
+    public GameObject ModeConfigM;
 
     public List<GameObject> Agents;
 
@@ -73,6 +74,8 @@ public class GlobalTest : TCPConnector
 
     private WasteCollectionInfo wci;
 
+    private ModeConfig mc;
+
 
     // Start is called before the first frame update
     void Start()
@@ -90,6 +93,7 @@ public class GlobalTest : TCPConnector
 
        dm = WasteDisplayM.GetComponent<DisplayManagement>();
        wci = WasteCollectionI.GetComponent<WasteCollectionInfo>();
+       mc = ModeConfigM.GetComponent<ModeConfig>();
        }
 
 
@@ -337,6 +341,8 @@ public class GlobalTest : TCPConnector
             SendMessageToServer("ok");
             initialized = true;
             //playerPositionUpdate = true;
+            mc.language = parameters.language;
+            mc.mode = parameters.mode;
 
         }
         else if (mes.Contains("points"))

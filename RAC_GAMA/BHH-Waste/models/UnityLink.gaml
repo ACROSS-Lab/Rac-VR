@@ -75,6 +75,9 @@ global skills: [network]{
 	
 	bool connected_to_unity <- false;
 	
+	string language;
+	string mode;
+	
 	/*************************************** 
 	 *
 	 * PARAMETERS ABOUT THE PLAYER
@@ -224,7 +227,9 @@ global skills: [network]{
 		to_send <+ "world"::[world.shape.width * precision, world.shape.height * precision];
 		to_send <+ "delay"::delay_after_mes;
 		to_send <+ "physics"::use_physics_for_player;
-		to_send <+ "position"::[int(location_init.x*precision), int(location_init.y*precision)];
+//		to_send <+ "position"::[int(location_init.x*precision), int(location_init.y*precision)];
+		to_send <+ "langage"::language;
+		to_send <+ "mode"::mode;
 
 		if unity_client = nil {
 			write "no client to send to";
@@ -346,8 +351,8 @@ global skills: [network]{
 		}
 		message_ags<-message_agents(ags) ;
 			
-		//to_send <+ "date"::"" + current_date;
-		//to_send <+ "agents"::message_ags;
+		to_send <+ "date"::"" + current_date;
+		to_send <+ "agents"::message_ags;
 		to_send <+ "position"::player_position;
 		player_position <- [];
 		

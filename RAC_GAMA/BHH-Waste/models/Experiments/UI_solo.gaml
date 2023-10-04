@@ -492,7 +492,7 @@ experiment Open {
 	action _init_ {
 		//Requires latest version of GAMA 1.8.2
 		//map<string, unknown> params <- user_input_dialog("Welcome to RÁC",[enter("Dark theme",true), choose("Language", string, "English",["English","Français","Tiếng Việt"])], font("Helvetica",18, #bold), nil, false);
-		map<string, unknown> params <- user_input_dialog("Welcome to RÁC",[choose("Language", string, "English",["English","Français","Tiếng Việt"])], ui_font, map_background, false);
+		map<string, unknown> params <- user_input_dialog("Welcome to RÁC",[choose("Mode", string, "Demo_01",["Demo_01", "Demo_02"]), choose("Language", string, "eng",["eng","fr","vn"])], ui_font, map_background, false);
 		gama.pref_display_slice_number <- 12; /* 128 too slow ! */
 		gama.pref_display_show_rotation <- false;
 		gama.pref_display_show_errors <- false;
@@ -501,7 +501,7 @@ experiment Open {
 		gama.pref_errors_in_editor <- false;
 		gama.pref_display_numkeyscam <- false;
 		//create simulation with: [dark_theme::bool(params["Dark theme"]), langage::params["Language"]];
-		create simulation with: [langage::params["Language"]];
+		create simulation with: [mode::params["Mode"], language::params["Language"]];
 	}
 
 	output {
