@@ -228,7 +228,7 @@ global skills: [network]{
 		to_send <+ "delay"::delay_after_mes;
 		to_send <+ "physics"::use_physics_for_player;
 //		to_send <+ "position"::[int(location_init.x*precision), int(location_init.y*precision)];
-		to_send <+ "langage"::language;
+		to_send <+ "language"::language;
 		to_send <+ "mode"::mode;
 
 		if unity_client = nil {
