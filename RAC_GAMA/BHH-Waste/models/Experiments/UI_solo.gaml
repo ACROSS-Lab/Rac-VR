@@ -147,6 +147,7 @@ global {
 	image_file minimap <- image_file("../../includes/icons/mini_map.png");
 	image_file player <- image_file("../../includes/icons/Icone_Player.png");
 	image_file interest <- image_file("../../includes/icons/Icone_PointOfInterest.png");
+	image_file logo_rac <- image_file("../../includes/icons/logo_RAC.png");
 
 	/********************** VARIOUS FUNCTIONS  ***************************/
 
@@ -625,6 +626,8 @@ experiment Open {
 	
 			graphics "Stage"  {
 				image_file icon;
+				point size <- {w_width /3, w_width /3};
+				point location_icon <- {location.x, location.y-w_height/8 + y_centerdis};
 				if (stage = PLAYER_DISCUSSION_TURN) {
 					icon <- discussion_icon; 
 				} else if (stage = PLAYER_ACTION_TURN) {
@@ -635,10 +638,14 @@ experiment Open {
 					}
 				} else if (stage = PLAYER_VR_EXPLORATION_TURN) {
 					icon <- vr_icon;
-				} else {
+				} else if (stage = COMPUTE_INDICATORS){
 					icon <- computer_icon;
+				} else {
+					icon <- logo_rac;
+					size <- {w_width /2.25, w_width /3};
+					location_icon <- {location.x, location.y-w_height/6 + y_centerdis};
 				}
-				draw icon size: w_width / 3 at:  {location.x, location.y-w_height/8 + y_centerdis};
+				draw icon size: size at: location_icon;
 			}
 			
 			graphics "Money" position: {0,0 } visible: CHOOSING_VILLAGE_FOR_POOL {
@@ -646,10 +653,10 @@ experiment Open {
 				draw ""+commune_money  at: {location.x, location.y- 6*radius/10 + y_centerdis, 0.01}  color: dark_theme ? #gold : rgb (225, 126, 21, 255) font: ui_font anchor: #bottom_center;
 			}
 	
-			graphics "Next" transparency: ((stage = PLAYER_DISCUSSION_TURN or stage = PLAYER_ACTION_TURN or stage = PLAYER_VR_EXPLORATION_TURN) and turn <= end_of_game) ? 0 : 0.6 {
+			graphics "Next" transparency: (((stage = STARTING_STATE and connected_to_unity) or stage = PLAYER_DISCUSSION_TURN or stage = PLAYER_ACTION_TURN or stage = PLAYER_VR_EXPLORATION_TURN ) and turn <= end_of_game) ? 0 : 0.6 {
 				next_location <- {location.x + w_width / 2.5,  location.y-w_height/8} + {0, y_centerdis};
-				draw button_background at: next_location color: (next_selected and ((stage = PLAYER_DISCUSSION_TURN or stage = PLAYER_ACTION_TURN or stage = PLAYER_VR_EXPLORATION_TURN) and turn <= end_of_game)) ? selected_color:unselected_color size: shape.width / 4;
-				draw next_icon at: next_location + {100, 0} size: w_width / 8 color: (next_selected and ((stage = PLAYER_DISCUSSION_TURN or stage = PLAYER_ACTION_TURN or stage = PLAYER_VR_EXPLORATION_TURN) and turn <= end_of_game)) ? selected_color:unselected_color;
+				draw button_background at: next_location color: (next_selected and (((stage = STARTING_STATE and connected_to_unity) or stage = PLAYER_DISCUSSION_TURN or stage = PLAYER_ACTION_TURN or stage = PLAYER_VR_EXPLORATION_TURN) and turn <= end_of_game)) ? selected_color:unselected_color size: shape.width / 4;
+				draw next_icon at: next_location + {100, 0} size: w_width / 8 color: (next_selected and (((stage = STARTING_STATE and connected_to_unity) or stage = PLAYER_DISCUSSION_TURN or stage = PLAYER_ACTION_TURN or stage = PLAYER_VR_EXPLORATION_TURN) and turn <= end_of_game)) ? selected_color:unselected_color;
 			}
 	
 			graphics "Play Pause" visible: turn <= end_of_game {
@@ -797,7 +804,11 @@ experiment Open {
 						if (turn > end_of_game) {
 							return;
 						}
-						if (stage = PLAYER_DISCUSSION_TURN) {
+						if (stage = STARTING_STATE and connected_to_unity) {
+							ask simulation {
+								stage <- COMPUTE_INDICATORS;
+							}
+						} else if (stage = PLAYER_DISCUSSION_TURN) {
 							ask simulation {
 								do end_of_discussion_phase;
 							}

@@ -62,7 +62,8 @@ global {
 	
 	
 	//string type_of_map_display <- MAP_SOLID_WASTE;// category: "Display" among: ["Map of solid waste", "Map of waster waste", "Map of total pollution", "Map of agricultural productivity"] parameter: "Type of map display" ;//on_change: update_display;
-	string stage <- COMPUTE_INDICATORS;
+//	string stage <- COMPUTE_INDICATORS;
+	string stage <- STARTING_STATE;
 	int commune_money <- 0;
 	int index_player <- 0;
 	int action_type <- -1;	
@@ -713,7 +714,7 @@ global {
 	action before_exploration_phase{
 		start_exploration_turn_time <- machine_time;
 		do update_indicators_unity;
-		connect_to_unity <- true;
+//		connect_to_unity <- true;
 		enter_or_exit_VR <- true;
 	}
 	
@@ -904,6 +905,7 @@ global {
 		
 	}
 	
+
 	action end_of_discussion_phase {
 		stage <- PLAYER_ACTION_TURN;
 		ask villages_order[0] {do start_turn;}
@@ -942,7 +944,6 @@ global {
 		}
 		
 	}
-	
 	
 	
 //REFLEXES

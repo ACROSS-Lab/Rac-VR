@@ -307,6 +307,7 @@ global {
 	string PLAYER_DISCUSSION_TURN <- "player discussion turn";
 	string PLAYER_VR_EXPLORATION_TURN <- "player exploration turn";
 	string COMPUTE_INDICATORS <-  "compute indicators";
+	string STARTING_STATE <- "starting state";
 		
 	string MAP_SOLID_WASTE <- "Map of solid waste";
 	string MAP_WATER_WASTE <- "Map of waster waste";

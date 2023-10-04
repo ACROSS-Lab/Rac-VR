@@ -17,7 +17,7 @@ global skills: [network]{
 	 ***************************************************/
 	 
 	//Activate the unity connection; if activated, the model will wait for an connection from Unity to start
-	bool connect_to_unity <- false;
+	bool connect_to_unity <- true;
 	
 	// connection port
 	int port <- 8000;
@@ -73,6 +73,7 @@ global skills: [network]{
 	
 	bool do_send_world <- false;
 	
+	bool connected_to_unity <- false;
 	
 	/*************************************** 
 	 *
@@ -205,6 +206,7 @@ global skills: [network]{
 			message s <- fetch_message();
 		}
 		write "connection established";
+		connected_to_unity <- true;
 		
 		if not empty(background_geoms) {
 			do send_geometries(background_geoms, background_geoms_heights,  background_geoms_colliders, background_geoms_names, precision);
