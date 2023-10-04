@@ -11,7 +11,7 @@ public class ModeConfig : MonoBehaviour
     // Start is called before the first frame update
     void Start()
     {
-        language = "en";
+        language = "eng";
         mode = "Demo_01";
     }
 
