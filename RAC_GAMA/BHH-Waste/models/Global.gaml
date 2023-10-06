@@ -718,12 +718,11 @@ global {
 			do update_indicators_unity;
 			enter_or_exit_VR <- true;
 		}
+		write sample(village_soil_solid_pollution);
+		write sample(village_canal_solid_pollution);
 	}
 	
 	action update_indicators_unity{
-		
-		write sample(village_soil_solid_pollution);
-		write sample(village_canal_solid_pollution);
 		
 		productionClass <- production_class(village_production);
 		

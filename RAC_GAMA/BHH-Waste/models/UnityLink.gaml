@@ -64,7 +64,7 @@ global skills: [network]{
 //	list<float> waterwasteValue;
 	
 	// Information received from Unity
-	int choice <- 0;
+	int choice <- -1;
 	int nb_waste;
 	
 	//allows to manage during which phase GAMA sends/receives information
