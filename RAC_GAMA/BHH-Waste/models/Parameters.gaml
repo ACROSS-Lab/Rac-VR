@@ -97,8 +97,8 @@ global {
 	float coeff_visu_canal <- 3.0;  //coeff used to define the color of the canal according to the pollution
 	float coeff_visu_productivity <- 150 /factor_productivity;
 	bool show_pol_chart_by_cat_glob;
-	bool always_display_sub_charts <- true const: true;
-	bool always_display_chart_by_vil <- true const: true;
+	bool always_display_sub_charts <- true; //true when testing, false for a game: sub charts appear in the dsicussion phase
+	bool always_display_chart_by_vil <- true const: true; //give the possibility to see the chart divided by village
 	
 	/********* PARAMETERS RELATED TO WATER FLOW (WASTE DIFFUSION) IN THE CANAL *******/
 	
@@ -199,9 +199,14 @@ global {
 	
 	/********************** PARAMETERS RELATED TO DEMO ****************************/
 	
-	bool isDemo;
-	bool collect_on_ground <- false;
-	bool collect_in_canal <- false;
-	float collection_ground_solid_waste_rate <- 0.9925 min: 0.0 max: 1.0;
-	float collection_canal_solid_waste_rate <- 0.999 min: 0.0 max: 1.0;
-}
+	bool isDemo <- true;
+	bool collect_on_ground <- false; //player chose to collect waste on the ground
+	bool collect_in_canal <- false; //player chose to collect waste in the canal
+	float high_collection_ground_solid_waste <- 0.0075 min: 0.0 max: 1.0; //proportion of waste collected on the ground per inhabitants in a high collection scenario
+	float mid_collection_ground_solid_waste <- 0.0035 min: 0.0 max: 1.0; //proportion of waste collected on the ground per inhabitants in a mid collection scenario
+	float low_collection_ground_solid_waste <- 0.0017 min: 0.0 max: 1.0; //proportion of waste collected on the ground per inhabitants in a low collection scenario
+	
+	float high_collection_canal_solid_waste <- 0.00100 min: 0.0 max: 1.0; //proportion of waste collected in the canal per inhabitants in a high collection scenario
+	float mid_collection_canal_solid_waste <- 0.00050 min: 0.0 max: 1.0; //proportion of waste collected in the canal per inhabitants in a mid collection scenario
+	float low_collection_canal_solid_waste <- 0.00015 min: 0.0 max: 1.0; //proportion of waste collected in the canal per inhabitants in a low collection scenario
+	}

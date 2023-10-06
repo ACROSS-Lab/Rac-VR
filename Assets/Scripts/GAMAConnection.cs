@@ -14,6 +14,7 @@ public class GlobalTest : TCPConnector
     public GameObject Ground;
     public GameObject WasteDisplayM;
     public GameObject WasteCollectionI;
+    public GameObject ModeConfigM;
 
     public List<GameObject> Agents;
 
@@ -67,11 +68,13 @@ public class GlobalTest : TCPConnector
 
     private PolygonGenerator polyGen;
 
-    private int village_id = 2;
+    private int village_id;
 
     private static DisplayManagement dm;
 
     private WasteCollectionInfo wci;
+
+    private ModeConfig mc;
 
 
     // Start is called before the first frame update
@@ -90,6 +93,7 @@ public class GlobalTest : TCPConnector
 
        dm = WasteDisplayM.GetComponent<DisplayManagement>();
        wci = WasteCollectionI.GetComponent<WasteCollectionInfo>();
+       mc = ModeConfigM.GetComponent<ModeConfig>();
        }
 
 
@@ -209,9 +213,14 @@ public class GlobalTest : TCPConnector
         }
         if (initialized && wci.sendInfoWasteCollection && receiveInformation)
         {
-            SendChoice();
-            SendNbWaste();
+            SendChoiceAndNbWaste();
             wci.sendInfoWasteCollection = false;
+        }
+        if (initialized && wci.pointInterstVisited && receiveInformation)
+        {
+            Debug.Log("enter");
+            SendEndDialogue();
+            wci.pointInterstVisited = false;
         }
         if (infoWorld != null && receiveInformation)
         {
@@ -239,8 +248,8 @@ public class GlobalTest : TCPConnector
         // SendMessageToServer("{\"position\":[" + p[0] + "," + p[1] + "]" + "}");
     }
 
-    private void SendChoice()
-    {
+    private void SendChoiceAndNbWaste()
+    {   
         int choice_int = -1; // 0 : ground, 1 : river, -1 : default
         if (wci.ground_choice) 
         {
@@ -250,13 +259,13 @@ public class GlobalTest : TCPConnector
         {
             choice_int = 1;
         }
-        SendMessageToServer("{\"choice\": " + choice_int + "}");
+        SendMessageToServer("{\"choice\": " + choice_int + ",\"nb_waste\": " + wci.nb_waste + "}");
     }
 
-    private void SendNbWaste()
-    {
-        SendMessageToServer("{\"nb_waste\": " + wci.nb_waste + "}");
+    private void SendEndDialogue(){
+        SendMessageToServer("{\"point_of_interest\": " + wci.pointInterestIndex + "}");
     }
+
     private void UpdateAgentList()
     {
         if (infoWorld.position.Count == 2)
@@ -332,7 +341,16 @@ public class GlobalTest : TCPConnector
             SendMessageToServer("ok");
             initialized = true;
             //playerPositionUpdate = true;
-
+            mc.language = parameters.language;
+            mc.mode = parameters.mode;
+            if (mc.mode == "Demo_01")
+            {
+                village_id = 2;
+            }
+            else if (mc.mode == "Demo_2")
+            {
+                village_id = 1;
+            }
         }
         else if (mes.Contains("points"))
         {
@@ -342,8 +360,6 @@ public class GlobalTest : TCPConnector
                 geoms = new List<GAMAGeometry>();
             }
             geoms.Add(g);
-
-
         }
         else if (mes.Contains("agents") && parameters != null)
         {

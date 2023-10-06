@@ -17,7 +17,7 @@ global skills: [network]{
 	 ***************************************************/
 	 
 	//Activate the unity connection; if activated, the model will wait for an connection from Unity to start
-	bool connect_to_unity <- true;
+	bool connect_to_unity <- false;
 	
 	// connection port
 	int port <- 8000;
@@ -55,22 +55,29 @@ global skills: [network]{
 	list<int> solidwasteSoilClass;
 	list<int> solidwasteCanalClass;
 	list<int> waterwasteCanalClass;
-	list<float> waterwasteVillageValue;
-	list<float> waterwasteCanalValue;
+//	list<float> waterwasteVillageValue;
+//	list<float> waterwasteCanalValue;
 	
 	list<int> solidwasteClass;
 	list<int> waterwasteClass;
 	list<int> productionClass;
+//	list<float> waterwasteValue;
 	
-	list<float> waterwasteValue;
-	
+	// Information received from Unity
 	int choice <- -1;
 	int nb_waste;
-		
-	bool classUpdatedTour <- false;
-	bool enter_or_exit_VR <- false;
+	
+	//allows to manage during which phase GAMA sends/receives information
+	bool classUpdatedTour <- false; //for sending the indicators information only once after the indicators computation stage
+	bool enter_or_exit_VR <- false; //for receiving position only in the VR phase
 	
 	bool do_send_world <- false;
+	
+	bool connected_to_unity <- false;
+	
+	string language;
+	string mode;
+	
 	/*************************************** 
 	 *
 	 * PARAMETERS ABOUT THE PLAYER
@@ -94,23 +101,14 @@ global skills: [network]{
 	
 	//player rotation - only used for displaying the player in GAMA
 	int rotation_player <- 0;
-
-		
-	float t1;
-	float t2;
-	float t3;
-	float t4;
-	float t5;
-	float t6;
-	float t7;
-	float t8;
-	float t9;
-	float t10;
-
-	/* 
-	 * PRIVATE VARIABLES ONLY USED INTERNALLY
-	 */
 	
+	
+	/*************************************** 
+	 *
+	 * PRIVATE VARIABLES ONLY USED INTERNALLY
+	 * 
+	 ***************************************/
+	 
 	//message send by Unity to tell GAMA that it is ready
 	string READY <- "ready" const: true;
 
@@ -135,19 +133,33 @@ global skills: [network]{
 	//the last received position of the player ([x,y,rotation])
 	list<int> player_position <- [];
 	
+	//Benchmark	
+	float t1;
+	float t2;
+	float t3;
+	
+	
+	/*************************************** 
+	 *
+	 * ACTIONS
+	 * 
+	 ***************************************/
+	
+	//transformation of the position send by unity for the minimap on GAMA
 	point translate_coord(point p){
-		point o <- {2802.2, 3128.5};
+		point o <- {3148.3, 3186.2};
 		
-		float a <- 102.0821;
-		float b <- -2.2820;
-		float c <- 2.7507;
-		float d <- -113.9149;
+		float a <- 121.4599;
+		float b <- -2.5249;
+		float c <- 8.4725;
+		float d <- -103.2179;
 		
 		float x <- a*p.x + b*p.y + o.x;
 		float y <- c*p.x + d*p.y + o.y;
 		return {x,y} ;
 	}
 	
+	//used to display well the cone of vision
 	float transform_rot(float r){
 		return r - 90;
 	}
@@ -197,6 +209,7 @@ global skills: [network]{
 			message s <- fetch_message();
 		}
 		write "connection established";
+		connected_to_unity <- true;
 		
 		if not empty(background_geoms) {
 			do send_geometries(background_geoms, background_geoms_heights,  background_geoms_colliders, background_geoms_names, precision);
@@ -214,7 +227,9 @@ global skills: [network]{
 		to_send <+ "world"::[world.shape.width * precision, world.shape.height * precision];
 		to_send <+ "delay"::delay_after_mes;
 		to_send <+ "physics"::use_physics_for_player;
-		to_send <+ "position"::[int(location_init.x*precision), int(location_init.y*precision)];
+//		to_send <+ "position"::[int(location_init.x*precision), int(location_init.y*precision)];
+		to_send <+ "language"::language;
+		to_send <+ "mode"::mode;
 
 		if unity_client = nil {
 			write "no client to send to";
@@ -336,8 +351,8 @@ global skills: [network]{
 		}
 		message_ags<-message_agents(ags) ;
 			
-		//to_send <+ "date"::"" + current_date;
-		//to_send <+ "agents"::message_ags;
+		to_send <+ "date"::"" + current_date;
+		to_send <+ "agents"::message_ags;
 		to_send <+ "position"::player_position;
 		player_position <- [];
 		
@@ -400,7 +415,7 @@ global skills: [network]{
 //	}
 	
 	action manage_message_from_unity(message s) {
-		write "s: " + s.contents;
+//		write "s: " + s.contents;
 		if (waiting_message != nil and string(s.contents) = waiting_message) {
 	    	receive_information <- true;
 //	    } else if  the_player != nil and move_player_from_unity and receive_information {
@@ -420,12 +435,17 @@ global skills: [network]{
 					the_player.rotation <- int(transform_rot(int(answer["rotation"])/precision));
 					the_player.location <- translate_coord({position[0]/precision, position[1]/precision});
 					the_player.to_display <- true;
-	//				write sample(the_player.rotation);
+//					write sample(the_player.location);
 				}
 			} else if answer contains_key "choice" {
+				write "s: " + s.contents;
 				choice <- int(answer["choice"]);
-			} else if answer contains_key "nb_waste" {
-				nb_waste <- int(answer['nb_waste']);
+				nb_waste <- int(answer["nb_waste"]);
+			} else if answer contains_key "point_of_interest" {
+				write "s: " + s.contents;
+				ask pointInterestManager {
+					do changeState(int(answer["point_of_interest"]));
+				}
 			}
 		}
 	}
@@ -445,10 +465,39 @@ global skills: [network]{
 	}	
 }
 
+species pointInterestManager {
+	list<pointInterest> points <- [];
+	
+	action changeState(int i) {
+		points[i].visited <- true;
+	}
+}
+
+species pointInterest {
+	rgb color <- rgb(217, 104, 76);
+	point location;
+	float size <- 300.0;
+	bool visited <- false;
+	pointInterestManager manager;
+	
+	action addSelfToManager {
+		add self to: manager.points;
+	}
+	
+	aspect default {
+		if !visited {
+			if file_exists("../../includes/icons/Icone_PointOfInterest.png")  {
+				draw image("../../includes/icons/Icone_PointOfInterest.png") size: {size, size} at: location + {0, 0, 5};
+			} else {
+				draw circle(size/2) at: location + {0, 0, 5} color: color;
+			}
+		}	
+	}
+}
 
 //Defaut species for the player
 species default_player {
-	rgb color <- #red;
+	rgb color <- rgb(223, 204, 76);
 	int rotation;
 	bool to_display <- true;
 	float cone_distance <- 2 * player_size_GAMA;

@@ -62,7 +62,8 @@ global {
 	
 	
 	//string type_of_map_display <- MAP_SOLID_WASTE;// category: "Display" among: ["Map of solid waste", "Map of waster waste", "Map of total pollution", "Map of agricultural productivity"] parameter: "Type of map display" ;//on_change: update_display;
-	string stage <- COMPUTE_INDICATORS;
+//	string stage <- COMPUTE_INDICATORS;
+	string stage <- STARTING_STATE;
 	int commune_money <- 0;
 	int index_player <- 0;
 	int action_type <- -1;	
@@ -83,6 +84,7 @@ global {
 	int current_day <- 0;
 	int days_with_ecolabel <- 0;
 	list<int> days_with_ecolabel_year <- [0];
+	int number_of_days_passed <- 0;
 	
 	float village1_solid_pollution update: village[0].canals sum_of each.solid_waste_level + village[0].cells sum_of each.solid_waste_level ;
 	float village1_water_pollution update: convertion_from_l_water_waste_to_kg_solid_waste * (village[0].canals sum_of each.water_waste_level + village[0].cells  sum_of each.water_waste_level)  ;
@@ -712,15 +714,15 @@ global {
 	
 	action before_exploration_phase{
 		start_exploration_turn_time <- machine_time;
-		do update_indicators_unity;
-		connect_to_unity <- true;
-		enter_or_exit_VR <- true;
+		if connect_to_unity {
+			do update_indicators_unity;
+			enter_or_exit_VR <- true;
+		}
+		write sample(village_soil_solid_pollution);
+		write sample(village_canal_solid_pollution);
 	}
 	
 	action update_indicators_unity{
-		
-//		write sample(village_soil_solid_pollution);
-//		write sample(village_canal_solid_pollution);
 		
 		productionClass <- production_class(village_production);
 		
@@ -904,6 +906,7 @@ global {
 		
 	}
 	
+
 	action end_of_discussion_phase {
 		stage <- PLAYER_ACTION_TURN;
 		ask villages_order[0] {do start_turn;}
@@ -944,12 +947,12 @@ global {
 	}
 	
 	
-	
 //REFLEXES
 	reflex indicators_computation when: stage = COMPUTE_INDICATORS {
 		float t <- machine_time;
 		
 		do compute_indicators;
+		
 		if (current_day mod data_frequency) = 0 {
 			do add_data;
 		}
@@ -958,11 +961,14 @@ global {
 		do manage_pollution_decrease;
 		//do manage_landfill;
 		do manage_daily_indicator;
+
+		current_day <- current_day + 1;
+		number_of_days_passed <- number_of_days_passed + 1;
+
 		do manage_end_of_indicator_computation;
 		
-		current_day <- current_day + 1; 
 		
-		t3<- t3 + machine_time - t;
+//		t3<- t3 + machine_time - t;
 	}
 	
 	/**
@@ -998,7 +1004,7 @@ global {
 					}
 	
 					days_with_ecolabel_year << 0;
-					current_day <- 1;
+					current_day <- 0;
 					step <- #day;
 
 					if not without_player {do tell(INDICATOR_COMPUTATION);}

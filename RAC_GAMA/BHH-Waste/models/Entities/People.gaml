@@ -44,14 +44,26 @@ species inhabitant {
 		
 		if solid_waste_canal > 0 {
 			if collect_in_canal {
-				closest_canal.solid_waste_level <- closest_canal.solid_waste_level * collection_canal_solid_waste_rate ;
+				if nb_waste >= 20 {
+					closest_canal.solid_waste_level <- closest_canal.solid_waste_level * (1 - high_collection_canal_solid_waste) ;
+				} else if 10 <= nb_waste {
+					closest_canal.solid_waste_level <- closest_canal.solid_waste_level * (1 - mid_collection_canal_solid_waste) ;
+				} else if 0 < nb_waste {
+					closest_canal.solid_waste_level <- closest_canal.solid_waste_level * (1 - low_collection_canal_solid_waste) ;
+				}
 			}
 			closest_canal.solid_waste_level <- closest_canal.solid_waste_level + solid_waste_canal;
 		}
 		if solid_waste_ground > 0 {
 			ask one_of(my_cells) {
 				if collect_on_ground {
-					solid_waste_level <- solid_waste_level * collection_ground_solid_waste_rate ;
+					if nb_waste >= 20 {
+						solid_waste_level <- solid_waste_level * (1 - high_collection_ground_solid_waste) ;
+					} else if 10 <= nb_waste {
+						solid_waste_level <- solid_waste_level * (1 - mid_collection_ground_solid_waste) ;
+					} else if 0 < nb_waste {
+						solid_waste_level <- solid_waste_level * (1 - low_collection_ground_solid_waste) ;
+					}
 				}
 				solid_waste_level <- solid_waste_level + solid_waste_ground;
 			}
@@ -85,6 +97,7 @@ species inhabitant {
 		}
 		
 	// WATER WASTE
+	
 		//Facility treatment effects
 		float rate_decrease_due_to_treatment <- 0.0;
 		if (my_village != nil and  my_village.treatment_facility_is_activated) {

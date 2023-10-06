@@ -184,7 +184,7 @@ MonoBehaviour:
           tooltip: 
           showInInspector: 0
           networkSync: 0
-          value: {fileID: 6823473464210672147, guid: 73ca3af20fa83d448bdaa44df4046c65, type: 3}
+          value: {fileID: 4821431296090497213, guid: 73ca3af20fa83d448bdaa44df4046c65, type: 3}
         - useVariable: 0
           name: 
           tooltip: 
@@ -684,7 +684,7 @@ SphereCollider:
     serializedVersion: 2
     m_Bits: 0
   m_LayerOverridePriority: 0
-  m_IsTrigger: 0
+  m_IsTrigger: 1
   m_ProvidesContacts: 0
   m_Enabled: 1
   serializedVersion: 3
