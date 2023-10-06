@@ -17,7 +17,7 @@ global skills: [network]{
 	 ***************************************************/
 	 
 	//Activate the unity connection; if activated, the model will wait for an connection from Unity to start
-	bool connect_to_unity <- true;
+	bool connect_to_unity <- false;
 	
 	// connection port
 	int port <- 8000;
@@ -64,7 +64,7 @@ global skills: [network]{
 //	list<float> waterwasteValue;
 	
 	// Information received from Unity
-	int choice <- -1;
+	int choice <- 0;
 	int nb_waste;
 	
 	//allows to manage during which phase GAMA sends/receives information

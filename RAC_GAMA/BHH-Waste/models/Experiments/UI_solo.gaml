@@ -71,7 +71,6 @@ global {
 	bool display_water_flow <- true;
 	stacked_chart global_chart;
 	int chosen_village <- -1;
-	int number_of_days_passed <- 0;
 	map<village,list<string>> village_actions <- nil;
 	
 	/****************** DISPLAY OF WATER DYNAMICS *****************************/ 
@@ -273,7 +272,6 @@ global {
 		time_for_discussion <- initial_time_for_discussion;
 		time_for_exploration <- initial_time_for_exploration;
 		pause_started_time <- 0.0;
-		number_of_days_passed <- number_of_days_passed + 1;
 	}
 
 	
