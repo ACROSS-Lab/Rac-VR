@@ -653,10 +653,10 @@ experiment Open {
 				draw ""+commune_money  at: {location.x, location.y- 6*radius/10 + y_centerdis, 0.01}  color: dark_theme ? #gold : rgb (225, 126, 21, 255) font: ui_font anchor: #bottom_center;
 			}
 	
-			graphics "Next" transparency: (((stage = STARTING_STATE and connected_to_unity) or stage = PLAYER_DISCUSSION_TURN or stage = PLAYER_ACTION_TURN or stage = PLAYER_VR_EXPLORATION_TURN ) and turn <= end_of_game) ? 0 : 0.6 {
+			graphics "Next" transparency: (((stage = STARTING_STATE and (connected_to_unity or !connect_to_unity)) or stage = PLAYER_DISCUSSION_TURN or stage = PLAYER_ACTION_TURN or stage = PLAYER_VR_EXPLORATION_TURN ) and turn <= end_of_game) ? 0 : 0.6 {
 				next_location <- {location.x + w_width / 2.5,  location.y-w_height/8} + {0, y_centerdis};
-				draw button_background at: next_location color: (next_selected and (((stage = STARTING_STATE and connected_to_unity) or stage = PLAYER_DISCUSSION_TURN or stage = PLAYER_ACTION_TURN or stage = PLAYER_VR_EXPLORATION_TURN) and turn <= end_of_game)) ? selected_color:unselected_color size: shape.width / 4;
-				draw next_icon at: next_location + {100, 0} size: w_width / 8 color: (next_selected and (((stage = STARTING_STATE and connected_to_unity) or stage = PLAYER_DISCUSSION_TURN or stage = PLAYER_ACTION_TURN or stage = PLAYER_VR_EXPLORATION_TURN) and turn <= end_of_game)) ? selected_color:unselected_color;
+				draw button_background at: next_location color: (next_selected and (((stage = STARTING_STATE and (connected_to_unity or !connect_to_unity)) or stage = PLAYER_DISCUSSION_TURN or stage = PLAYER_ACTION_TURN or stage = PLAYER_VR_EXPLORATION_TURN) and turn <= end_of_game)) ? selected_color:unselected_color size: shape.width / 4;
+				draw next_icon at: next_location + {100, 0} size: w_width / 8 color: (next_selected and (((stage = STARTING_STATE and (connected_to_unity or !connect_to_unity)) or stage = PLAYER_DISCUSSION_TURN or stage = PLAYER_ACTION_TURN or stage = PLAYER_VR_EXPLORATION_TURN) and turn <= end_of_game)) ? selected_color:unselected_color;
 			}
 	
 			graphics "Play Pause" visible: turn <= end_of_game {
@@ -804,7 +804,7 @@ experiment Open {
 						if (turn > end_of_game) {
 							return;
 						}
-						if (stage = STARTING_STATE and connected_to_unity) {
+						if (stage = STARTING_STATE and (connected_to_unity or !connect_to_unity)) {
 							ask simulation {
 								stage <- COMPUTE_INDICATORS;
 							}

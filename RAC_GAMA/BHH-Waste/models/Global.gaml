@@ -137,7 +137,7 @@ global {
 	bool is_production_ok <- true;
 	bool is_pollution_ok <- true;
 	
-	int days <- 10;
+	int days <- 365;
 
 	/********************** INITIALIZATION OF THE GAME ****************************/
 
@@ -720,8 +720,8 @@ global {
 	
 	action update_indicators_unity{
 		
-//		write sample(village_soil_solid_pollution);
-//		write sample(village_canal_solid_pollution);
+		write sample(village_soil_solid_pollution);
+		write sample(village_canal_solid_pollution);
 		
 		productionClass <- production_class(village_production);
 		
