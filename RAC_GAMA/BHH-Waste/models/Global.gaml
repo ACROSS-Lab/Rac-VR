@@ -928,7 +928,7 @@ global {
 				do pause;
 			} else {
 				days_with_ecolabel_year << 0;
-				current_day <- 1;
+				current_day <- 0;
 				step <- #day;
 	
 				if not without_player {do tell(INDICATOR_COMPUTATION);}
