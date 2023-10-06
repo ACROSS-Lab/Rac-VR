@@ -8,14 +8,12 @@
 * Tags: 
 */
 
-model UI1
-
+model UI
 
  
 import "../Global.gaml"
  
 global {
-
 	bool dark_theme <- false;
 	
 	/********************** COLORS ************************************************/
@@ -23,18 +21,24 @@ global {
 	list<rgb> greens <- reverse(palette(rgb(43, 108, 1), rgb(103, 156, 36), rgb(141, 173, 39), rgb(172, 172, 37), rgb(235, 188, 86)));
 	list<rgb> blues <- reverse(palette(rgb(239, 243, 255), rgb(189, 215, 231), rgb(107, 174, 214), rgb(49, 130, 189), rgb(8, 81, 156)));
 	list<rgb> reds <- palette(rgb(254, 229, 217), rgb(252, 174, 145), rgb(251, 106, 74), rgb(222, 45, 38), rgb(165, 15, 21));
-	rgb landfill_color <- #chocolate;
 	rgb city_color <- rgb(228, 141, 104);
 	rgb selected_color <- rgb(255,255,255);
 	rgb unselected_color <-rgb(200,200,200,0.7);
 	list<rgb> village_color <- [rgb(183, 73, 77), rgb(255, 217, 67), rgb(65, 149, 205), rgb(80, 174, 76)]; // color for the 4 villages
 	map<string, rgb> color_col <- ["Production":: rgb(118, 189, 30), "Total"::rgb(253, 161, 69), "Water"::rgb(120, 172, 217), "Solid"::rgb(137, 100, 73)]; //color used when indicators are not broken down by villages
-	map<string, rgb> color_col_back <- ["Production":: rgb(231, 255, 140), "Total"::rgb(255, 225, 177), "Water"::rgb(213, 243, 243), "Solid"::rgb(229, 194, 163)];
-	//rgb map_background <- dark_theme ? #black: #white;
+	map<string, rgb> color_col_background <- ["Production":: rgb(231, 255, 140), "Total"::rgb(255, 225, 177), "Water"::rgb(213, 243, 243), "Solid"::rgb(229, 194, 163)];
 	rgb map_background <- rgb(248, 246, 245);
-	rgb map_background2 <- rgb(237, 234, 233);
-	rgb timer_background <- dark_theme ? rgb(60,60,60): rgb(200,200,200);
+	rgb map_background2 <- rgb(237, 234, 233); //bandeau
 	rgb legend_background <- dark_theme ? #black: #white; //rgb(60,60,60);
+	rgb timer_main <- rgb(29, 98, 223);
+	rgb timer_second <- rgb(205, 226, 242);
+	rgb calendar <- rgb(202, 56, 40);
+	rgb calendar_second <- rgb(236, 187, 175);
+	rgb ecolabel <- rgb(97, 180, 31);
+	rgb ecolabel_second <- rgb(174, 224, 128);
+	rgb river <- rgb(178, 193, 149);
+	rgb point_of_interest_color <- rgb(217, 104, 76);
+	rgb player_color <- rgb(223, 204, 76);
 	
 	/********************** PROPORTION OF THE DISPLAYS ****************************/
 	
@@ -55,7 +59,7 @@ global {
 	/********************** FONTS ************************************************/
 	// UNCOMMENT FOR THE LATEST VERSION IN GAMA 
 	int text_size -> #hidpi ? (#fullscreen ? 100 : 30) : (#fullscreen ? 50 : 30);
-	font ui_font -> font("Helvetica", text_size, #bold);
+	font ui_font -> font("Jaldi", text_size, #bold);
 	
 	/******************* GENERAL PARAMETERS *************************************/
 	
@@ -67,7 +71,6 @@ global {
 	bool display_water_flow <- true;
 	stacked_chart global_chart;
 	int chosen_village <- -1;
-	int number_of_days_passed <- 0;
 	map<village,list<string>> village_actions <- nil;
 	
 	/****************** DISPLAY OF WATER DYNAMICS *****************************/ 
@@ -80,12 +83,10 @@ global {
 	
 	bool use_timer_player_turn <- false;	
 	bool use_timer_for_discussion <- true;
-	bool use_timer_for_exploration <- true;
-	bool use_timer_for_estimation <- true;
+	bool use_timer_for_exploration <- false;
 	bool timer_just_for_warning <- false; //if true, if the timer is finished, just a warning message is displayed; if false, the turn passes to the next player - for the moment, some issue with the automatic change of step
-	float initial_time_for_discussion <- 0 #s const: true; // time before the player turns
-	float initial_time_for_exploration <- 0 #s const: true;
-	float initial_time_for_estimation <- 0 #mn const: true;
+	float initial_time_for_discussion <- 1 #mn const: true; // time before the player turns
+	float initial_time_for_exploration <- 5 #mn const: true;
 	float initial_time_for_choosing_village <- 20 #s const: true;
 	float time_for_choosing_village <- initial_time_for_choosing_village;
 	float start_choosing_village_time;
@@ -102,9 +103,8 @@ global {
 	bool show_chart_selected;
 	bool show_waterflow_selected;
 	bool show_chart_vil_selected;
-	bool show_geography <- true;
+	bool show_chart_by_vil <- false;
 	bool show_chart <- true;
-	bool show_chart_by_vil <- true; 
 	bool show_player_numbers <- true;
 	bool play_pause_selected <- false;
 	bool next_selected <- false;
@@ -143,71 +143,14 @@ global {
 	image_file line_threshold <- image_file("../../includes/icons/Line.png");
 	image_file ecolabel_icon <- image_file("../../includes/icons/Ecolabel_On.png");
 	image_file no_ecolabel_icon <- image_file("../../includes/icons/Ecolabel_Off.png");
+	image_file minimap <- image_file("../../includes/icons/mini_map.png");
+	image_file player <- image_file("../../includes/icons/Icone_Player.png");
+	image_file interest <- image_file("../../includes/icons/Icone_PointOfInterest.png");
+	image_file logo_rac <- image_file("../../includes/icons/logo_RAC.png");
 
 	/********************** VARIOUS FUNCTIONS  ***************************/
-	
-	image_file soil_pollution_smiley (float v) {
-		switch(v) {
-			match_between [0, 19999] {return smileys[0];}
-			match_between [20000, 29999] {return smileys[1];}
-			match_between [30000, 64999] {return smileys[2];}
-			match_between [65000, 90000] {return smileys[3];}
-			default {return smileys[4];}
-		}
-	}
 
-	image_file soil_pollution_class(village w) {
-		switch (int(w)) {
-			match 0 {return soil_pollution_smiley(village1_solid_pollution);}
-			match 1 {return soil_pollution_smiley(village2_solid_pollution);}
-			match 2 {return soil_pollution_smiley(village3_solid_pollution);}
-			match 3 {return soil_pollution_smiley(village4_solid_pollution);}
-		}
-		return smileys[0];
-	}
-	
-	image_file water_pollution_smiley(float w) {
-		switch(w) {
-			match_between [0, 4999] {return smileys[0];}
-			match_between [5000, 14999] {return smileys[1];}
-			match_between [15000, 29999] {return smileys[2];}
-			match_between [30000, 44999] {return smileys[3];}
-			default {return smileys[4];}
-		}
-	}
-	
-	image_file water_pollution_class(village w) {
-		switch (int(w)) {
-			match 0 {return water_pollution_smiley(village1_water_pollution);}
-			match 1 {return water_pollution_smiley(village2_water_pollution);}
-			match 2 {return water_pollution_smiley(village3_water_pollution);}
-			match 3 {return water_pollution_smiley(village4_water_pollution);}
-		}
-		return smileys[0];
-	}
-
-	image_file production_class_smiley (village v) {
-		float w <- village_production[int(v)];
-		if (int(v) = 0) {
-			switch(w) {
-				match_between [0, 199] {return smileys[4];}
-				match_between [200, 499] {return smileys[3];}
-				match_between [500, 799] {return smileys[2];}
-				match_between [800, 1149] {return smileys[1];}
-				default {return smileys[0];}
-			}
-		} else {
-			switch(w) {
-				match_between [0, 299] {return smileys[4];}
-				match_between [300, 699] {return smileys[3];}
-				match_between [700, 999] {return smileys[2];}
-				match_between [1000, 1499] {return smileys[1];}
-				default {return smileys[0];}
-			}
-		}
-	}
-
-
+	//for display on main map
 	int production_class_current(plot p) {
 		float w <- p.current_productivity; 
 		switch(w) {
@@ -219,6 +162,7 @@ global {
 		}
 	}
 	
+	//for display on main map
 	int water_pollution_class_current(canal p) {
 		float w <- p.pollution_density; 
 		switch(w) {
@@ -229,7 +173,6 @@ global {
 			default {return 4;}
 		}
 	}
-
 
 	action choose_village_for_pool {
 		if (not CHOOSING_VILLAGE_FOR_POOL) {
@@ -287,10 +230,13 @@ global {
 			do update_all(["Total"::total_value, "Water"::water_value, "Solid"::solid_value, "Production"::production_value]);
 		}
 	}
+
+
+	/********************** INITIALIZATION & REFLEXES ***************************/
 	
 	init {
 		create stacked_chart {
-			show_pol_chart_by_cat_glob <- always_display_sub_charts ? true : false ;
+			show_pol_chart_by_cat_glob <- always_display_sub_charts ;
 			desired_value <- 1.0;
 			max_value <- ["Production"::2.0, "Total"::2.0, "Water"::0.70, "Solid"::1.78];
 			do add_column("Production");
@@ -308,24 +254,31 @@ global {
 		}
 		global_chart <- stacked_chart[0];
 
+		always_display_sub_charts <- true;
+		
+		create pointInterestManager;
+		create pointInterest {
+			location <- {3189.6, 2823.6};
+			manager <- first(pointInterestManager);
+			do addSelfToManager;
+		}
 	}
 
 	reflex update_charts when: stage = COMPUTE_INDICATORS{
 		village_actions <- nil;
 		do update_chart_by_vil(global_chart);
-		
-		// TODO remove this at some point ! 
+ 
 		time_for_discussion <- initial_time_for_discussion;
 		time_for_exploration <- initial_time_for_exploration;
 		pause_started_time <- 0.0;
-		number_of_days_passed <- number_of_days_passed + 1;
 	}
+
 	
 	reflex end_of_exploration_turn when: use_timer_for_exploration and stage = PLAYER_VR_EXPLORATION_TURN {
-		if turn = turn_see_indicators +1 {
-			//show_chart_by_vil <- false;
+		if turn = turn_see_indicators +1 and !always_display_chart_by_vil{
+			show_chart_by_vil <- false;
 		}
-		remaining_time <- int(time_for_exploration - machine_time/1000.0 + start_exploration_turn_time/1000.0); 
+		remaining_time <- int(time_for_exploration - machine_time/1000.0 + start_exploration_turn_time/1000.0);
 		if remaining_time <= 0 {
 			do end_of_exploration_phase;
 			if !always_display_sub_charts {
@@ -333,7 +286,6 @@ global {
 			}
 		}
 	}
-
 	
 	reflex end_of_discussion_turn when: use_timer_for_discussion and stage = PLAYER_DISCUSSION_TURN {
 		remaining_time <- int(time_for_discussion - machine_time/1000.0 + start_discussion_turn_time/1000.0); 
@@ -385,7 +337,6 @@ global {
 	}
 }
 
-
 species waste_on_canal skills: [moving]{
 	point target;
 	point prev_loc <- copy(location);
@@ -402,8 +353,8 @@ species waste_on_canal skills: [moving]{
 
 species stacked_chart {
 	point location <- {w_width/2 ,w_height/2};
-	map<string, float> data <- [];	
-	map<string, map<rgb,float>> data2 <- [];
+	map<string, float> data <- [];	//not by village
+	map<string, map<rgb,float>> data2 <- []; //by village
 	map<string, image_file> icons <- [];
 	map<string, bool> inf_or_sup ;
 	map<string, bool> draw_smiley;
@@ -426,19 +377,21 @@ species stacked_chart {
 		}
  	}
 	
+	//update values by villages
  	action update_all2(rgb element, map<string, float> values) {
  		loop col over: data2.keys {
  			data2[col][element] <- values[col];
  		}
  	}
  	
+ 	//update values not by villages
  	action update_all(map<string, float> values) {
  		loop col over: data.keys {
  			data[col] <- values[col];
  		}
- 	}	
+	}
  	
- 	reflex update_show_pol_by_cat {
+ 	reflex update_show_pol_by_cat when: !always_display_sub_charts {
  		show_pol_chart_by_cat <- show_pol_chart_by_cat_glob;
  	}
  	
@@ -483,7 +436,7 @@ species stacked_chart {
  				float v <- data[col];
 				total <- total+v;
 				float col_height <- (v * max_heights[col])/max_value[col];
-				draw rectangle(col_width,max_heights[col]) color: color_col_back[col] at: {current_x, y_rect[col]};
+				draw rectangle(col_width,max_heights[col]) color: color_col_background[col] at: {current_x, y_rect[col]};
 				draw rectangle(col_width,col_height) color: color_col[col] at: {current_x,my_height  + current_y - col_height/2};
 				//draw rectangle(col_width,col_height) wireframe: true border: dark_theme ? #black : #black width: 2 at: {current_x,my_height  + current_y -  col_height/2};
 				current_y <- current_y - col_height;
@@ -514,26 +467,29 @@ species stacked_chart {
  			current_x <- current_x + col_width + gap;
  		}
  		if (total_pol <= 1 and total_prod > 1) {
-			draw ecolabel_icon at: {original_col_width*1.75, my_height-2.25*original_col_width} size: 1500;
+			draw ecolabel_icon at: {original_col_width*1.75, my_height-2.25*original_col_width} size: {1300, 1600};
 		} 
 		else {
-			draw no_ecolabel_icon at: {original_col_width*1.75, my_height-2.25*original_col_width} size: 1500;
+			draw no_ecolabel_icon at: {original_col_width*1.75, my_height-2.25*original_col_width} size: {1300, 1600};
 		}
  				
  		draw line({-original_col_width/2, 3* chart_height / 2 - max_heights["Production"]/2}, {original_col_width/2, 3* chart_height / 2 - max_heights["Production"]/2}) width:20 color: map_background ;
  		draw line({original_col_width/2 + gap, 3* chart_height / 2 - max_heights["Production"]/2}, {3*original_col_width/2 + gap, 3* chart_height / 2 - max_heights["Production"]/2}) width:20 color: map_background;
  	}
-}
-
+} 
 
 experiment Open {
+	
+	action affiche_coord {
+		write sample(#user_location);
+	}
 	
 	int ambient_intensity <- 100;
 	
 	action _init_ {
 		//Requires latest version of GAMA 1.8.2
 		//map<string, unknown> params <- user_input_dialog("Welcome to RÁC",[enter("Dark theme",true), choose("Language", string, "English",["English","Français","Tiếng Việt"])], font("Helvetica",18, #bold), nil, false);
-		map<string, unknown> params <- user_input_dialog("Welcome to RÁC",[enter("Dark theme",true), choose("Language", string, "English",["English","Français","Tiếng Việt"])], font("Helvetica",18, #bold), #white);
+		map<string, unknown> params <- user_input_dialog("Welcome to RÁC",[choose("Language", string, "eng",["eng","fr","vn"])], ui_font, map_background, false);
 		gama.pref_display_slice_number <- 12; /* 128 too slow ! */
 		gama.pref_display_show_rotation <- false;
 		gama.pref_display_show_errors <- false;
@@ -542,7 +498,7 @@ experiment Open {
 		gama.pref_errors_in_editor <- false;
 		gama.pref_display_numkeyscam <- false;
 		//create simulation with: [dark_theme::bool(params["Dark theme"]), langage::params["Language"]];
-		create simulation with: [langage::params["Language"]];
+		create simulation with: [language::params["Language"]];
 	}
 
 	output {
@@ -562,13 +518,13 @@ experiment Open {
 				float radius <- w_width/1.5;
 				float start_angle <-  - 180.0;
 				float arc_angle <- (value * 180/total);
-				draw arc(radius, start_angle + arc_angle/2, arc_angle) color: rgb(202, 56, 40);
+				draw arc(radius, start_angle + arc_angle/2, arc_angle) color: calendar;
 				start_angle <- start_angle + arc_angle;
 				arc_angle <- (total - value) * 180/total;
-				draw arc(radius, start_angle + arc_angle/2, arc_angle) color: rgb(236, 187, 175);
+				draw arc(radius, start_angle + arc_angle/2, arc_angle) color: calendar_second;
 				draw arc(radius/2, -90, 180) color: #white;
 				draw calendar_icon size: w_width / 6;
-				draw ""+value + " [" +value div 365 + "]" at: {location.x, location.y- 6*radius/10, 0.01}  color: rgb(202, 56, 40) font: ui_font anchor: #bottom_center;
+				draw ""+value + " [" +value div 365 + "]" at: {location.x, location.y- 6*radius/10, 0.01}  color: calendar font: ui_font anchor: #bottom_center;
 			}
 					
 			graphics "Score#" position: {w_width, y_centerdis}{
@@ -577,34 +533,34 @@ experiment Open {
 				float radius <- w_width/1.5;
 				float start_angle <-  - 180.0;
 				float arc_angle <- (value * 180/total);
-				draw arc(radius, start_angle + arc_angle/2, arc_angle) color: rgb(97, 180, 31);
+				draw arc(radius, start_angle + arc_angle/2, arc_angle) color: ecolabel;
 				start_angle <- start_angle + arc_angle;
 				arc_angle <- (total - value) * 180/total;
-				draw arc(radius, start_angle + arc_angle/2, arc_angle) color: rgb(174, 224, 128);
+				draw arc(radius, start_angle + arc_angle/2, arc_angle) color: ecolabel_second;
 				draw arc(radius/2, -90, 180) color: #white;
 				draw label_icon size: w_width / 5;
-				draw ""+value  at: {location.x, location.y- 6*radius/10, 0.01}  color: rgb(97, 180, 31) font: ui_font anchor: #bottom_center;
+				draw ""+value  at: {location.x, location.y- 6*radius/10, 0.01}  color: ecolabel font: ui_font anchor: #bottom_center;
 			}
 		
-			graphics "Timer for the discussion" visible: stage = PLAYER_DISCUSSION_TURN and turn <= end_of_game {
+			graphics "Timer for the discussion" visible: stage = PLAYER_DISCUSSION_TURN and turn <= end_of_game and use_timer_for_discussion {
 				float y <- location.y + w_height/5 + y_centerdis;
 				float left <- location.x - w_width/2;
 				float right <- location.x + w_width/2;
-				draw "" + int(remaining_time) + "s" color: dark_theme ? #white : #black font: ui_font anchor: #left_center at: {right + 500, y};
-				draw line({left, y}, {right, y}) buffer (100, 200) color: rgb(205, 226, 242);
+				draw "" + int(remaining_time) + " s" color: timer_main font: ui_font anchor: #left_center at: {right + 500, y};
+				draw line({left, y}, {right, y}) buffer (100, 200) color: timer_second;
 				float width <- (initial_time_for_discussion - remaining_time) * (right - left) / (initial_time_for_discussion);
-				draw line({left, y}, {left + width, y}) buffer (100, 200) color: rgb(29, 98, 223);
+				draw line({left, y}, {left + width, y}) buffer (100, 200) color: timer_main;
 				draw sandclock_icon /*rotate: (180 - remaining_time)*3*/ at: {left + width, y} size: w_height / 6;
 			}
 			
-			graphics "Timer for the exploration" visible: stage = PLAYER_VR_EXPLORATION_TURN and turn <= end_of_game {
+			graphics "Timer for the exploration" visible: stage = PLAYER_VR_EXPLORATION_TURN and turn <= end_of_game and use_timer_for_exploration{
 				float y <- location.y + w_height/5 + y_centerdis;
 				float left <- location.x - w_width/2;
 				float right <- location.x + w_width/2;
-				draw "" + int(remaining_time) + "s" color: dark_theme ? #white : #black font: ui_font anchor: #left_center at: {right + 500, y};
-				draw line({left, y}, {right, y}) buffer (100, 200) color: rgb(205, 226, 242);
+				draw "" + int(remaining_time) + " s" color: timer_main font: ui_font anchor: #left_center at: {right + 500, y};
+				draw line({left, y}, {right, y}) buffer (100, 200) color: timer_second;
 				float width <- (initial_time_for_exploration - remaining_time) * (right - left) / (initial_time_for_exploration);
-				draw line({left, y}, {left + width, y}) buffer (100, 200) color: rgb(29, 98, 223);
+				draw line({left, y}, {left + width, y}) buffer (100, 200) color: timer_main;
 				draw sandclock_icon /*rotate: (180 - remaining_time)*3*/ at: {left + width, y} size: w_height / 6;
 			}
 			
@@ -612,10 +568,10 @@ experiment Open {
 				float y <- location.y + 3*w_height/8 + y_centerdis;
 				float left <- location.x - w_width/2;
 				float right <- location.x + w_width/2;
-				draw "" + int(remaining_time_for_choosing_village) + "s" color: rgb(205, 226, 242) font: ui_font anchor: #left_center at: {right + 500, y};
-				draw line({left, y}, {right, y}) buffer (100, 200) color: dark_theme ? #white : #gray;
+				draw "" + int(remaining_time_for_choosing_village) + " s" color: timer_main font: ui_font anchor: #left_center at: {right + 500, y};
+				draw line({left, y}, {right, y}) buffer (100, 200) color: timer_second ;
 				float width <- (initial_time_for_choosing_village - remaining_time_for_choosing_village) * (right - left) / (initial_time_for_choosing_village);
-				draw line({left, y}, {left + width, y}) buffer (100, 200) color: rgb(29, 98, 223);
+				draw line({left, y}, {left + width, y}) buffer (100, 200) color: timer_main;
 				draw sandclock_icon at: {left + width, y} size: w_height / 6;
 			}	
 	
@@ -654,7 +610,7 @@ experiment Open {
 				loop s over: (sort(actions_name_without_end, each)) {
 	
 					bool selected <- village_actions[v] != nil and village_actions[v] contains s;
-					write sample(selected) + " " + sample(village_actions[v]) + " " + sample(s) + " " + sample(village_actions) + " " + sample(v);
+					//write sample(selected) + " " + sample(village_actions[v]) + " " + sample(s) + " " + sample(village_actions) + " " + sample(v);
 					draw s color:  s = over_action or selected ? (dark_theme ? #white : #black) : (dark_theme ? rgb(255, 255, 255, 130) : rgb(0, 0, 0, 130)) font: ui_font anchor: #center at: {left + gap * index, y} depth: 1;
 					if (selected) {
 						draw circle(w_width / 10) wireframe: true width: 2 color: #black at: {left + gap * index, y, 0.1};
@@ -667,6 +623,8 @@ experiment Open {
 	
 			graphics "Stage"  {
 				image_file icon;
+				point size <- {w_width /3, w_width /3};
+				point location_icon <- {location.x, location.y-w_height/8 + y_centerdis};
 				if (stage = PLAYER_DISCUSSION_TURN) {
 					icon <- discussion_icon; 
 				} else if (stage = PLAYER_ACTION_TURN) {
@@ -677,10 +635,14 @@ experiment Open {
 					}
 				} else if (stage = PLAYER_VR_EXPLORATION_TURN) {
 					icon <- vr_icon;
-				} else {
+				} else if (stage = COMPUTE_INDICATORS){
 					icon <- computer_icon;
+				} else {
+					icon <- logo_rac;
+					size <- {w_width /2.25, w_width /3};
+					location_icon <- {location.x, location.y-w_height/6 + y_centerdis};
 				}
-				draw icon size: w_width / 3 at:  {location.x, location.y-w_height/8 + y_centerdis};
+				draw icon size: size at: location_icon;
 			}
 			
 			graphics "Money" position: {0,0 } visible: CHOOSING_VILLAGE_FOR_POOL {
@@ -688,23 +650,23 @@ experiment Open {
 				draw ""+commune_money  at: {location.x, location.y- 6*radius/10 + y_centerdis, 0.01}  color: dark_theme ? #gold : rgb (225, 126, 21, 255) font: ui_font anchor: #bottom_center;
 			}
 	
-			graphics "Next" transparency: ((stage = PLAYER_DISCUSSION_TURN or stage = PLAYER_ACTION_TURN or stage = PLAYER_VR_EXPLORATION_TURN) and turn <= end_of_game) ? 0 : 0.6 {
-				next_location <- {location.x + w_width / 2.5,  location.y-w_height/8};
-				draw button_background at: next_location + {0, y_centerdis} color: (next_selected and ((stage = PLAYER_DISCUSSION_TURN or stage = PLAYER_ACTION_TURN or stage = PLAYER_VR_EXPLORATION_TURN) and turn <= end_of_game)) ? selected_color:unselected_color size: shape.width / 4;
-				draw next_icon at: next_location + {100, y_centerdis} size: w_width / 8 color: (next_selected and ((stage = PLAYER_DISCUSSION_TURN or stage = PLAYER_ACTION_TURN or stage = PLAYER_VR_EXPLORATION_TURN) and turn <= end_of_game)) ? selected_color:unselected_color;
+			graphics "Next" transparency: (((stage = STARTING_STATE and (connected_to_unity or !connect_to_unity)) or stage = PLAYER_DISCUSSION_TURN or stage = PLAYER_ACTION_TURN or stage = PLAYER_VR_EXPLORATION_TURN ) and turn <= end_of_game) ? 0 : 0.6 {
+				next_location <- {location.x + w_width / 2.5,  location.y-w_height/8} + {0, y_centerdis};
+				draw button_background at: next_location color: (next_selected and (((stage = STARTING_STATE and (connected_to_unity or !connect_to_unity)) or stage = PLAYER_DISCUSSION_TURN or stage = PLAYER_ACTION_TURN or stage = PLAYER_VR_EXPLORATION_TURN) and turn <= end_of_game)) ? selected_color:unselected_color size: shape.width / 4;
+				draw next_icon at: next_location + {100, 0} size: w_width / 8 color: (next_selected and (((stage = STARTING_STATE and (connected_to_unity or !connect_to_unity)) or stage = PLAYER_DISCUSSION_TURN or stage = PLAYER_ACTION_TURN or stage = PLAYER_VR_EXPLORATION_TURN) and turn <= end_of_game)) ? selected_color:unselected_color;
 			}
 	
 			graphics "Play Pause" visible: turn <= end_of_game {
-				pause_location <- {location.x - w_width / 2.5, location.y- w_height/8};
-				draw button_background at: pause_location + {0, y_centerdis} color: play_pause_selected ? selected_color:unselected_color size: shape.width / 4;
-				draw simulation.paused or about_to_pause ? play_icon : pause_icon at: simulation.paused or about_to_pause ? pause_location + {100,y_centerdis}: pause_location + {0, y_centerdis} color: play_pause_selected ? selected_color:unselected_color size: shape.width / 8;
+				pause_location <- {location.x - w_width / 2.5, location.y- w_height/8} + {0, y_centerdis};
+				draw button_background at: pause_location color: play_pause_selected ? selected_color:unselected_color size: shape.width / 4;
+				draw simulation.paused or about_to_pause ? play_icon : pause_icon at: simulation.paused or about_to_pause ? pause_location + {100,0}: pause_location color: play_pause_selected ? selected_color:unselected_color size: shape.width / 8;
 			}
 			
-			graphics "Button chart by village" visible: turn <= turn_see_indicators {
+			graphics "Button chart by village" visible: turn <= turn_see_indicators or always_display_chart_by_vil {
 				float x <- 2.0;
 				float y <- 0.5;
-				show_chart_vil_button <-  circle(w_width/8) at_location {x*w_width, location.y- w_height/8 + y_centerdis};
-				draw image_file(show_chart_by_vil ? "../../includes/icons/Visibility_off.png":"../../includes/icons/Visibility_on.png") color: show_chart_vil_selected ? selected_color:unselected_color size: w_width/3.5 at: show_chart_vil_button.location + {400,0};
+				show_chart_vil_button <-  circle(w_width/6) at_location {x*w_width + 400, location.y- w_height/8 + y_centerdis};
+				draw image_file(show_chart_by_vil ? "../../includes/icons/Visibility_off.png":"../../includes/icons/Visibility_on.png") color: show_chart_vil_selected ? selected_color:unselected_color size: w_width/3.5 at: show_chart_vil_button.location ;
 			}
 			
 			event #mouse_move {
@@ -722,64 +684,7 @@ experiment Open {
 					show_chart_by_vil <- !show_chart_by_vil;
 				} 
 			}
-			
-			/** Button chart (WASTE_POLLUTION / PRODUCTION & stacked charts)
-			graphics "Button chart" {
-				float x <- 2.0;
-				float y <- 0.5;
-				show_chart_button <- circle(w_width/8) at_location {x*w_width, location.y- w_height/8};
-				draw image_file(show_chart ? "../../includes/icons/button_series_chart.png":"../../includes/icons/button_stacked_chart.png") color: show_chart_selected ? selected_color:unselected_color size: w_width/4 at: show_chart_button.location;
-			}
-			event #mouse_move {
-				using topology(simulation) {
-					show_chart_selected <- (show_chart_button covers #user_location) ;
-				}
-			}
-			event #mouse_exit {
-					show_chart_selected <- false;
-			}
-			event #mouse_down {
-				if (show_chart_selected) {
-					show_chart <- !show_chart;}
-			}
-			*/
-			
-			/** Button geography
-				graphics "Button geography" {
-					float x <- -1.0;
-					float y <- 0.5;
-					show_map_button <-  circle(w_width/8) at_location {x*w_width, location.y- w_height/8};
-					draw image_file(show_geography ? "../../includes/icons/button_map_off.png":"../../includes/icons/button_map_on.png") color: show_map_selected ? selected_color:unselected_color size: w_width/4 at: show_map_button.location ;
-				}
 				
-	//			graphics "Button flow" visible: show_geography{
-	//				float x <- -0.25;
-	//				float y <- 0.85;
-	//				show_waterflow_button <- circle(w_width/8) at_location {x*w_width,y*w_height};
-	//				draw image_file(display_water_flow ? "../../includes/icons/button_waterflow_off.png":"../../includes/icons/button_waterflow_on.png") color: show_waterflow_selected ? selected_color:unselected_color size: w_width/4 at: {x*w_width,y*w_height} ;
-	//			}
-				
-				event #mouse_move {
-					using topology(simulation) {
-						show_map_selected <- (show_map_button covers #user_location) ;
-						//show_waterflow_selected <- (show_waterflow_button covers #user_location) ;
-					}
-				}
-				
-				event #mouse_exit {
-						show_map_selected <- false;
-						//show_waterflow_selected <- false;
-				}
-				
-				event #mouse_down {
-					if (show_map_selected) {
-						show_geography <- !show_geography;
-					} 
-	//				else if (show_waterflow_selected) {
-	//					display_water_flow <- !display_water_flow;
-	//				}
-				}
-				*/
 				
 			event "1" {
 				ask simulation {
@@ -896,7 +801,11 @@ experiment Open {
 						if (turn > end_of_game) {
 							return;
 						}
-						if (stage = PLAYER_DISCUSSION_TURN) {
+						if (stage = STARTING_STATE and (connected_to_unity or !connect_to_unity)) {
+							ask simulation {
+								stage <- COMPUTE_INDICATORS;
+							}
+						} else if (stage = PLAYER_DISCUSSION_TURN) {
 							ask simulation {
 								do end_of_discussion_phase;
 							}
@@ -941,138 +850,94 @@ experiment Open {
 	
 		/********************** MAIN MAP DISPLAY ***************************************************/
 		
-		display "MAIN MAP" type: opengl background:map_background axes: false {
+		display "MAIN MAP" type: 3d background:map_background axes: false {
 			
-		 overlay position: {0.5, 1} size: {0,0} transparency: 0 visible: show_geography or !show_chart {
-				float y_gap <- 0.25/3;
+			overlay position: {0.5, 1} size: {0,0} transparency: 0 {
 				float x_gap <- 0.1/3;
-				float x_init <- 0.35/10;
+				float x_init <- 0.35/3;
 				float icon_size <-  w_height / 18;
-				float y <- 0.2/3;
+				float y <- 0.2/1.1;
 				float x <- x_init;
 				
-	
-				draw plant_icon at: {x* w_width,y*w_height} size: icon_size;
-				x <- x + 2* x_gap;
-				loop c over: reverse(greens) {
-					draw square(x_gap*w_width) color: c at: {x*w_width,y*w_height};
-					x <- x + x_gap;
+				if (stage = PLAYER_VR_EXPLORATION_TURN) {
+					
+					//Legend Player position
+					draw player at: {x* w_width,y*w_height} size: icon_size*1.5;
+					x <- x + 2.3* x_gap;
+					draw "Player" at: {x* w_width,y*w_height} color: player_color depth: 0 font: ui_font anchor: #center;
+					
+					x <- x_init + x_gap * 8.5;
+					
+					//Legend Point of interest
+					draw interest at: {x*w_width,y*w_height} size: icon_size*1.5;
+					x <- x + 4*x_gap;
+					draw "Point Of Interest" at: {x* w_width,y*w_height} color: point_of_interest_color depth: 0 font: ui_font anchor: #center;
+					
+				} else {
+					
+					//Legend Productivity
+					draw plant_icon at: {x* w_width,y*w_height} size: icon_size;
+					x <- x + 2* x_gap;
+					loop c over: reverse(greens) {
+						draw square(x_gap*w_width) color: c at: {x*w_width,y*w_height};
+						x <- x + x_gap;
+					}
+					
+					x <- x_init + x_gap * 8.5;
+					
+					//Legend Urban areas
+					draw city_icon at: {x*w_width,y*w_height} size:  icon_size;
+					x <- x + 2*x_gap;
+					draw square(x_gap*w_width) color: city_color at: {x* w_width,y*w_height};
+					
 				}
 				
-				/** Legend canals
-				 y <- y + y_gap;
-				x <- x_init;
-				draw water_icon at: {x* w_width,y*w_height} size: icon_size;
-				x <- x + 2* x_gap;
-				loop c over: blues {
-					draw square(x_gap*w_width) color: c at: {x*w_width,y*w_height};
-					x <- x + x_gap;
-				}
-				*/
-								
-				//y <- y + y_gap;
-				x <- x_init + x_gap * 8.5;
-				
-				/** Legend landfill
-				draw garbage_icon at: {x*w_width,y*w_height} size:  icon_size;
-				x <- x + 2 * x_gap;
-				draw square(x_gap*w_width) color: landfill_color at: {x* w_width,y*w_height};
-				x <- x + 2 * x_gap;
-				 */
-				
-				//Legend Urban areas
-				draw city_icon at: {x*w_width,y*w_height} size:  icon_size;
-				x <- x + 2*x_gap;
-				draw square(x_gap*w_width) color: city_color at: {x* w_width,y*w_height};
-	
 			}
-			camera 'default' location: {3154.8761,3145.9738,7969.9466} target: {3154.8761,3145.8347,0.0};
+			
 			light #ambient intensity: ambient_intensity;
-			//camera 'default' location: {3170.7531,5600.8795,5037.7866} target: {3170.7531,2957.9814,0.0};
-			//camera 'default' location: {3213.0194,2444.8489,6883.1631} target: {3213.0194,2444.7288,0.0};
+			camera 'default' distance: 7700 location: #from_above target: {3000,2700,0};
 			
-			
-			species plot visible: show_geography {
+			/********************** MAIN MAP DISPLAY ******************************/
+			species plot visible: !(stage = PLAYER_VR_EXPLORATION_TURN)  {
 				draw shape color: greens[world.production_class_current(self)] border: false;
 			}
-			species canal visible: show_geography{
-				draw shape buffer (20,10) color: display_water_flow ? rgb(178, 193, 149) : blues[world.water_pollution_class_current(self)]  ;
+			species canal visible: !(stage = PLAYER_VR_EXPLORATION_TURN) {
+				draw shape buffer (20,10) color: display_water_flow ? river : blues[world.water_pollution_class_current(self)]  ;
 			}
-			species waste_on_canal visible: (show_geography) and display_water_flow  {
+			species waste_on_canal visible: !(stage = PLAYER_VR_EXPLORATION_TURN) and display_water_flow  {
 					draw sphere(20) color: #lightblue;
 			}
-			species local_landfill visible: show_geography{
-				draw  shape depth: waste_quantity / 100.0 color: landfill_color;
-			}
-			species communal_landfill visible: show_geography{
-				draw  shape depth: waste_quantity / 100.0 color: landfill_color;
-			}
-			species urban_area visible:  show_geography;
+			species urban_area visible: !(stage = PLAYER_VR_EXPLORATION_TURN);
 			
-			
-			species village visible: (!show_geography) {
-				draw shape color: color border: #black width: 2  ;
-			}
-			
-			/**
-			species village transparency: 0.4  visible: ((show_geography) and show_player_numbers) or !show_geography  {
-				int divider <- (show_geography) ? 16 : 8;
-				draw circle(w_width/divider) color: !show_geography ? #black :color at: shape.centroid + {0,0,0.4};
-			}
-			*/
-			
-			species village visible: ((show_geography) and show_player_numbers) or !show_geography   {
+			species village visible: !(stage = PLAYER_VR_EXPLORATION_TURN){
 				float size <- w_width/10;
 				draw numbers[int(self)] at: shape.centroid + position[int(self)] size: w_width/10;
-				if (show_geography or stage = COMPUTE_INDICATORS) {draw shape-(shape-40) color: color;}
-			}
-			
-			species village position: {0,0,0.01}/*visible: !show_geography*/ {
+				draw shape-(shape-40) color: color;
+			}	
+			species village position: {0,0,0.01} visible: !(stage = PLAYER_VR_EXPLORATION_TURN) {
 				int i <- int(self);
 				float size <- w_width/20;
 				float spacing <- size * 1;
-				float smiley_vertical_spacing <- size/2;
-				float smiley_horizontal_spacing <- smiley_vertical_spacing;
-				float smiley_size <- 2*size/3;
 				float x <- shape.centroid.x + position2[int(self), 0] + 700 - spacing;
 				float y <- shape.centroid.y + position2[int(self), 1] + 600 - spacing;
-				
-				/**
-				//Solid waste indication
-				draw waste_icon at: {x, y} size: size;
-				draw world.soil_pollution_class(self) at: {x - smiley_horizontal_spacing , y + smiley_vertical_spacing, 0.01} size: smiley_size;
-				
-				x <- x + 2*spacing;
-				
-				//Water waste indication
-				draw water_icon at: {x,  y} size: size;
-				draw world.water_pollution_class(self) at: {x + smiley_horizontal_spacing , y + smiley_vertical_spacing, 0.01} size: smiley_size;
-				
-				y <- y + 2*spacing;
-				x <- x - 2*spacing;
-				
-				//Productivity indication
-				draw plant_icon at: {x, y} size: size;
-				draw world.production_class_smiley(self) at: {x - smiley_horizontal_spacing , y + smiley_vertical_spacing, 0.01} size: smiley_size;
-				*/
 				
 				draw tokens_icon at: {x,  y} size: size;
 				draw ""+budget at: {x, y + spacing/1.25} color: #black depth: 0 font: ui_font anchor: #center;
 			}
 			
-			/**
-			 event #mouse_down {
-				if (show_geography) {
-					display_water_flow <- !display_water_flow;
-				}
-			}	
-			 */
+			/********************** MINI MAP DISPLAY ******************************/
+			image minimap size: {0.97,0.99} position:{0.1,0} visible: stage = PLAYER_VR_EXPLORATION_TURN;
+			species default_player visible: stage = PLAYER_VR_EXPLORATION_TURN;
+			species pointInterest visible: stage = PLAYER_VR_EXPLORATION_TURN;
+			
+			
+			event #mouse_down action: affiche_coord;
+			
 		}
 	
 	
 		/********************** CHARTS DISPLAY ***************************************************/
 	
-		//display "Chart 4" type: opengl axes: false background: legend_background refresh: stage = COMPUTE_INDICATORS and every(data_frequency#cycle) {
 		display "Chart 4"  type: 3d axes: false background: map_background refresh: (stage = COMPUTE_INDICATORS and every(data_frequency#cycle)) or (stage = PLAYER_DISCUSSION_TURN and !always_display_sub_charts)  {
 			
 			light #ambient intensity: ambient_intensity;
