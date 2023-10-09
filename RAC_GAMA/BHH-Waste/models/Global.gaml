@@ -162,11 +162,11 @@ global {
 		}
 		
 		if save_log {
-			save "turn,player,productivity,solid_pollution,water_pollution,days_with_ecolabel"  to: systeme_evolution_log_path format: text rewrite: true;
-			save "turn,player,budget,exra_turn,action" to: village_action_log_path format: text rewrite: true;
+			save "turn,player,productivity,solid_pollution,water_pollution,days_with_ecolabel"  to: systeme_evolution_log_path format: "text" rewrite: true;
+			save "turn,player,budget,exra_turn,action" to: village_action_log_path format: "text" rewrite: true;
 		}
 		if save_log_2 {
-			save "turn, solid_pollution_canal_1, solid_pollution_canal_2, solid_pollution_canal_3, solid_pollution_canal_4, solid_pollution_soil_1, solid_pollution_soil_2, solid_pollution_soil_3, solid_pollution_soil_4, water_pollution_1, water_pollution_2, water_pollution_3, water_pollution_4" to: log_path format: text rewrite: true;
+			save "turn, solid_pollution_canal_1, solid_pollution_canal_2, solid_pollution_canal_3, solid_pollution_canal_4, solid_pollution_soil_1, solid_pollution_soil_2, solid_pollution_soil_3, solid_pollution_soil_4, water_pollution_1, water_pollution_2, water_pollution_3, water_pollution_4" to: log_path format: "text" rewrite: true;
 		}
 	}
 	
@@ -566,14 +566,14 @@ global {
 			}
 			
 			if save_log {
-				save ("" + turn  + ",0," + total_production + ","+ total_solid_pollution + "," + total_water_pollution + "," + days_with_ecolabel)  to: systeme_evolution_log_path format: text rewrite: false;
-				save ("" + turn  + ",1," + village1_production + ","+ village1_solid_pollution + "," + village1_water_pollution + "," + days_with_ecolabel)  to: systeme_evolution_log_path format: text rewrite: false;
-				save ("" + turn  + ",2," + village2_production + ","+ village2_solid_pollution + "," + village2_water_pollution+ "," + days_with_ecolabel)  to: systeme_evolution_log_path format: text rewrite: false;
-				save ("" + turn  + ",3," + village3_production + ","+ village3_solid_pollution + "," + village3_water_pollution+ "," + days_with_ecolabel)  to: systeme_evolution_log_path format: text rewrite: false;
-				save ("" + turn  + ",4," + village4_production + ","+ village4_solid_pollution + "," + village4_water_pollution+ "," + days_with_ecolabel)  to: systeme_evolution_log_path format: text rewrite: false;
+				save ("" + turn  + ",0," + total_production + ","+ total_solid_pollution + "," + total_water_pollution + "," + days_with_ecolabel)  to: systeme_evolution_log_path format: "text" rewrite: false;
+				save ("" + turn  + ",1," + village1_production + ","+ village1_solid_pollution + "," + village1_water_pollution + "," + days_with_ecolabel)  to: systeme_evolution_log_path format: "text" rewrite: false;
+				save ("" + turn  + ",2," + village2_production + ","+ village2_solid_pollution + "," + village2_water_pollution+ "," + days_with_ecolabel)  to: systeme_evolution_log_path format: "text" rewrite: false;
+				save ("" + turn  + ",3," + village3_production + ","+ village3_solid_pollution + "," + village3_water_pollution+ "," + days_with_ecolabel)  to: systeme_evolution_log_path format: "text" rewrite: false;
+				save ("" + turn  + ",4," + village4_production + ","+ village4_solid_pollution + "," + village4_water_pollution+ "," + days_with_ecolabel)  to: systeme_evolution_log_path format: "text" rewrite: false;
 			}
 			if save_log_2 {
-				save ("" + turn + "," + village_canal_solid_pollution  + ","+ village_soil_solid_pollution + "," + village_water_pollution)  to: log_path format: text rewrite: false;
+				save ("" + turn + "," + village_canal_solid_pollution  + ","+ village_soil_solid_pollution + "," + village_water_pollution)  to: log_path format: "text" rewrite: false;
 			}
 
 		}
