@@ -58,7 +58,7 @@ Material:
     - _SplatMap: 1
     - _Splatmap1: 0
     - _TextureTiling: 0.698
-    - _Transition: 1
+    - _Transition: 0.91
     - _TransitionTiling: 0.709
     m_Colors:
     - _EmissionColor: {r: 1, g: 1, b: 1, a: 1}

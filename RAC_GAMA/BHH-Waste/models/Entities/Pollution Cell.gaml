@@ -17,6 +17,12 @@ grid cell height: 50 width: 50 {
 	float pollution_level <- 0.0;
 	canal closest_canal;
 	
+	action init {
+		solid_waste_level <- 0.0;
+		water_waste_level <- 0.0;
+		pollution_level <- 0.0;
+	}
+	
 	action natural_pollution_reduction {
 		if solid_waste_level > 0 {
 			solid_waste_level <- solid_waste_level * (1 - ground_solid_pollution_reducing_day);
