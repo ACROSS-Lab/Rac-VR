@@ -95,21 +95,20 @@ global {
 	
 	/********************* MANAGEMENT OF BUTTONS ****************************/
 	
-	geometry show_waterflow_button;
-	geometry show_map_button;
-	geometry show_chart_button;
+	geometry restart_button;
 	geometry show_chart_vil_button;
-	bool show_map_selected;
-	bool show_chart_selected;
-	bool show_waterflow_selected;
 	bool show_chart_vil_selected;
+	bool restart_selected;	
 	bool show_chart_by_vil <- false;
 	bool show_chart <- true;
-	bool show_player_numbers <- true;
+
 	bool play_pause_selected <- false;
 	bool next_selected <- false;
+	
 	map<string, point> action_locations <- [];
 	map<int,geometry> village_buttons <- [];
+	
+	point restart_location <- {0,0};
 	point next_location <- {0,0};
 	point pause_location <- {0,0};
 	string over_action;
@@ -236,6 +235,7 @@ global {
 	
 	init {
 		create stacked_chart {
+			always_display_sub_charts <- false;
 			show_pol_chart_by_cat_glob <- always_display_sub_charts ;
 			desired_value <- 1.0;
 			max_value <- ["Production"::2.0, "Total"::2.0, "Water"::0.70, "Solid"::1.78];
@@ -254,14 +254,13 @@ global {
 		}
 		global_chart <- stacked_chart[0];
 
-		always_display_sub_charts <- true;
-		
 		create pointInterestManager;
 		create pointInterest {
 			location <- {3189.6, 2823.6};
 			manager <- first(pointInterestManager);
 			do addSelfToManager;
 		}
+		isDemo <- false;
 	}
 
 	reflex update_charts when: stage = COMPUTE_INDICATORS{
@@ -665,26 +664,39 @@ experiment Open {
 			graphics "Button chart by village" visible: turn <= turn_see_indicators or always_display_chart_by_vil {
 				float x <- 2.0;
 				float y <- 0.5;
-				show_chart_vil_button <-  circle(w_width/6) at_location {x*w_width + 400, location.y- w_height/8 + y_centerdis};
+				show_chart_vil_button <- circle(w_width/6) at_location {x*w_width + 400, location.y - w_height/8 + y_centerdis};
 				draw image_file(show_chart_by_vil ? "../../includes/icons/Visibility_off.png":"../../includes/icons/Visibility_on.png") color: show_chart_vil_selected ? selected_color:unselected_color size: w_width/3.5 at: show_chart_vil_button.location ;
+			}
+			
+			graphics "Button restart" {
+				restart_location <- {location.x - w_width / 2.5 + 38000, location.y- w_height/8 + y_centerdis};
+				restart_button <- circle(w_width/6) at_location restart_location;
+				draw image_file("../../includes/icons/Visibility_on.png") color: restart_selected ? selected_color:unselected_color size: w_width/3.5 at: restart_button.location ;
 			}
 			
 			event #mouse_move {
 				using topology(simulation) {
 					show_chart_vil_selected <- (show_chart_vil_button covers #user_location) ;
+					restart_selected <- ((restart_location + {2000,0}) distance_to #user_location) < w_width / 3;
 				}
 			}
 			
 			event #mouse_exit {
-					show_chart_vil_selected <- false;
+				show_chart_vil_selected <- false;
+				restart_selected <- false;
+					
 			}
 			
 			event #mouse_down {
 				if (show_chart_vil_selected) {
 					show_chart_by_vil <- !show_chart_by_vil;
 				} 
+				if (restart_selected) {
+					ask simulation {
+						do restart ;
+					}
+				} 
 			}
-				
 				
 			event "1" {
 				ask simulation {
@@ -846,8 +858,6 @@ experiment Open {
 			}
 		}
 	
-	
-	
 		/********************** MAIN MAP DISPLAY ***************************************************/
 		
 		display "MAIN MAP" type: 3d background:map_background axes: false {
@@ -911,15 +921,15 @@ experiment Open {
 			
 			species village visible: !(stage = PLAYER_VR_EXPLORATION_TURN){
 				float size <- w_width/10;
-				draw numbers[int(self)] at: shape.centroid + position[int(self)] size: w_width/10;
+				draw numbers[id] at: shape.centroid + position[id] size: size;
 				draw shape-(shape-40) color: color;
-			}	
+			}
+			
 			species village position: {0,0,0.01} visible: !(stage = PLAYER_VR_EXPLORATION_TURN) {
-				int i <- int(self);
 				float size <- w_width/20;
 				float spacing <- size * 1;
-				float x <- shape.centroid.x + position2[int(self), 0] + 700 - spacing;
-				float y <- shape.centroid.y + position2[int(self), 1] + 600 - spacing;
+				float x <- shape.centroid.x + position2[id, 0] + 700 - spacing;
+				float y <- shape.centroid.y + position2[id, 1] + 600 - spacing;
 				
 				draw tokens_icon at: {x,  y} size: size;
 				draw ""+budget at: {x, y + spacing/1.25} color: #black depth: 0 font: ui_font anchor: #center;
@@ -943,8 +953,8 @@ experiment Open {
 			light #ambient intensity: ambient_intensity;
 			camera #default locked: true;
 			
-			agents "Global" value: [global_chart] aspect: horizontal visible: show_chart position: {0.25,0} size: {0.7,0.7} transparency:0;
-			
+			agents "Global" value: [global_chart] aspect: horizontal visible: show_chart position: {0.25,0} size: {0.7,0.7} transparency:0;	
 		}		
+		
 	}
 }
