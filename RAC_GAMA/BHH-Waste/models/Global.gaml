@@ -39,10 +39,10 @@ global {
 	list<village> villages_order;
 	bool without_player <- false; //for testing
 	bool without_actions <- false;
-	file players_actions_to_load <- nil;
-	list<list<map<string,map>>> players_actions <- nil;
-	list<list<int>> players_collect_policy <- nil;
-	list<list<bool>> players_traitement_facility_maintenance <- nil;
+	file players_actions_to_load;
+	list<list<map<string,map>>> players_actions;
+	list<list<int>> players_collect_policy;
+	list<list<bool>> players_traitement_facility_maintenance;
 	list<village> village_ordered_by_production;
 	list<village> village_ordered_by_pollution;
 	
@@ -78,7 +78,6 @@ global {
 	
 	string text_action <- "";
 	map<string,string> actions_name ;
-	
 	
 	int turn <- 0;
 	int current_day <- 0;
@@ -138,7 +137,7 @@ global {
 	bool is_production_ok <- true;
 	bool is_pollution_ok <- true;
 	
-	int days <- 365;
+	int days <- 365 const: true;
 
 	/********************** INITIALIZATION OF THE GAME ****************************/
 
@@ -146,28 +145,92 @@ global {
 		if not without_player or (players_actions_to_load != nil){do load_language;}
 		do generate_info_action;
 		name <- GAME_NAME;
-		create village from: villages_shape_file sort_by (location.x + location.y * 2);
-		//if without_player and  (players_actions_to_load != nil) {do load_actions_file;}
 		
-		do create_canals;
-		create commune from: Limites_commune_shape_file;
-		do create_urban_area;
-		do create_plots;
-		do init_villages;	
+		do init;
 		
-		//do create_landfill;
 		do add_data;
 		loop k over: actions_name.keys {
 			text_action <- text_action + k +":" + actions_name[k] + "\n"; 
 		}
 		
 		if save_log {
-			save "turn,player,productivity,solid_pollution,water_pollution,days_with_ecolabel"  to: systeme_evolution_log_path format: text rewrite: true;
-			save "turn,player,budget,exra_turn,action" to: village_action_log_path format: text rewrite: true;
+			save "turn,player,productivity,solid_pollution,water_pollution,days_with_ecolabel"  to: systeme_evolution_log_path format: "text" rewrite: true;
+			save "turn,player,budget,exra_turn,action" to: village_action_log_path format: "text" rewrite: true;
 		}
 		if save_log_2 {
-			save "turn, solid_pollution_canal_1, solid_pollution_canal_2, solid_pollution_canal_3, solid_pollution_canal_4, solid_pollution_soil_1, solid_pollution_soil_2, solid_pollution_soil_3, solid_pollution_soil_4, water_pollution_1, water_pollution_2, water_pollution_3, water_pollution_4" to: log_path format: text rewrite: true;
+			save "turn, solid_pollution_canal_1, solid_pollution_canal_2, solid_pollution_canal_3, solid_pollution_canal_4, solid_pollution_soil_1, solid_pollution_soil_2, solid_pollution_soil_3, solid_pollution_soil_4, water_pollution_1, water_pollution_2, water_pollution_3, water_pollution_4" to: log_path format: "text" rewrite: true;
 		}
+	}
+	
+	action kill {
+		ask village {do die;}
+		ask canal {do die;}
+		ask commune {do die;}
+		ask urban_area {do die;}
+		ask house {do die;}
+		ask house {do die;}
+		ask inhabitant {do die;}
+		ask plot {do die;}
+		ask collection_team{do die;}
+	}
+	
+	action init{
+		
+		ask cell { do init; }
+		
+		//Creation of agents
+		create village from: villages_shape_file sort_by (location.x + location.y * 2);
+		do create_canals;
+		create commune from: Limites_commune_shape_file;
+		do create_urban_area;
+		do create_plots;
+		do init_villages;	
+		//do create_landfill;
+				
+		//Init variables
+		stage <- STARTING_STATE;
+		turn <- 0;
+		current_day <- 0;
+		number_of_days_passed <- 0;
+		days_with_ecolabel <- 0;
+		days_with_ecolabel_year <- [0];
+		is_production_ok <- true;
+		is_pollution_ok <- true;
+		
+		players_actions_to_load <- nil;
+		players_actions <- nil;
+		extra_turn <- false;
+		index_player <- 0;
+		text_action <- "";
+		
+		create_facility_treatment <- false;
+		commune_money <- 0;
+		commune_budget_dispatch <- false;
+		
+		time_step<-[];
+		village1_solid_pollution_values<-[];
+		village2_solid_pollution_values<-[];
+		village3_solid_pollution_values<-[];
+		village4_solid_pollution_values<-[];
+		village1_water_pollution_values<-[];
+		village2_water_pollution_values<-[];
+		village3_water_pollution_values<-[];
+		village4_water_pollution_values<-[];
+		village1_production_values<-[];
+		village2_production_values<-[];
+		village3_production_values<-[];
+		village4_production_values<-[];
+		total_solid_pollution_values<-[];
+		total_water_pollution_values<-[];
+		total_pollution_values<-[];
+		total_production_values<-[];
+		ecolabel_max_pollution_values<-[];
+		ecolabel_min_production_values<-[];
+	}
+	
+	action restart {
+		do kill;
+		do init;
 	}
 	
 	
@@ -338,7 +401,7 @@ global {
 	
 	action init_villages {
 		ask village {
-			name <- VILLAGE + " " + (int(self) + 1);
+			name <- VILLAGE + " " + (id + 1);
 			plots <- plot overlapping self;
 			cells <- cell overlapping self;
 			canals <- canal at_distance 1.0;
@@ -354,17 +417,15 @@ global {
 			}
 			budget <- world.compute_budget(production_level);
 			if without_player and not without_actions and players_actions_to_load = nil{
-				int id <- int(self);
 				player_actions <- list<map<string, map>>(players_actions = nil ? nil : players_actions[id]);
 			//	player_traitement_facility_maintenance <- players_traitement_facility_maintenance = nil ? nil : players_traitement_facility_maintenance[id];
 			} 
 		} 
-		village1_production <-  (village[0].plots sum_of each.current_production);	
+		village1_production <-  village[0].plots sum_of each.current_production;	
 		village2_production <-  village[1].plots sum_of each.current_production ;	
 		village3_production <-  village[2].plots sum_of each.current_production ;	
 		village4_production <-  village[3].plots sum_of each.current_production ;	
-		total_production <- (village1_production + village2_production + village3_production + village4_production) ;	
-	
+		total_production <- (village1_production + village2_production + village3_production + village4_production) ;
 	}	
 	
 	action manage_landfill_geom(geometry geom_landfill) {
@@ -566,14 +627,14 @@ global {
 			}
 			
 			if save_log {
-				save ("" + turn  + ",0," + total_production + ","+ total_solid_pollution + "," + total_water_pollution + "," + days_with_ecolabel)  to: systeme_evolution_log_path format: text rewrite: false;
-				save ("" + turn  + ",1," + village1_production + ","+ village1_solid_pollution + "," + village1_water_pollution + "," + days_with_ecolabel)  to: systeme_evolution_log_path format: text rewrite: false;
-				save ("" + turn  + ",2," + village2_production + ","+ village2_solid_pollution + "," + village2_water_pollution+ "," + days_with_ecolabel)  to: systeme_evolution_log_path format: text rewrite: false;
-				save ("" + turn  + ",3," + village3_production + ","+ village3_solid_pollution + "," + village3_water_pollution+ "," + days_with_ecolabel)  to: systeme_evolution_log_path format: text rewrite: false;
-				save ("" + turn  + ",4," + village4_production + ","+ village4_solid_pollution + "," + village4_water_pollution+ "," + days_with_ecolabel)  to: systeme_evolution_log_path format: text rewrite: false;
+				save ("" + turn  + ",0," + total_production + ","+ total_solid_pollution + "," + total_water_pollution + "," + days_with_ecolabel)  to: systeme_evolution_log_path format: "text" rewrite: false;
+				save ("" + turn  + ",1," + village1_production + ","+ village1_solid_pollution + "," + village1_water_pollution + "," + days_with_ecolabel)  to: systeme_evolution_log_path format: "text" rewrite: false;
+				save ("" + turn  + ",2," + village2_production + ","+ village2_solid_pollution + "," + village2_water_pollution+ "," + days_with_ecolabel)  to: systeme_evolution_log_path format: "text" rewrite: false;
+				save ("" + turn  + ",3," + village3_production + ","+ village3_solid_pollution + "," + village3_water_pollution+ "," + days_with_ecolabel)  to: systeme_evolution_log_path format: "text" rewrite: false;
+				save ("" + turn  + ",4," + village4_production + ","+ village4_solid_pollution + "," + village4_water_pollution+ "," + days_with_ecolabel)  to: systeme_evolution_log_path format: "text" rewrite: false;
 			}
 			if save_log_2 {
-				save ("" + turn + "," + village_canal_solid_pollution  + ","+ village_soil_solid_pollution + "," + village_water_pollution)  to: log_path format: text rewrite: false;
+				save ("" + turn + "," + village_canal_solid_pollution  + ","+ village_soil_solid_pollution + "," + village_water_pollution)  to: log_path format: "text" rewrite: false;
 			}
 
 		}
@@ -644,7 +705,7 @@ global {
 // PLAYERTURN REFLEX'S ACTIONS
 	action increase_urban_area {
 		ask village {
-			float increase_urban_area_population_year <- increase_urban_area_population_year_per_village[int(self)];
+			float increase_urban_area_population_year <- increase_urban_area_population_year_per_village[id];
 			target_population <- round(population *(1 + increase_urban_area_population_year));
 			using topology(world) {
 				ask urban_areas {

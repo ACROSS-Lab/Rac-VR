@@ -11,8 +11,9 @@ import "../Global.gaml"
 
 
 
-species village { 
-	rgb color <- village_color[int(self)];
+species village {
+	int id <- get_id();
+	rgb color <- village_color[id];
 	list<string> actions_done_this_year;
 	list<string> actions_done_total;
 	list<cell> cells;
@@ -42,6 +43,9 @@ species village {
 	
 	list<map<string,map>> player_actions <- nil;
 	
+	int get_id {
+		return int(self) mod 4;
+	}
 	
 	action compute_new_budget {
 		budget <- world.compute_budget(production_level);
@@ -154,7 +158,7 @@ species village {
 	//Used when there is players
 	bool confirm_action(string act_name, int act_cost) {
 		if confirmation_popup {
-			return user_confirm(ACTION + " " + act_name, PLAYER + " " + (int(self) + 1) +",  " + CONFIRM_ACTION + " "+ act_name + " (" + COST+ ": " +  act_cost +" " + TOKENS + ")?");
+			return user_confirm(ACTION + " " + act_name, PLAYER + " " + (id + 1) +",  " + CONFIRM_ACTION + " "+ act_name + " (" + COST+ ": " +  act_cost +" " + TOKENS + ")?");
 		}
 		return true;
 	}
@@ -171,15 +175,15 @@ species village {
 					act <- act + k + "%" + param[k] + ";";
 				}
 				act <- act + ")";
-			}	
-			string to_save <- "" + turn + "," + (int(self) +1) + "," + budget +"," + extra_turn + "," + act;
-			save to_save to: village_action_log_path format: text rewrite: false;
+			}
+			string to_save <- "" + turn + "," + (id +1) + "," + budget +"," + extra_turn + "," + act;
+			save to_save to: village_action_log_path format: 'text' rewrite: false;
 		}	
 	}
 	
 	//Used when there is players
 	action end_of_turn {
-		bool  is_ok <- (not confirmation_popup) or user_confirm(END_OF_TURN,PLAYER + " " + (int(self) + 1) +", " + CONFIRM_END_OF_TURN);
+		bool  is_ok <- (not confirmation_popup) or user_confirm(END_OF_TURN,PLAYER + " " + (id + 1) +", " + CONFIRM_END_OF_TURN);
 		if is_ok {
 			do ending_turn;
 		}
@@ -270,8 +274,8 @@ species village {
 				if p4 > 0 {
 					cost_str <- cost_str  + (add_ok ? ", " : "")+ PLAYER + " 4:" + p4 +  " " + TOKENS;
 				}
-				
-				bool  is_ok <- (not confirmation_popup) or without_player or user_confirm(ACTION +" " + ACT_FACILITY_TREATMENT, PLAYER +" " + (int(self) + 1) +",  " + CONFIRM_ACTION + " " + ACT_FACILITY_TREATMENT + " " + cost_str +"?");
+
+				bool  is_ok <- (not confirmation_popup) or without_player or user_confirm(ACTION +" " + ACT_FACILITY_TREATMENT, PLAYER +" " + (id + 1) +",  " + CONFIRM_ACTION + " " + ACT_FACILITY_TREATMENT + " " + cost_str +"?");
 				if is_ok {
 					if not without_player {
 						if (empty(player_actions)) {
@@ -417,7 +421,7 @@ species village {
 			
 			bool strong <- is_strong;
 			if selection_possible and not without_player {
-				map result <- user_input_dialog(PLAYER +" " + (int(self) + 1)+" - " + ACT_COLLECTIVE_ACTION  ,[choose(LEVEL,string,weak_str, possibilities)]);
+				map result <- user_input_dialog(PLAYER +" " + (id + 1)+" - " + ACT_COLLECTIVE_ACTION  ,[choose(LEVEL,string,weak_str, possibilities)]);
 				strong <- result[LEVEL] = strong_str;
 			}
 			
@@ -502,7 +506,7 @@ species village {
 			if not selection_possible or without_player {
 				strong <- is_strong;
 			} else {
-				map result <- user_input_dialog(PLAYER + " " + (int(self) + 1)+" - " + ACT_DRAIN_DREDGE  ,[choose(LEVEL,string,weak_str, possibilities)]);
+				map result <- user_input_dialog(PLAYER + " " + (id + 1)+" - " + ACT_DRAIN_DREDGE  ,[choose(LEVEL,string,weak_str, possibilities)]);
 				strong <- result[LEVEL] = strong_str;
 			}
 			int token_drain_dredge <- strong ? token_drain_dredge_strong : token_drain_dredge_weak;
@@ -548,7 +552,7 @@ species village {
 			} 
 			bool strong <- is_strong;
 			if selection_possible and  not without_player {
-				map result <- user_input_dialog(PLAYER +" " + (int(self) + 1)+" - " + ACT_SUPPORT_MANURE  ,[choose(LEVEL,string,weak_str, possibilities)]);
+				map result <- user_input_dialog(PLAYER +" " + (id + 1)+" - " + ACT_SUPPORT_MANURE  ,[choose(LEVEL,string,weak_str, possibilities)]);
 				strong <- result[LEVEL] = strong_str;
 				do save_actions_done(strong? "8b":"8a");
 			}
@@ -668,7 +672,7 @@ species village {
 	
 	aspect demo_with_name {
 		if draw_territory {
-			draw PLAYER + " " + (int(self) + 1) at: location + {0,0,10} color: #white anchor: #center font: font("Helvetica", 50, #bold);
+			draw PLAYER + " " + (id + 1) at: location + {0,0,10} color: #white anchor: #center font: font("Helvetica", 50, #bold);
 			draw shape.contour + 20.0 color: color;
 		}
 	}

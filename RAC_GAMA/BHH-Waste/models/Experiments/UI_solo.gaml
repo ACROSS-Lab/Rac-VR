@@ -95,21 +95,20 @@ global {
 	
 	/********************* MANAGEMENT OF BUTTONS ****************************/
 	
-	geometry show_waterflow_button;
-	geometry show_map_button;
-	geometry show_chart_button;
+	geometry restart_button;
 	geometry show_chart_vil_button;
-	bool show_map_selected;
-	bool show_chart_selected;
-	bool show_waterflow_selected;
 	bool show_chart_vil_selected;
+	bool restart_selected;
+	
 	bool show_chart_by_vil <- false;
 	bool show_chart <- true;
-	bool show_player_numbers <- true;
 	bool play_pause_selected <- false;
 	bool next_selected <- false;
+	
 	map<string, point> action_locations <- [];
 	map<int,geometry> village_buttons <- [];
+	
+	point restart_location <- {0,0};
 	point next_location <- {0,0};
 	point pause_location <- {0,0};
 	string over_action;
@@ -685,7 +684,30 @@ experiment Open {
 					show_chart_by_vil <- !show_chart_by_vil;
 				} 
 			}
-				
+			
+			graphics "Button restart" {
+				restart_location <- {location.x - w_width / 2.5 + 38000, location.y- w_height/8 + y_centerdis};
+				restart_button <- circle(w_width/6) at_location restart_location;
+				draw image_file("../../includes/icons/Visibility_on.png") color: restart_selected ? selected_color:unselected_color size: w_width/3.5 at: restart_button.location ;
+			}
+			
+			event #mouse_move {
+				using topology(simulation) {
+					restart_selected <- ((restart_location + {2000,0}) distance_to #user_location) < w_width / 3;
+				}
+			}
+			
+			event #mouse_exit {
+					restart_selected <- false;
+			}
+			
+			event #mouse_down {
+				if (restart_selected) {
+					ask simulation {
+						do restart ;
+					}
+				} 
+			}
 				
 			event "1" {
 				ask simulation {
@@ -912,15 +934,15 @@ experiment Open {
 			
 			species village visible: !(stage = PLAYER_VR_EXPLORATION_TURN){
 				float size <- w_width/10;
-				draw numbers[int(self)] at: shape.centroid + position[int(self)] size: w_width/10;
+				draw numbers[id] at: shape.centroid + position[id] size: w_width/10;
 				draw shape-(shape-40) color: color;
 			}	
 			species village position: {0,0,0.01} visible: !(stage = PLAYER_VR_EXPLORATION_TURN) {
-				int i <- int(self);
+				int i <- id;
 				float size <- w_width/20;
 				float spacing <- size * 1;
-				float x <- shape.centroid.x + position2[int(self), 0] + 700 - spacing;
-				float y <- shape.centroid.y + position2[int(self), 1] + 600 - spacing;
+				float x <- shape.centroid.x + position2[id, 0] + 700 - spacing;
+				float y <- shape.centroid.y + position2[id, 1] + 600 - spacing;
 				
 				draw tokens_icon at: {x,  y} size: size;
 				draw ""+budget at: {x, y + spacing/1.25} color: #black depth: 0 font: ui_font anchor: #center;
