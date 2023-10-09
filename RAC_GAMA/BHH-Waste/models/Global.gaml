@@ -84,6 +84,7 @@ global {
 	int current_day <- 0;
 	int days_with_ecolabel <- 0;
 	list<int> days_with_ecolabel_year <- [0];
+	int number_of_days_passed <- 0;
 	
 	float village1_solid_pollution update: village[0].canals sum_of each.solid_waste_level + village[0].cells sum_of each.solid_waste_level ;
 	float village1_water_pollution update: convertion_from_l_water_waste_to_kg_solid_waste * (village[0].canals sum_of each.water_waste_level + village[0].cells  sum_of each.water_waste_level)  ;
@@ -137,7 +138,7 @@ global {
 	bool is_production_ok <- true;
 	bool is_pollution_ok <- true;
 	
-	int days <- 10;
+	int days <- 365;
 
 	/********************** INITIALIZATION OF THE GAME ****************************/
 
@@ -713,15 +714,15 @@ global {
 	
 	action before_exploration_phase{
 		start_exploration_turn_time <- machine_time;
-		do update_indicators_unity;
-//		connect_to_unity <- true;
-		enter_or_exit_VR <- true;
+		if connect_to_unity {
+			do update_indicators_unity;
+			enter_or_exit_VR <- true;
+		}
+		write sample(village_soil_solid_pollution);
+		write sample(village_canal_solid_pollution);
 	}
 	
 	action update_indicators_unity{
-		
-//		write sample(village_soil_solid_pollution);
-//		write sample(village_canal_solid_pollution);
 		
 		productionClass <- production_class(village_production);
 		
@@ -930,7 +931,7 @@ global {
 				do pause;
 			} else {
 				days_with_ecolabel_year << 0;
-				current_day <- 1;
+				current_day <- 0;
 				step <- #day;
 	
 				if not without_player {do tell(INDICATOR_COMPUTATION);}
@@ -960,9 +961,11 @@ global {
 		do manage_pollution_decrease;
 		//do manage_landfill;
 		do manage_daily_indicator;
-		do manage_end_of_indicator_computation;
-		
+
 		current_day <- current_day + 1;
+		number_of_days_passed <- number_of_days_passed + 1;
+
+		do manage_end_of_indicator_computation;
 		
 		
 //		t3<- t3 + machine_time - t;
@@ -1001,7 +1004,7 @@ global {
 					}
 	
 					days_with_ecolabel_year << 0;
-					current_day <- 1;
+					current_day <- 0;
 					step <- #day;
 
 					if not without_player {do tell(INDICATOR_COMPUTATION);}

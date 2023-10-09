@@ -68,7 +68,7 @@ public class GlobalTest : TCPConnector
 
     private PolygonGenerator polyGen;
 
-    private int village_id = 2;
+    private int village_id;
 
     private static DisplayManagement dm;
 
@@ -343,7 +343,14 @@ public class GlobalTest : TCPConnector
             //playerPositionUpdate = true;
             mc.language = parameters.language;
             mc.mode = parameters.mode;
-
+            if (mc.mode == "Demo_01")
+            {
+                village_id = 2;
+            }
+            else if (mc.mode == "Demo_2")
+            {
+                village_id = 1;
+            }
         }
         else if (mes.Contains("points"))
         {

@@ -46,10 +46,10 @@ species inhabitant {
 			if collect_in_canal {
 				if nb_waste >= 20 {
 					closest_canal.solid_waste_level <- closest_canal.solid_waste_level * (1 - high_collection_canal_solid_waste) ;
-				} else if nb_waste < 10 {
-					closest_canal.solid_waste_level <- closest_canal.solid_waste_level * (1 - low_collection_canal_solid_waste) ;
-				} else {
+				} else if 10 <= nb_waste {
 					closest_canal.solid_waste_level <- closest_canal.solid_waste_level * (1 - mid_collection_canal_solid_waste) ;
+				} else if 0 < nb_waste {
+					closest_canal.solid_waste_level <- closest_canal.solid_waste_level * (1 - low_collection_canal_solid_waste) ;
 				}
 			}
 			closest_canal.solid_waste_level <- closest_canal.solid_waste_level + solid_waste_canal;
@@ -59,10 +59,10 @@ species inhabitant {
 				if collect_on_ground {
 					if nb_waste >= 20 {
 						solid_waste_level <- solid_waste_level * (1 - high_collection_ground_solid_waste) ;
-					} else if nb_waste < 10 {
-						solid_waste_level <- solid_waste_level * (1 - low_collection_ground_solid_waste) ;
-					} else {
+					} else if 10 <= nb_waste {
 						solid_waste_level <- solid_waste_level * (1 - mid_collection_ground_solid_waste) ;
+					} else if 0 < nb_waste {
+						solid_waste_level <- solid_waste_level * (1 - low_collection_ground_solid_waste) ;
 					}
 				}
 				solid_waste_level <- solid_waste_level + solid_waste_ground;
