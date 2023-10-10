@@ -18,6 +18,7 @@ global skills: [network]{
 	 
 	//Activate the unity connection; if activated, the model will wait for an connection from Unity to start
 	bool connect_to_unity <- false;
+	bool connect_to_unity <- true;
 	
 	// connection port
 	int port <- 8000;
@@ -446,6 +447,12 @@ global skills: [network]{
 				ask pointInterestManager {
 					do changeState(int(answer["point_of_interest"]));
 				}
+			} else if answer contains_key "pnj_pos" {
+				write "s: " + s.contents;
+				list<int> positionPNJ <- answer["pnj_pos"];
+				ask pointInterestManager {
+					do setLocation(int(answer["pnj_id"]), world.translate_coord({positionPNJ[0]/precision,positionPNJ[1]/precision}));
+				}
 			}
 		}
 	}
@@ -470,6 +477,10 @@ species pointInterestManager {
 	
 	action changeState(int i) {
 		points[i].visited <- true;
+	}
+	
+	action setLocation(int i, point p) {
+		points[i].location <- p;
 	}
 }
 
