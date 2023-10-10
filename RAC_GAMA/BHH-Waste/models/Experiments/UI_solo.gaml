@@ -473,8 +473,8 @@ species stacked_chart {
 			draw no_ecolabel_icon at: {original_col_width*1.75, my_height-2.25*original_col_width} size: {1300, 1600};
 		}
  				
- 		draw line({-original_col_width/2, 3* chart_height / 2 - max_heights["Production"]/2}, {original_col_width/2, 3* chart_height / 2 - max_heights["Production"]/2}) width:20 color: map_background ;
- 		draw line({original_col_width/2 + gap, 3* chart_height / 2 - max_heights["Production"]/2}, {3*original_col_width/2 + gap, 3* chart_height / 2 - max_heights["Production"]/2}) width:20 color: map_background;
+ 		draw line({-original_col_width/2, 3* chart_height / 2 - max_heights["Production"]/2}, {original_col_width/2, 3* chart_height / 2 - max_heights["Production"]/2}) width:6 color: #white ;
+ 		draw line({original_col_width/2 + gap, 3* chart_height / 2 - max_heights["Production"]/2}, {3*original_col_width/2 + gap, 3* chart_height / 2 - max_heights["Production"]/2}) width:6 color: #white;
  	}
 } 
 
@@ -489,7 +489,7 @@ experiment Open {
 	action _init_ {
 		//Requires latest version of GAMA 1.8.2
 		//map<string, unknown> params <- user_input_dialog("Welcome to RÁC",[enter("Dark theme",true), choose("Language", string, "English",["English","Français","Tiếng Việt"])], font("Helvetica",18, #bold), nil, false);
-		map<string, unknown> params <- user_input_dialog("Welcome to RÁC",[choose("Mode", string, "Demo_01",["Demo_01", "Demo_02"]), choose("Language", string, "eng",["eng","fr","vn"])], ui_font, map_background, false);
+		map<string, unknown> params <- user_input_dialog("Welcome to RÁC",[choose("Mode", string, "Demo_01",["Demo_01", "Demo_02", "Demo_03"]), choose("Language", string, "eng",["eng","fr","vn"])], ui_font, map_background, false);
 		gama.pref_display_slice_number <- 12; /* 128 too slow ! */
 		gama.pref_display_show_rotation <- false;
 		gama.pref_display_show_errors <- false;

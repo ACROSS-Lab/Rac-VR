@@ -585,7 +585,7 @@ global {
 				}
 			}
 			create_facility_treatment <- false;
-			stage <- PLAYER_VR_EXPLORATION_TURN;
+			
 			index_player <- 0;
 			step <- 0.000000000001;
 			ask village {
@@ -600,7 +600,7 @@ global {
 			
 			turn <- turn + 1;
 			do update_display;
-			if turn > end_of_game {
+			if turn > end_of_game or (mode = "Demo_02" and turn > 1){
 				do pause;
 			}
 			else if not without_player {
@@ -774,6 +774,7 @@ global {
 	
 	
 	action before_exploration_phase{
+		stage <- PLAYER_VR_EXPLORATION_TURN;
 		start_exploration_turn_time <- machine_time;
 		if connect_to_unity {
 			do update_indicators_unity;
