@@ -138,6 +138,8 @@ global {
 	bool is_pollution_ok <- true;
 	
 	int days <- 365 const: true;
+	
+	bool continue_to_compute <- true;
 
 	/********************** INITIALIZATION OF THE GAME ****************************/
 
@@ -145,6 +147,10 @@ global {
 		if not without_player or (players_actions_to_load != nil){do load_language;}
 		do generate_info_action;
 		name <- GAME_NAME;
+		
+		if mode != nil {
+			end_of_game <- 2;
+		}
 		
 		do init;
 		
@@ -600,10 +606,7 @@ global {
 			
 			turn <- turn + 1;
 			do update_display;
-			if turn > end_of_game or (mode = "Demo_02" and turn > 1){
-				do pause;
-			}
-			else if not without_player {
+			if not without_player {
 				
 				string mess <- PLAYER_TURN +"\n" +((is_production_ok and is_pollution_ok)? COMMUNE_STANDARD_ECOLABEL : COMMUNE_NOT_STANDARD_ECOLABEL + ":" );
 				if (not is_production_ok) {
@@ -618,12 +621,15 @@ global {
 				do tell(mess);
 				//do tell(DISCUSSION_PHASE);
 				//start_discussion_turn_time <- machine_time;
-				ask world {
-					do update_display;
-					do resume;
-					do before_exploration_phase;
+				if mode = "Demo_02" {
+					continue_to_compute <- false;
+				} else {
+					ask world {
+						do update_display;
+						do resume;
+						do before_exploration_phase;
+					}
 				}
-		
 			}
 			
 			if save_log {
@@ -975,7 +981,10 @@ global {
 	}
 	
 	action end_of_exploration_phase {
-		if isDemo {
+		if turn >= end_of_game{
+			end <- true;
+		} else {
+			if isDemo {
 			if isDemo{
 				if choice = 0 {
 					collect_on_ground <- true;
@@ -1005,12 +1014,12 @@ global {
 			stage <- PLAYER_DISCUSSION_TURN;
 			start_discussion_turn_time <- machine_time;
 		}
-		
-	}
+	}		
+}
 	
 	
 //REFLEXES
-	reflex indicators_computation when: stage = COMPUTE_INDICATORS {
+	reflex indicators_computation when: stage = COMPUTE_INDICATORS and continue_to_compute {
 		float t <- machine_time;
 		
 		do compute_indicators;

@@ -65,6 +65,7 @@ global {
 	
 	int end_of_game <- 11; // Number of turns of the game (1 turn = 1 year)
 	float tolerance_dist <- 1#m;
+	bool end <- false;
 	
 	/*************** PARAMETERS ON ECO-LABEL ****************************/
 	
