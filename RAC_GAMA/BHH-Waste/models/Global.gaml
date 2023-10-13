@@ -235,6 +235,7 @@ global {
 	}
 	
 	action restart {
+		hasRestarted <- true;
 		do kill;
 		do init;
 	}
@@ -642,7 +643,7 @@ global {
 			if save_log_2 {
 				save ("" + turn + "," + village_canal_solid_pollution  + ","+ village_soil_solid_pollution + "," + village_water_pollution)  to: log_path format: "text" rewrite: false;
 			}
-
+			
 		}
 	}
 	
@@ -781,6 +782,7 @@ global {
 	
 	action before_exploration_phase{
 		stage <- PLAYER_VR_EXPLORATION_TURN;
+
 		start_exploration_turn_time <- machine_time;
 		if connect_to_unity {
 			do update_indicators_unity;

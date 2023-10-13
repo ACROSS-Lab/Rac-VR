@@ -5,6 +5,7 @@ using System.Net.Sockets;
 using System.Threading;
 using System.Timers;
 using TMPro;
+using UnityEngine.SceneManagement;
 
 
 public class GlobalTest : TCPConnector
@@ -78,6 +79,8 @@ public class GlobalTest : TCPConnector
 
     private ModeConfig mc;
 
+    private bool restart;
+
 
     // Start is called before the first frame update
     void Start()
@@ -98,6 +101,7 @@ public class GlobalTest : TCPConnector
         mc = ModeConfigM.GetComponent<ModeConfig>();
         pPNJ1 = PNJ1.GetComponent<ParamPNJ>();
 
+        restart = false;
     }
 
     private void Update()
@@ -110,7 +114,13 @@ public class GlobalTest : TCPConnector
             classIndicators.displayProductionClass(classIndicators.productionClass[village_id]);
             classIndicators.displayWaterColor(classIndicators.waterwasteClass[village_id]);
         }
-             
+        // if (restart)
+        // {
+        //     Debug.Log("enter");
+        //     SceneManager.LoadScene("Assets/Scenes/RAC_MainScene.unity");
+        //     Debug.Log("done");
+        // }
+
         //DisplayMessage("Update");
         if (text != null && message != null)
         {
@@ -383,6 +393,9 @@ public class GlobalTest : TCPConnector
             readySendPlayerPosition = !readySendPlayerPosition;
             pPNJ1.readySendPosition = true;
         }
+        // else if (mes.Contains("Restart")){
+        //     restart = true;
+        // }
 
         if (text != null)
             message = mes;

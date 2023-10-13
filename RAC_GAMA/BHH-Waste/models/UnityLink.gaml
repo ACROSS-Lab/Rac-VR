@@ -17,7 +17,6 @@ global skills: [network]{
 	 ***************************************************/
 	 
 	//Activate the unity connection; if activated, the model will wait for an connection from Unity to start
-	bool connect_to_unity <- false;
 	bool connect_to_unity <- true;
 	
 	// connection port
@@ -71,6 +70,7 @@ global skills: [network]{
 	//allows to manage during which phase GAMA sends/receives information
 	bool classUpdatedTour <- false; //for sending the indicators information only once after the indicators computation stage
 	bool enter_or_exit_VR <- false; //for receiving position only in the VR phase
+	bool hasRestarted <- false;
 	
 	bool do_send_world <- false;
 	
@@ -405,6 +405,14 @@ global skills: [network]{
 			}
 			enter_or_exit_VR <- false;
 		}
+//		if hasRestarted {
+//			if unity_client = nil {
+//				write "no client to send to";
+//			} else {
+//				do send to: unity_client contents: "Restart" + end_message_symbol;	
+//			}
+//			hasRestarted <- false;
+//		}
 		
 		
 		t1<- t1 + machine_time - t;

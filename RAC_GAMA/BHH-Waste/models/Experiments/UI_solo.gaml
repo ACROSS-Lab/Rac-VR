@@ -146,6 +146,7 @@ global {
 	image_file player <- image_file("../../includes/icons/Icone_Player.png");
 	image_file interest <- image_file("../../includes/icons/Icone_PointOfInterest.png");
 	image_file logo_rac <- image_file("../../includes/icons/logo_RAC.png");
+	image_file logo_restart <- image_file("../../includes/icons/Restart.png");
 
 	/********************** VARIOUS FUNCTIONS  ***************************/
 
@@ -685,29 +686,29 @@ experiment Open {
 				} 
 			}
 			
-			graphics "Button restart" {
-				restart_location <- {location.x - w_width / 2.5 + 38000, location.y- w_height/8 + y_centerdis};
-				restart_button <- circle(w_width/6) at_location restart_location;
-				draw image_file("../../includes/icons/Visibility_on.png") color: restart_selected ? selected_color:unselected_color size: w_width/3.5 at: restart_button.location ;
-			}
+//			graphics "Button restart" {
+//				restart_location <- {location.x - w_width / 2.5 + 38000, location.y- w_height/8 + y_centerdis};
+//				restart_button <- circle(w_width/6) at_location restart_location;
+//				draw logo_restart color: restart_selected ? selected_color:unselected_color size: w_width/3.5 at: restart_button.location ;
+//			}
 			
-			event #mouse_move {
-				using topology(simulation) {
-					restart_selected <- ((restart_location + {2000,0}) distance_to #user_location) < w_width / 3;
-				}
-			}
-			
-			event #mouse_exit {
-					restart_selected <- false;
-			}
-			
-			event #mouse_down {
-				if (restart_selected) {
-					ask simulation {
-						do restart ;
-					}
-				} 
-			}
+//			event #mouse_move {
+//				using topology(simulation) {
+//					restart_selected <- ((restart_location + {2000,0}) distance_to #user_location) < w_width / 3;
+//				}
+//			}
+//			
+//			event #mouse_exit {
+//					restart_selected <- false;
+//			}
+//			
+//			event #mouse_down {
+//				if (restart_selected) {
+//					ask simulation {
+//						do restart ;
+//					}
+//				} 
+//			}
 				
 			event "1" {
 				ask simulation {
