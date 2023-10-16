@@ -17,6 +17,7 @@ public class GlobalTest : TCPConnector
     public GameObject WasteDisplayM;
     public GameObject WasteCollectionI;
     public GameObject ModeConfigM;
+    public GameObject HelpM;
 
     public List<GameObject> Agents;
 
@@ -79,7 +80,11 @@ public class GlobalTest : TCPConnector
 
     private ModeConfig mc;
 
+    private HelpManagement hm;
+
     private bool restart;
+
+    private bool help = false;
 
 
     // Start is called before the first frame update
@@ -100,6 +105,7 @@ public class GlobalTest : TCPConnector
         wci = WasteCollectionI.GetComponent<WasteCollectionInfo>();
         mc = ModeConfigM.GetComponent<ModeConfig>();
         pPNJ1 = PNJ1.GetComponent<ParamPNJ>();
+        hm = HelpM.GetComponent<HelpManagement>();
 
         restart = false;
     }
@@ -121,6 +127,12 @@ public class GlobalTest : TCPConnector
         //     Debug.Log("done");
         // }
 
+        if (help) {
+            hm.PanelTuto.SetActive(true);
+            Player.transform.position = hm.start_pos;
+            Player.transform.rotation = hm.start_rot;
+            help = false;
+        }
         //DisplayMessage("Update");
         if (text != null && message != null)
         {
@@ -397,7 +409,7 @@ public class GlobalTest : TCPConnector
         //     restart = true;
         // }
         else if (mes.Contains("Help")){
-            
+            help = true;
         }
 
         if (text != null)
