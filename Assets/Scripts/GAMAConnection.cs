@@ -396,6 +396,9 @@ public class GlobalTest : TCPConnector
         // else if (mes.Contains("Restart")){
         //     restart = true;
         // }
+        else if (mes.Contains("Help")){
+            
+        }
 
         if (text != null)
             message = mes;

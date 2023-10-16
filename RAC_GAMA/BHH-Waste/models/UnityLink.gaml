@@ -79,6 +79,8 @@ global skills: [network]{
 	string language;
 	string mode;
 	
+	bool send_help <- false;
+	
 	/*************************************** 
 	 *
 	 * PARAMETERS ABOUT THE PLAYER
@@ -413,6 +415,10 @@ global skills: [network]{
 //			}
 //			hasRestarted <- false;
 //		}
+		if send_help {
+			do send to: unity_client contents: "Help" + end_message_symbol;	
+			send_help <- false;
+		}
 		
 		
 		t1<- t1 + machine_time - t;

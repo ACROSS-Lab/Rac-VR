@@ -1,9 +1,20 @@
 /**
-* Name: U1
+* Name: UI_solo
 * The model used for the main demonstrations
 * Author: A. Drogoul
 * 
-* This model has been designed using resources (icons) from Flaticon.com
+* 
+* Demo_01 -> original
+**** VR (Exploration + Choix + Ramassage de dechets)
+**** Simulaion GAMA
+**** VR (Constat de l'effet de l'action)
+*
+* Demo_02 -> ministre (Pas de choix a faire)
+**** Simulation GAMA 
+**** VR (Exploration + Ramassage de dechets ; pas de choix)
+**** Simulation GAMA (Constat de l'effet de l'action)
+* 
+* Demo_03 -> pareil que Demo_01 avec changement aleatoire de position du PNJ (au niveau Unity)
 * 
 * Tags: 
 */
@@ -24,7 +35,6 @@ global {
 	rgb city_color <- rgb(228, 141, 104);
 	rgb selected_color <- rgb(255,255,255);
 	rgb unselected_color <-rgb(200,200,200,0.7);
-	list<rgb> village_color <- [rgb(183, 73, 77), rgb(255, 217, 67), rgb(65, 149, 205), rgb(80, 174, 76)]; // color for the 4 villages
 	map<string, rgb> color_col <- ["Production":: rgb(118, 189, 30), "Total"::rgb(253, 161, 69), "Water"::rgb(120, 172, 217), "Solid"::rgb(137, 100, 73)]; //color used when indicators are not broken down by villages
 	map<string, rgb> color_col_background <- ["Production":: rgb(231, 255, 140), "Total"::rgb(255, 225, 177), "Water"::rgb(213, 243, 243), "Solid"::rgb(229, 194, 163)];
 	rgb map_background <- rgb(248, 246, 245);
@@ -720,7 +730,7 @@ experiment Open {
 					do execute_action(A_2a);
 				}
 			}
-			event "a" {
+			event "q" {
 				ask simulation {
 					do execute_action(A_2b);
 				}
@@ -774,6 +784,11 @@ experiment Open {
 				ask simulation {
 					do execute_action(A_9);
 				}
+			}
+			
+			event " " {
+				write "Sending help";
+				send_help <- true;
 			}
 						
 			event #mouse_exit {
