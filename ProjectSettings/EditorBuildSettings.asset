@@ -11,6 +11,9 @@ EditorBuildSettings:
   - enabled: 1
     path: Assets/Scenes/RAC_MainScene.unity
     guid: b38b46963063dc044b822dcaa19930e4
+  - enabled: 1
+    path: Assets/Scenes/DARK_Scene.unity
+    guid: 8ace68fdfc8e1c94f928b4527c0eb66e
   - enabled: 0
     path: Assets/Scenes/VR_Collisions.unity
     guid: c33d84a834ccddb46810c0c96153742c
