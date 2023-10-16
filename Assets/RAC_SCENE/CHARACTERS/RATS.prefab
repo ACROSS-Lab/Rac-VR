@@ -184,7 +184,7 @@ MonoBehaviour:
           tooltip: 
           showInInspector: 0
           networkSync: 0
-          value: {fileID: 3932458783396887011, guid: 73ca3af20fa83d448bdaa44df4046c65, type: 3}
+          value: {fileID: 1535721505243150620, guid: 73ca3af20fa83d448bdaa44df4046c65, type: 3}
         - useVariable: 0
           name: 
           tooltip: 
@@ -632,7 +632,7 @@ MonoBehaviour:
     manualUpdate: 0
     outVariableIndices: 
     keepDelayedEventsOnStateExit: 0
-    preprocessed: 1
+    preprocessed: 0
     ExposedEvents: []
     OutputEvents: []
     RestartOnEnable: 1
@@ -649,8 +649,8 @@ MonoBehaviour:
     handleCollisionEnter2D: 0
     handleCollisionExit2D: 0
     handleCollisionStay2D: 0
-    handleTriggerEnter: 1
-    handleTriggerExit: 1
+    handleTriggerEnter: 0
+    handleTriggerExit: 0
     handleTriggerStay: 0
     handleCollisionEnter: 0
     handleCollisionExit: 0
