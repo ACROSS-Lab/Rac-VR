@@ -939,7 +939,7 @@ experiment Open {
 			}
 			
 			light #ambient intensity: ambient_intensity;
-			camera 'default' distance: 7700 location: #from_above target: {3000,2700,0};
+			camera 'default' distance: 7800 location: #from_above target: {3000,2700,0};
 			
 			/********************** MAIN MAP DISPLAY ******************************/
 			species plot visible: !(stage = PLAYER_VR_EXPLORATION_TURN)  {
