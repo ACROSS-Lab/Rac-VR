@@ -782,7 +782,7 @@ global {
 	
 	action before_exploration_phase{
 		stage <- PLAYER_VR_EXPLORATION_TURN;
-
+		connect_to_unity <- true;
 		start_exploration_turn_time <- machine_time;
 		if connect_to_unity {
 			do update_indicators_unity;

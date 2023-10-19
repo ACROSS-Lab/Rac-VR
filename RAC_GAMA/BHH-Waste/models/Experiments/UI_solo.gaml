@@ -500,7 +500,7 @@ experiment Open {
 	action _init_ {
 		//Requires latest version of GAMA 1.8.2
 		//map<string, unknown> params <- user_input_dialog("Welcome to RÁC",[enter("Dark theme",true), choose("Language", string, "English",["English","Français","Tiếng Việt"])], font("Helvetica",18, #bold), nil, false);
-		map<string, unknown> params <- user_input_dialog("Welcome to RÁC",[choose("Mode", string, "Demo_01",["Demo_01", "Demo_02", "Demo_03"]), choose("Language", string, "eng",["eng","fr","vn"])], ui_font, map_background, false);
+		map<string, unknown> params <- user_input_dialog("Welcome to RÁC",[choose("Mode", string, "Demo_02",["Demo_01", "Demo_02", "Demo_03"]), choose("Language", string, "eng",["eng","fr","vn"])], ui_font, map_background, false);
 		gama.pref_display_slice_number <- 12; /* 128 too slow ! */
 		gama.pref_display_show_rotation <- false;
 		gama.pref_display_show_errors <- false;
@@ -661,10 +661,10 @@ experiment Open {
 				draw ""+commune_money  at: {location.x, location.y- 6*radius/10 + y_centerdis, 0.01}  color: dark_theme ? #gold : rgb (225, 126, 21, 255) font: ui_font anchor: #bottom_center;
 			}
 	
-			graphics "Next" transparency: (((stage = STARTING_STATE and (connected_to_unity or !connect_to_unity)) or stage = PLAYER_DISCUSSION_TURN or stage = PLAYER_ACTION_TURN or stage = PLAYER_VR_EXPLORATION_TURN or !continue_to_compute) and !end) ? 0 : 0.6 {
+			graphics "Next" transparency: (((stage = STARTING_STATE and (connected_to_unity or !connect_to_unity)) or stage = PLAYER_DISCUSSION_TURN or stage = PLAYER_ACTION_TURN or (stage = PLAYER_VR_EXPLORATION_TURN and (connected_to_unity or !connect_to_unity))or !continue_to_compute) and !end) ? 0 : 0.6 {
 				next_location <- {location.x + w_width / 2.5,  location.y-w_height/8} + {0, y_centerdis};
-				draw button_background at: next_location color: (next_selected and (((stage = STARTING_STATE and (connected_to_unity or !connect_to_unity)) or stage = PLAYER_DISCUSSION_TURN or stage = PLAYER_ACTION_TURN or stage = PLAYER_VR_EXPLORATION_TURN or !continue_to_compute) and !end)) ? selected_color:unselected_color size: shape.width / 4;
-				draw next_icon at: next_location + {100, 0} size: w_width / 8 color: (next_selected and (((stage = STARTING_STATE and (connected_to_unity or !connect_to_unity)) or stage = PLAYER_DISCUSSION_TURN or stage = PLAYER_ACTION_TURN or stage = PLAYER_VR_EXPLORATION_TURN or !continue_to_compute) and !end)) ? selected_color:unselected_color;
+				draw button_background at: next_location color: (next_selected and (((stage = STARTING_STATE and (connected_to_unity or !connect_to_unity)) or stage = PLAYER_DISCUSSION_TURN or stage = PLAYER_ACTION_TURN or (stage = PLAYER_VR_EXPLORATION_TURN and (connected_to_unity or !connect_to_unity)) or !continue_to_compute) and !end)) ? selected_color:unselected_color size: shape.width / 4;
+				draw next_icon at: next_location + {100, 0} size: w_width / 8 color: (next_selected and (((stage = STARTING_STATE and (connected_to_unity or !connect_to_unity)) or stage = PLAYER_DISCUSSION_TURN or stage = PLAYER_ACTION_TURN or (stage = PLAYER_VR_EXPLORATION_TURN and (connected_to_unity or !connect_to_unity)) or !continue_to_compute) and !end)) ? selected_color:unselected_color;
 			}
 	
 			graphics "Play Pause" visible: !end {
@@ -848,7 +848,7 @@ experiment Open {
 							ask simulation {
 								do end_of_discussion_phase;
 							}
-						} else if (stage = PLAYER_VR_EXPLORATION_TURN) {
+						} else if (stage = PLAYER_VR_EXPLORATION_TURN and (connected_to_unity or !connect_to_unity)) {
 							ask simulation {
 								do end_of_exploration_phase;
 								if !always_display_sub_charts {
