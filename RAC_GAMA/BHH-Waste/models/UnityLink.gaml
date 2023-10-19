@@ -70,6 +70,7 @@ global skills: [network]{
 	//allows to manage during which phase GAMA sends/receives information
 	bool classUpdatedTour <- false; //for sending the indicators information only once after the indicators computation stage
 	bool enter_or_exit_VR <- false; //for receiving position only in the VR phase
+	bool hasRestarted <- false;
 	
 	bool do_send_world <- false;
 	
@@ -77,6 +78,8 @@ global skills: [network]{
 	
 	string language;
 	string mode;
+	
+	bool send_help <- false;
 	
 	/*************************************** 
 	 *
@@ -404,6 +407,18 @@ global skills: [network]{
 			}
 			enter_or_exit_VR <- false;
 		}
+//		if hasRestarted {
+//			if unity_client = nil {
+//				write "no client to send to";
+//			} else {
+//				do send to: unity_client contents: "Restart" + end_message_symbol;	
+//			}
+//			hasRestarted <- false;
+//		}
+		if send_help {
+			do send to: unity_client contents: "Help" + end_message_symbol;	
+			send_help <- false;
+		}
 		
 		
 		t1<- t1 + machine_time - t;
@@ -446,6 +461,12 @@ global skills: [network]{
 				ask pointInterestManager {
 					do changeState(int(answer["point_of_interest"]));
 				}
+			} else if answer contains_key "pnj_pos" {
+				write "s: " + s.contents;
+				list<int> positionPNJ <- answer["pnj_pos"];
+				ask pointInterestManager {
+					do setLocation(int(answer["pnj_id"]), world.translate_coord({positionPNJ[0]/precision,positionPNJ[1]/precision}));
+				}
 			}
 		}
 	}
@@ -470,6 +491,10 @@ species pointInterestManager {
 	
 	action changeState(int i) {
 		points[i].visited <- true;
+	}
+	
+	action setLocation(int i, point p) {
+		points[i].location <- p;
 	}
 }
 

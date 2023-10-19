@@ -12,7 +12,7 @@ public class ModeConfig : MonoBehaviour
     void Start()
     {
         language = "eng";
-        mode = "Demo_03";
+        mode = "Demo_01";
     }
 
     // Update is called once per frame

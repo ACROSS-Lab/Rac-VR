@@ -65,7 +65,7 @@ global {
 				}
 			}
 			geometries_received <- true;
-			save object to: output_file format: shp;
+			save object to: output_file format: "shp";
 			
 			if unity_client = nil {
 				write "no client to send to";

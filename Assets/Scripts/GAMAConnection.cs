@@ -5,16 +5,19 @@ using System.Net.Sockets;
 using System.Threading;
 using System.Timers;
 using TMPro;
+using UnityEngine.SceneManagement;
 
 
 public class GlobalTest : TCPConnector
 {
 
     public GameObject Player;
+    public GameObject PNJ1;
     public GameObject Ground;
     public GameObject WasteDisplayM;
     public GameObject WasteCollectionI;
     public GameObject ModeConfigM;
+    public GameObject HelpM;
 
     public List<GameObject> Agents;
 
@@ -73,15 +76,22 @@ public class GlobalTest : TCPConnector
     private static DisplayManagement dm;
 
     private WasteCollectionInfo wci;
+    private ParamPNJ pPNJ1;
 
     private ModeConfig mc;
+
+    private HelpManagement hm;
+
+    private bool restart;
+
+    private bool help = false;
 
 
     // Start is called before the first frame update
     void Start()
     {
         DisplayMessage("Start");
-       agentMapList = new List<Dictionary<int, GameObject>>();
+        agentMapList = new List<Dictionary<int, GameObject>>();
         foreach (GameObject i in Agents) 
         {
             agentMapList.Add(
@@ -91,13 +101,14 @@ public class GlobalTest : TCPConnector
         DisplayMessage("IP: " + ip + " port: " + port);
         ConnectToTcpServer();
 
-       dm = WasteDisplayM.GetComponent<DisplayManagement>();
-       wci = WasteCollectionI.GetComponent<WasteCollectionInfo>();
-       mc = ModeConfigM.GetComponent<ModeConfig>();
-       }
+        dm = WasteDisplayM.GetComponent<DisplayManagement>();
+        wci = WasteCollectionI.GetComponent<WasteCollectionInfo>();
+        mc = ModeConfigM.GetComponent<ModeConfig>();
+        pPNJ1 = PNJ1.GetComponent<ParamPNJ>();
+        hm = HelpM.GetComponent<HelpManagement>();
 
-
-
+        restart = false;
+    }
 
     private void Update()
     {
@@ -109,7 +120,21 @@ public class GlobalTest : TCPConnector
             classIndicators.displayProductionClass(classIndicators.productionClass[village_id]);
             classIndicators.displayWaterColor(classIndicators.waterwasteClass[village_id]);
         }
-             
+        // if (restart)
+        // {
+        //     Debug.Log("enter");
+        //     SceneManager.LoadScene("Assets/Scenes/RAC_MainScene.unity");
+        //     Debug.Log("done");
+        // }
+
+        if (help) {
+            hm.PanelTuto.SetActive(true);
+            hm.Complete_XR.transform.position = hm.start_pos;
+            hm.Complete_XR.transform.rotation = hm.start_rot;
+            //hm.XR.transform.position = hm.start_pos_xr;
+            //hm.XR.transform.rotation = hm.start_rot_xr;
+            help = false;
+        }
         //DisplayMessage("Update");
         if (text != null && message != null)
         {
@@ -229,6 +254,10 @@ public class GlobalTest : TCPConnector
             infoWorld = null;
 
         }
+        if (PNJ1 != null && pPNJ1.readySendPosition){
+            SendInitPNJPos(PNJ1, pPNJ1);
+            pPNJ1.readySendPosition = false;
+        }
     }
 
    
@@ -262,6 +291,11 @@ public class GlobalTest : TCPConnector
         SendMessageToServer("{\"choice\": " + choice_int + ",\"nb_waste\": " + wci.nb_waste + "}");
     }
 
+    private void SendInitPNJPos(GameObject Object, ParamPNJ pPNJ){
+        List<int> p = converter.toGAMACRS(Object.transform.position);
+        SendMessageToServer("{\"pnj_pos\":[" + p[0] + "," + p[1] + "], \"pnj_id\":"+ pPNJ.id +"}");
+    }
+
     private void SendEndDialogue(){
         SendMessageToServer("{\"point_of_interest\": " + wci.pointInterestIndex + "}");
     }
@@ -272,7 +306,6 @@ public class GlobalTest : TCPConnector
         {
             parameters.position = infoWorld.position;
             playerPositionUpdate = true;
-
         }
         foreach (Dictionary<int, GameObject> agentMap in agentMapList) { 
             foreach (GameObject obj in agentMap.Values)
@@ -372,8 +405,14 @@ public class GlobalTest : TCPConnector
         }
         else if (mes.Contains("Enter_or_exit_VR")){
             readySendPlayerPosition = !readySendPlayerPosition;
+            pPNJ1.readySendPosition = true;
         }
-
+        // else if (mes.Contains("Restart")){
+        //     restart = true;
+        // }
+        else if (mes.Contains("Help")){
+            help = true;
+        }
 
         if (text != null)
             message = mes;

@@ -146,6 +146,7 @@ global {
 	image_file player <- image_file("../../includes/icons/Icone_Player.png");
 	image_file interest <- image_file("../../includes/icons/Icone_PointOfInterest.png");
 	image_file logo_rac <- image_file("../../includes/icons/logo_RAC.png");
+	image_file logo_restart <- image_file("../../includes/icons/Restart.png");
 
 	/********************** VARIOUS FUNCTIONS  ***************************/
 
@@ -472,8 +473,8 @@ species stacked_chart {
 			draw no_ecolabel_icon at: {original_col_width*1.75, my_height-2.25*original_col_width} size: {1300, 1600};
 		}
  				
- 		draw line({-original_col_width/2, 3* chart_height / 2 - max_heights["Production"]/2}, {original_col_width/2, 3* chart_height / 2 - max_heights["Production"]/2}) width:20 color: map_background ;
- 		draw line({original_col_width/2 + gap, 3* chart_height / 2 - max_heights["Production"]/2}, {3*original_col_width/2 + gap, 3* chart_height / 2 - max_heights["Production"]/2}) width:20 color: map_background;
+ 		draw line({-original_col_width/2, 3* chart_height / 2 - max_heights["Production"]/2}, {original_col_width/2, 3* chart_height / 2 - max_heights["Production"]/2}) width:6 color: #white ;
+ 		draw line({original_col_width/2 + gap, 3* chart_height / 2 - max_heights["Production"]/2}, {3*original_col_width/2 + gap, 3* chart_height / 2 - max_heights["Production"]/2}) width:6 color: #white;
  	}
 } 
 
@@ -541,7 +542,7 @@ experiment Open {
 				draw ""+value  at: {location.x, location.y- 6*radius/10, 0.01}  color: ecolabel font: ui_font anchor: #bottom_center;
 			}
 		
-			graphics "Timer for the discussion" visible: stage = PLAYER_DISCUSSION_TURN and turn <= end_of_game and use_timer_for_discussion {
+			graphics "Timer for the discussion" visible: stage = PLAYER_DISCUSSION_TURN and !end and use_timer_for_discussion {
 				float y <- location.y + w_height/5 + y_centerdis;
 				float left <- location.x - w_width/2;
 				float right <- location.x + w_width/2;
@@ -552,7 +553,7 @@ experiment Open {
 				draw sandclock_icon /*rotate: (180 - remaining_time)*3*/ at: {left + width, y} size: w_height / 6;
 			}
 			
-			graphics "Timer for the exploration" visible: stage = PLAYER_VR_EXPLORATION_TURN and turn <= end_of_game and use_timer_for_exploration{
+			graphics "Timer for the exploration" visible: stage = PLAYER_VR_EXPLORATION_TURN and !end and use_timer_for_exploration{
 				float y <- location.y + w_height/5 + y_centerdis;
 				float left <- location.x - w_width/2;
 				float right <- location.x + w_width/2;
@@ -563,7 +564,7 @@ experiment Open {
 				draw sandclock_icon /*rotate: (180 - remaining_time)*3*/ at: {left + width, y} size: w_height / 6;
 			}
 			
-			graphics "Timer for the village choice" visible: CHOOSING_VILLAGE_FOR_POOL and turn <= end_of_game {
+			graphics "Timer for the village choice" visible: CHOOSING_VILLAGE_FOR_POOL and !end {
 				float y <- location.y + 3*w_height/8 + y_centerdis;
 				float left <- location.x - w_width/2;
 				float right <- location.x + w_width/2;
@@ -617,7 +618,6 @@ experiment Open {
 					action_locations[s] <- {left + gap * index, y};
 					index <- index + 1;
 				}
-	
 			}
 	
 			graphics "Stage"  {
@@ -649,13 +649,13 @@ experiment Open {
 				draw ""+commune_money  at: {location.x, location.y- 6*radius/10 + y_centerdis, 0.01}  color: dark_theme ? #gold : rgb (225, 126, 21, 255) font: ui_font anchor: #bottom_center;
 			}
 	
-			graphics "Next" transparency: (((stage = STARTING_STATE and (connected_to_unity or !connect_to_unity)) or stage = PLAYER_DISCUSSION_TURN or stage = PLAYER_ACTION_TURN or stage = PLAYER_VR_EXPLORATION_TURN ) and turn <= end_of_game) ? 0 : 0.6 {
+			graphics "Next" transparency: (((stage = STARTING_STATE and (connected_to_unity or !connect_to_unity)) or stage = PLAYER_DISCUSSION_TURN or stage = PLAYER_ACTION_TURN or stage = PLAYER_VR_EXPLORATION_TURN ) and !end) ? 0 : 0.6 {
 				next_location <- {location.x + w_width / 2.5,  location.y-w_height/8} + {0, y_centerdis};
-				draw button_background at: next_location color: (next_selected and (((stage = STARTING_STATE and (connected_to_unity or !connect_to_unity)) or stage = PLAYER_DISCUSSION_TURN or stage = PLAYER_ACTION_TURN or stage = PLAYER_VR_EXPLORATION_TURN) and turn <= end_of_game)) ? selected_color:unselected_color size: shape.width / 4;
-				draw next_icon at: next_location + {100, 0} size: w_width / 8 color: (next_selected and (((stage = STARTING_STATE and (connected_to_unity or !connect_to_unity)) or stage = PLAYER_DISCUSSION_TURN or stage = PLAYER_ACTION_TURN or stage = PLAYER_VR_EXPLORATION_TURN) and turn <= end_of_game)) ? selected_color:unselected_color;
+				draw button_background at: next_location color: (next_selected and (((stage = STARTING_STATE and (connected_to_unity or !connect_to_unity)) or stage = PLAYER_DISCUSSION_TURN or stage = PLAYER_ACTION_TURN or stage = PLAYER_VR_EXPLORATION_TURN) and !end)) ? selected_color:unselected_color size: shape.width / 4;
+				draw next_icon at: next_location + {100, 0} size: w_width / 8 color: (next_selected and (((stage = STARTING_STATE and (connected_to_unity or !connect_to_unity)) or stage = PLAYER_DISCUSSION_TURN or stage = PLAYER_ACTION_TURN or stage = PLAYER_VR_EXPLORATION_TURN) and !end)) ? selected_color:unselected_color;
 			}
 	
-			graphics "Play Pause" visible: turn <= end_of_game {
+			graphics "Play Pause" visible: !end {
 				pause_location <- {location.x - w_width / 2.5, location.y- w_height/8} + {0, y_centerdis};
 				draw button_background at: pause_location color: play_pause_selected ? selected_color:unselected_color size: shape.width / 4;
 				draw simulation.paused or about_to_pause ? play_icon : pause_icon at: simulation.paused or about_to_pause ? pause_location + {100,0}: pause_location color: play_pause_selected ? selected_color:unselected_color size: shape.width / 8;
@@ -668,35 +668,35 @@ experiment Open {
 				draw image_file(show_chart_by_vil ? "../../includes/icons/Visibility_off.png":"../../includes/icons/Visibility_on.png") color: show_chart_vil_selected ? selected_color:unselected_color size: w_width/3.5 at: show_chart_vil_button.location ;
 			}
 			
-			graphics "Button restart" {
-				restart_location <- {location.x - w_width / 2.5 + 38000, location.y- w_height/8 + y_centerdis};
-				restart_button <- circle(w_width/6) at_location restart_location;
-				draw image_file("../../includes/icons/Visibility_on.png") color: restart_selected ? selected_color:unselected_color size: w_width/3.5 at: restart_button.location ;
-			}
-			
-			event #mouse_move {
-				using topology(simulation) {
-					show_chart_vil_selected <- (show_chart_vil_button covers #user_location) ;
-					restart_selected <- ((restart_location + {2000,0}) distance_to #user_location) < w_width / 3;
-				}
-			}
-			
-			event #mouse_exit {
-				show_chart_vil_selected <- false;
-				restart_selected <- false;
-					
-			}
-			
-			event #mouse_down {
-				if (show_chart_vil_selected) {
-					show_chart_by_vil <- !show_chart_by_vil;
-				} 
-				if (restart_selected) {
-					ask simulation {
-						do restart ;
-					}
-				} 
-			}
+//			graphics "Button restart" {
+//				restart_location <- {location.x - w_width / 2.5 + 38000, location.y- w_height/8 + y_centerdis};
+//				restart_button <- circle(w_width/6) at_location restart_location;
+//				draw logo_restart color: restart_selected ? selected_color:unselected_color size: w_width/3.5 at: restart_button.location ;
+//			}
+//			
+//			event #mouse_move {
+//				using topology(simulation) {
+//					show_chart_vil_selected <- (show_chart_vil_button covers #user_location) ;
+//					restart_selected <- ((restart_location + {2000,0}) distance_to #user_location) < w_width / 3;
+//				}
+//			}
+//			
+//			event #mouse_exit {
+//				show_chart_vil_selected <- false;
+//				restart_selected <- false;
+//					
+//			}
+//			
+//			event #mouse_down {
+//				if (show_chart_vil_selected) {
+//					show_chart_by_vil <- !show_chart_by_vil;
+//				} 
+//				if (restart_selected) {
+//					ask simulation {
+//						do restart ;
+//					}
+//				} 
+//			}
 				
 			event "1" {
 				ask simulation {
@@ -810,7 +810,7 @@ experiment Open {
 				}
 				using topology(simulation) {
 					if (next_location distance_to #user_location) < w_width / 5 {
-						if (turn > end_of_game) {
+						if end {
 							return;
 						}
 						if (stage = STARTING_STATE and (connected_to_unity or !connect_to_unity)) {
