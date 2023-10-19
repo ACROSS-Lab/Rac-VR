@@ -484,8 +484,8 @@ species stacked_chart {
 			draw no_ecolabel_icon at: {original_col_width*1.75, my_height-2.25*original_col_width} size: {1300, 1600};
 		}
  				
- 		draw line({-original_col_width/2, 3* chart_height / 2 - max_heights["Production"]/2}, {original_col_width/2, 3* chart_height / 2 - max_heights["Production"]/2}) width:6 color: #white ;
- 		draw line({original_col_width/2 + gap, 3* chart_height / 2 - max_heights["Production"]/2}, {3*original_col_width/2 + gap, 3* chart_height / 2 - max_heights["Production"]/2}) width:6 color: #white;
+ 		draw line({-original_col_width/2, chart_height}, {original_col_width/2, chart_height}) width:6 color: #white ;
+ 		draw line({original_col_width/2 + gap, chart_height}, {3*original_col_width/2 + gap, chart_height}) width:6 color: #white;
  	}
 } 
 
