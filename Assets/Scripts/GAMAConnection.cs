@@ -129,8 +129,10 @@ public class GlobalTest : TCPConnector
 
         if (help) {
             hm.PanelTuto.SetActive(true);
-            Player.transform.position = hm.start_pos;
-            Player.transform.rotation = hm.start_rot;
+            hm.Complete_XR.transform.position = hm.start_pos;
+            hm.Complete_XR.transform.rotation = hm.start_rot;
+            //hm.XR.transform.position = hm.start_pos_xr;
+            //hm.XR.transform.rotation = hm.start_rot_xr;
             help = false;
         }
         //DisplayMessage("Update");
