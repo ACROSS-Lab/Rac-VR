@@ -41,6 +41,10 @@ species village {
 	int diff_budget;
 	int prev_budget <- -1;
 	
+	int estimated_production;
+	int estimated_solid_pollution ;
+	int estimated_water_pollution;
+	
 	list<map<string,map>> player_actions <- nil;
 	
 	int get_id {

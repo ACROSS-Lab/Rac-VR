@@ -302,8 +302,13 @@ global {
 	string LEGEND <- "legend";
 	string RANKING <- "ranking";
 	
+	string DEMO_VR_VIP <- "demo VR VIP";
+	string FULL_VR_GAME <- "full VR game";
+	
 	// STAGE
 	string PLAYER_ACTION_TURN <- "player action turn";
+	string PLAYER_ESTIMATION_TURN <- "player estimation turn";
+	
 	string PLAYER_DISCUSSION_TURN <- "player discussion turn";
 	string PLAYER_VR_EXPLORATION_TURN <- "player exploration turn";
 	string COMPUTE_INDICATORS <-  "compute indicators";

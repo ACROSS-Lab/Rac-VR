@@ -29,7 +29,7 @@ import "Entities/Village.gaml"
 
 import "Parameters.gaml"
 
-import "UnityLink.gaml"
+//import "UnityLink.gaml"
  
 
 global {
@@ -56,7 +56,10 @@ global {
 	bool display_water_flow <- true;
 	bool draw_territory <- false;
 	bool extra_turn <- false;
+	map<string, int> pollution_values <- ["No pollution"::0,"Slightly polluted"::1,"Moderately polluted"::2, "Very polluted"::3, "Extremely polluted"::4];
+	map<string,int> production_values <- ["Very low"::4,"Low"::3,"Medium"::2, "High"::1, "Very High"::0];
 	
+	bool VR_debug_mode <- false;
 //	map<string,string> to_english;
 //	map<string,string> from_english;
 	
@@ -137,9 +140,47 @@ global {
 	bool is_production_ok <- true;
 	bool is_pollution_ok <- true;
 	
-	int days <- 365 const: true;
+	bool end_player_turn <- true;
+	int days <- 365 const: false;
 	
 	bool continue_to_compute <- true;
+	
+		
+	//allows to manage during which phase GAMA sends/receives information
+	bool classUpdatedTour <- false; //for sending the indicators information only once after the indicators computation stage
+	bool enter_or_exit_VR <- false; //for receiving position only in the VR phase
+	bool hasRestarted <- false;
+	
+	bool do_send_world <- false;
+	
+	bool connected_to_unity <- false;
+	bool connect_to_unity <- false;
+	string language;
+	string mode;
+	
+	bool send_help <- false;
+	
+		
+	// Information to send to Unity
+	list<int> solidwasteSoilClass;
+	list<int> solidwasteCanalClass;
+	list<int> waterwasteCanalClass;
+//	list<float> waterwasteVillageValue;
+//	list<float> waterwasteCanalValue;
+	
+	list<int> solidwasteClass;
+	list<int> waterwasteClass;
+	list<int> productionClass;
+	
+	list<int> solidwasteSoilClassLastTurn;
+	list<int> waterwasteClassLastTurn;
+	list<int> productionClassLastTurn;
+	list<int> solidwasteCanalClassLastTurn;
+//	list<float> waterwasteValue;
+	
+	// Information received from Unity
+	int choice <- -1;
+	int nb_waste;
 
 	/********************** INITIALIZATION OF THE GAME ****************************/
 
@@ -148,7 +189,7 @@ global {
 		do generate_info_action;
 		name <- GAME_NAME;
 		
-		if mode != nil {
+		if mode != nil and mode != FULL_VR_GAME{
 			end_of_game <- 2;
 		}
 		
@@ -594,6 +635,7 @@ global {
 			create_facility_treatment <- false;
 			
 			index_player <- 0;
+			end_player_turn <- false;
 			step <- 0.000000000001;
 			ask village {
 				do compute_new_budget;
@@ -622,7 +664,7 @@ global {
 				do tell(mess);
 				//do tell(DISCUSSION_PHASE);
 				//start_discussion_turn_time <- machine_time;
-				if mode = "Demo_02" {
+				if mode = DEMO_VR_VIP {
 					continue_to_compute <- false;
 				} else {
 					ask world {
@@ -770,9 +812,9 @@ global {
 			}
 
 			map result <- user_input_dialog(SELECT_A_VILLAGE_TO_RECEIVE_COMMUNE_BUDGET, [choose(PLAYER_SELECTED, string, one_of(players_names), players_names)]);
-			int index <- index_of(players_names, result[PLAYER_SELECTED]);
-			villages_order << village[index];
-			ask village[index] {
+			int index_ <- index_of(players_names, result[PLAYER_SELECTED]);
+			villages_order << village[index_];
+			ask village[index_] {
 				budget <- commune_money;
 			}
 			commune_money <- 0;
@@ -782,18 +824,17 @@ global {
 	
 	action before_exploration_phase{
 		stage <- PLAYER_VR_EXPLORATION_TURN;
-		connect_to_unity <- true;
 		start_exploration_turn_time <- machine_time;
-		if connect_to_unity {
-			do update_indicators_unity;
-			enter_or_exit_VR <- true;
-		}
+		do update_indicators_unity;
+		enter_or_exit_VR <- true;
 		write sample(village_soil_solid_pollution);
 		write sample(village_canal_solid_pollution);
 	}
 	
 	action update_indicators_unity{
-		
+		solidwasteCanalClassLastTurn <- solidwasteSoilClass;
+		productionClassLastTurn <- productionClass;
+
 		productionClass <- production_class(village_production);
 		
 		waterwasteClass <- waterwaste_class(village_water_pollution);
@@ -981,43 +1022,41 @@ global {
 		stage <- PLAYER_ACTION_TURN;
 		ask villages_order[0] {do start_turn;}
 	}
-	
+	action end_of_estimation_phase {
+		stage <- PLAYER_DISCUSSION_TURN;
+		start_discussion_turn_time <- machine_time;
+	}
 	action end_of_exploration_phase {
 		if turn >= end_of_game{
 			end <- true;
 		} else {
 			if isDemo {
-			if isDemo{
 				if choice = 0 {
 					collect_on_ground <- true;
 				} else if choice = 1 {
 					collect_in_canal <- true;
 				}
+			
+				stage <- COMPUTE_INDICATORS;
+				if !always_display_sub_charts {
+					show_pol_chart_by_cat_glob <- false;
+				}
+				if (turn >= end_of_game) {
+					do pause;
+				} else {
+					days_with_ecolabel_year << 0;
+					current_day <- 0;
+					step <- #day;
+		
+					if not without_player {do tell(INDICATOR_COMPUTATION);}
+					do increase_urban_area;
+				}
+				enter_or_exit_VR <- true;
+			}else {
+				stage <- PLAYER_ESTIMATION_TURN;
 			}
-			write sample(collect_on_ground);
-			write sample(collect_in_canal);
-			stage <- COMPUTE_INDICATORS;
-			if !always_display_sub_charts {
-				show_pol_chart_by_cat_glob <- false;
-			}
-			if (turn >= end_of_game) {
-				do pause;
-			} else {
-				days_with_ecolabel_year << 0;
-				current_day <- 0;
-				step <- #day;
-	
-				if not without_player {do tell(INDICATOR_COMPUTATION);}
-				do increase_urban_area;
-			}
-			enter_or_exit_VR <- true;
-		}
-		else {
-			stage <- PLAYER_DISCUSSION_TURN;
-			start_discussion_turn_time <- machine_time;
-		}
-	}		
-}
+		}		
+	}
 	
 	
 //REFLEXES
@@ -1053,9 +1092,22 @@ global {
 		}
 	}
 	*/
+	
+	reflex estimation_phase when: stage = PLAYER_ESTIMATION_TURN{
+		ask village {
+			map<string, string>  result <- user_input_dialog("Village " + ((id)+1) + ": ",[choose("Solid waste pollution",string,pollution_values.keys[0], pollution_values.keys),
+				choose("Water waste pollution",string,pollution_values.keys[0], pollution_values.keys),
+				choose("Agricultural production",string,production_values.keys[2], production_values.keys)
+			]);
+			estimated_production <- production_values[result["Agricultural production"]];
+			estimated_solid_pollution <- pollution_values[result["Solid waste pollution"]];
+			estimated_water_pollution <- pollution_values[result["Water waste pollution"]];
+		}
+		do end_of_estimation_phase;
+	}
 		
 	reflex playerturn when: stage = PLAYER_ACTION_TURN{
-		if without_player or (index_player >= length(villages_order)) {
+		if without_player or (end_player_turn) {//index_player >= length(villages_order)) {
 			if not without_player and  use_money_pool and not commune_budget_dispatch {
 				do choose_village_for_pool();
 			} else {
@@ -1097,5 +1149,68 @@ global {
 	}
 	*/
 
+}
+
+species pointInterestManager {
+	list<pointInterest> points <- [];
+	
+	action changeState(int i) {
+		points[i].visited <- true;
+	}
+	
+	action setLocation(int i, point p) {
+		points[i].location <- p;
+	}
+}
+
+species pointInterest {
+	rgb color <- rgb(217, 104, 76);
+	point location;
+	float size <- 300.0;
+	bool visited <- false;
+	pointInterestManager manager;
+	
+	action addSelfToManager {
+		add self to: manager.points;
+	}
+	
+	aspect default {
+		if !visited {
+			if file_exists("../../includes/icons/Icone_PointOfInterest.png")  {
+				draw image("../../includes/icons/Icone_PointOfInterest.png") size: {size, size} at: location + {0, 0, 5};
+			} else {
+				draw circle(size/2) at: location + {0, 0, 5} color: color;
+			}
+		}	
+	}
+}
+
+species unity_linker parent: abstract_unity_linker {
+	int port <- 8000;
+	string player_species <- string(unity_player);
+	point location_init <- {50.0,50.0,0.0};
+	int max_num_players  <- 1;
+	int min_num_players  <- 0;
+	
+	bool use_physics_for_player <- false;
+	
+}
+
+species unity_player parent: abstract_unity_player{
+	float player_size <- 1.0;
+	rgb color <- #red;
+	float cone_distance <- 10.0 * player_size;
+	float cone_amplitude <- 90.0;
+	float player_rotation <- 90.0;
+	bool to_display <- true;
+	aspect default {
+		if to_display {
+			if selected {
+				 draw circle(player_size) at: location + {0, 0, 4.9} color: rgb(#blue, 0.5);
+			}
+			draw circle(player_size/2.0) at: location + {0, 0, 5} color: color ;
+			draw player_perception_cone() color: rgb(color, 0.5);
+		}
+	}
 }
 

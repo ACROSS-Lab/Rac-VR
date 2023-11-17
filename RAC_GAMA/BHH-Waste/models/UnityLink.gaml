@@ -9,12 +9,7 @@
 model UnityLink
 
 
-global skills: [network]{
-	/***************************************************
-	 *
-	 * PARAMETERS ABOUT THE CONNECTION AND DATA SENT
-	 * 
-	 ***************************************************/
+/*global skills: [network]{
 	 
 	//Activate the unity connection; if activated, the model will wait for an connection from Unity to start
 	bool connect_to_unity <- false;
@@ -81,11 +76,7 @@ global skills: [network]{
 	
 	bool send_help <- false;
 	
-	/*************************************** 
-	 *
-	 * PARAMETERS ABOUT THE PLAYER
-	 * 
-	 ***************************************/
+	
 
 	//allow to create a player agent
 	bool create_player <- true;
@@ -106,11 +97,7 @@ global skills: [network]{
 	int rotation_player <- 0;
 	
 	
-	/*************************************** 
-	 *
-	 * PRIVATE VARIABLES ONLY USED INTERNALLY
-	 * 
-	 ***************************************/
+	
 	 
 	//message send by Unity to tell GAMA that it is ready
 	string READY <- "ready" const: true;
@@ -140,13 +127,6 @@ global skills: [network]{
 	float t1;
 	float t2;
 	float t3;
-	
-	
-	/*************************************** 
-	 *
-	 * ACTIONS
-	 * 
-	 ***************************************/
 	
 	//transformation of the position send by unity for the minimap on GAMA
 	point translate_coord(point p){
@@ -250,11 +230,11 @@ global skills: [network]{
 		
 		to_send <+ "productionClass"::productionClass;
 		
-		/** To use, define categories
-		to_send <+ "waterwasteVillage"::waterwasteVillageValue;
-		to_send <+ "waterwasteCanal"::waterwasteCanalValue;
-		to_send <+ "waterwasteCanalClass"::waterwasteCanalClass;
-		*/
+		// To use, define categories
+		//to_send <+ "waterwasteVillage"::waterwasteVillageValue;
+		//to_send <+ "waterwasteCanal"::waterwasteCanalValue;
+		//to_send <+ "waterwasteCanalClass"::waterwasteCanalClass;
+		
 		
 		if unity_client = nil {
 			write "no client to send to";
@@ -531,9 +511,9 @@ species default_player {
 	
 	aspect default {
 		if to_display {
-			draw cone(rotation - cone_amplitude/2,rotation + cone_amplitude/2) inter circle(cone_distance) /**translated_by ({cos(rotation), sin(rotation)} * (- player_size_GAMA/4.0))**/ translated_by {0,0,4.9} color: rgb(223, 204, 76, 0.5);
+			draw cone(rotation - cone_amplitude/2,rotation + cone_amplitude/2) inter circle(cone_distance)  translated_by {0,0,4.9} color: rgb(223, 204, 76, 0.5);
 			if file_exists("../../includes/icons/Icone_Player.png")  {
-				draw image("../../includes/icons/Icone_Player.png")  size: {player_size_GAMA, player_size_GAMA} at: location + {0, 0, 5} /**rotate: rotation - 90*/;
+				draw image("../../includes/icons/Icone_Player.png")  size: {player_size_GAMA, player_size_GAMA} at: location + {0, 0, 5} ;
 			} else {
 				draw circle(player_size_GAMA/2) at: location + {0, 0, 5} color: color rotate: rotation - 90;
 			}
@@ -557,5 +537,5 @@ experiment vr_xp virtual: true  {
 	action move_player {
 		move_player_event <- true;
 	}
-}
+}*/
 

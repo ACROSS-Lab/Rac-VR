@@ -37,7 +37,7 @@ species inhabitant {
 	
 	float waste_for_a_day {
 		return solid_waste_day;
-	}
+	} 
 	
 	//Propagate domestic waste in the canal and ground
 	action domestic_waste_production (float solid_waste_canal, float solid_waste_ground, float water_waste_canal, float water_waste_ground) {

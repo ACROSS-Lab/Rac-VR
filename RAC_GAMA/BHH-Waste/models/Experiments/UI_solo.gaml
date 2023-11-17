@@ -591,19 +591,19 @@ experiment Open {
 				float left <- location.x - w_width/2;
 				float right <- location.x + w_width/2;
 				float gap <- (right - left) /4;
-				float index <- 0.5;
+				float index_ <- 0.5;
 				// Used as a mask for the position of the mouse
 				draw rectangle(right-left,w_width / 8) color: legend_background at: {location.x, y};
 				loop s over: numbers { 
-					int village_index <- int(index - 0.5);
+					int village_index <- int(index_ - 0.5);
 					bool selected <- village_selected = village_index;
-					draw s size: w_width / 10 at: {left + gap * index, y};
-					village_buttons[village_index] <- circle(w_width / 10) at_location {left + gap * index, y};
+					draw s size: w_width / 10 at: {left + gap * index_, y};
+					village_buttons[village_index] <- circle(w_width / 10) at_location {left + gap * index_, y};
 					if (selected) {
 						draw village_buttons[village_index] wireframe: true width: 2 color: dark_theme ? #white : #black;
 					}
 	
-					index <- index + 1;
+					index_ <- index_ + 1;
 				}
 	
 			}		
@@ -614,7 +614,7 @@ experiment Open {
 				float left <- location.x - w_width + w_width / 5 - 2800;
 				float right <- location.x + w_width - w_width / 5 + 2800;
 				float gap <- (right - left) / length(actions_name_without_end);
-				float index <- 0.5;
+				float index_ <- 0.5;
 				// Used as a mask for the position of the mouse
 				draw rectangle(right-left,w_width / 8) color: legend_background at: {location.x, y};
 				
@@ -622,12 +622,12 @@ experiment Open {
 	
 					bool selected <- village_actions[v] != nil and village_actions[v] contains s;
 					//write sample(selected) + " " + sample(village_actions[v]) + " " + sample(s) + " " + sample(village_actions) + " " + sample(v);
-					draw s color:  s = over_action or selected ? (dark_theme ? #white : #black) : (dark_theme ? rgb(255, 255, 255, 130) : rgb(0, 0, 0, 130)) font: ui_font anchor: #center at: {left + gap * index, y} depth: 1;
+					draw s color:  s = over_action or selected ? (dark_theme ? #white : #black) : (dark_theme ? rgb(255, 255, 255, 130) : rgb(0, 0, 0, 130)) font: ui_font anchor: #center at: {left + gap * index_, y} depth: 1;
 					if (selected) {
-						draw circle(w_width / 10) wireframe: true width: 2 color: #black at: {left + gap * index, y, 0.1};
+						draw circle(w_width / 10) wireframe: true width: 2 color: #black at: {left + gap * index_, y, 0.1};
 					}
 					action_locations[s] <- {left + gap * index, y};
-					index <- index + 1;
+					index_ <- index_ + 1;
 				}
 	
 			}
@@ -971,7 +971,7 @@ experiment Open {
 			
 			/********************** MINI MAP DISPLAY ******************************/
 			image minimap size: {0.97,0.99} position:{0.1,0} visible: stage = PLAYER_VR_EXPLORATION_TURN;
-			species default_player visible: stage = PLAYER_VR_EXPLORATION_TURN;
+			species unity_player visible: stage = PLAYER_VR_EXPLORATION_TURN;
 			species pointInterest visible: stage = PLAYER_VR_EXPLORATION_TURN;
 			
 			
