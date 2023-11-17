@@ -194,6 +194,7 @@ species village {
 	}
 	
 	action ending_turn {
+		write sample(index_player);
 		if index_player >= length(village) {
 			commune_budget_dispatch <- true;
 		}
@@ -204,6 +205,8 @@ species village {
 				ask villages_order[index_player] {
 					do start_turn;
 				}
+			} else {
+				end_player_turn <- true;
 			} 
 		}
 	}

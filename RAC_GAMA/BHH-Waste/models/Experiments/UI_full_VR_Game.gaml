@@ -1003,6 +1003,7 @@ experiment VR_GAME autorun: true type: unity{
 								}
 							}
 						} else if (stage != COMPUTE_INDICATORS) {
+						
 							if (CHOOSING_VILLAGE_FOR_POOL) {
 								PASS_CHOOSING_VILLAGE <- true;
 							} else if (stage = PLAYER_ACTION_TURN){
@@ -1188,25 +1189,3 @@ experiment VR_GAME autorun: true type: unity{
 	}
 }
 
-
-/*experiment VR_GAME_DEBUG parent:VR_GAME  {
-	//float minimum_cycle_duration <- 0.05;
-	bool debug_mode <- true;
-	
-	
-	action _init_ {
-		//Requires latest version of GAMA 1.8.2
-		//map<string, unknown> params <- user_input_dialog("Welcome to RÁC",[enter("Dark theme",true), choose("Language", string, "English",["English","Français","Tiếng Việt"])], font("Helvetica",18, #bold), nil, false);
-		gama.pref_display_slice_number <- 12; 
-		gama.pref_display_show_rotation <- true;
-		gama.pref_display_show_errors <- true;
-		gama.pref_errors_display <- true;
-		gama.pref_errors_stop <- true;
-		gama.pref_errors_in_editor <- true;
-		gama.pref_display_numkeyscam <- true;
-		//create simulation with: [dark_theme::bool(params["Dark theme"]), langage::params["Language"]];
-		create simulation with: [mode::FULL_VR_GAME, language::"English", days::50, VR_debug_mode:: true, isDemo:: false];
-	}
-	
-	
-}*/
