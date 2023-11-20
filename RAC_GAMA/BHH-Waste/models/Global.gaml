@@ -821,26 +821,52 @@ global {
 			to_refresh <- true;
 	}
 	
+	action stop_VR {
+		map to_send;
+		to_send <+ "stopVR"::true;
+		
+		ask unity_linker {
+			do send_message mes: to_send players: unity_player as list ;
+		}
+	}
 	
 	action before_exploration_phase{
 		stage <- PLAYER_VR_EXPLORATION_TURN;
 		start_exploration_turn_time <- machine_time;
 		do update_indicators_unity;
 		enter_or_exit_VR <- true;
-		write sample(village_soil_solid_pollution);
-		write sample(village_canal_solid_pollution);
+		
+		map to_send;
+		to_send <+ "solidwasteSoilClass"::solidwasteSoilClass;
+		to_send <+ "solidwasteCanalClass"::solidwasteCanalClass;
+		to_send <+ "waterwasteClass"::waterwasteClass;
+		to_send <+ "productionClass"::productionClass;
+		
+		to_send <+ "solidwasteSoilClass"::solidwasteSoilClassLastTurn ;
+		to_send <+ "solidwasteCanalClass"::solidwasteCanalClassLastTurn ;
+		to_send <+ "waterwasteClass"::waterwasteClassLastTurn ;
+		to_send <+ "productionClass"::productionClassLastTurn ;
+		
+		ask unity_linker {
+			do send_message mes: to_send players: unity_player as list ;
+		}
+		//write sample(village_soil_solid_pollution);
+		//write sample(village_canal_solid_pollution);
 	}
 	
 	action update_indicators_unity{
-		solidwasteCanalClassLastTurn <- solidwasteSoilClass;
+		solidwasteSoilClassLastTurn <- solidwasteSoilClass;
+		solidwasteCanalClassLastTurn <- solidwasteCanalClass;
 		productionClassLastTurn <- productionClass;
+		waterwasteClassLastTurn <- waterwasteClass;
+		
 
 		productionClass <- production_class(village_production);
 		
 		waterwasteClass <- waterwaste_class(village_water_pollution);
 		solidwasteSoilClass <- solidwaste_soil_class(village_soil_solid_pollution);
 		solidwasteCanalClass <- solidwaste_canal_class(village_canal_solid_pollution);
-
+ 
 		/** To use, define categories
 		 * define fcts : solidwaste_soil_class(), solidwaste_canal_class(), waterwaste_canal_class()
 		waterwasteVillageValue <- list(village_soil_water_pollution);
@@ -1027,6 +1053,7 @@ global {
 		start_discussion_turn_time <- machine_time;
 	}
 	action end_of_exploration_phase {
+		do stop_VR;
 		if turn >= end_of_game{
 			end <- true;
 		} else {
