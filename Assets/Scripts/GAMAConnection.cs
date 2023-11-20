@@ -164,7 +164,7 @@ public class GlobalTest : TCPConnector
         {
             foreach (GAMAGeometry g in geoms)
             {
-                if (polyGen == null) polyGen = new PolygonGenerator(converter, offsetYBackgroundGeom);
+                // if (polyGen == null) polyGen = new PolygonGenerator(converter, offsetYBackgroundGeom);
                 polyGen.GeneratePolygons(g);
             }
             geoms = null;

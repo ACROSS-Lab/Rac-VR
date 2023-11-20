@@ -54,7 +54,7 @@ public class GameManager : MonoBehaviour
     // called when the world data is received
     public static event Action<WorldJSONInfo> OnWorldDataReceived;
 
-    private Timer timer;
+    // private Timer timer;
     private List<Dictionary<int, GameObject>> agentMapList;
 
     private bool geometriesInitialized;
@@ -93,14 +93,20 @@ public class GameManager : MonoBehaviour
 
     void Start() {
         UpdateGameState(GameState.MENU);
-        InitAgentsList();
-        timer = GetComponent<Timer>();
+        // InitAgentsList();
+        // timer = GetComponent<Timer>();
         geometriesInitialized = false;
         simulationParametersHandled = false;
         handleGroundRequested = false;
         handlePlayerRequested = false;
         handleGeometriesRequested = false;
+        // StartCoroutine(DelayedConnection());
     }
+
+    // private IEnumerator DelayedConnection() {
+    //     yield return new WaitForSeconds(0.2f);
+    //     ConnectionManager.Instance.TryConnectionToServer();
+    // }
 
     void FixedUpdate() {
         if(IsGameState(GameState.GAME)) {
@@ -148,16 +154,16 @@ public class GameManager : MonoBehaviour
             case GameState.GAME:
                 Debug.Log("GameManager: UpdateGameState -> GAME");
                 RemoveInfoText();
-                timer.SetTimerRunning(true);
+                // timer.SetTimerRunning(true);
                 break;
 
             case GameState.END:
-                timer.SetTimerRunning(false);
+                // timer.SetTimerRunning(false);
                 Debug.Log("GameManager: UpdateGameState -> END");
                 break;
 
             case GameState.CRASH:
-                timer.Reset();
+                // timer.Reset();
                 Debug.Log("GameManager: UpdateGameState -> CRASH");
                 break;
 
@@ -222,13 +228,13 @@ public class GameManager : MonoBehaviour
         Debug.Log("GameManager: Geometries initialized");
     }
 
-    private void InitAgentsList() {
-        agentMapList = new List<Dictionary<int, GameObject>>();
-        foreach (GameObject i in Agents) {
-            agentMapList.Add(new Dictionary<int, GameObject>());
-        }
-        Debug.Log("GameManager: Agents list initialized. " + Agents.Count + " species found");
-    }
+    // private void InitAgentsList() {
+    //     agentMapList = new List<Dictionary<int, GameObject>>();
+    //     foreach (GameObject i in Agents) {
+    //         agentMapList.Add(new Dictionary<int, GameObject>());
+    //     }
+    //     Debug.Log("GameManager: Agents list initialized. " + Agents.Count + " species found");
+    // }
 
 
     // ############################################ UPDATERS ############################################
@@ -369,9 +375,9 @@ public class GameManager : MonoBehaviour
         return currentState == state;
     }
     
-    public Timer GetTimer() {
-        return timer;
-    }   
+    // public Timer GetTimer() {
+    //     return timer;
+    // }   
 
     public float GetMinSimulationDuration() {
         return minSimulationDuration;
@@ -391,8 +397,10 @@ public enum GameState {
     WAITING,
     // connected to middleware, authenticated, waiting for initial data from middleware
     LOADING_DATA,
-    // connected to middleware, authenticated, initial data received, simulation running
+    // connected to middleware, authenticated, initial data received, exploration phase
     GAME,
+    // connected to middleware, authenticated, initial data received, waiting for the next exploration phase
+    IDLE,
     END,
     CRASH
 }

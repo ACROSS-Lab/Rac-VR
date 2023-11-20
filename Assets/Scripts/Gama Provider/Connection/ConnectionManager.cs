@@ -33,14 +33,18 @@ public class ConnectionManager : WebSocketConnector
     }
 
     void Start() {
-        if (PlayerPrefs.GetString("CONNECT_ID") != "") {
-            connectionId = PlayerPrefs.GetString("CONNECT_ID");
-        } else {
-            connectionId = Guid.NewGuid().ToString();
-            PlayerPrefs.SetString("CONNECT_ID", connectionId);
-        }
+        connectionId = Guid.NewGuid().ToString();
         UpdateConnectionState(ConnectionState.DISCONNECTED);
         connectionRequested = false;
+        TryConnectionToServer();
+        // if (PlayerPrefs.GetString("CONNECT_ID") != "") {
+        //     connectionId = PlayerPrefs.GetString("CONNECT_ID");
+        // } else {
+        //     connectionId = Guid.NewGuid().ToString();
+        //     PlayerPrefs.SetString("CONNECT_ID", connectionId);
+        // }
+        // UpdateConnectionState(ConnectionState.DISCONNECTED);
+        // connectionRequested = false;
     }
 
     
@@ -87,7 +91,9 @@ public class ConnectionManager : WebSocketConnector
     {
         if (e.IsText)
         {
+            
             JObject jsonObj = JObject.Parse(e.Data);
+            Debug.Log(jsonObj);
             string type = (string) jsonObj["type"];
 
             switch(type) {
@@ -128,7 +134,7 @@ public class ConnectionManager : WebSocketConnector
 
     protected override void HandleConnectionClosed(object sender, CloseEventArgs e) {   
         // checks if the connection was closed just after a connection request
-        if (connectionRequested) {
+        if (connectionRequested) { 
             connectionRequested = false;
             OnConnectionAttempted?.Invoke(false);
             Debug.Log("ConnectionManager: Failed to connect to server");
