@@ -620,14 +620,20 @@ experiment VR_GAME autorun: true type: unity{
 	
 	int ambient_intensity <- 100;
 	
-	action _init_ {
+	parameter mode var:mode <- FULL_VR_GAME;
+	
+	parameter  days var:days <- 50;
+	
+	parameter isDemo var: isDemo <- false;
+	
+	/*action _init_ {
 		//Requires latest version of GAMA 1.8.2
 		//map<string, unknown> params <- user_input_dialog("Welcome to RÁC",[enter("Dark theme",true), choose("Language", string, "English",["English","Français","Tiếng Việt"])], font("Helvetica",18, #bold), nil, false);
 		map<string, unknown> params;
 		if debug_mode {
 			params <- user_input_dialog("Welcome to RÁC",[choose("Language", string, "eng",["eng","fr","vn"])], ui_font, map_background, false);
 		}
-		gama.pref_display_slice_number <- 12; /* 128 too slow ! */
+		gama.pref_display_slice_number <- 12; 
 		gama.pref_display_show_rotation <- false;
 		gama.pref_display_show_errors <- false;
 		gama.pref_errors_display <- false;
@@ -637,7 +643,8 @@ experiment VR_GAME autorun: true type: unity{
 		//create simulation with: [dark_theme::bool(params["Dark theme"]), langage::params["Language"]];
 		create simulation with: [mode::FULL_VR_GAME, language::(debug_mode?"English": params["Language"]), days::debug_mode?50 : 365, VR_debug_mode:: debug_mode, isDemo:: false];
 		//create simulation with: [mode::FULL_VR_GAME, language::];
-	}
+		
+	}*/
 	
 	action create_player(string id) {
 		ask unity_linker {

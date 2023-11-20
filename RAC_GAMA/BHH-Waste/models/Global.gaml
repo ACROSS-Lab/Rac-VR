@@ -25,10 +25,10 @@ import "Entities/Agricultural Space.gaml"
 
 import "Entities/Urban Space.gaml" 
 
-import "Entities/Village.gaml" 
+ import "Entities/Village.gaml" 
 
 import "Parameters.gaml"
-
+ 
 //import "UnityLink.gaml"
  
 
@@ -842,17 +842,21 @@ global {
 		to_send <+ "waterwasteClass"::waterwasteClass;
 		to_send <+ "productionClass"::productionClass;
 		
-		to_send <+ "solidwasteSoilClass"::solidwasteSoilClassLastTurn ;
-		to_send <+ "solidwasteCanalClass"::solidwasteCanalClassLastTurn ;
-		to_send <+ "waterwasteClass"::waterwasteClassLastTurn ;
-		to_send <+ "productionClass"::productionClassLastTurn ;
+		to_send <+ "solidwasteSoilClassLastTurn"::solidwasteSoilClassLastTurn ;
+		to_send <+ "solidwasteCanalClassLastTurn"::solidwasteCanalClassLastTurn ;
+		to_send <+ "waterwasteClassLastTurn"::waterwasteClassLastTurn ;
+		to_send <+ "productionClassLastTurn"::productionClassLastTurn ;
+			
+		ask (unity_linker) {
+			//write sample(to_send);
 		
-		ask unity_linker {
 			do send_message mes: to_send players: unity_player as list ;
 		}
 		//write sample(village_soil_solid_pollution);
 		//write sample(village_canal_solid_pollution);
 	}
+	
+	
 	
 	action update_indicators_unity{
 		solidwasteSoilClassLastTurn <- solidwasteSoilClass;
@@ -1221,6 +1225,7 @@ species unity_linker parent: abstract_unity_linker {
 	
 	bool use_physics_for_player <- false;
 	
+	action send_world;
 }
 
 species unity_player parent: abstract_unity_player{

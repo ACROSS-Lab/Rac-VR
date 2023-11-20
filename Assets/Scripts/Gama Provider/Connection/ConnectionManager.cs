@@ -93,7 +93,6 @@ public class ConnectionManager : WebSocketConnector
         {
             
             JObject jsonObj = JObject.Parse(e.Data);
-            Debug.Log(jsonObj);
             string type = (string) jsonObj["type"];
 
             switch(type) {

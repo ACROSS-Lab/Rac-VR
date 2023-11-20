@@ -41,6 +41,10 @@ public class GameManager : MonoBehaviour
 
     [Header("Simulation parameters")]
     [SerializeField] private float minSimulationDuration = 10.0f;
+    [SerializeField] private bool geometriesExpected = false;
+    [SerializeField] private bool groundExpected = false;
+    [SerializeField] private bool playerParametersExpected = true;
+
 
     // called when the current game state changes
     public static event Action<GameState> OnGameStateChanged;
@@ -54,7 +58,7 @@ public class GameManager : MonoBehaviour
     // called when the world data is received
     public static event Action<WorldJSONInfo> OnWorldDataReceived;
 
-    // private Timer timer;
+    private Timer timer;
     private List<Dictionary<int, GameObject>> agentMapList;
 
     private bool geometriesInitialized;
@@ -122,8 +126,9 @@ public class GameManager : MonoBehaviour
         }
 
         if (handlePlayerRequested && !simulationParametersHandled) {
-            InitPlayerParameters();
             handlePlayerRequested = false;
+            InitPlayerParameters();
+            
         }
 
         if (handleGeometriesRequested && !simulationParametersHandled) {
@@ -154,11 +159,16 @@ public class GameManager : MonoBehaviour
             case GameState.GAME:
                 Debug.Log("GameManager: UpdateGameState -> GAME");
                 RemoveInfoText();
-                // timer.SetTimerRunning(true);
+                timer.SetTimerRunning(true);
+                break;
+
+            case GameState.IDLE:
+                Debug.Log("GameManager: UpdateGameState -> IDLE");
+                timer.SetTimerRunning(false);
                 break;
 
             case GameState.END:
-                // timer.SetTimerRunning(false);
+                timer.SetTimerRunning(false);
                 Debug.Log("GameManager: UpdateGameState -> END");
                 break;
 
@@ -192,6 +202,8 @@ public class GameManager : MonoBehaviour
                 Destroy(rigidBody);
             }
         }
+        
+        UpdateGameState(GameState.GAME);
         Debug.Log("GameManager: Player parameters initialized");
     }
 
@@ -224,7 +236,6 @@ public class GameManager : MonoBehaviour
         polyGen.GeneratePolygons(gamaGeometry);
         geometriesInitialized = true;
         OnGeometriesInitialized?.Invoke(gamaGeometry);
-        UpdateGameState(GameState.GAME);
         Debug.Log("GameManager: Geometries initialized");
     }
 
@@ -313,6 +324,7 @@ public class GameManager : MonoBehaviour
 
     private void HandleServerMessageReceived(JObject jsonObj) {
         string firstKey = jsonObj.Properties().Select(p => p.Name).FirstOrDefault();
+        Debug.Log(jsonObj.ToString());
         switch (firstKey) {
             // handle general informations about the simulation
             case "precision":
@@ -320,15 +332,15 @@ public class GameManager : MonoBehaviour
                 converter = new CoordinateConverter(parameters.precision, GamaCRSCoefX, GamaCRSCoefY, GamaCRSCoefY, GamaCRSOffsetX, GamaCRSOffsetY, GamaCRSOffsetZ);
                 Debug.Log("GameManager: Received simulation parameters");
                 // Init ground and player
-                handleGroundRequested = true;
-                handlePlayerRequested = true;                
+                if (groundExpected) handleGroundRequested = true;
+                if (playerParametersExpected) handlePlayerRequested = true;                
             break;
 
             // handle geometries sent by GAMA at the beginning of the simulation
             case "points":
                 gamaGeometry = GAMAGeometry.CreateFromJSON(jsonObj.ToString());
                 Debug.Log("GameManager: Received geometries data");
-                handleGeometriesRequested = true;
+                if (geometriesExpected) handleGeometriesRequested = true;
             break;
 
             // handle agents while simulation is running
