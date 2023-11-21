@@ -18,11 +18,11 @@ global  {
 	
 	bool confirmation_popup <- false;
 	bool no_starting_actions <- true;
-	bool play_beep <- false;
+	bool play_beep <- true;
 	
 
 	
-	webcam cam <- webcam(1);
+	webcam cam <- webcam(0);
 	float delay_between_actions<- 1#s;
 	int image_width <- 640;
 	int image_height <- 480;
@@ -32,6 +32,7 @@ global  {
 	
 	reflex detect_interaction_discussion_phase when: stage = PLAYER_DISCUSSION_TURN {
 		string result <- string(decodeQR(cam,image_width::image_height, false));
+		//write sample(result);
 		if result = nil { 
 			ready_action <- true;
 		}
@@ -44,6 +45,42 @@ global  {
 			latest_action <- result;
 			last_action_time <- machine_time;
 			do end_of_discussion_phase;	
+		}
+	}
+	
+	reflex detect_interaction_starting_phase when: stage = STARTING_STATE {
+		string result <- string(decodeQR(cam,image_width::image_height, false));
+		//write sample(result);
+		if result = nil { 
+			ready_action <- true;
+		}
+		if ready_action and machine_time > (last_action_time + (1000.0 * 2 * delay_between_actions)) {
+			latest_action <- "";
+		}
+		if result != latest_action and result = A_END_TURN {
+			if play_beep {bool is_ok <- play_sound("../../includes/BEEP.wav");}
+			ready_action <- false;
+			latest_action <- result;
+			last_action_time <- machine_time;
+			stage <- COMPUTE_INDICATORS;
+		}
+	}
+	
+	reflex detect_interaction_exploration_phase when: stage = PLAYER_VR_EXPLORATION_TURN {
+		string result <- string(decodeQR(cam,image_width::image_height, false));
+		//write sample(result);
+		if result = nil { 
+			ready_action <- true;
+		}
+		if ready_action and machine_time > (last_action_time + (1000.0 * 2 * delay_between_actions)) {
+			latest_action <- "";
+		}
+		if result != latest_action and result = A_END_TURN {
+			if play_beep {bool is_ok <- play_sound("../../includes/BEEP.wav");}
+			ready_action <- false;
+			latest_action <- result;
+			last_action_time <- machine_time;
+			do end_of_exploration_phase;
 		}
 	}
 	
@@ -63,13 +100,15 @@ global  {
 				latest_action <- result;
 				last_action_time <- machine_time;
 				chosen_village <- int(result) - 1;
+				
 			} else if result = END_OF_TURN {
 				PASS_CHOOSING_VILLAGE <- true;
+				index_player <-0;			
 			}
 		}
 	}
 	
-	reflex detect_interaction when: stage = PLAYER_ACTION_TURN and (machine_time > (last_action_time + (1000.0 * delay_between_actions))){
+	reflex detect_interaction when: not CHOOSING_VILLAGE_FOR_POOL and stage = PLAYER_ACTION_TURN  and (machine_time > (last_action_time + (1000.0 * delay_between_actions))){
 		string result <- string(decodeQR(cam,image_width::image_height, false));
 		if result = nil {
 			ready_action <- true;

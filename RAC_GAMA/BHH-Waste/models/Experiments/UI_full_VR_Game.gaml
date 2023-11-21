@@ -78,7 +78,6 @@ global {
 	bool confirmation_popup <- false;
 	bool no_starting_actions <- true;
 	bool about_to_pause <- false;
-	bool CHOOSING_VILLAGE_FOR_POOL <- false;
 	bool PASS_CHOOSING_VILLAGE <- false;
 	bool display_water_flow <- true;
 	stacked_chart global_chart;
@@ -394,7 +393,6 @@ global {
 
 	
 	reflex end_of_exploration_turn when: use_timer_for_exploration and stage = PLAYER_VR_EXPLORATION_TURN {
-		//write "ici : " + sample(remaining_time) + " ";
 		if turn = turn_see_indicators +1 and !always_display_chart_by_vil{
 			show_chart_by_vil <- false;
 		}
@@ -437,14 +435,21 @@ global {
 	}
 	
 	reflex end_of_choosing_village when: CHOOSING_VILLAGE_FOR_POOL {
+		
 		remaining_time_for_choosing_village <- int(time_for_choosing_village - machine_time/1000.0  +start_choosing_village_time/1000.0); 
 		if remaining_time_for_choosing_village <= 0 or chosen_village > -1 or PASS_CHOOSING_VILLAGE{
-			if (chosen_village > -1){
+			
+		if (chosen_village > -1){
 				villages_order << village[chosen_village];
+				end_player_turn <- false;
 				ask village[chosen_village] {
 					budget <- commune_money;
+					
 				}
-				//do before_start_turn();
+				
+			///} else {
+		///		commune_budget_dispatch <- true;
+		//	}
 			} else {
 				commune_budget_dispatch <- true;
 			}
@@ -453,6 +458,7 @@ global {
 			chosen_village  <- -1;
 			commune_money <- 0;
 			to_refresh <- true;
+			
 		}
 	}
 }
@@ -751,7 +757,7 @@ experiment VR_GAME autorun: true type: unity{
 					int village_index <- int(index_ - 0.5);
 					bool selected <- village_selected = village_index;
 					draw s size: w_width / 10 at: {left + gap * index_, y};
-					village_buttons[village_index] <- circle(w_width / 10) at_location {left + gap * index, y};
+					village_buttons[village_index] <- circle(w_width / 10) at_location {left + gap * index_, y};
 					if (selected) {
 						draw village_buttons[village_index] wireframe: true width: 2 color: dark_theme ? #white : #black;
 					}
@@ -777,9 +783,9 @@ experiment VR_GAME autorun: true type: unity{
 					//write sample(selected) + " " + sample(village_actions[v]) + " " + sample(s) + " " + sample(village_actions) + " " + sample(v);
 					draw s color:  s = over_action or selected ? (dark_theme ? #white : #black) : (dark_theme ? rgb(255, 255, 255, 130) : rgb(0, 0, 0, 130)) font: ui_font anchor: #center at: {left + gap * index_, y} depth: 1;
 					if (selected) {
-						draw circle(w_width / 10) wireframe: true width: 2 color: #black at: {left + gap * index, y, 0.1};
+						draw circle(w_width / 10) wireframe: true width: 2 color: #black at: {left + gap * index_, y, 0.1};
 					}
-					action_locations[s] <- {left + gap * index, y};
+					action_locations[s] <- {left + gap * index_, y};
 					index_ <- index_ + 1;
 				}
 	
@@ -788,7 +794,7 @@ experiment VR_GAME autorun: true type: unity{
 			graphics "Stage"  {
 				image_file icon;
 				point size <- {w_width /3, w_width /3};
-				point location_icon <- {location.x, location.y-w_height/8 + y_centerdis};
+				point location_icon <- {location.x, location.y-w_height/8 + y_centerdis}; 
 				if (stage = PLAYER_DISCUSSION_TURN) {
 					icon <- discussion_icon; 
 				} else if (stage = PLAYER_ACTION_TURN) {
