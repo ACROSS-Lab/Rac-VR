@@ -12,24 +12,27 @@ public class Timer : MonoBehaviour
     [SerializeField] private Color endColor = new Color(255,0,0,255);
     
     [Header("Timer settings")]
-    [SerializeField] private float timerDuration = 10.0f;
+    [SerializeField] private float timerDuration = 20.0f;
     
-    private bool timerRunning;
+    private bool timerRunning = false;
     private float midTime;
     private float timeRemaining;
 
     // ############################################################
 
     void Start() {
-        if (PlayerPrefs.GetFloat("TIMER") != 0.0) {
-            timerDuration = PlayerPrefs.GetFloat("TIMER");
-        } else {
-            PlayerPrefs.SetFloat("TIMER", timerDuration);
-        }
-        timerRunning = false;
+        Debug.Log("Timer: start");
         timeRemaining = timerDuration;
-        midTime = timerDuration / 2;
+        midTime = timeRemaining / 2;
         DisplayTime(timeRemaining-1);
+    }
+
+    void OnEnble() {
+        GameManager.Instance.OnGameStateChanged += HandleTimerOnStateChanged;
+    }
+
+    void OnDisable() {
+        GameManager.Instance.OnGameStateChanged -= HandleTimerOnStateChanged;
     }
 
     void Update() {
@@ -38,9 +41,9 @@ public class Timer : MonoBehaviour
                 timeRemaining -= Time.deltaTime;
                 DisplayTime(timeRemaining);
             } else {
-                timerRunning = false;
-                timeRemaining = 0;
+                // Reset();
                 GameManager.Instance.UpdateGameState(GameState.IDLE);
+                ConnectionManager.Instance.SendExecutableExpression("do exploration_over(\"" + ConnectionManager.Instance.GetConnectionId() + "\");");
             }
         } else {
             timeRemaining = timerDuration;
@@ -67,6 +70,13 @@ public class Timer : MonoBehaviour
     public void Reset() {
         timerRunning = false;
         timeRemaining = timerDuration;
+    }
+
+    private void HandleTimerOnStateChanged(GameState newState) {
+        if (newState == GameState.IDLE) {
+            Reset();
+        }
+
     }
 
     // ############################################################

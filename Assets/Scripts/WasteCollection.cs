@@ -22,10 +22,4 @@ public class WasteCollectionInfo : MonoBehaviour
         pointInterstVisited = false;
         pointInterestIndex = -1;
     }
-
-    // Update is called once per frame
-    void Update()
-    {
-        
-    }
 }

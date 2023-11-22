@@ -11,9 +11,15 @@ public class GameManager : MonoBehaviour
 {
     [Header("Base GameObjects")]
     [SerializeField] private GameObject player;
+
+    // [SerializeField] private GameObject PNJ1;
+    [SerializeField] private GameObject WasteDisplayM;
+    [SerializeField] private GameObject WasteCollectionI;
+    [SerializeField] private GameObject ModeConfigM;
+    [SerializeField] private GameObject HelpM;
+
     [SerializeField] private GameObject Ground;
     [SerializeField] private List<GameObject> Agents;
-    [SerializeField] private TMPro.TextMeshProUGUI infoText;
 
     // optional: rotation, Y-translation and Size scale to apply to the prefabs correspoding to the different species of agents
     [Header("Transformations applied to agents prefabs")]
@@ -40,25 +46,29 @@ public class GameManager : MonoBehaviour
     [SerializeField] private float offsetYBackgroundGeom = 0.1f;
 
     [Header("Simulation parameters")]
-    [SerializeField] private float minSimulationDuration = 10.0f;
     [SerializeField] private bool geometriesExpected = false;
     [SerializeField] private bool groundExpected = false;
     [SerializeField] private bool playerParametersExpected = true;
 
+    // ADDED
+    private static DisplayManagement dm;
+    // private ParamPNJ pPNJ1;
+    private ModeConfig mc;
+    private HelpManagement hm;
+
 
     // called when the current game state changes
-    public static event Action<GameState> OnGameStateChanged;
+    public event Action<GameState> OnGameStateChanged;
 
     // called when the game is restarted
-    public static event Action OnGameRestarted;
+    public event Action OnGameRestarted;
 
     // called when the geometries are initialized
-    public static event Action<GAMAGeometry> OnGeometriesInitialized;
+    public event Action<GAMAGeometry> OnGeometriesInitialized;
 
     // called when the world data is received
-    public static event Action<WorldJSONInfo> OnWorldDataReceived;
+    public event Action<WorldJSONInfo> OnWorldDataReceived;
 
-    private Timer timer;
     private List<Dictionary<int, GameObject>> agentMapList;
 
     private bool geometriesInitialized;
@@ -68,13 +78,18 @@ public class GameManager : MonoBehaviour
     private bool handlePlayerRequested;
     private bool handleGeometriesRequested;
 
+    private bool gameReadyToStart = false;
+
     private CoordinateConverter converter;
     private PolygonGenerator polyGen;
     private ConnectionParameter parameters;
     private WorldJSONInfo infoWorld;
     private GAMAGeometry gamaGeometry;
+    private ConnectionClass classIndicators;
 
-    private GameState currentState;
+    private GameState currentState = GameState.MENU;
+
+    private int villageId;
 
     public static GameManager Instance = null;
 
@@ -96,44 +111,45 @@ public class GameManager : MonoBehaviour
     }
 
     void Start() {
-        UpdateGameState(GameState.MENU);
         // InitAgentsList();
-        // timer = GetComponent<Timer>();
         geometriesInitialized = false;
         simulationParametersHandled = false;
         handleGroundRequested = false;
         handlePlayerRequested = false;
         handleGeometriesRequested = false;
-        // StartCoroutine(DelayedConnection());
+        villageId = -1;
     }
-
-    // private IEnumerator DelayedConnection() {
-    //     yield return new WaitForSeconds(0.2f);
-    //     ConnectionManager.Instance.TryConnectionToServer();
-    // }
 
     void FixedUpdate() {
         if(IsGameState(GameState.GAME)) {
             UpdatePlayerPosition();
             UpdateAgentsList();
+
+            // if (PNJ1 != null && pPNJ1.readySendPosition){
+            //     SendInitPNJPos(PNJ1, pPNJ1);
+            //     pPNJ1.readySendPosition = false;
+            // }
         }
     }
 
     void LateUpdate() {
         if (handleGroundRequested && !simulationParametersHandled) {
-            InitGroundParameters();
             handleGroundRequested = false;
+            InitGroundParameters();
         }
 
         if (handlePlayerRequested && !simulationParametersHandled) {
             handlePlayerRequested = false;
             InitPlayerParameters();
-            
         }
 
         if (handleGeometriesRequested && !simulationParametersHandled) {
-            InitGeometries();
             handleGeometriesRequested = false;
+            InitGeometries();
+        }
+
+        if (classIndicators != null) {
+            UpdateClassIndicator();
         }
     }
 
@@ -142,13 +158,11 @@ public class GameManager : MonoBehaviour
         
         switch(newState) {
             case GameState.MENU:
-                RemoveInfoText();
                 Debug.Log("GameManager: UpdateGameState -> MENU");
                 break;
 
             case GameState.WAITING:
                 Debug.Log("GameManager: UpdateGameState -> WAITING");
-                RemoveInfoText();
                 break;
 
             case GameState.LOADING_DATA:
@@ -158,22 +172,18 @@ public class GameManager : MonoBehaviour
 
             case GameState.GAME:
                 Debug.Log("GameManager: UpdateGameState -> GAME");
-                RemoveInfoText();
-                timer.SetTimerRunning(true);
                 break;
 
             case GameState.IDLE:
+                gameReadyToStart = false;
                 Debug.Log("GameManager: UpdateGameState -> IDLE");
-                timer.SetTimerRunning(false);
                 break;
 
             case GameState.END:
-                timer.SetTimerRunning(false);
                 Debug.Log("GameManager: UpdateGameState -> END");
                 break;
 
             case GameState.CRASH:
-                // timer.Reset();
                 Debug.Log("GameManager: UpdateGameState -> CRASH");
                 break;
 
@@ -203,7 +213,7 @@ public class GameManager : MonoBehaviour
             }
         }
         
-        UpdateGameState(GameState.GAME);
+        UpdateGameState(GameState.IDLE);
         Debug.Log("GameManager: Player parameters initialized");
     }
 
@@ -264,10 +274,6 @@ public class GameManager : MonoBehaviour
     }
 
     private void UpdateAgentsList() {
-        // if (infoWorld.position.Count == 2) {
-        //     parameters.position = infoWorld.position;
-        //     playerPositionUpdate = true; // Teleportation disabled
-        // }
 
         foreach (Dictionary<int, GameObject> agentMap in agentMapList) {
             foreach (GameObject obj in agentMap.Values) {
@@ -313,6 +319,13 @@ public class GameManager : MonoBehaviour
         }
     }
 
+    private void UpdateClassIndicator() {
+        classIndicators.displaySolidClass(classIndicators.solidwasteSoilClass[villageId], classIndicators.solidwasteCanalClass[villageId]);
+        classIndicators.displayWaterClass(classIndicators.waterwasteClass[villageId]);
+        classIndicators.displayProductionClass(classIndicators.productionClass[villageId]);
+        classIndicators.displayWaterColor(classIndicators.waterwasteClass[villageId]);
+    }
+
     // ############################################# HANDLERS ########################################
     private void HandleConnectionStateChange(ConnectionState state) {
         // player has been added to the simulation by the middleware
@@ -324,7 +337,7 @@ public class GameManager : MonoBehaviour
 
     private void HandleServerMessageReceived(JObject jsonObj) {
         string firstKey = jsonObj.Properties().Select(p => p.Name).FirstOrDefault();
-        Debug.Log(jsonObj.ToString());
+        Debug.Log(firstKey);
         switch (firstKey) {
             // handle general informations about the simulation
             case "precision":
@@ -332,6 +345,7 @@ public class GameManager : MonoBehaviour
                 converter = new CoordinateConverter(parameters.precision, GamaCRSCoefX, GamaCRSCoefY, GamaCRSCoefY, GamaCRSOffsetX, GamaCRSOffsetY, GamaCRSOffsetZ);
                 Debug.Log("GameManager: Received simulation parameters");
                 // Init ground and player
+                villageId = parameters.village_id;
                 if (groundExpected) handleGroundRequested = true;
                 if (playerParametersExpected) handlePlayerRequested = true;                
             break;
@@ -349,6 +363,19 @@ public class GameManager : MonoBehaviour
                 OnWorldDataReceived?.Invoke(infoWorld);
             break;
 
+            case "solidwasteSoilClass":
+                classIndicators = ConnectionClass.CreateFromJSON(jsonObj.ToString(), dm);
+                gameReadyToStart = true;
+            break;
+
+            // case "Enter_or_exit_VR":
+            //     pPNJ1.readySendPosition = true;
+            // break;
+
+            case "stopVR":
+                UpdateGameState(GameState.IDLE);
+            break;
+
             default:
                 Debug.LogError("GameManager: Received unknown message from middleware");
                 break;
@@ -362,41 +389,34 @@ public class GameManager : MonoBehaviour
                 Debug.Log("GameManager: Successfully connected to middleware");
                 UpdateGameState(GameState.WAITING);
             }
-        } else {
-            // stay in MENU state
-            DisplayInfoText("Unable to connect to middleware", Color.red);
-        }
+        } 
     }
 
     // ############################################# UTILITY FUNCTIONS ########################################
-    public void DisplayInfoText(string text, Color color) {
-        infoText.text = text;
-        infoText.color = color;
-    }
-
-    public void RemoveInfoText() {
-        DisplayInfoText("", new Color(0,0,0,0));
-    }    
-
-    public void RestartGame() {
-        OnGameRestarted?.Invoke();        
-        SceneManager.LoadScene(SceneManager.GetActiveScene().buildIndex);
+    private void SendInitPNJPos(GameObject Object, ParamPNJ pPNJ){
+        List<int> p = converter.toGAMACRS(Object.transform.position);
+        // REPLACE BY AN ACTION
+        // SendMessageToServer("{\"pnj_pos\":[" + p[0] + "," + p[1] + "], \"pnj_id\":"+ pPNJ.id +"}");
     }
 
     public bool IsGameState(GameState state) {
         return currentState == state;
-    }
-    
-    // public Timer GetTimer() {
-    //     return timer;
-    // }   
-
-    public float GetMinSimulationDuration() {
-        return minSimulationDuration;
-    }
+    }  
 
     public GameState GetCurrentState() {
         return currentState;
+    }
+
+    public bool IsGameReadyToStart() {
+        return gameReadyToStart;
+    }
+
+    public void SetGameReadyToStart(bool ready) {
+        gameReadyToStart = ready;
+    }
+
+    public int GetVillageId() {
+        return villageId;
     }
 }
 
@@ -409,10 +429,11 @@ public enum GameState {
     WAITING,
     // connected to middleware, authenticated, waiting for initial data from middleware
     LOADING_DATA,
-    // connected to middleware, authenticated, initial data received, exploration phase
-    GAME,
     // connected to middleware, authenticated, initial data received, waiting for the next exploration phase
     IDLE,
+    // connected to middleware, authenticated, initial data received, exploration phase
+    GAME,   
+    
     END,
     CRASH
 }
