@@ -15,7 +15,7 @@ public class VillageId : MonoBehaviour
     void Update()
     {
         if (GameManager.Instance.GetVillageId() != -1) {
-            idText.text = "Village number: " + GameManager.Instance.GetVillageId();
+            idText.text = "Village number: " + (GameManager.Instance.GetVillageId() + 1);
         }
     }
 }

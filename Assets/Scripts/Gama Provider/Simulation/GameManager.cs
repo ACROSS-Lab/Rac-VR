@@ -176,6 +176,8 @@ public class GameManager : MonoBehaviour
 
             case GameState.IDLE:
                 gameReadyToStart = false;
+                Vector3 pos = converter.fromGAMACRS(parameters.position[0], parameters.position[1]);
+                player.transform.position = pos;
                 Debug.Log("GameManager: UpdateGameState -> IDLE");
                 break;
 
@@ -344,8 +346,10 @@ public class GameManager : MonoBehaviour
                 parameters = ConnectionParameter.CreateFromJSON(jsonObj.ToString());
                 converter = new CoordinateConverter(parameters.precision, GamaCRSCoefX, GamaCRSCoefY, GamaCRSCoefY, GamaCRSOffsetX, GamaCRSOffsetY, GamaCRSOffsetZ);
                 Debug.Log("GameManager: Received simulation parameters");
+                Debug.Log(jsonObj.ToString());
                 // Init ground and player
                 villageId = parameters.village_id;
+                Timer.SetTimerDuration((float) parameters.exploration_duration);
                 if (groundExpected) handleGroundRequested = true;
                 if (playerParametersExpected) handlePlayerRequested = true;                
             break;

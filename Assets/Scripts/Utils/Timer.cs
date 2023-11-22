@@ -11,8 +11,7 @@ public class Timer : MonoBehaviour
     [SerializeField] private Color midColor = new Color(255,218,0,255);
     [SerializeField] private Color endColor = new Color(255,0,0,255);
     
-    [Header("Timer settings")]
-    [SerializeField] private float timerDuration = 20.0f;
+    private static float timerDuration = 20.0f;
     
     private bool timerRunning = false;
     private float midTime;
@@ -43,7 +42,7 @@ public class Timer : MonoBehaviour
             } else {
                 // Reset();
                 GameManager.Instance.UpdateGameState(GameState.IDLE);
-                ConnectionManager.Instance.SendExecutableExpression("do exploration_over(\"" + ConnectionManager.Instance.GetConnectionId() + "\");");
+                ConnectionManager.Instance.SendExecutableExpression("do exploration_over(" + GameManager.Instance.GetVillageId() + ");");
             }
         } else {
             timeRemaining = timerDuration;
@@ -81,11 +80,11 @@ public class Timer : MonoBehaviour
 
     // ############################################################
 
-    public void SetTimerDuration(float duration) {
+    public static void SetTimerDuration(float duration) {
         timerDuration = duration;
     }
 
-    public float GetTimerDuration() {
+    public static float GetTimerDuration() {
         return timerDuration;
     }
 

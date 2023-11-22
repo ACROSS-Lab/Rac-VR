@@ -661,6 +661,7 @@ experiment VR_GAME autorun: true type: unity{
 	}*/
 	
 	action create_player(string id) {
+		write sample(id);
 		ask unity_linker {
 			do create_player(id);
 		}
@@ -677,6 +678,11 @@ experiment VR_GAME autorun: true type: unity{
 			do send_init_data(player_agents[id]); 
 		}
 	}
+	
+	action exploration_over(int village_id) {
+		// HANDLE END OF EXPLORATION FOR A GIVEN UNITY CLIENT
+	}
+	
 	
 
 	output {

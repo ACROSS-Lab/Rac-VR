@@ -1230,12 +1230,18 @@ species unity_linker parent: abstract_unity_linker {
 	int port <- 8000;
 	string player_species <- string(unity_player);
 	point location_init <- {50.0,50.0,0.0};
-	int max_num_players  <- 1;
+	int max_num_players  <- 100;
 	int min_num_players  <- 0;
 	
 	bool use_physics_for_player <- false;
 	
 	action send_world;
+	
+	action add_to_send_parameter(map map_to_send) {
+		map_to_send <+ "village_id"::(length(unity_player)-1); // VILLAGE NUMBER MUST BE DYNAMICALLY ASSIGNED
+		map_to_send <+ "exploration_duration"::30.0;
+			
+	}
 }
 
 species unity_player parent: abstract_unity_player{
