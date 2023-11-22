@@ -100,7 +100,7 @@ species inhabitant {
 	
 		//Facility treatment effects
 		float rate_decrease_due_to_treatment <- 0.0;
-		if (my_village != nil and  my_village.treatment_facility_is_activated) {
+		if (my_village != nil and  my_village.treatment_facility_is_activated and  my_village.treatment_facility_year > 0) {
 			rate_decrease_due_to_treatment <- treatment_facility_decrease[my_village.treatment_facility_year - 1];
 		} 
 		

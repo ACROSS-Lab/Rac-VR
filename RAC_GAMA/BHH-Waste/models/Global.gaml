@@ -34,6 +34,8 @@ import "Parameters.gaml"
 
 global {
 	
+	bool CHOOSING_VILLAGE_FOR_POOL <- false;
+	bool CHOOSEN_VILLAGE_FOR_POOL <- false;
 	
 	/********************** INTERNAL VARIABLES ****************************/
 	list<village> villages_order;
@@ -804,7 +806,7 @@ global {
 		}
 	}
 	
-	action choose_village_for_pool {
+	/*action choose_village_for_pool {
 			commune_money <- 0;
 			ask village {
 				commune_money <- commune_money + budget;
@@ -819,7 +821,7 @@ global {
 			}
 			commune_money <- 0;
 			to_refresh <- true;
-	}
+	}*/
 	
 	action stop_VR {
 		map to_send;
@@ -1056,12 +1058,16 @@ global {
 		stage <- PLAYER_DISCUSSION_TURN;
 		start_discussion_turn_time <- machine_time;
 	}
+	
+	action end_of_VR_discussion_phase {
+		stage <- PLAYER_ESTIMATION_TURN;
+	}
 	action end_of_exploration_phase {
 		do stop_VR;
 		if turn >= end_of_game{
 			end <- true;
 		} else {
-			if isDemo {
+			/*if isDemo {
 				if choice = 0 {
 					collect_on_ground <- true;
 				} else if choice = 1 {
@@ -1082,10 +1088,12 @@ global {
 					if not without_player {do tell(INDICATOR_COMPUTATION);}
 					do increase_urban_area;
 				}
-				enter_or_exit_VR <- true;
-			}else {
-				stage <- PLAYER_ESTIMATION_TURN;
-			}
+				enter_or_exit_VR <- true;*/
+			//}else {
+				stage <- PLAYER_VR_EXPLORATION_DISCUSSION_TURN;
+				
+				start_discussion_turn_time <- machine_time;
+			//}
 		}		
 	}
 	
@@ -1123,6 +1131,7 @@ global {
 		}
 	}
 	*/
+	action choose_village_for_pool;
 	
 	reflex estimation_phase when: stage = PLAYER_ESTIMATION_TURN{
 		ask village {
@@ -1137,10 +1146,11 @@ global {
 		do end_of_estimation_phase;
 	}
 		
-	reflex playerturn when: stage = PLAYER_ACTION_TURN{
+	reflex playerturn when: stage = PLAYER_ACTION_TURN and not CHOOSING_VILLAGE_FOR_POOL{
 		if without_player or (end_player_turn) {//index_player >= length(villages_order)) {
 			if not without_player and  use_money_pool and not commune_budget_dispatch {
 				do choose_village_for_pool();
+				
 			} else {
 				if (turn >= end_of_game) {
 					do pause;
