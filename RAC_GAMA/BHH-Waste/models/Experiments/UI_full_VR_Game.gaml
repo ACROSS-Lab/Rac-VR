@@ -96,7 +96,8 @@ global {
 	bool use_timer_for_discussion <- true;
 	bool use_timer_for_exploration <- false;
 	bool timer_just_for_warning <- false; //if true, if the timer is finished, just a warning message is displayed; if false, the turn passes to the next player - for the moment, some issue with the automatic change of step
-	float initial_time_for_discussion <- 1 #mn const: true; // time before the player turns
+	float initial_time_for_discussion <- 2 #mn const: true; // time before the player turns
+	float initial_time_for_VR_discussion <- 1 #mn const: true; // time before the player turns
 	float initial_time_for_exploration <- 5 #mn const: true;
 	float initial_time_for_choosing_village <- 20 #s const: true;
 	float time_for_choosing_village <- initial_time_for_choosing_village;
@@ -385,7 +386,7 @@ global {
 	reflex update_charts when: stage = COMPUTE_INDICATORS{
 		village_actions <- nil;
 		do update_chart_by_vil(global_chart);
- 
+ 		time_for_estimation_discussion <- initial_time_for_VR_discussion;
 		time_for_discussion <- initial_time_for_discussion;
 		time_for_exploration <- initial_time_for_exploration;
 		pause_started_time <- 0.0;
@@ -409,6 +410,13 @@ global {
 		remaining_time <- int(time_for_discussion - machine_time/1000.0 + start_discussion_turn_time/1000.0); 
 		if remaining_time <= 0 {
 			do end_of_discussion_phase;		
+		}
+	}
+	
+	reflex end_of_VR_iscussion_turn when: use_timer_for_discussion and stage = PLAYER_VR_EXPLORATION_DISCUSSION_TURN {
+		remaining_time <- int(time_for_estimation_discussion - machine_time/1000.0 + start_discussion_turn_time/1000.0); 
+		if remaining_time <= 0 {
+			do end_of_VR_discussion_phase;	
 		}
 	}
 
@@ -621,7 +629,7 @@ experiment VR_GAME autorun: true type: unity{
 	bool debug_mode <- true;
 	
 	action affiche_coord {
-		write sample(#user_location);
+	//	write sample(#user_location);
 	}
 	
 	int ambient_intensity <- 100;
@@ -712,13 +720,14 @@ experiment VR_GAME autorun: true type: unity{
 				draw ""+value  at: {location.x, location.y- 6*radius/10, 0.01}  color: ecolabel font: ui_font anchor: #bottom_center;
 			}
 		
-			graphics "Timer for the discussion" visible: stage = PLAYER_DISCUSSION_TURN and !end and use_timer_for_discussion {
+			graphics "Timer for the discussion" visible: stage in [PLAYER_DISCUSSION_TURN,PLAYER_VR_EXPLORATION_DISCUSSION_TURN] and !end and use_timer_for_discussion {
 				float y <- location.y + w_height/5 + y_centerdis;
 				float left <- location.x - w_width/2;
 				float right <- location.x + w_width/2;
 				draw "" + int(remaining_time) + " s" color: timer_main font: ui_font anchor: #left_center at: {right + 500, y};
 				draw line({left, y}, {right, y}) buffer (100, 200) color: timer_second;
-				float width <- (initial_time_for_discussion - remaining_time) * (right - left) / (initial_time_for_discussion);
+				float time_ <- stage = PLAYER_DISCUSSION_TURN ? initial_time_for_discussion : initial_time_for_VR_discussion;
+				float width <- (time_ - remaining_time) * (right - left) / (time_);
 				draw line({left, y}, {left + width, y}) buffer (100, 200) color: timer_main;
 				draw sandclock_icon /*rotate: (180 - remaining_time)*3*/ at: {left + width, y} size: w_height / 6;
 			}
@@ -795,7 +804,7 @@ experiment VR_GAME autorun: true type: unity{
 				image_file icon;
 				point size <- {w_width /3, w_width /3};
 				point location_icon <- {location.x, location.y-w_height/8 + y_centerdis}; 
-				if (stage = PLAYER_DISCUSSION_TURN) {
+				if (stage in [PLAYER_VR_EXPLORATION_DISCUSSION_TURN,PLAYER_DISCUSSION_TURN]) {
 					icon <- discussion_icon; 
 				} else if (stage = PLAYER_ACTION_TURN) {
 					if (CHOOSING_VILLAGE_FOR_POOL) {
@@ -820,10 +829,10 @@ experiment VR_GAME autorun: true type: unity{
 				draw ""+commune_money  at: {location.x, location.y- 6*radius/10 + y_centerdis, 0.01}  color: dark_theme ? #gold : rgb (225, 126, 21, 255) font: ui_font anchor: #bottom_center;
 			}
 	
-			graphics "Next" transparency: (((stage = STARTING_STATE and (connected_to_unity or !connect_to_unity)) or stage = PLAYER_DISCUSSION_TURN or stage = PLAYER_ACTION_TURN or (stage = PLAYER_VR_EXPLORATION_TURN and (connected_to_unity or !connect_to_unity))or !continue_to_compute) and !end) ? 0 : 0.6 {
+			graphics "Next" transparency: (((stage = STARTING_STATE and (connected_to_unity or !connect_to_unity)) or stage = PLAYER_VR_EXPLORATION_DISCUSSION_TURN or stage = PLAYER_ESTIMATION_TURN or stage = PLAYER_DISCUSSION_TURN or stage = PLAYER_ACTION_TURN or (stage = PLAYER_VR_EXPLORATION_TURN and (connected_to_unity or !connect_to_unity))or !continue_to_compute) and !end) ? 0 : 0.6 {
 				next_location <- {location.x + w_width / 2.5,  location.y-w_height/8} + {0, y_centerdis};
-				draw button_background at: next_location color: (next_selected and (((stage = STARTING_STATE and (connected_to_unity or !connect_to_unity)) or stage = PLAYER_DISCUSSION_TURN or stage = PLAYER_ACTION_TURN or (stage = PLAYER_VR_EXPLORATION_TURN and (connected_to_unity or !connect_to_unity)) or !continue_to_compute) and !end)) ? selected_color:unselected_color size: shape.width / 4;
-				draw next_icon at: next_location + {100, 0} size: w_width / 8 color: (next_selected and (((stage = STARTING_STATE and (connected_to_unity or !connect_to_unity)) or stage = PLAYER_DISCUSSION_TURN or stage = PLAYER_ACTION_TURN or (stage = PLAYER_VR_EXPLORATION_TURN and (connected_to_unity or !connect_to_unity)) or !continue_to_compute) and !end)) ? selected_color:unselected_color;
+				draw button_background at: next_location color: (next_selected and (((stage = STARTING_STATE and (connected_to_unity or !connect_to_unity))or stage = PLAYER_VR_EXPLORATION_DISCUSSION_TURN or stage = PLAYER_DISCUSSION_TURN or stage = PLAYER_ACTION_TURN or (stage = PLAYER_VR_EXPLORATION_TURN and (connected_to_unity or !connect_to_unity)) or !continue_to_compute) and !end)) ? selected_color:unselected_color size: shape.width / 4;
+				draw next_icon at: next_location + {100, 0} size: w_width / 8 color: (next_selected and (((stage = STARTING_STATE and (connected_to_unity or !connect_to_unity)) or stage = PLAYER_VR_EXPLORATION_DISCUSSION_TURN or stage = PLAYER_DISCUSSION_TURN or stage = PLAYER_ACTION_TURN or (stage = PLAYER_VR_EXPLORATION_TURN and (connected_to_unity or !connect_to_unity)) or !continue_to_compute) and !end)) ? selected_color:unselected_color;
 			}
 	
 			graphics "Play Pause" visible: !end {
@@ -1015,7 +1024,15 @@ experiment VR_GAME autorun: true type: unity{
 									show_pol_chart_by_cat_glob <- true;
 								}
 							}
-						} else if (stage != COMPUTE_INDICATORS) {
+					
+						} else if (stage = PLAYER_VR_EXPLORATION_DISCUSSION_TURN ) {
+							ask simulation {
+								do end_of_VR_discussion_phase;
+								
+							}
+						} 
+						
+						 else if (stage != COMPUTE_INDICATORS) {
 						
 							if (CHOOSING_VILLAGE_FOR_POOL) {
 								PASS_CHOOSING_VILLAGE <- true;
@@ -1078,6 +1095,8 @@ experiment VR_GAME autorun: true type: unity{
 					x <- x + 5.25*x_gap;
 					draw "Point Of Interest" at: {5 + x* w_width,y*w_height} color: point_of_interest_color depth: 0 font: ui_font anchor: #center;
 					
+				} else if stage = PLAYER_VR_EXPLORATION_DISCUSSION_TURN {
+				
 				} else {
 					
 					//Legend Productivity
@@ -1106,22 +1125,22 @@ experiment VR_GAME autorun: true type: unity{
 			camera 'default' distance: 7800 location: #from_above target: {3000,2700,0};
 			
 			/********************** MAIN MAP DISPLAY ******************************/
-			species plot visible: !(stage in [PLAYER_DISCUSSION_TURN, PLAYER_ACTION_TURN, PLAYER_VR_EXPLORATION_TURN])  {
+			species plot visible: !(stage in [PLAYER_DISCUSSION_TURN,PLAYER_ESTIMATION_TURN,  PLAYER_ACTION_TURN, PLAYER_VR_EXPLORATION_TURN,PLAYER_VR_EXPLORATION_DISCUSSION_TURN])  {
 				draw shape color: greens[world.production_class_current(self)] border: false;
 			}
-			species canal visible: !(stage in [PLAYER_DISCUSSION_TURN, PLAYER_ACTION_TURN, PLAYER_VR_EXPLORATION_TURN]) {
+			species canal visible: !(stage in [PLAYER_DISCUSSION_TURN, PLAYER_ESTIMATION_TURN, PLAYER_ACTION_TURN, PLAYER_VR_EXPLORATION_TURN,PLAYER_VR_EXPLORATION_DISCUSSION_TURN]) {
 				draw shape buffer (20,10) color: display_water_flow ? river : blues[world.water_pollution_class_current(self)]  ;
 			}
-			species waste_on_canal visible: !(stage in [PLAYER_DISCUSSION_TURN, PLAYER_ACTION_TURN, PLAYER_VR_EXPLORATION_TURN]) and display_water_flow  {
+			species waste_on_canal visible: !(stage in [PLAYER_DISCUSSION_TURN,PLAYER_ESTIMATION_TURN,  PLAYER_ACTION_TURN, PLAYER_VR_EXPLORATION_TURN, PLAYER_VR_EXPLORATION_DISCUSSION_TURN]) and display_water_flow  {
 					draw sphere(20) color: #lightblue;
 			}
-			species urban_area visible: !(stage in [PLAYER_DISCUSSION_TURN, PLAYER_ACTION_TURN, PLAYER_VR_EXPLORATION_TURN]);
+			species urban_area visible: !(stage in [PLAYER_DISCUSSION_TURN, PLAYER_ESTIMATION_TURN, PLAYER_ACTION_TURN, PLAYER_VR_EXPLORATION_TURN, PLAYER_VR_EXPLORATION_DISCUSSION_TURN]);
 			
 			species village {
 				if (stage = PLAYER_VR_EXPLORATION_TURN) {
 					float size <- w_width/10;
 					draw numbers[id] at: {(id mod 2)* w_width/1.7,int(id / 2)* w_height/1.95}   size: w_width/10;
-				} else {
+				} else if not (stage in [PLAYER_ESTIMATION_TURN, PLAYER_VR_EXPLORATION_DISCUSSION_TURN]){
 					float size <- w_width/10;
 					draw numbers[id] at: shape.centroid + position[id] size: w_width/10;
 					draw shape-(shape-40) color: color;
@@ -1130,7 +1149,7 @@ experiment VR_GAME autorun: true type: unity{
 				}
 				
 			}	
-			species village position: {0,0,0.01} visible: !(stage = PLAYER_VR_EXPLORATION_TURN) {
+			species village position: {0,0,0.01} visible: !(stage in [PLAYER_VR_EXPLORATION_DISCUSSION_TURN, PLAYER_ESTIMATION_TURN, PLAYER_VR_EXPLORATION_TURN]) {
 				int i <- id;
 				float size <- w_width/20;
 				float spacing <- size * 1;

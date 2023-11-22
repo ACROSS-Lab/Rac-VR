@@ -1058,6 +1058,10 @@ global {
 		stage <- PLAYER_DISCUSSION_TURN;
 		start_discussion_turn_time <- machine_time;
 	}
+	
+	action end_of_VR_discussion_phase {
+		stage <- PLAYER_ESTIMATION_TURN;
+	}
 	action end_of_exploration_phase {
 		do stop_VR;
 		if turn >= end_of_game{
@@ -1086,7 +1090,9 @@ global {
 				}
 				enter_or_exit_VR <- true;*/
 			//}else {
-				stage <- PLAYER_ESTIMATION_TURN;
+				stage <- PLAYER_VR_EXPLORATION_DISCUSSION_TURN;
+				
+				start_discussion_turn_time <- machine_time;
 			//}
 		}		
 	}

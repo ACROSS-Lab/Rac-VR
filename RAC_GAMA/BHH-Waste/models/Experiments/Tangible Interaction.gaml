@@ -48,6 +48,26 @@ global  {
 		}
 	}
 	
+		
+	reflex detect_interaction_estimation_discussion_phase when: stage = PLAYER_VR_EXPLORATION_DISCUSSION_TURN {
+		string result <- string(decodeQR(cam,image_width::image_height, false));
+		//write sample(result);
+		if result = nil { 
+			ready_action <- true;
+		}
+		if ready_action and machine_time > (last_action_time + (1000.0 * 2 * delay_between_actions)) {
+			latest_action <- "";
+		}
+		if result != latest_action and result = A_END_TURN {
+			if play_beep {bool is_ok <- play_sound("../../includes/BEEP.wav");}
+			ready_action <- false;
+			latest_action <- result;
+			last_action_time <- machine_time;
+			do end_of_VR_discussion_phase;	
+		}
+	}
+	
+	
 	reflex detect_interaction_starting_phase when: stage = STARTING_STATE {
 		string result <- string(decodeQR(cam,image_width::image_height, false));
 		//write sample(result);
