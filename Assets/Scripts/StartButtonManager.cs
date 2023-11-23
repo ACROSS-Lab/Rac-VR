@@ -7,17 +7,21 @@ public class StartButtonManager : MonoBehaviour
 {
 
     [SerializeField] private Button startButton;
+    [SerializeField] private TMPro.TextMeshProUGUI debugText;
+
+    private bool changeInteractableRequested;
 
     void OnEnable() {
-        startButton.onClick.AddListener(SetGameState);
+        GameManager.Instance.OnGameStateChanged += HandleStartButtonOnStateChanged;
     }
 
     void OnDisable() {
-        startButton.onClick.RemoveListener(SetGameState);
+        GameManager.Instance.OnGameStateChanged -= HandleStartButtonOnStateChanged;
     }
 
     void Start() {
         startButton.interactable = false;
+        changeInteractableRequested = false;
     }
 
     void Update() {
@@ -25,9 +29,16 @@ public class StartButtonManager : MonoBehaviour
             GameManager.Instance.SetGameReadyToStart(false);
             startButton.interactable = true;
         }
+
+        if(changeInteractableRequested) {
+            startButton.interactable = false;
+            changeInteractableRequested = false;
+        }
     }
 
-    private void SetGameState() {
-        GameManager.Instance.UpdateGameState(GameState.GAME);
+    public void HandleStartButtonOnStateChanged(GameState newState) {
+        if (newState == GameState.IDLE) {
+            changeInteractableRequested = true;
+        }
     }
 }

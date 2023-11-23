@@ -8,14 +8,13 @@ public class VillageId : MonoBehaviour
 
     void Start()
     {
-        idText.text = "Village number: ?";
+        idText.text = "No village";
     }
 
-    // Update is called once per frame
     void Update()
     {
         if (GameManager.Instance.GetVillageId() != -1) {
-            idText.text = "Village number: " + (GameManager.Instance.GetVillageId() + 1);
+            idText.text = "You are village " + (GameManager.Instance.GetVillageId() + 1);
         }
     }
 }
