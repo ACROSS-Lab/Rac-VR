@@ -1103,7 +1103,7 @@ experiment VR_GAME autorun: true type: unity{
 					
 				} else if stage = PLAYER_VR_EXPLORATION_DISCUSSION_TURN {
 				
-				} else {
+				} else if !(stage in [PLAYER_DISCUSSION_TURN, PLAYER_ACTION_TURN] ){
 					
 					//Legend Productivity
 					draw plant_icon at: {x* w_width,y*w_height} size: icon_size;
@@ -1159,43 +1159,39 @@ experiment VR_GAME autorun: true type: unity{
 				int i <- id;
 				float size <- w_width/20;
 				float spacing <- size * 1;
-				//float x_<- shape.centroid.x + position2[id, 0] + 700 - spacing;
-				//float y_ <- shape.centroid.y + position2[id, 1] + 600 - spacing;
-				
-				//draw tokens_icon at: {x_,  y_} size: size;
 				if (stage in [PLAYER_DISCUSSION_TURN, PLAYER_ACTION_TURN] ) {
 					draw shape color: color;
-				
+					float z <- 1.0;
 					float smiley_vertical_spacing <- size/2;
 					float smiley_horizontal_spacing <- smiley_vertical_spacing;
 					float smiley_size <- 2*size/3;
 					float x <- shape.centroid.x - spacing;
 					float y <- shape.centroid.y - spacing;
-					draw circle(3.0 * spacing) at: {x +  spacing, y + spacing} color: rgb(#gray, 0.5)  ;
-					draw soil_icon at: {x, y} size: size;
-					draw  smileys[estimated_solid_pollution] at: {x - smiley_horizontal_spacing , y + smiley_vertical_spacing, 0.01} size: smiley_size;
+					draw circle(2.5 * spacing) at: {x +  spacing, y + spacing, z/2} color: rgb(#gray, 0.5)  ;
+					draw soil_icon at: {x, y, z} size: size;
+					draw  smileys[estimated_solid_pollution] at: {x - smiley_horizontal_spacing , y + smiley_vertical_spacing, z} size: smiley_size;
 					if( show_chart_by_vil) {
-						draw square(smiley_size *1.5) at: {x + smiley_vertical_spacing , y + smiley_vertical_spacing, 0.01} color: rgb(#green, 0.5) ;
-						draw world.soil_pollution_class(self) at: {x + smiley_vertical_spacing , y + smiley_vertical_spacing, 0.01} size: smiley_size;
+						draw square(smiley_size *1.5) at: {x + smiley_vertical_spacing , y + smiley_vertical_spacing, z} color: #black wireframe: true ;
+						draw world.soil_pollution_class(self) at: {x + smiley_vertical_spacing , y + smiley_vertical_spacing, z} size: smiley_size;
 					}
 					x <- x + 2*spacing;
-					draw water_icon at: {x,  y} size: size;
+					draw water_icon at: {x,  y, z} size: size;
 				
-					draw smileys[estimated_water_pollution] at: {x + smiley_horizontal_spacing , y + smiley_vertical_spacing, 0.01} size: smiley_size;
+					draw smileys[estimated_water_pollution] at: {x - smiley_horizontal_spacing , y + smiley_vertical_spacing, z} size: smiley_size;
 					if( show_chart_by_vil) {
-						draw square(smiley_size *1.5) at:{x + 3* smiley_horizontal_spacing , y + smiley_vertical_spacing, 0.01} color: rgb(#green, 0.5) ;
-						draw world.water_pollution_class(self) at: {x + 3* smiley_horizontal_spacing , y + smiley_vertical_spacing, 0.01} size: smiley_size;
+						draw square(smiley_size *1.5) at:{x + smiley_horizontal_spacing , y + smiley_vertical_spacing, z} color: #black wireframe: true ;
+						draw world.water_pollution_class(self) at: {x + smiley_horizontal_spacing , y + smiley_vertical_spacing, z} size: smiley_size;
 					}
 					y <- y + 2*spacing;
-					draw tokens_icon at: {x,  y} size: size;
-					draw ""+budget at: {x, y + spacing} color: #white depth: 5 font: ui_font anchor: #bottom_center;
+					draw tokens_icon at: {x,  y, z} size: size;
+					draw ""+budget at: {x, y + spacing, z} color: #white depth: 5 font: ui_font anchor: #bottom_center;
 					x <- x - 2*spacing;
-					draw plant_icon at: {x, y} size: size;
-					draw smileys[estimated_production] at: {x - smiley_horizontal_spacing , y + smiley_vertical_spacing, 0.01} size: smiley_size;
+					draw plant_icon at: {x, y, z} size: size;
+					draw smileys[estimated_production] at: {x - smiley_horizontal_spacing , y + smiley_vertical_spacing,z} size: smiley_size;
 				
 					if( show_chart_by_vil) {
-						draw square(smiley_size *1.5) at: {x  + smiley_vertical_spacing, y + smiley_vertical_spacing, 0.01} color: rgb(#green, 0.5) ;
-						draw world.production_class_image(self) at: {x  + smiley_vertical_spacing, y + smiley_vertical_spacing, 0.01} size: smiley_size;
+						draw square(smiley_size *1.5) at: {x  + smiley_vertical_spacing, y + smiley_vertical_spacing, z} color: #black wireframe: true ;
+						draw world.production_class_image(self) at: {x  + smiley_vertical_spacing, y + smiley_vertical_spacing, z} size: smiley_size;
 					}
 				}
 			}
