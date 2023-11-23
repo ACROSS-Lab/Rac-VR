@@ -1240,6 +1240,9 @@ species unity_linker parent: abstract_unity_linker {
 	action add_to_send_parameter(map map_to_send) {
 		map_to_send <+ "village_id"::(length(unity_player)-1); // VILLAGE NUMBER MUST BE DYNAMICALLY ASSIGNED
 		map_to_send <+ "exploration_duration"::30.0;
+		remove key: "position" from: map_to_send;
+		
+		
 			
 	}
 }
