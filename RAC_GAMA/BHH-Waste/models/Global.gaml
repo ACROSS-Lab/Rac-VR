@@ -1244,7 +1244,7 @@ species unity_linker parent: abstract_unity_linker {
 	
 	action add_to_send_parameter(map map_to_send) {
 		map_to_send <+ "village_id"::(length(unity_player)-1); // VILLAGE NUMBER MUST BE DYNAMICALLY ASSIGNED
-		map_to_send <+ "exploration_duration"::30.0;
+		map_to_send <+ "exploration_duration"::120.0;
 		remove key: "position" from: map_to_send;
 		
 		
@@ -1261,6 +1261,8 @@ species unity_player parent: abstract_unity_player{
 	bool to_display <- true;
 	aspect default {
 		point loc <- {location.x * mini_map_x_coeff , location.y * mini_map_y_coeff, 0.5};
+		write sample(loc); 
+		write sample(location);
 		draw circle(player_size/2.0) at:loc color: color ;
 		draw player_perception_cone() at: loc color: rgb(color, 0.5);
 		

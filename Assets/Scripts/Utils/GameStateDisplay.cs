@@ -5,8 +5,9 @@ using UnityEngine;
 public class GameStateDisplay : MonoBehaviour
 {
 
+    public string texttoDisplay = "";
     [SerializeField] private TMPro.TextMeshProUGUI gameStateText;
-    
+     
     void Start()
     {
         gameStateText.text = GameManager.Instance.GetCurrentState().ToString();
@@ -15,6 +16,7 @@ public class GameStateDisplay : MonoBehaviour
     // Update is called once per frame
     void Update()
     {
-        gameStateText.text =  GameManager.Instance.GetCurrentState().ToString();
+        gameStateText.text =  GameManager.Instance.GetCurrentState().ToString() + " \n " + texttoDisplay;
+
     }
 }

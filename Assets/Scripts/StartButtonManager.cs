@@ -8,6 +8,7 @@ public class StartButtonManager : MonoBehaviour
 
     [SerializeField] private Button startButton;
     [SerializeField] private TMPro.TextMeshProUGUI debugText;
+    private bool ready = false;
 
     private bool changeInteractableRequested;
 
@@ -25,9 +26,10 @@ public class StartButtonManager : MonoBehaviour
     }
 
     void Update() {
-        if (GameManager.Instance.IsGameReadyToStart() && startButton.interactable == false) {
-            GameManager.Instance.SetGameReadyToStart(false);
+        if (!ready && GameManager.Instance.GetCurrentState() == GameState.READY && startButton.interactable == false) {
+            //GameManager.Instance.SetGameReadyToStart(false);
             startButton.interactable = true;
+            ready = true;
         }
 
         if(changeInteractableRequested) {
@@ -39,6 +41,8 @@ public class StartButtonManager : MonoBehaviour
     public void HandleStartButtonOnStateChanged(GameState newState) {
         if (newState == GameState.IDLE) {
             changeInteractableRequested = true;
+
+            ready = false;
         }
     }
 }
