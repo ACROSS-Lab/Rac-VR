@@ -180,8 +180,8 @@ public class GameManager : MonoBehaviour
 
             case GameState.IDLE:
                 gameReadyToStart = false;
-                Vector3 pos = converter.fromGAMACRS(parameters.position[0], parameters.position[1]);
-                player.transform.position = initialPosition.position;
+                //Vector3 pos = converter.fromGAMACRS(parameters.position[0], parameters.position[1]);
+                //player.transform.position = initialPosition.position;
                 Debug.Log("GameManager: UpdateGameState -> IDLE");
                 break;
 
@@ -206,7 +206,7 @@ public class GameManager : MonoBehaviour
 
     // ############################# INITIALIZERS ####################################
     private void InitPlayerParameters() {
-        Vector3 pos = converter.fromGAMACRS(parameters.position[0], parameters.position[1]);
+      /*  Vector3 pos = converter.fromGAMACRS(parameters.position[0], parameters.position[1]);
         player.transform.position = pos;
 
         if (parameters.physics) {
@@ -217,7 +217,7 @@ public class GameManager : MonoBehaviour
             if (player.TryGetComponent(out Rigidbody rigidBody)) {
                 Destroy(rigidBody);
             }
-        }
+        }*/
         
         UpdateGameState(GameState.IDLE);
         Debug.Log("GameManager: Player parameters initialized");
@@ -225,7 +225,7 @@ public class GameManager : MonoBehaviour
 
 
     private void InitGroundParameters() {
-        if (Ground == null) {
+       /* if (Ground == null) {
             Debug.LogError("GameManager: Ground not set");
             return;
         }
@@ -241,7 +241,7 @@ public class GameManager : MonoBehaviour
         ps.y = -groundY;
 
         Ground.transform.position = ps;
-        Debug.Log("GameManager: Ground parameters initialized");
+        Debug.Log("GameManager: Ground parameters initialized");*/
     }
 
     private void InitGeometries() {
@@ -423,9 +423,9 @@ public class GameManager : MonoBehaviour
     }
 
     public void StartGame() {
-        if (IsGameState(GameState.IDLE)) {
+        //if (IsGameState(GameState.IDLE)) {
             UpdateGameState(GameState.GAME);
-        }
+        //}
     }
 
     // ############################################################

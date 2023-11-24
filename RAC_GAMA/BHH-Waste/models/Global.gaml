@@ -33,7 +33,8 @@ import "Parameters.gaml"
  
 
 global {
-	
+	float mini_map_x_coeff <- 0.4;
+	float mini_map_y_coeff <- 0.4;
 	bool CHOOSING_VILLAGE_FOR_POOL <- false;
 	bool CHOOSEN_VILLAGE_FOR_POOL <- false;
 	
@@ -1249,19 +1250,16 @@ species unity_linker parent: abstract_unity_linker {
 
 species unity_player parent: abstract_unity_player{
 	float player_size <- 1.0;
-	rgb color <- #red;
+	rgb color <- #blue;
 	float cone_distance <- 10.0 * player_size;
 	float cone_amplitude <- 90.0;
 	float player_rotation <- 90.0;
 	bool to_display <- true;
 	aspect default {
-		if to_display {
-			if selected {
-				 draw circle(player_size) at: location + {0, 0, 4.9} color: rgb(#blue, 0.5);
-			}
-			draw circle(player_size/2.0) at: location + {0, 0, 5} color: color ;
-			draw player_perception_cone() color: rgb(color, 0.5);
-		}
+		point loc <- {location.x * mini_map_x_coeff , location.y * mini_map_y_coeff, 0.5};
+		draw circle(player_size/2.0) at:loc color: color ;
+		draw player_perception_cone() at: loc color: rgb(color, 0.5);
+		
 	}
 }
 

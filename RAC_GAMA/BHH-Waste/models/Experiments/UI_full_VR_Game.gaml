@@ -1206,15 +1206,15 @@ experiment VR_GAME autorun: true type: unity{
 			}
 			
 			/********************** MINI MAP DISPLAY ******************************/
-			image minimap size: {0.4,0.4} position:{0.0,0} visible: stage = PLAYER_VR_EXPLORATION_TURN;
-			image minimap size: {0.4,0.4} position:{0.6,0} visible: stage = PLAYER_VR_EXPLORATION_TURN;
-			image minimap size: {0.4,0.4} position:{0.0,0.5} visible: stage = PLAYER_VR_EXPLORATION_TURN;
-			image minimap size: {0.4,0.4} position:{0.6,0.5} visible: stage = PLAYER_VR_EXPLORATION_TURN;
+			image minimap size: {mini_map_x_coeff,mini_map_y_coeff} position:{0.0,0} visible: stage = PLAYER_VR_EXPLORATION_TURN;
+			image minimap size: {mini_map_x_coeff,mini_map_y_coeff} position:{0.6,0} visible: stage = PLAYER_VR_EXPLORATION_TURN;
+			image minimap size: {mini_map_x_coeff,mini_map_y_coeff} position:{0.0,0.5} visible: stage = PLAYER_VR_EXPLORATION_TURN;
+			image minimap size: {mini_map_x_coeff,mini_map_y_coeff} position:{0.6,0.5} visible: stage = PLAYER_VR_EXPLORATION_TURN;
 			
-			image gray_image  size: {0.4,0.4} position:{0.0,0, 0.01} transparency: 0.5 visible: stage = PLAYER_VR_EXPLORATION_TURN and (0 in exploration_ended);
-			image gray_image  size: {0.4,0.4} position:{0.6,0, 0.01} transparency: 0.5 visible: stage = PLAYER_VR_EXPLORATION_TURN and (1 in exploration_ended);
-			image gray_image  size: {0.4,0.4} position:{0.0,0.5, 0.01}  transparency: 0.5 visible: stage = PLAYER_VR_EXPLORATION_TURN and (2 in exploration_ended);
-			image gray_image  size: {0.4,0.4} position:{0.6,0.5, 0.01} transparency: 0.5 visible: stage = PLAYER_VR_EXPLORATION_TURN and (3 in exploration_ended);
+			image gray_image  size: {mini_map_x_coeff,mini_map_y_coeff} position:{0.0,0, 0.01} transparency: 0.5 visible: stage = PLAYER_VR_EXPLORATION_TURN and (0 in exploration_ended);
+			image gray_image  size: {mini_map_x_coeff,mini_map_y_coeff} position:{0.6,0, 0.01} transparency: 0.5 visible: stage = PLAYER_VR_EXPLORATION_TURN and (1 in exploration_ended);
+			image gray_image  size: {mini_map_x_coeff,mini_map_y_coeff} position:{0.0,0.5, 0.01}  transparency: 0.5 visible: stage = PLAYER_VR_EXPLORATION_TURN and (2 in exploration_ended);
+			image gray_image  size: {mini_map_x_coeff,mini_map_y_coeff} position:{0.6,0.5, 0.01} transparency: 0.5 visible: stage = PLAYER_VR_EXPLORATION_TURN and (3 in exploration_ended);
 			
 			species unity_player visible: stage = PLAYER_VR_EXPLORATION_TURN;
 			species pointInterest visible: stage = PLAYER_VR_EXPLORATION_TURN;

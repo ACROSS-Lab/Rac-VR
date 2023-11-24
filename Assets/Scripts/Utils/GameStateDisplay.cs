@@ -15,6 +15,6 @@ public class GameStateDisplay : MonoBehaviour
     // Update is called once per frame
     void Update()
     {
-        gameStateText.text = GameManager.Instance.GetCurrentState().ToString();
+        gameStateText.text =  GameManager.Instance.GetCurrentState().ToString();
     }
 }
