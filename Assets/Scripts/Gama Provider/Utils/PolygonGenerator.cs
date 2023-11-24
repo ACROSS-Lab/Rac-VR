@@ -32,7 +32,7 @@ public class PolygonGenerator
         instance = null;
     }
 
-    public void GeneratePolygons(GAMAGeometry geom)
+   /* public void GeneratePolygons(GAMAGeometry geom)
     {
         GameObject generated2D = new GameObject();
         generated2D.name = "Generated 2D geometries";
@@ -123,7 +123,7 @@ public class PolygonGenerator
     public Dictionary<int, GameObject> GetGeneratedGeometries2D()
     {
         return geometriesMap2D;
-    }
+    }*/
 
     // public static void SetGeneratedBuildings(Dictionary<int, GameObject> buildings)
     // {

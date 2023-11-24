@@ -185,6 +185,10 @@ global {
 	int choice <- -1;
 	int nb_waste;
 
+
+	list<int> exploration_ended;
+	
+	
 	/********************** INITIALIZATION OF THE GAME ****************************/
 
 	init {
@@ -531,7 +535,7 @@ global {
 	
 // INDICATORS' COMPUTATION REFLEX'S ACTIONS	
 	action compute_indicators {
-		
+		exploration_ended <- [];
 	 	is_pollution_ok <- (total_solid_pollution + total_water_pollution) <= max_pollution_ecolabel ;
 	 	is_production_ok <- total_production >= min_production_ecolabel;
 	 	

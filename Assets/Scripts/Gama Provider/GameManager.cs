@@ -74,9 +74,9 @@ public class GameManager : MonoBehaviour
     private bool geometriesInitialized;
     private bool simulationParametersHandled;
 
-    private bool handleGroundRequested;
-    private bool handlePlayerRequested;
-    private bool handleGeometriesRequested;
+    //private bool handleGroundRequested;
+   // private bool handlePlayerRequested;
+    //private bool handleGeometriesRequested;
 
     private bool gameReadyToStart = false;
 
@@ -116,9 +116,9 @@ public class GameManager : MonoBehaviour
         // InitAgentsList();
         geometriesInitialized = false;
         simulationParametersHandled = false;
-        handleGroundRequested = false;
-        handlePlayerRequested = false;
-        handleGeometriesRequested = false;
+      //  handleGroundRequested = false;
+       // handlePlayerRequested = false;
+       // handleGeometriesRequested = false;
         villageId = -1;
         initialPosition = player.transform;
     }
@@ -126,7 +126,7 @@ public class GameManager : MonoBehaviour
     void FixedUpdate() {
         if(IsGameState(GameState.GAME)) {
             UpdatePlayerPosition();
-            UpdateAgentsList();
+         //   UpdateAgentsList();
 
             // if (PNJ1 != null && pPNJ1.readySendPosition){
             //     SendInitPNJPos(PNJ1, pPNJ1);
@@ -136,20 +136,20 @@ public class GameManager : MonoBehaviour
     }
 
     void LateUpdate() {
-        if (handleGroundRequested && !simulationParametersHandled) {
-            handleGroundRequested = false;
-            InitGroundParameters();
-        }
+       // if (handleGroundRequested && !simulationParametersHandled) {
+        //    handleGroundRequested = false;
+          //  InitGroundParameters();
+        //}
 
-        if (handlePlayerRequested && !simulationParametersHandled) {
+        /*if (handlePlayerRequested && !simulationParametersHandled) {
             handlePlayerRequested = false;
             InitPlayerParameters();
         }
 
         if (handleGeometriesRequested && !simulationParametersHandled) {
             handleGeometriesRequested = false;
-            InitGeometries();
-        }
+           // InitGeometries();
+        }*/
 
         if (classIndicators != null) {
             UpdateClassIndicator();
@@ -224,7 +224,7 @@ public class GameManager : MonoBehaviour
     }
 
 
-    private void InitGroundParameters() {
+   // private void InitGroundParameters() {
        /* if (Ground == null) {
             Debug.LogError("GameManager: Ground not set");
             return;
@@ -242,9 +242,9 @@ public class GameManager : MonoBehaviour
 
         Ground.transform.position = ps;
         Debug.Log("GameManager: Ground parameters initialized");*/
-    }
+   // }
 
-    private void InitGeometries() {
+   /* private void InitGeometries() {
         if (polyGen == null) {
             polyGen = PolygonGenerator.GetInstance();
             polyGen.Init(converter, offsetYBackgroundGeom);
@@ -253,7 +253,7 @@ public class GameManager : MonoBehaviour
         geometriesInitialized = true;
         OnGeometriesInitialized?.Invoke(gamaGeometry);
         Debug.Log("GameManager: Geometries initialized");
-    }
+    }*/
 
     // private void InitAgentsList() {
     //     agentMapList = new List<Dictionary<int, GameObject>>();
@@ -279,7 +279,7 @@ public class GameManager : MonoBehaviour
         ConnectionManager.Instance.SendExecutableExpression("do move_player_external($id," + p[0] + "," + p[1] + "," + angle + ");");
     }
 
-    private void UpdateAgentsList() {
+   /* private void UpdateAgentsList() {
 
         foreach (Dictionary<int, GameObject> agentMap in agentMapList) {
             foreach (GameObject obj in agentMap.Values) {
@@ -324,7 +324,7 @@ public class GameManager : MonoBehaviour
             }
         }
     }
-
+   */
     private void UpdateClassIndicator() {
         classIndicators.displaySolidClass(classIndicators.solidwasteSoilClass[villageId], classIndicators.solidwasteCanalClass[villageId]);
         classIndicators.displayWaterClass(classIndicators.waterwasteClass[villageId]);
@@ -353,23 +353,26 @@ public class GameManager : MonoBehaviour
                 Debug.Log(jsonObj.ToString());
                 // Init ground and player
                 villageId = parameters.village_id;
+
                 Timer.SetTimerDuration((float) parameters.exploration_duration);
-                if (groundExpected) handleGroundRequested = true;
-                if (playerParametersExpected) handlePlayerRequested = true;                
-            break;
+                UpdateGameState(GameState.IDLE);
+
+                //if (groundExpected) handleGroundRequested = true;
+                //if (playerParametersExpected) handlePlayerRequested = true;                
+                break;
 
             // handle geometries sent by GAMA at the beginning of the simulation
-            case "points":
+           /* case "points":
                 gamaGeometry = GAMAGeometry.CreateFromJSON(jsonObj.ToString());
                 Debug.Log("GameManager: Received geometries data");
-                if (geometriesExpected) handleGeometriesRequested = true;
-            break;
+               // if (geometriesExpected) handleGeometriesRequested = true;
+            break;*/
 
             // handle agents while simulation is running
-            case "agents":
+           /* case "agents":
                 infoWorld = WorldJSONInfo.CreateFromJSON(jsonObj.ToString());                
                 OnWorldDataReceived?.Invoke(infoWorld);
-            break;
+            break;*/ 
 
             case "solidwasteSoilClass":
                 classIndicators = ConnectionClass.CreateFromJSON(jsonObj.ToString(), dm);

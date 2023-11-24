@@ -128,9 +128,6 @@ global {
 	int turn_see_indicators <- 1;
 	
 	
-	list<int> exploration_ended;
-	
-	
 	/********************** ICONS *************************************************/
 	
 	image_file label_icon <- image_file("../../includes/icons/Logo jour de label.png");

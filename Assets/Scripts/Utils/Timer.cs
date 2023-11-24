@@ -26,27 +26,32 @@ public class Timer : MonoBehaviour
         DisplayTime(timeRemaining-1);
     }
 
-    void OnEnble() {
+   /* void OnEnble() {
         GameManager.Instance.OnGameStateChanged += HandleTimerOnStateChanged;
     }
 
     void OnDisable() {
         GameManager.Instance.OnGameStateChanged -= HandleTimerOnStateChanged;
-    }
+    }*/
 
     void Update() {
-        if(timerRunning) {
-            if (timeRemaining > 0) {
-                timeRemaining -= Time.deltaTime;
-                DisplayTime(timeRemaining);
-            } else {
-                // Reset();
-                GameManager.Instance.UpdateGameState(GameState.IDLE);
-                ConnectionManager.Instance.SendExecutableExpression("do exploration_over(" + GameManager.Instance.GetVillageId() + ");");
+       if (timerRunning)
+            {
+                if (timeRemaining > 0)
+                {
+                    timeRemaining -= Time.deltaTime;
+                    DisplayTime(timeRemaining);
+                }
+                else
+                {
+                    Reset();
+                    //  timerRunning = false;
+                    GameManager.Instance.UpdateGameState(GameState.IDLE);
+                    ConnectionManager.Instance.SendExecutableExpression("do exploration_over(" + GameManager.Instance.GetVillageId() + ");");
+                }
             }
-        } else {
-            timeRemaining = timerDuration;
-        }
+           
+        
     }
 
     // ############################################################
@@ -71,12 +76,12 @@ public class Timer : MonoBehaviour
         timeRemaining = timerDuration;
     }
 
-    private void HandleTimerOnStateChanged(GameState newState) {
+    /*private void HandleTimerOnStateChanged(GameState newState) {
         if (newState == GameState.IDLE) {
             Reset();
         }
 
-    }
+    }*/
 
     // ############################################################
 
