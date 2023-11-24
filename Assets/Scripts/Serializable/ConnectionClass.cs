@@ -20,6 +20,7 @@ public class ConnectionClass
     }
 
 
+
     private void displaylvl1(GameObject lvl2, GameObject lvl3, GameObject lvl4, GameObject lvl5)
     {
         if (lvl2.activeSelf)
@@ -127,6 +128,8 @@ public class ConnectionClass
         switch(classValueSoil){
             case 0:
                 // Urban Areas
+                Debug.Log("dm: " + dm);
+                Debug.Log("dm.UASolidWasteLvl2: " + dm.UASolidWasteLvl2);
                 displaylvl1(dm.UASolidWasteLvl2, dm.UASolidWasteLvl3, dm.UASolidWasteLvl4, dm.UASolidWasteLvl5);
 
                 break;
