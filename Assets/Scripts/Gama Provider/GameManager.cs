@@ -116,6 +116,7 @@ public class GameManager : MonoBehaviour
         villageId = -1;
         initialPosition = new Vector3(player.transform.position.x, player.transform.position.y, player.transform.position.z);
         initialRotation = new Quaternion(player.transform.rotation.x, player.transform.rotation.y, player.transform.rotation.z, player.transform.rotation.w);
+        
     }
 
     void FixedUpdate() {
@@ -131,6 +132,7 @@ public class GameManager : MonoBehaviour
 
         if (classIndicators != null)
         {
+            player.transform.SetLocalPositionAndRotation(initialPosition, initialRotation);
             UpdateClassIndicator();
             UpdateGameState(GameState.READY);
         }
@@ -184,7 +186,6 @@ public class GameManager : MonoBehaviour
                 break;
             case GameState.READY:
                 //gameReadyToStart = true;
-                player.transform.SetLocalPositionAndRotation(initialPosition, initialRotation);
                 Debug.Log("GameManager: UpdateGameState -> READY");
                 break;
 
@@ -269,7 +270,7 @@ public class GameManager : MonoBehaviour
 
     // ############################################ UPDATERS ############################################
     private void UpdatePlayerPosition() {
-        Vector2 vF = new Vector2(Camera.main.transform.forward.x, Camera.main.transform.forward.z);
+        /*Vector2 vF = new Vector2(Camera.main.transform.forward.x, Camera.main.transform.forward.z);
         Vector2 vR = new Vector2(transform.forward.x, transform.forward.z);
         vF.Normalize();
         vR.Normalize();
@@ -277,6 +278,18 @@ public class GameManager : MonoBehaviour
         float s = vF.x * vR.y - vF.y * vR.x;
 
         int angle = (int) (((s > 0) ? -1.0 : 1.0) * (180 / Math.PI) * Math.Acos(c) * parameters.precision);
+
+        List<int> p = converter.toGAMACRS(Camera.main.transform.position);
+        ConnectionManager.Instance.SendExecutableExpression("do move_player_external($id," + p[0] + "," + p[1] + "," + angle + ");");*/
+        
+        Vector2 vF = new Vector2(player.transform.forward.x, player.transform.forward.z);
+        Vector2 vR = new Vector2(transform.forward.x, transform.forward.z);
+        vF.Normalize();
+        vR.Normalize();
+        float c = vF.x * vR.x + vF.y * vR.y;
+        float s = vF.x * vR.y - vF.y * vR.x;
+
+        int angle = (int)(((s > 0) ? -1.0 : 1.0) * (180 / Math.PI) * Math.Acos(c) * parameters.precision);
 
         List<int> p = converter.toGAMACRS(Camera.main.transform.position);
         ConnectionManager.Instance.SendExecutableExpression("do move_player_external($id," + p[0] + "," + p[1] + "," + angle + ");");
@@ -338,7 +351,6 @@ public class GameManager : MonoBehaviour
         classIndicators.displayWaterColor(classIndicators.waterwasteClass[villageId]);
         Debug.Log("3 villageId: " + villageId);
 
-        disDebug.texttoDisplay = "display classe : " + classIndicators.solidwasteSoilClass[villageId];
        classIndicators = null;
     } 
 
@@ -386,7 +398,6 @@ public class GameManager : MonoBehaviour
 
             case "solidwasteSoilClass":
                 classIndicators = ConnectionClass.CreateFromJSON(jsonObj.ToString(), dm);
-                disDebug.texttoDisplay = "pollution: " + classIndicators.solidwasteSoilClass[0];
                // disDebug.texttoDisplay = "classIndicators  : " + classIndicators;
 
                
