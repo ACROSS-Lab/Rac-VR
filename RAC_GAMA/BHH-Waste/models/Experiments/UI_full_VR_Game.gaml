@@ -632,7 +632,7 @@ experiment VR_GAME autorun: true type: unity{
 	bool debug_mode <- true;
 	
 	action affiche_coord {
-	//	write sample(#user_location);
+		write sample(#user_location);
 	}
 	
 	int ambient_intensity <- 100;
@@ -670,10 +670,16 @@ experiment VR_GAME autorun: true type: unity{
 		}
 	}
 	
-	action move_player_external(string id, int x, int y, int a) {
-		ask unity_linker {
-			do move_player_external(id, x, y, a); 
+	action move_player_external(int id, int x, int y, int a) {
+		write sample(id) + ":("+x+","+y+","+a+")";
+		int precis <- first(unity_linker).precision;
+		ask unity_player[id] {
+			location <- {x/precis, y/precis};
+			rotation <- a/precis;
 		}
+		/*ask unity_linker {
+			do move_player_external(id, x, y, a); 
+		}*/
 	}
 	
 	action init_player(string id) {
@@ -1096,7 +1102,7 @@ experiment VR_GAME autorun: true type: unity{
 				if (stage = PLAYER_VR_EXPLORATION_TURN) {
 					
 					//Legend Player position
-					draw player at: {x* w_width,y*w_height} size: icon_size*1.5;
+					/*draw player at: {x* w_width,y*w_height} size: icon_size*1.5;
 					x <- x + 2.5* x_gap;
 					draw "Player" at: {x * w_width,y*w_height} color: player_color depth: 0 font: ui_font anchor: #center;
 					
@@ -1105,9 +1111,9 @@ experiment VR_GAME autorun: true type: unity{
 					//Legend Point of interest
 					draw interest at: {x*w_width,y*w_height} size: icon_size*1.5;
 					x <- x + 5.25*x_gap;
-					draw "Point Of Interest" at: {5 + x* w_width,y*w_height} color: point_of_interest_color depth: 0 font: ui_font anchor: #center;
+					draw "Point Of Interest" at: {5 + x* w_width,y*w_height} color: point_of_interest_color depth: 0 font: ui_font anchor: #center;*/
 					
-				} else if stage = PLAYER_VR_EXPLORATION_DISCUSSION_TURN {
+				//} else if stage = PLAYER_VR_EXPLORATION_DISCUSSION_TURN {
 				
 				} else if !(stage in [PLAYER_DISCUSSION_TURN, PLAYER_ACTION_TURN] ){
 					
@@ -1137,31 +1143,31 @@ experiment VR_GAME autorun: true type: unity{
 			camera 'default' distance: 7800 location: #from_above target: {3000,2700,0};
 			
 			/********************** MAIN MAP DISPLAY ******************************/
-			species plot visible: !(stage in [PLAYER_DISCUSSION_TURN,PLAYER_ESTIMATION_TURN,  PLAYER_ACTION_TURN, PLAYER_VR_EXPLORATION_TURN,PLAYER_VR_EXPLORATION_DISCUSSION_TURN])  {
+			species plot visible: !(stage in [PLAYER_DISCUSSION_TURN,  PLAYER_ACTION_TURN, PLAYER_VR_EXPLORATION_TURN])  {
 				draw shape color: greens[world.production_class_current(self)] border: false;
 			}
-			species canal visible: !(stage in [PLAYER_DISCUSSION_TURN, PLAYER_ESTIMATION_TURN, PLAYER_ACTION_TURN, PLAYER_VR_EXPLORATION_TURN,PLAYER_VR_EXPLORATION_DISCUSSION_TURN]) {
+			species canal visible: !(stage in [PLAYER_DISCUSSION_TURN, PLAYER_ACTION_TURN, PLAYER_VR_EXPLORATION_TURN]) {
 				draw shape buffer (20,10) color: display_water_flow ? river : blues[world.water_pollution_class_current(self)]  ;
 			}
-			species waste_on_canal visible: !(stage in [PLAYER_DISCUSSION_TURN,PLAYER_ESTIMATION_TURN,  PLAYER_ACTION_TURN, PLAYER_VR_EXPLORATION_TURN, PLAYER_VR_EXPLORATION_DISCUSSION_TURN]) and display_water_flow  {
+			species waste_on_canal visible: !(stage in [PLAYER_DISCUSSION_TURN,  PLAYER_ACTION_TURN, PLAYER_VR_EXPLORATION_TURN]) and display_water_flow  {
 					draw sphere(20) color: #lightblue;
 			}
-			species urban_area visible: !(stage in [PLAYER_DISCUSSION_TURN, PLAYER_ESTIMATION_TURN, PLAYER_ACTION_TURN, PLAYER_VR_EXPLORATION_TURN, PLAYER_VR_EXPLORATION_DISCUSSION_TURN]);
+			species urban_area visible: !(stage in [PLAYER_DISCUSSION_TURN, PLAYER_ACTION_TURN, PLAYER_VR_EXPLORATION_TURN]);
 			
 			species village {
 				if (stage = PLAYER_VR_EXPLORATION_TURN) {
 					float size <- w_width/10;
 					draw numbers[id] at: {(id mod 2)* w_width/1.7,int(id / 2)* w_height/1.95}   size: w_width/10;
-				} else if not (stage in [PLAYER_ESTIMATION_TURN, PLAYER_VR_EXPLORATION_DISCUSSION_TURN]){
+				}/* else if not (stage in [PLAYER_ESTIMATION_TURN, PLAYER_VR_EXPLORATION_DISCUSSION_TURN]){
 					float size <- w_width/10;
 					draw numbers[id] at: shape.centroid + position[id] size: w_width/10;
 					draw shape-(shape-40) color: color;
 					
 				
-				}
+				}*/
 				
 			}	
-			species village position: {0,0,0.01} visible: !(stage in [PLAYER_VR_EXPLORATION_DISCUSSION_TURN, PLAYER_ESTIMATION_TURN, PLAYER_VR_EXPLORATION_TURN]) {
+			species village position: {0,0,0.01} visible: !(stage in [ PLAYER_VR_EXPLORATION_TURN]) {
 				int i <- id;
 				float size <- w_width/20;
 				float spacing <- size * 1;

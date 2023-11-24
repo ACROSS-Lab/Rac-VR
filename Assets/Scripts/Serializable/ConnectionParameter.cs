@@ -13,7 +13,7 @@ public class ConnectionParameter
     public string language;
     public string mode;
     public int village_id;
-    public double exploration_duration;
+    public int exploration_duration;
 
     public static ConnectionParameter CreateFromJSON(string jsonString)
     {

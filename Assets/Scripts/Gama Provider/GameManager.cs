@@ -270,7 +270,7 @@ public class GameManager : MonoBehaviour
 
     // ############################################ UPDATERS ############################################
     private void UpdatePlayerPosition() {
-        /*Vector2 vF = new Vector2(Camera.main.transform.forward.x, Camera.main.transform.forward.z);
+        Vector2 vF = new Vector2(Camera.main.transform.forward.x, Camera.main.transform.forward.z);
         Vector2 vR = new Vector2(transform.forward.x, transform.forward.z);
         vF.Normalize();
         vR.Normalize();
@@ -280,9 +280,9 @@ public class GameManager : MonoBehaviour
         int angle = (int) (((s > 0) ? -1.0 : 1.0) * (180 / Math.PI) * Math.Acos(c) * parameters.precision);
 
         List<int> p = converter.toGAMACRS(Camera.main.transform.position);
-        ConnectionManager.Instance.SendExecutableExpression("do move_player_external($id," + p[0] + "," + p[1] + "," + angle + ");");*/
+        ConnectionManager.Instance.SendExecutableExpression("do move_player_external("+ villageId + "," + p[0] + "," + p[1] + "," + angle + ");");
         
-        Vector2 vF = new Vector2(player.transform.forward.x, player.transform.forward.z);
+       /* Vector2 vF = new Vector2(player.transform.forward.x, player.transform.forward.z);
         Vector2 vR = new Vector2(transform.forward.x, transform.forward.z);
         vF.Normalize();
         vR.Normalize();
@@ -292,7 +292,7 @@ public class GameManager : MonoBehaviour
         int angle = (int)(((s > 0) ? -1.0 : 1.0) * (180 / Math.PI) * Math.Acos(c) * parameters.precision);
 
         List<int> p = converter.toGAMACRS(Camera.main.transform.position);
-        ConnectionManager.Instance.SendExecutableExpression("do move_player_external($id," + p[0] + "," + p[1] + "," + angle + ");");
+        ConnectionManager.Instance.SendExecutableExpression("do move_player_external($id," + p[0] + "," + p[1] + "," + angle + ");");*/
     }
 
    /* private void UpdateAgentsList() {
