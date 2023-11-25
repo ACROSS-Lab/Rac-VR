@@ -1253,15 +1253,20 @@ species unity_linker parent: abstract_unity_linker {
 }
 
 species unity_player parent: abstract_unity_player{
-	float player_size <- 10.0;
-	rgb color <- #blue;
-	float cone_distance <- 10.0 * player_size;
+	float player_size <- 15.0;
+	
+	float cone_distance <- 15.0 * player_size;
 	float cone_amplitude <- 90.0;
 	float player_rotation <- 90.0;
 	bool to_display <- true;
+	
+	init {
+		color <- village[int(self)].color;
+	}
 	aspect default {
-		point loc <- {location.x * 0.000562 + 1094 , location.y * -0.005026767537135 + 1199, 0.5};
-		draw circle(player_size/2.0) at:loc color: color ;
+	//	point loc <- {location.x * 0.000562 + 1094 , location.y * -0.005026767537135 + 1199, 0.5};
+		point loc <- location;
+		draw sphere(player_size/2.0) at:loc color: color ;
 		draw player_perception_cone() at: loc color: rgb(color, 0.5);
 		
 	}

@@ -629,7 +629,7 @@ experiment VR_GAME autorun: true type: unity{
 	string unity_linker_species <- string(unity_linker);
 	list<string> displays_to_hide <- [];
 	
-	bool debug_mode <- true;
+	bool debug_mode <- false;
 	
 	action affiche_coord {
 		write sample(#user_location);
@@ -639,7 +639,7 @@ experiment VR_GAME autorun: true type: unity{
 	
 	parameter mode var:mode <- FULL_VR_GAME;
 	
-	parameter  days var:days <- 50;
+	//parameter  days var:days <- 50;
 	
 	parameter isDemo var: isDemo <- false;
 	
@@ -673,6 +673,7 @@ experiment VR_GAME autorun: true type: unity{
 	action move_player_external(int id, int x, int y, int a) {
 		write sample(id) + ":("+x+","+y+","+a+")";
 		int precis <- first(unity_linker).precision;
+		
 		ask unity_player[id] {
 			location <- {x/precis, y/precis};
 			rotation <- a/precis;
@@ -1155,9 +1156,9 @@ experiment VR_GAME autorun: true type: unity{
 			species urban_area visible: !(stage in [PLAYER_DISCUSSION_TURN, PLAYER_ACTION_TURN, PLAYER_VR_EXPLORATION_TURN]);
 			
 			species village {
-				if (stage = PLAYER_VR_EXPLORATION_TURN) {
+				if (stage = PLAYER_VR_EXPLORATION_TURN and (id in exploration_ended)) {
 					float size <- w_width/10;
-					draw numbers[id] at: {(id mod 2)* w_width/1.7,int(id / 2)* w_height/1.95}   size: w_width/10;
+					draw numbers[id] at: {id * w_width/10 ,0}   size: w_width/10;
 				}/* else if not (stage in [PLAYER_ESTIMATION_TURN, PLAYER_VR_EXPLORATION_DISCUSSION_TURN]){
 					float size <- w_width/10;
 					draw numbers[id] at: shape.centroid + position[id] size: w_width/10;
@@ -1209,18 +1210,20 @@ experiment VR_GAME autorun: true type: unity{
 			}
 			
 			/********************** MINI MAP DISPLAY ******************************/
-			image minimap size: {mini_map_x_coeff,mini_map_y_coeff} position:{0.0,0} visible: stage = PLAYER_VR_EXPLORATION_TURN;
-			image minimap size: {mini_map_x_coeff,mini_map_y_coeff} position:{0.6,0} visible: stage = PLAYER_VR_EXPLORATION_TURN;
-			image minimap size: {mini_map_x_coeff,mini_map_y_coeff} position:{0.0,0.5} visible: stage = PLAYER_VR_EXPLORATION_TURN;
-			image minimap size: {mini_map_x_coeff,mini_map_y_coeff} position:{0.6,0.5} visible: stage = PLAYER_VR_EXPLORATION_TURN;
+			image minimap  visible: stage = PLAYER_VR_EXPLORATION_TURN;
 			
-			image gray_image  size: {mini_map_x_coeff,mini_map_y_coeff} position:{0.0,0, 0.01} transparency: 0.5 visible: stage = PLAYER_VR_EXPLORATION_TURN and (0 in exploration_ended);
+			//image minimap size: {mini_map_x_coeff,mini_map_y_coeff} position:{0.0,0} visible: stage = PLAYER_VR_EXPLORATION_TURN;
+			//image minimap size: {mini_map_x_coeff,mini_map_y_coeff} position:{0.6,0} visible: stage = PLAYER_VR_EXPLORATION_TURN;
+			//image minimap size: {mini_map_x_coeff,mini_map_y_coeff} position:{0.0,0.5} visible: stage = PLAYER_VR_EXPLORATION_TURN;
+			//image minimap size: {mini_map_x_coeff,mini_map_y_coeff} position:{0.6,0.5} visible: stage = PLAYER_VR_EXPLORATION_TURN;
+			
+			/*image gray_image  size: {mini_map_x_coeff,mini_map_y_coeff} position:{0.0,0, 0.01} transparency: 0.5 visible: stage = PLAYER_VR_EXPLORATION_TURN and (0 in exploration_ended);
 			image gray_image  size: {mini_map_x_coeff,mini_map_y_coeff} position:{0.6,0, 0.01} transparency: 0.5 visible: stage = PLAYER_VR_EXPLORATION_TURN and (1 in exploration_ended);
 			image gray_image  size: {mini_map_x_coeff,mini_map_y_coeff} position:{0.0,0.5, 0.01}  transparency: 0.5 visible: stage = PLAYER_VR_EXPLORATION_TURN and (2 in exploration_ended);
 			image gray_image  size: {mini_map_x_coeff,mini_map_y_coeff} position:{0.6,0.5, 0.01} transparency: 0.5 visible: stage = PLAYER_VR_EXPLORATION_TURN and (3 in exploration_ended);
-			
+			*/
 			species unity_player visible: stage = PLAYER_VR_EXPLORATION_TURN;
-			species pointInterest visible: stage = PLAYER_VR_EXPLORATION_TURN;
+			//species pointInterest visible: stage = PLAYER_VR_EXPLORATION_TURN;
 			
 			
 			event #mouse_down action: affiche_coord;
