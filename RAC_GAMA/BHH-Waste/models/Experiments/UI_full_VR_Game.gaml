@@ -632,7 +632,7 @@ experiment VR_GAME autorun: true type: unity{
 	bool debug_mode <- false;
 	
 	action affiche_coord {
-		write sample(#user_location);
+		//write sample(#user_location);
 	}
 	
 	int ambient_intensity <- 100;
@@ -664,19 +664,18 @@ experiment VR_GAME autorun: true type: unity{
 	}*/
 	
 	action create_player(string id) {
-		write sample(id);
+		//write sample(id);
 		ask unity_linker {
 			do create_player(id);
 		}
 	}
 	
 	action move_player_external(int id, int x, int y, int a) {
-		write sample(id) + ":("+x+","+y+","+a+")";
-		int precis <- first(unity_linker).precision;
+		//write sample(id) + ":("+x+","+y+","+a+")";
 		
 		ask unity_player[id] {
-			location <- {x/precis, y/precis};
-			rotation <- a/precis;
+			location <- {x, y};
+			//rotation <- a/precis;
 		}
 		/*ask unity_linker {
 			do move_player_external(id, x, y, a); 
@@ -974,7 +973,7 @@ experiment VR_GAME autorun: true type: unity{
 			}
 			
 			event " " {
-				write "Sending help";
+				//write "Sending help";
 				send_help <- true;
 			}
 						
