@@ -45,9 +45,10 @@ Material:
     - _Plants1: 0
     - _Texture: 0
     - _Texture1: 0
+    - __dirty: 0
     m_Colors:
     - _BaseColor: {r: 0.745283, g: 0, b: 0, a: 0}
-    - _BaseColor1: {r: 0.21226406, g: 0.92704, b: 1, a: 1}
+    - _BaseColor1: {r: 0.212264, g: 0.92704, b: 1, a: 1}
     - _EmissionColor: {r: 1, g: 1, b: 1, a: 1}
     - _Pollution_Color: {r: 0.27990386, g: 0.43809888, b: 0.6981132, a: 0}
     - _Pollution_Color1: {r: 0.27990386, g: 0.43809888, b: 0.6981132, a: 0}
