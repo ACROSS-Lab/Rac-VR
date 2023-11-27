@@ -24,13 +24,13 @@ Transform:
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 633323557520857216}
+  serializedVersion: 2
   m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
   m_LocalPosition: {x: 0, y: 0, z: 0}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_ConstrainProportionsScale: 0
   m_Children: []
   m_Father: {fileID: 8046534170124473884}
-  m_RootOrder: -1
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!82 &1122482956938752832
 AudioSource:
@@ -157,6 +157,7 @@ Transform:
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 1695834045018921732}
+  serializedVersion: 2
   m_LocalRotation: {x: -9.313226e-10, y: 0.640888, z: -9.313226e-10, w: 0.7676345}
   m_LocalPosition: {x: 0.17134176, y: 0.000000023585251, z: -0.102856696}
   m_LocalScale: {x: 0.41, y: 0.41, z: 0.41}
@@ -164,7 +165,6 @@ Transform:
   m_Children:
   - {fileID: 7323156274555238251}
   m_Father: {fileID: 8046534170124473884}
-  m_RootOrder: -1
   m_LocalEulerAnglesHint: {x: 0, y: 79.716, z: 0}
 --- !u!33 &2348064901989091773
 MeshFilter:
@@ -238,6 +238,7 @@ MonoBehaviour:
     m_Bits: 1
   m_DistanceCalculationMode: 1
   m_SelectMode: 0
+  m_FocusMode: 1
   m_CustomReticle: {fileID: 0}
   m_AllowGazeInteraction: 0
   m_AllowGazeSelect: 0
@@ -328,6 +329,18 @@ MonoBehaviour:
           m_BoolArgument: 1
         m_CallState: 2
   m_SelectExited:
+    m_PersistentCalls:
+      m_Calls: []
+  m_FirstFocusEntered:
+    m_PersistentCalls:
+      m_Calls: []
+  m_LastFocusExited:
+    m_PersistentCalls:
+      m_Calls: []
+  m_FocusEntered:
+    m_PersistentCalls:
+      m_Calls: []
+  m_FocusExited:
     m_PersistentCalls:
       m_Calls: []
   m_Activated:
@@ -948,6 +961,7 @@ Transform:
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 2884655965411333590}
+  serializedVersion: 2
   m_LocalRotation: {x: -0.013791627, y: -0, z: -0, w: 0.99990493}
   m_LocalPosition: {x: 1.7074, y: -0.098267384, z: 0.1278845}
   m_LocalScale: {x: 1.5795, y: 1.5795, z: 1.5795}
@@ -957,7 +971,6 @@ Transform:
   - {fileID: 7943801805951082714}
   - {fileID: 8586317741770516364}
   m_Father: {fileID: 0}
-  m_RootOrder: 0
   m_LocalEulerAnglesHint: {x: -1.58, y: 0, z: 0}
 --- !u!1001 &3267444673222454848
 PrefabInstance:

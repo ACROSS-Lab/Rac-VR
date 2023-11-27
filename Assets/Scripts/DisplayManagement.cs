@@ -77,11 +77,5 @@ public class DisplayManagement : MonoBehaviour
         material_fieldWater.SetColor("_Color0", FieldWaterColorLvl1);
         material_grass.SetColor("_PollutionColor", TreeColorLvl1);
     }
-
-    // Update is called once per frame
-    void Update()
-    {
-
-    }
     
 }
