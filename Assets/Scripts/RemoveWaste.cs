@@ -9,19 +9,28 @@ public class RemoveWaste : MonoBehaviour
 
 	private float currentTime = 0.0f;
     	private bool timerOn = false;
-
+	private ManageScore scoreM;
+	
+	void Start()
+   	{
+	   GameObject g = GameObject.FindWithTag("ScoreManager");
+           scoreM = g.GetComponent<ManageScore>();
+	   Debug.Log("g:" +scoreM);
+    	}
 
 	void reset() {
 		GetComponent<BoxCollider>().enabled = true;
-		GetComponent<Renderer>().enabled = true;
+		GetComponent<Renderer>().enabled = true; 
 		GetComponent<PlayMakerFSM>().enabled = false;	
 		timerOn = false;
+
 	}
 	public void remove() {
 		GetComponent<BoxCollider>().enabled = false;
 		GetComponent<Renderer>().enabled = false;	
 		currentTime = durationSec;
 		timerOn = true;
+		scoreM.IncrementScore();
 	} 
 
     // Update is called once per frame
