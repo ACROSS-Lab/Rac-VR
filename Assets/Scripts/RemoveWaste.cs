@@ -13,9 +13,8 @@ public class RemoveWaste : MonoBehaviour
 	
 	void Start()
    	{
-	   GameObject g = GameObject.FindWithTag("ScoreManager");
+		   GameObject g = GameObject.FindWithTag("ScoreManager");
            scoreM = g.GetComponent<ManageScore>();
-	   Debug.Log("g:" +scoreM);
     	}
 
 	void reset() {
