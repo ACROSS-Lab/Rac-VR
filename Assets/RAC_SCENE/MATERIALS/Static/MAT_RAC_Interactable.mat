@@ -8,7 +8,7 @@ Material:
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
   m_Name: MAT_RAC_Interactable
-  m_Shader: {fileID: 4800000, guid: 933532a4fcc9baf4fa0491de14d08ed7, type: 3}
+  m_Shader: {fileID: 4800000, guid: 3bc0d05e9e2844a4ba4dbd6f33906e24, type: 3}
   m_Parent: {fileID: 0}
   m_ModifiedSerializedProperties: 0
   m_ValidKeywords: []
@@ -17,8 +17,7 @@ Material:
   m_EnableInstancingVariants: 0
   m_DoubleSidedGI: 0
   m_CustomRenderQueue: -1
-  stringTagMap:
-    RenderType: Opaque
+  stringTagMap: {}
   disabledShaderPasses: []
   m_LockedProperties: 
   m_SavedProperties:
@@ -142,7 +141,7 @@ Material:
     - __dirty: 0
     m_Colors:
     - _BaseColor: {r: 0.745283, g: 0, b: 0, a: 0}
-    - _BaseColor1: {r: 0.5707547, g: 0.9594245, b: 1, a: 1}
+    - _BaseColor1: {r: 0.57075465, g: 0.95942444, b: 1, a: 1}
     - _Color: {r: 0.745283, g: 0, b: 0, a: 0}
     - _Color1: {r: 1, g: 1, b: 1, a: 0}
     - _EmissionColor: {r: 1, g: 1, b: 1, a: 1}
