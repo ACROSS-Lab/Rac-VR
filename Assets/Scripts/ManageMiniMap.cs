@@ -10,8 +10,10 @@ public class MiniMapManager : MonoBehaviour
 {
     [SerializeField] private GameObject miniMap;
     public InputDevice _rightController;
-   
-  
+
+    [SerializeField] private float delayButton = 1.0f;
+
+    private float lastPush = 0.0f;
     public InputHelpers.Button button = InputHelpers.Button.PrimaryButton;
 
 
@@ -26,9 +28,9 @@ public class MiniMapManager : MonoBehaviour
     void Update()
     {
         float val;
-
+        lastPush += Time.deltaTime;
         _rightController.TryReadSingleValue(button, out val);
-        if (val > 0)
+        if ((val > 0) && (lastPush > delayButton))
             ActivateDesactivate();
 
     }
@@ -53,7 +55,9 @@ public class MiniMapManager : MonoBehaviour
 
     public void ActivateDesactivate()
     {
+        lastPush = 0.0f;
         miniMap.SetActive(!miniMap.activeSelf);
+      
     }
 
     
