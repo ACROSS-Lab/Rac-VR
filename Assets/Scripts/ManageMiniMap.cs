@@ -9,6 +9,9 @@ using UnityEngine.XR;
 public class MiniMapManager : MonoBehaviour
 {
     [SerializeField] private GameObject miniMap;
+    [SerializeField] private GameObject player;
+
+    [SerializeField] private GameObject playerRepresentation;
     public InputDevice _rightController;
 
     [SerializeField] private float delayButton = 1.0f;
@@ -32,6 +35,13 @@ public class MiniMapManager : MonoBehaviour
         _rightController.TryReadSingleValue(button, out val);
         if ((val > 0) && (lastPush > delayButton))
             ActivateDesactivate();
+        if (miniMap.activeSelf)
+        {
+            Vector3 pos = player.transform.position;
+            float x = pos.x * 13.6f + 319.6f - 750f/2f;
+            float y =  -1 * (pos.z * (-13.0f) + 112.1f);
+            playerRepresentation.transform.localPosition = new Vector3(x,y,0);
+        }
 
     }
 
