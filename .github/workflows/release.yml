@@ -7,12 +7,6 @@ jobs:
     name: Build my project
     runs-on: ubuntu-latest
     steps:
-      # Checkout
-      - name: Checkout repository
-        uses: actions/checkout@v4
-        with:
-          lfs: false
-
       # The following step as short on disk space
       # docs here: https://github.com/marketplace/actions/maximize-build-disk-space
       - name: Maximize build space 🪶
@@ -20,10 +14,20 @@ jobs:
         with:
           remove-haskell: true
           remove-codeql: true
-          remove-docker-images: true
+          #remove-docker-images: true
           # We can afford to uninstall android & dotnet as game-ci relies on docker containers
           remove-android: true
           remove-dotnet: true 
+
+      - run: echo ${GITHUB_REF#refs/heads/}
+
+      # Checkout
+      - name: Checkout repository
+        uses: actions/checkout@v4
+        with:
+          lfs: false
+          fetch-depth: '1'
+          ref: $(echo ${GITHUB_REF#refs/heads/})
 
       # Cache
       #- uses: actions/cache@v3
