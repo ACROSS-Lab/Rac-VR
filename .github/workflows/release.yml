@@ -4,7 +4,7 @@ on: [push, workflow_dispatch]
 
 jobs:
   build:
-    name: Build my project ✨
+    name: Build my project
     runs-on: ubuntu-latest
     steps:
       # Checkout
@@ -12,6 +12,18 @@ jobs:
         uses: actions/checkout@v4
         with:
           lfs: false
+
+      # The following step as short on disk space
+      # docs here: https://github.com/marketplace/actions/maximize-build-disk-space
+      - name: Maximize build space 🪶
+        uses: easimon/maximize-build-space@master
+        with:
+          remove-haskell: true
+          remove-codeql: true
+          remove-docker-images: true
+          # We can afford to uninstall android & dotnet as game-ci relies on docker containers
+          remove-android: true
+          remove-dotnet: true 
 
       # Cache
       #- uses: actions/cache@v3
