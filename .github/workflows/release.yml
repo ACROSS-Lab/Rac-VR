@@ -20,7 +20,7 @@ jobs:
           remove-dotnet: true
 
       # Checkout
-      - name: Checkout repository
+      - name: Checkout repository 📥
         uses: actions/checkout@v4
         with:
           lfs: false
@@ -43,7 +43,8 @@ jobs:
       #    githubToken: ${{ secrets.GITHUB_TOKEN }}
 
       # Build
-      - name: Build project
+      - name: Build project 👷
+        working-directory: /home/runner/work/Rac-VR/Rac-VR
         uses: game-ci/unity-builder@v4
         env:
           UNITY_LICENSE: ${{ secrets.ARTHUR_UNITY_PERSONAL_LICENSE }}
@@ -53,7 +54,9 @@ jobs:
           targetPlatform: Android
 
       # Output
-      - uses: actions/upload-artifact@v3
+      - name: Save built artefact 📦
+        working-directory: /home/runner/work/Rac-VR/Rac-VR
+        uses: actions/upload-artifact@v3/
         with:
           name: Build
           path: build
