@@ -45,7 +45,6 @@ jobs:
 
       # Build
       - name: Build project 👷
-        working-directory: /home/runner/work/Rac-VR/Rac-VR
         uses: game-ci/unity-builder@v4
         env:
           UNITY_LICENSE: ${{ secrets.ARTHUR_UNITY_PERSONAL_LICENSE }}
@@ -56,7 +55,6 @@ jobs:
 
       # Output
       - name: Save built artefact 📦
-        working-directory: /home/runner/work/Rac-VR/Rac-VR
         uses: actions/upload-artifact@v3/
         with:
           name: Build
