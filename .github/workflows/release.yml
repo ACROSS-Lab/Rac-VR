@@ -17,9 +17,7 @@ jobs:
           #remove-docker-images: true
           # We can afford to uninstall android & dotnet as game-ci relies on docker containers
           remove-android: true
-          remove-dotnet: true 
-
-      - run: echo ${GITHUB_REF#refs/heads/}
+          remove-dotnet: true
 
       # Checkout
       - name: Checkout repository
@@ -27,7 +25,7 @@ jobs:
         with:
           lfs: false
           fetch-depth: '1'
-          ref: $(echo ${GITHUB_REF#refs/heads/})
+          ref: "$(echo ${GITHUB_REF#refs/heads/})"
 
       # Cache
       #- uses: actions/cache@v3
