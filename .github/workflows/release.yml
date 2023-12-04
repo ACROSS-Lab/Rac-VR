@@ -14,7 +14,7 @@ jobs:
         with:
           remove-haskell: true
           remove-codeql: true
-          #remove-docker-images: true
+          remove-docker-images: true
           # We can afford to uninstall android & dotnet as game-ci relies on docker containers
           remove-android: true
           remove-dotnet: true
