@@ -18,6 +18,7 @@ jobs:
           # We can afford to uninstall android & dotnet as game-ci relies on docker containers
           remove-android: true
           remove-dotnet: true
+          root-reserve-mb: 9216
 
       # Checkout
       - name: Checkout repository 📥
