@@ -25,7 +25,6 @@ jobs:
         with:
           lfs: false
           fetch-depth: '1'
-          ref: "$(echo ${GITHUB_REF#refs/heads/})"
 
       # Cache
       #- uses: actions/cache@v3
