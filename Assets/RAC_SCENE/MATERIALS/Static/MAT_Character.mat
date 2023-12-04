@@ -48,7 +48,7 @@ Material:
     m_Ints: []
     m_Floats:
     - _AlphaCutoff: 0.5
-    - _Float0: 0.35
+    - _Float0: 0.61
     - _Plants: 0
     - _Plants1: 0
     - _Texture: 1
