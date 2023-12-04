@@ -55,7 +55,7 @@ jobs:
 
       # Output
       - name: Save built artefact 📦
-        uses: actions/upload-artifact@v3/
+        uses: actions/upload-artifact@v3
         with:
           name: Build
           path: build
