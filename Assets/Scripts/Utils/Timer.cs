@@ -1,6 +1,7 @@
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+using UnityEngine.SceneManagement;
 
 public class Timer : MonoBehaviour
 {
@@ -11,7 +12,7 @@ public class Timer : MonoBehaviour
     [SerializeField] private Color midColor = new Color(255,218,0,255);
     [SerializeField] private Color endColor = new Color(255,0,0,255);
     
-    private static float timerDuration = 120.0f;
+    private static float timerDuration;
     
     private bool timerRunning = false;
     private float midTime;
@@ -20,22 +21,15 @@ public class Timer : MonoBehaviour
     // ############################################################
 
     void Start() {
-        Debug.Log("Timer: start");
-        timeRemaining = timerDuration;
+        timerDuration = PlayerPrefs.GetFloat("duration");
+       timeRemaining = timerDuration;
         midTime = timeRemaining / 2;
         DisplayTime(timeRemaining-1);
-        Debug.Log("duration init: " + timerDuration);
+        timerRunning = true;
 
     }
 
-    /* void OnEnble() {
-         GameManager.Instance.OnGameStateChanged += HandleTimerOnStateChanged;
-     }
-
-     void OnDisable() {
-         GameManager.Instance.OnGameStateChanged -= HandleTimerOnStateChanged;
-     }*/
-
+ 
     void Update() {
        if (timerRunning)
             {
@@ -47,9 +41,7 @@ public class Timer : MonoBehaviour
                 else
                 {
                     Reset();
-                    //  timerRunning = false;
-                    GameManager.Instance.UpdateGameState(GameState.IDLE);
-                    ConnectionManager.Instance.SendExecutableExpression("do exploration_over(" + GameManager.Instance.GetVillageId() + ");");
+                 
                 }
             }
            
@@ -76,19 +68,13 @@ public class Timer : MonoBehaviour
     public void Reset() {
         timerRunning = false;
         timeRemaining = timerDuration;
+        SceneManager.LoadScene("EndingMenu");
     }
 
-    /*private void HandleTimerOnStateChanged(GameState newState) {
-        if (newState == GameState.IDLE) {
-            Reset();
-        }
-
-    }*/
-
+   
     // ############################################################
 
     public static void SetTimerDuration(float duration) {
-        Debug.Log("duration: " + duration);
         timerDuration = duration;
     }
 

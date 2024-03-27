@@ -9,14 +9,26 @@ EditorBuildSettings:
     path: Assets/Scenes/RAC_MENU.unity
     guid: 1c775d20c6b119a469b636503fbd0c2b
   - enabled: 1
-    path: Assets/Scenes/RAC_MainScene.unity
-    guid: b38b46963063dc044b822dcaa19930e4
+    path: Assets/Scenes/StartupMenu.unity
+    guid: c6d54942974394e62868f4c7b97ad52c
   - enabled: 0
     path: Assets/Scenes/DARK_Scene.unity
     guid: 8ace68fdfc8e1c94f928b4527c0eb66e
   - enabled: 0
     path: Assets/Scenes/VR_Collisions.unity
     guid: c33d84a834ccddb46810c0c96153742c
+  - enabled: 1
+    path: Assets/Scenes/RAC_MainScene - Normal.unity
+    guid: b726dcc23a22f4db8b45ccd7b91cf580
+  - enabled: 1
+    path: Assets/Scenes/RAC_MainScene - Unlimited.unity
+    guid: b38b46963063dc044b822dcaa19930e4
+  - enabled: 1
+    path: Assets/Scenes/RAC_Tuto.unity
+    guid: a41d7db3890a540f386a31dd76c96935
+  - enabled: 1
+    path: Assets/Scenes/EndingMenu.unity
+    guid: 957ebf99ae6da4355af92b5f35eb82e3
   m_configObjects:
     Unity.XR.Oculus.Settings: {fileID: 11400000, guid: bfa1182bd221b4ca89619141f66f1260, type: 2}
     Unity.XR.WindowsMR.Settings: {fileID: 11400000, guid: dc5a169419fa04987b057f65238cf3ba, type: 2}

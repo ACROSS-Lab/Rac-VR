@@ -12,7 +12,7 @@ GameObject:
   - component: {fileID: 7001753545952332950}
   - component: {fileID: 4393043596060819541}
   m_Layer: 0
-  m_Name: "SM_Barri\xE8re_001"
+  m_Name: "SM_Barrie\u0300re_001"
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0

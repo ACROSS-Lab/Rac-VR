@@ -1056,6 +1056,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   durationSec: 120
+  gameInfotext: {fileID: 0}
 --- !u!1 &2884655965411333590
 GameObject:
   m_ObjectHideFlags: 0

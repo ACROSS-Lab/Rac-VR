@@ -10,7 +10,9 @@ public class ManageScore : MonoBehaviour
 {
    [SerializeField] private TMPro.TextMeshProUGUI gameScoreText;
     public InputDevice _leftController ;
-    
+
+    public bool resetWaste = true;
+
     private int score = 0;
 
     public InputHelpers.Button button = InputHelpers.Button.PrimaryButton;
@@ -55,6 +57,8 @@ public class ManageScore : MonoBehaviour
     public void IncrementScore(){
        score++;
        gameScoreText.text = ""+score;
+
+        PlayerPrefs.SetFloat("score", score);
    } 
  
    public void ResetScore(){
