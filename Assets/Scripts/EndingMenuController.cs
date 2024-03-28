@@ -21,8 +21,10 @@ public class EndingMenuController : MonoBehaviour
             PlayerPrefs.SetFloat(time, bestScore);
 
         }
-        gameScoretext.SetText("Your score: " + score);
-        gameBestScoretext.SetText("Best score: " + bestScore);
+
+       
+        gameScoretext.SetText("Số điểm của bạn: " + score);
+        gameBestScoretext.SetText("Số điểm cao nhất: " + bestScore);
     }
 
     public void Restart()

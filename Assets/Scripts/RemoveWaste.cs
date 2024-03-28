@@ -40,7 +40,7 @@ public class RemoveWaste : MonoBehaviour
 		} else
         {
 
-			gameInfotext.SetText("Loading the environment!");
+			gameInfotext.SetText("Đang tải môi trường!");
 			SceneManager.LoadScene("RAC_MainScene - Normal");
 		}
 		
@@ -56,7 +56,7 @@ public class RemoveWaste : MonoBehaviour
 			scoreM.IncrementScore();
 		} else
         {
-			gameInfotext.SetText("Great!\nNow do the same in the village!");
+			gameInfotext.SetText("Tốt lắm!\nBây giờ là lúc dọn dẹp ngôi làng!");
 			timerOn = true; 
 			currentTime = 2;
 		}
