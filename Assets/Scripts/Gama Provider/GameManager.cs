@@ -9,19 +9,14 @@ using Newtonsoft.Json.Linq;
 
 public class GameManager : MonoBehaviour
 {
-    [Header("Base GameObjects")]
+  /*  [Header("Base GameObjects")]
     [SerializeField] private GameObject player;
 
-    // [SerializeField] private GameObject PNJ1;
     [SerializeField] private GameObject WasteDisplayM;
     [SerializeField] private GameObject WasteCollectionI;
-    // [SerializeField] private GameObject ModeConfigM;
     [SerializeField] private GameObject HelpM;
 
-//    [SerializeField] private GameObject Ground;
- //   [SerializeField] private List<GameObject> Agents;
-
-    // optional: rotation, Y-translation and Size scale to apply to the prefabs correspoding to the different species of agents
+   // optional: rotation, Y-translation and Size scale to apply to the prefabs correspoding to the different species of agents
     [Header("Transformations applied to agents prefabs")]
     [SerializeField] private List<float> rotations = new List<float> { 90.0f, 90.0f, 0.0f };
     [SerializeField] private List<float> rotationsCoeff = new List<float> { 1, 1, 0.0f };
@@ -37,15 +32,9 @@ public class GameManager : MonoBehaviour
 
     [SerializeField] private GameStateDisplay disDebug;
 
-    // [Header("Simulation parameters")]
-    //    [SerializeField] private bool geometriesExpected = false;
-    //   [SerializeField] private bool groundExpected = false;
-    //  [SerializeField] private bool playerParametersExpected = true;
-
     // ADDED
     [SerializeField]
     private  DisplayManagement dm;
-    // private ParamPNJ pPNJ1;
     private ModeConfig mc;
     private HelpManagement hm;
 
@@ -55,23 +44,6 @@ public class GameManager : MonoBehaviour
 
     // called when the game is restarted
     public event Action OnGameRestarted;
-
-    // called when the geometries are initialized
-//    public event Action<GAMAGeometry> OnGeometriesInitialized;
-
-    // called when the world data is received
-//    public event Action<WorldJSONInfo> OnWorldDataReceived;
-
- //   private List<Dictionary<int, GameObject>> agentMapList;
-
-//    private bool geometriesInitialized;
-//    private bool simulationParametersHandled; 
-
-    //private bool handleGroundRequested;
-   // private bool handlePlayerRequested;
-    //private bool handleGeometriesRequested;
-
-  //  private bool gameReadyToStart = false;
 
     private CoordinateConverter converter;
     private PolygonGenerator polyGen;
@@ -107,13 +79,7 @@ public class GameManager : MonoBehaviour
     }
 
     void Start() {
-        // InitAgentsList();
-//        geometriesInitialized = false;
-//        simulationParametersHandled = false;
-      //  handleGroundRequested = false;
-       // handlePlayerRequested = false;
-       // handleGeometriesRequested = false;
-        villageId = -1;
+         villageId = -1;
         initialPosition = new Vector3(player.transform.position.x, player.transform.position.y, player.transform.position.z);
         initialRotation = new Quaternion(player.transform.rotation.x, player.transform.rotation.y, player.transform.rotation.z, player.transform.rotation.w);
         
@@ -122,12 +88,6 @@ public class GameManager : MonoBehaviour
     void FixedUpdate() {
         if(IsGameState(GameState.GAME)) {
             UpdatePlayerPosition();
-         //   UpdateAgentsList();
-
-            // if (PNJ1 != null && pPNJ1.readySendPosition){
-            //     SendInitPNJPos(PNJ1, pPNJ1);
-            //     pPNJ1.readySendPosition = false;
-            // }
         }
 
         if (classIndicators != null)
@@ -139,23 +99,6 @@ public class GameManager : MonoBehaviour
        
     }
 
-    void LateUpdate() {
-        // if (handleGroundRequested && !simulationParametersHandled) {
-        //    handleGroundRequested = false;
-        //  InitGroundParameters();
-        //}
-
-        /*if (handlePlayerRequested && !simulationParametersHandled) {
-            handlePlayerRequested = false;
-            InitPlayerParameters();
-        }
-
-        if (handleGeometriesRequested && !simulationParametersHandled) {
-            handleGeometriesRequested = false;
-           // InitGeometries();
-        }*/
-       
-    }
 
     // ############################################ GAMESTATE UPDATER ############################################
     public void UpdateGameState(GameState newState) {    
@@ -180,12 +123,9 @@ public class GameManager : MonoBehaviour
                 break;
 
             case GameState.IDLE:
-                //gameReadyToStart = false;
-                //Vector3 pos = converter.fromGAMACRS(parameters.position[0], parameters.position[1]);
                 Debug.Log("GameManager: UpdateGameState -> IDLE");
                 break;
             case GameState.READY:
-                //gameReadyToStart = true;
                 Debug.Log("GameManager: UpdateGameState -> READY");
                 break;
 
@@ -210,63 +150,10 @@ public class GameManager : MonoBehaviour
 
     // ############################# INITIALIZERS ####################################
     private void InitPlayerParameters() {
-      /*  Vector3 pos = converter.fromGAMACRS(parameters.position[0], parameters.position[1]);
-        player.transform.position = pos;
-
-        if (parameters.physics) {
-            if (!player.TryGetComponent(out Rigidbody rigidBody)) {
-                player.AddComponent<Rigidbody>();
-            }
-        } else {
-            if (player.TryGetComponent(out Rigidbody rigidBody)) {
-                Destroy(rigidBody);
-            }
-        }*/
         
         UpdateGameState(GameState.IDLE);
         Debug.Log("GameManager: Player parameters initialized");
     }
-
-
-   // private void InitGroundParameters() {
-       /* if (Ground == null) {
-            Debug.LogError("GameManager: Ground not set");
-            return;
-        }
-        Vector3 ls = converter.fromGAMACRS(parameters.world[0], parameters.world[1]);
-        if (ls.z < 0)
-            ls.z = -ls.z;
-        if (ls.x < 0)
-            ls.x = -ls.x;
-        ls.y = groundY;
-        Ground.transform.localScale = ls;
-
-        Vector3 ps = converter.fromGAMACRS(parameters.world[0] / 2, parameters.world[1] / 2);
-        ps.y = -groundY;
-
-        Ground.transform.position = ps;
-        Debug.Log("GameManager: Ground parameters initialized");*/
-   // }
-
-   /* private void InitGeometries() {
-        if (polyGen == null) {
-            polyGen = PolygonGenerator.GetInstance();
-            polyGen.Init(converter, offsetYBackgroundGeom);
-        }
-        polyGen.GeneratePolygons(gamaGeometry);
-        geometriesInitialized = true;
-        OnGeometriesInitialized?.Invoke(gamaGeometry);
-        Debug.Log("GameManager: Geometries initialized");
-    }*/
-
-    // private void InitAgentsList() {
-    //     agentMapList = new List<Dictionary<int, GameObject>>();
-    //     foreach (GameObject i in Agents) {
-    //         agentMapList.Add(new Dictionary<int, GameObject>());
-    //     }
-    //     Debug.Log("GameManager: Agents list initialized. " + Agents.Count + " species found");
-    // }
-
 
     // ############################################ UPDATERS ############################################
     private void UpdatePlayerPosition() {
@@ -282,65 +169,9 @@ public class GameManager : MonoBehaviour
         List<int> p = converter.toGAMACRS(Camera.main.transform.position);
         ConnectionManager.Instance.SendExecutableExpression("do move_player_external("+ villageId + "," + p[0] + "," + p[1] + "," + 0 + ");");
         
-        /*Vector2 vF = new Vector2(player.transform.forward.x, player.transform.forward.z);
-        Vector2 vR = new Vector2(transform.forward.x, transform.forward.z);
-        vF.Normalize();
-        vR.Normalize();
-        float c = vF.x * vR.x + vF.y * vR.y;
-        float s = vF.x * vR.y - vF.y * vR.x;
-
-        int angle = (int)(((s > 0) ? -1.0 : 1.0) * (180 / Math.PI) * Math.Acos(c) * parameters.precision);
-
-        List<int> p = converter.toGAMACRS(Camera.main.transform.position);
-        ConnectionManager.Instance.SendExecutableExpression("do move_player_external(" + villageId + "," + Camera.main.transform.position.x  + "," + Camera.main.transform.position.z + "," + 0 + ");");*/
     }
 
-   /* private void UpdateAgentsList() {
-
-        foreach (Dictionary<int, GameObject> agentMap in agentMapList) {
-            foreach (GameObject obj in agentMap.Values) {
-                obj.SetActive(false);
-            }
-        }
-
-        foreach (AgentInfo pi in infoWorld.agents) {
-            int speciesIndex = pi.v[0];
-            GameObject Agent = Agents[speciesIndex];
-            int id = pi.v[1];
-            GameObject obj = null;
-            Dictionary<int, GameObject> agentMap = agentMapList[speciesIndex];
-
-            if (!agentMap.ContainsKey(id)) {
-                obj = Instantiate(Agent);
-                float scale = Sizefactor[speciesIndex];
-                obj.transform.localScale = new Vector3(scale, scale, scale);
-                obj.SetActive(true);
-                agentMap.Add(id, obj);
-            } else {
-                obj = agentMap[id];
-            }
-
-
-            Vector3 pos = converter.fromGAMACRS(pi.v[2], pi.v[3]);
-            pos.y = YValues[speciesIndex];
-            float rot = rotationsCoeff[speciesIndex] * (pi.v[4] / parameters.precision) + rotations[speciesIndex];
-            obj.transform.SetPositionAndRotation(pos, Quaternion.AngleAxis(rot, Vector3.up));
-            obj.SetActive(true);
-        } 
-        
-        foreach (Dictionary<int, GameObject> agentMap in agentMapList) {
-            List<int> ids = new List<int>(agentMap.Keys);
-            foreach (int id in ids) {
-                GameObject obj = agentMap[id];
-                if (!obj.activeSelf) {
-                    obj.transform.position = new Vector3(0, -100, 0);
-                    agentMap.Remove(id);
-                    GameObject.Destroy(obj);
-                }
-            }
-        }
-    }
-   */
+   
     private void UpdateClassIndicator() {
         Debug.Log("villageId: " + villageId + " " + classIndicators.solidwasteSoilClass[villageId] +" " + classIndicators.solidwasteCanalClass[villageId]);
         classIndicators.displaySolidClass(classIndicators.solidwasteSoilClass[villageId], classIndicators.solidwasteCanalClass[villageId]);
@@ -379,35 +210,14 @@ public class GameManager : MonoBehaviour
                 Timer.SetTimerDuration((float) parameters.exploration_duration);
                 UpdateGameState(GameState.IDLE);
 
-                //if (groundExpected) handleGroundRequested = true;
-                //if (playerParametersExpected) handlePlayerRequested = true;                
                 break;
 
-            // handle geometries sent by GAMA at the beginning of the simulation
-           /* case "points": 
-                gamaGeometry = GAMAGeometry.CreateFromJSON(jsonObj.ToString());
-                Debug.Log("GameManager: Received geometries data");
-               // if (geometriesExpected) handleGeometriesRequested = true;
-            break;*/
-
-            // handle agents while simulation is running
-           /* case "agents":
-                infoWorld = WorldJSONInfo.CreateFromJSON(jsonObj.ToString());                
-                OnWorldDataReceived?.Invoke(infoWorld);
-            break;*/ 
-
+        
             case "solidwasteSoilClass":
                 classIndicators = ConnectionClass.CreateFromJSON(jsonObj.ToString(), dm);
-               // disDebug.texttoDisplay = "classIndicators  : " + classIndicators;
-
-               
-
-//                gameReadyToStart = true;
+             
                  break;
 
-            // case "Enter_or_exit_VR":
-            //     pPNJ1.readySendPosition = true;
-            // break;
 
             case "stopVR":
                 UpdateGameState(GameState.IDLE);
@@ -439,29 +249,18 @@ public class GameManager : MonoBehaviour
         return currentState;
     }
 
-  /*  public bool IsGameReadyToStart() {
-        return gameReadyToStart;
-    }
-
-    public void SetGameReadyToStart(bool ready) {
-        gameReadyToStart = ready;
-    }*/
-
     public int GetVillageId() {
         return villageId;
     }
 
     public void StartGame() {
-        //if (IsGameState(GameState.IDLE)) {
-            UpdateGameState(GameState.GAME);
-        //}
+        UpdateGameState(GameState.GAME);
+       
     }
-
-    // ############################################################
-
+    */
 }
 
-public enum GameState {
+/*public enum GameState {
     // not connected to middleware
     MENU,
     // connected to middleware, waiting for authentication
@@ -477,4 +276,4 @@ public enum GameState {
     
     END,
     CRASH
-}
+}*/

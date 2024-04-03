@@ -10,13 +10,13 @@ public class GameStateDisplay : MonoBehaviour
      
     void Start()
     {
-        gameStateText.text = GameManager.Instance.GetCurrentState().ToString();
+        gameStateText.text = SimulationManager.Instance.GetCurrentState().ToString();
     }
 
     // Update is called once per frame
     void Update()
     {
-        gameStateText.text =  GameManager.Instance.GetCurrentState().ToString() + " \n " + texttoDisplay;
+        gameStateText.text = SimulationManager.Instance.GetCurrentState().ToString() + " \n " + texttoDisplay;
 
     }
 }

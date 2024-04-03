@@ -1,57 +1,57 @@
 using System;
-using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 using WebSocketSharp;
 using Newtonsoft.Json.Linq;
 using Newtonsoft.Json;
+using System.Linq;
 
 public class ConnectionManager : WebSocketConnector
 {
 
-    [SerializeField] private ConnectionState currentState;
-    private string connectionId;
-    private bool connectionRequested;
+    private ConnectionState currentState;
+    private bool connectionRequested; 
 
     // called when the connection state is manually changed
-    public static event Action<ConnectionState> OnConnectionStateChange;
+    public event Action<ConnectionState> OnConnectionStateChanged;
 
     // called when a "json_simulation" message is received
-    public static event Action<JObject> OnServerMessageReceived;
+    public event Action<String, String> OnServerMessageReceived;
 
     // called when a "json_state" message is received 
-    public static event Action<JObject> OnConnectionStateReceived;
+    public event Action<JObject> OnConnectionStateReceived;
 
     // called when a connection request fails
-    public static event Action<bool> OnConnectionAttempted;
+    public event Action<bool> OnConnectionAttempted;
 
     public static ConnectionManager Instance = null;
+
+    //use to seperate messages in the case where the middleware is not used
+    public String MessageSeparator = "|||";
+
+    private String AgentToSendInfo = "simulation[0].unity_linker[0]";
+
     
     // ############################################# UNITY FUNCTIONS #############################################
     void Awake() {
+      
         Instance = this;
     }
 
     void Start() {
-        connectionId = Guid.NewGuid().ToString();
+        
+        Debug.Log("START");
         UpdateConnectionState(ConnectionState.DISCONNECTED);
         connectionRequested = false;
-        TryConnectionToServer();
-        // if (PlayerPrefs.GetString("CONNECT_ID") != "") {
-        //     connectionId = PlayerPrefs.GetString("CONNECT_ID");
-        // } else {
-        //     connectionId = Guid.NewGuid().ToString();
-        //     PlayerPrefs.SetString("CONNECT_ID", connectionId);
-        // }
-        // UpdateConnectionState(ConnectionState.DISCONNECTED);
-        // connectionRequested = false;
+
     }
 
     
     // ############################################# CONNECTION HANDLER #############################################
     public void UpdateConnectionState(ConnectionState newState) {
+        Debug.Log("ConnectionManager: Before trigger event " + currentState);
 
-        switch(newState) {
+        switch (newState) {
             case ConnectionState.PENDING:
                 Debug.Log("ConnectionManager: UpdateConnectionState -> PENDING");
                 break;
@@ -60,80 +60,121 @@ public class ConnectionManager : WebSocketConnector
                 break;
             case ConnectionState.AUTHENTICATED:
                 Debug.Log("ConnectionManager: UpdateConnectionState -> AUTHENTICATED");
+                SimulationManager.Instance.UpdateGameState(GameState.LOADING_DATA);
                 break;
             case ConnectionState.DISCONNECTED:
                 Debug.Log("ConnectionManager: UpdateConnectionState -> DISCONNECTED");
+                TryConnectionToServer();
                 break;
             default:
                 break;
         }
 
         currentState = newState;
-        OnConnectionStateChange?.Invoke(newState);        
+        OnConnectionStateChanged?.Invoke(newState);        
     }
 
     // ############################################# HANDLERS #############################################
 
     protected override void HandleConnectionOpen(object sender, System.EventArgs e)
     {
-        var jsonId = new Dictionary<string,string> {
+        if (UseMiddleware)
+        {
+            var jsonId = new Dictionary<string, string> {
                 {"type", "connection"},
-                { "id", connectionId}
-            };
-        string jsonStringId = JsonConvert.SerializeObject(jsonId);
-        SendMessageToServer(jsonStringId, new Action<bool>((success) => {
-            if (success) {}
-        }));
-        Debug.Log("ConnectionManager: Connection opened");
+                { "id", StaticInformation.getId() },
+                { "set_heartbeat", UseHeartbeat ? "true": "false" }
+            }; 
+            string jsonStringId = JsonConvert.SerializeObject(jsonId);
+            SendMessageToServer(jsonStringId, new Action<bool>((success) => {
+                if (success) { }
+            }));
+            Debug.Log("ConnectionManager: Connection opened");
+        }
+       
     }
 
     protected override void HandleReceivedMessage(object sender, MessageEventArgs e)
     {
+        
         if (e.IsText)
         {
-            
+           
+           Debug.Log("e.Data: " + e.Data);
             JObject jsonObj = JObject.Parse(e.Data);
-            string type = (string) jsonObj["type"];
+            string type = (string)jsonObj["type"];
+           
+        
+            if (UseMiddleware)
+            {
+                switch (type)
+                {
+                    case "ping":
+                        var jsonId = new Dictionary<string, string> {{"type", "pong"}};
+                        string jsonStringId = JsonConvert.SerializeObject(jsonId);
+                        SendMessageToServer(jsonStringId, new Action<bool>((success) => {
+                            if (success) { }
+                        }));
+                        break;
+                    case "json_state":
+                        OnConnectionStateReceived?.Invoke(jsonObj);
+                        bool authenticated = (bool)jsonObj["in_game"];
+                        bool connected = (bool)jsonObj["connected"];
 
-            switch(type) {
-                case "json_state":
-                    OnConnectionStateReceived?.Invoke(jsonObj);
-                    bool authenticated = (bool) jsonObj["player"][connectionId]["authentified"];
-                    bool connected = (bool) jsonObj["player"][connectionId]["connected"];
+                        if (authenticated && connected)
+                        {
+                            if (!IsConnectionState(ConnectionState.AUTHENTICATED))
+                            {
+                                Debug.Log("ConnectionManager: Player successfully authenticated");
+                                UpdateConnectionState(ConnectionState.AUTHENTICATED);
+                            }
 
-                    if (authenticated && connected)  {
-                        if (!IsConnectionState(ConnectionState.AUTHENTICATED)) {
-                            Debug.Log("ConnectionManager: Player successfully authenticated");
-                            UpdateConnectionState(ConnectionState.AUTHENTICATED);
                         }
-                        
-                    } else if (connected && !authenticated) {
-                        if(!IsConnectionState(ConnectionState.CONNECTED)) {
-                            connectionRequested = false;
-                            Debug.Log("ConnectionManager: Successfully connected, waiting for authentication...");
-                            UpdateConnectionState(ConnectionState.CONNECTED);
-                            OnConnectionAttempted?.Invoke(true);
-                        } else {
-                            Debug.LogWarning("ConnectionManager: Already connected, waiting for authentication...");
-                        }
-                        
-                    }
-                    break;
+                        else if (connected && !authenticated)
+                        {
+                            if (!IsConnectionState(ConnectionState.CONNECTED))
+                            {
+                                connectionRequested = false;
+                                Debug.Log("ConnectionManager: Successfully connected, waiting for authentication...");
+                                UpdateConnectionState(ConnectionState.CONNECTED);
+                                OnConnectionAttempted?.Invoke(true);
+                            }
+                            else
+                            {
+                                Debug.LogWarning("ConnectionManager: Already connected, waiting for authentication...");
+                            }
 
-                case "json_simulation":
-                    JObject content = (JObject) jsonObj["contents"];
-                    OnServerMessageReceived?.Invoke(content);
-                    break;
+                        } 
+                        break;  
 
-                default:
-                    break;
+                    case "json_output":
+                        JObject content = (JObject)jsonObj["contents"];
+                        String firstKey = content.Properties().Select(pp => pp.Name).FirstOrDefault();
+                        Debug.Log("lalal: " + firstKey + " -> " + content.ToString());
+                        OnServerMessageReceived?.Invoke(firstKey, content.ToString());
+                        break;
+
+                    default:
+                        break;
+                }
+            } 
+            else if (type.Equals("SimulationOutput"))
+            {
+                JValue content = (JValue)jsonObj["content"];
+               // Debug.Log("MessageSeparator: " + MessageSeparator);
+                foreach (String mes in content.ToString().Split(MessageSeparator))
+                {
+                    if (!mes.IsNullOrEmpty())
+                        OnServerMessageReceived?.Invoke(null, mes);
+                }
             }
         }
     }
 
-    protected override void HandleConnectionClosed(object sender, CloseEventArgs e) {   
+    protected override void HandleConnectionClosed(object sender, CloseEventArgs e) {
         // checks if the connection was closed just after a connection request
-        if (connectionRequested) { 
+        Debug.Log("ConnectionManager: HandleConnectionClosed");
+        if (connectionRequested) {
             connectionRequested = false;
             OnConnectionAttempted?.Invoke(false);
             Debug.Log("ConnectionManager: Failed to connect to server");
@@ -144,14 +185,39 @@ public class ConnectionManager : WebSocketConnector
     // ############################################# UTILITY FUNCTIONS #############################################
     public void TryConnectionToServer() {
         if(IsConnectionState(ConnectionState.DISCONNECTED)) {
-            Debug.Log("ConnectionManager: Attempting to connect to middleware...");
+            Debug.Log("ConnectionManager: Attempting to connect to " + (UseMiddleware?"middleware":"GAMA")+ ": ws://" + host + ":" + port + "/");
             connectionRequested = true;
             UpdateConnectionState(ConnectionState.PENDING);
+
             GetSocket().Connect();
+             
+            if (! UseMiddleware)  
+            {
+                Debug.Log("Create player direct :" + ConnectionManager.Instance.GetConnectionId());
+
+                  Dictionary<string, string> args = new Dictionary<string, string> {
+                    {"id", "\""+ConnectionManager.Instance.GetConnectionId()+"\""}
+                  };
+                  SendExecutableAsk("create_init_player", args);
+
+                 
+                UpdateConnectionState(ConnectionState.AUTHENTICATED); 
+
+            }
         } else {
-            Debug.LogWarning("ConnectionManager: Already connected to middleware");
+            Debug.LogWarning("ConnectionManager: Already connected to middleware: " + this.currentState);
         }
         
+    }
+     
+    public void DisconnectFromServer() {
+        if(!IsConnectionState(ConnectionState.DISCONNECTED)) {
+            Debug.Log("ConnectionManager: Disconnecting from middleware...");
+            GetSocket().Close();
+            UpdateConnectionState(ConnectionState.DISCONNECTED);
+        } else {
+            Debug.LogWarning("ConnectionManager: Already disconnected from middleware");
+        }
     }
 
     public bool IsConnectionState(ConnectionState currentState) {
@@ -159,21 +225,93 @@ public class ConnectionManager : WebSocketConnector
     }
 
     public void SendExecutableExpression(string expression) {
-        Dictionary<string,string> jsonExpression = new Dictionary<string,string> {
+        Dictionary<string, string> jsonExpression = null;
+        jsonExpression = new Dictionary<string, string> {
             {"type", "expression"},
             {"expr", expression}
+        };
+
+        string jsonStringExpression = JsonConvert.SerializeObject(jsonExpression);
+        SendMessageToServer(jsonStringExpression, new Action<bool>((success) => {
+            if (!success) {
+                numErrors++;
+                Debug.LogError("ConnectionManager: Failed to send executable expression");
+                if (numErrors > numErrorsBeforeDeconnection)
+                {
+                    GetSocket().Close();
+                   currentState = (ConnectionState.DISCONNECTED);
+                    numErrors = 0;
+                }
+            } else
+            {
+                numErrors = 0;
+            }
+        }));
+    }
+
+    public void SendExecutableAsk(string action, Dictionary<string,string> arguments)
+    {
+        string argsJSON = JsonConvert.SerializeObject(arguments);
+        Dictionary<string, string> jsonExpression = null;
+        jsonExpression = new Dictionary<string, string> {
+            {"type", "ask"},
+            {"action", action},
+            {"args", argsJSON},
+            {"agent", AgentToSendInfo }
+        };
+
+        string jsonStringExpression = JsonConvert.SerializeObject(jsonExpression);
+
+        SendMessageToServer(jsonStringExpression, new Action<bool>((success) => {
+            if (!success)
+            {
+                numErrors++;
+                Debug.LogError("ConnectionManager: Failed to send executable ask");
+                if (numErrors > numErrorsBeforeDeconnection)
+                {
+                    GetSocket().Close();
+                    currentState = (ConnectionState.DISCONNECTED);
+                    numErrors = 0;
+                }
+            } else
+            {
+                numErrors = 0;
+            }
+    }));
+    }
+
+    public void DisconnectProperly() {
+        Dictionary<string,string> jsonExpression = new Dictionary<string,string> {
+            {"type", "disconnect_properly"}
         };
         string jsonStringExpression = JsonConvert.SerializeObject(jsonExpression);
         SendMessageToServer(jsonStringExpression, new Action<bool>((success) => {
             if (!success) {
-                Debug.LogError("ConnectionManager: Failed to send executable expression");
+                Debug.LogError("ConnectionManager: Failed to send disconnect message");
+            }
+            else {
+                DisconnectFromServer();
             }
         }));
     }
 
     public string GetConnectionId() {
-        return connectionId;
+        return StaticInformation.getId();
     }
+
+
+    public bool getUseMiddleware()
+    {
+        return UseMiddleware;
+    }
+
+    public void Reconnect()
+    {
+        Debug.Log("Reconnect");
+        currentState = ConnectionState.DISCONNECTED;
+        TryConnectionToServer();
+    }
+
 
 }
 

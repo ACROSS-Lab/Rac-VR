@@ -13,15 +13,15 @@ public class OverlayManager : MonoBehaviour
 
     void OnEnable()
     {
-        GameManager.Instance.OnGameStateChanged += UpdateOverlayOnStateChanged;
+        SimulationManager.Instance.OnGameStateChanged += UpdateOverlayOnStateChanged;
     }
     
 
     void OnDisable()
     {
-        GameManager.Instance.OnGameStateChanged -= UpdateOverlayOnStateChanged;
+        SimulationManager.Instance.OnGameStateChanged -= UpdateOverlayOnStateChanged;
     }
-
+     
     void Start() {
         timerOverlay.SetActive(false);
         currentState = GameState.MENU;

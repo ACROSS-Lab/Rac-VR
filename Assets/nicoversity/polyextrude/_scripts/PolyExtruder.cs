@@ -61,6 +61,7 @@ using System.Collections.Generic;
 public class PolyExtruder : MonoBehaviour
 {
     #region Properties
+    string shader = "Universal Render Pipeline/Lit";
 
     [Header("Prism Configuration")]
     public string prismName;                        // reference to name of the prism
@@ -91,7 +92,7 @@ public class PolyExtruder : MonoBehaviour
     // -> scaling is applied using the GameObject transform's localScale y-value
     private static readonly float DEFAULT_BOTTOM_Y = 0.0f;
     private static readonly float DEFAULT_TOP_Y = 1.0f;
-    private float extrusionHeightY = 1.0f;
+    private float extrusionHeightY = 1.0f; 
 
     // reference to original input vertices of Polygon in Vector2 Array format
     private Vector2[] originalPolygonVertices;
@@ -118,8 +119,7 @@ public class PolyExtruder : MonoBehaviour
     /// <param name="color">Color of the prism's material.</param>
     /// <param name="is3D">Set to<c>true</c> if polygon extrusion should be applied (= 3D prism), or <c>false</c> if it is only the (2D) polygon.</param>
     /// <param name="isUsingBottomMeshIn3D">Set to<c>true</c> if the bottom mesh component should be attached, or <c>false</c> if not.</param>
-    /// <param name="isUsingColliders">Set to<c>true</c> if MeshCollider components should be attached, or <c>false</c> if not.</param>
-    public void createPrism(string prismName, float height, Vector2[] vertices, Color32 color, bool is3D, bool isUsingBottomMeshIn3D, bool isUsingColliders)
+    public void createPrism(string prismName, float height, Vector2[] vertices, Color32 color, bool is3D, bool isUsingBottomMeshIn3D)
     {
         // set data
         this.prismName = name;
@@ -130,8 +130,6 @@ public class PolyExtruder : MonoBehaviour
         this.polygonCentroid = new Vector2(0.0f, 0.0f);
         this.is3D = is3D;
         this.isUsingBottomMeshIn3D = isUsingBottomMeshIn3D;
-        this.isUsingColliders = isUsingColliders;
-
         // handle vertex order
         bool vertexOrderClockwise = areVerticesOrderedClockwise(this.originalPolygonVertices);
         if (!vertexOrderClockwise) System.Array.Reverse(this.originalPolygonVertices);
@@ -244,7 +242,7 @@ public class PolyExtruder : MonoBehaviour
         MeshFilter mfB = goB.AddComponent<MeshFilter>();
         if(this.isUsingColliders) goB.AddComponent<MeshCollider>();
         bottomMeshRenderer = goB.AddComponent<MeshRenderer>();
-        bottomMeshRenderer.material = new Material(Shader.Find("Standard"));
+        bottomMeshRenderer.material = new Material(Shader.Find(shader));
 
         // keep reference to bottom mesh
         this.bottomMesh = mfB.mesh;
@@ -312,7 +310,7 @@ public class PolyExtruder : MonoBehaviour
 			MeshFilter mfT = goT.AddComponent<MeshFilter>();
 			if(this.isUsingColliders) goT.AddComponent<MeshCollider>();
 			topMeshRenderer = goT.AddComponent<MeshRenderer>();
-			topMeshRenderer.material = new Material(Shader.Find("Standard"));
+			topMeshRenderer.material = new Material(Shader.Find(shader));
 			
 			// keep reference to top mesh
 			this.topMesh = mfT.mesh;
@@ -363,7 +361,7 @@ public class PolyExtruder : MonoBehaviour
 			goS.name = "surround_" + this.prismName;
 			MeshFilter mfS = goS.AddComponent<MeshFilter>();
 			surroundMeshRenderer = goS.AddComponent<MeshRenderer>();
-			surroundMeshRenderer.material = new Material(Shader.Find("Standard"));
+			surroundMeshRenderer.material = new Material(Shader.Find(shader));
 			
 			// keep reference to surrounding mesh
 			this.surroundMesh = mfS.mesh;
@@ -429,27 +427,32 @@ public class PolyExtruder : MonoBehaviour
 			// assign indices and vertices and create mesh
 			redrawMesh(this.surroundMesh, verticesS, indicesS);
 
-            /*
+            
             // reset mesh collider after (re-)creation (not needed right now since no mesh collider is attached)
-			goS.GetComponent<MeshCollider>().sharedMesh = this.surroundMesh;
-            */
+            if (isUsingColliders)
+            {
+                goS.AddComponent<MeshCollider>();
+                goS.GetComponent<MeshCollider>().sharedMesh = this.surroundMesh;
 
-            /*
-			// generate a simple UV map
-			Vector2[] uvsS = new Vector2[this.surroundMesh.vertices.Length];
+            }
+
+
+
+            // generate a simple UV map
+            /*Vector2[] uvsS = new Vector2[this.surroundMesh.vertices.Length];
 			for (int i = 0; i < uvsS.Length; i++)
 			{
 				uvsS[i] = new Vector2(this.surroundMesh.vertices[i].x, this.surroundMesh.vertices[i].y);
 			}
-            this.surroundMesh.uv = uvsS;
-			*/
+            this.surroundMesh.uv = uvsS;*/
+
 
             // note: for 3D prism, only keep top mesh collider activated (adapt to own preferences this if needed)
-            if(this.isUsingColliders)
+           /* if (this.isUsingColliders)
             {
                 goB.GetComponent<MeshCollider>().enabled = false;
                 goT.GetComponent<MeshCollider>().enabled = true;
-            }
+            }*/
         }
 
         // set height and color
@@ -560,7 +563,7 @@ public class PolyExtruder : MonoBehaviour
         outlineRenderer.startWidth = outlineWidth;
         outlineRenderer.endWidth = outlineWidth;
         outlineRenderer.useWorldSpace = false;
-        outlineRenderer.material = new Material(Shader.Find("Standard"));
+        outlineRenderer.material = new Material(Shader.Find(shader));
         outlineRenderer.material.color = outlineColor;
 
         // prepare original polygon vertices for LineRenderer positions

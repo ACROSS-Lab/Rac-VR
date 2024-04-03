@@ -1,99 +1,74 @@
 using System;
-using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+using UnityEngine.XR.Interaction.Toolkit;
+
 
 public class PolygonGenerator
 {
     CoordinateConverter converter;
+
     float offsetYBackgroundGeom;
-    private Dictionary<int, GameObject> geometriesMap3D;
-    private Dictionary<int, GameObject> geometriesMap2D;
 
     private static PolygonGenerator instance;
 
-    private PolygonGenerator() {}
+    public Mesh surroundMesh;
 
-    public void Init(CoordinateConverter c, float Yoffset) {
+
+    public PolygonGenerator() { }
+
+    public void Init(CoordinateConverter c)
+    {
         converter = c;
-        offsetYBackgroundGeom = Yoffset;
-        geometriesMap3D = new Dictionary<int, GameObject>();
-        geometriesMap2D = new Dictionary<int, GameObject>();
     }
 
-    public static PolygonGenerator GetInstance() {
-        if (instance == null) {
+    public static PolygonGenerator GetInstance()
+    {
+        if (instance == null)
+        {
             instance = new PolygonGenerator();
         }
         return instance;
     }
 
-    public static void DestroyInstance() {
+    public static void DestroyInstance()
+    {
         instance = null;
     }
+     
 
-   /* public void GeneratePolygons(GAMAGeometry geom)
+
+    public GameObject GeneratePolygons(String name, List<int> points, PropertiesGAMA prop, int precision)
     {
-        GameObject generated2D = new GameObject();
-        generated2D.name = "Generated 2D geometries";
-        GameObject generated3D = new GameObject();
-        generated3D.name = "Generated 3D geometries";
-
-
+   
         List<Vector2> pts = new List<Vector2>();
-        int cpt = 0;
-        int id2D = 0;
-        int id3D = 0;
-        for (int i = 0; i < geom.points.Count; i++)
+        for (int i = 0; i < points.Count - 1; i = i+2)
         {
-            GAMAPoint pt = geom.points[i];
-            if (pt.c.Count < 2)
-            {
-                if (pts.Count > 2)
-                {              
-                    Vector2[] MeshDataPoints = pts.ToArray();
-                    string name = geom.names.Count > 0 ?  geom.names[cpt] : "";
-                    string tag = geom.tags.Count > 0 ?  geom.tags[cpt] : "";
-                    float extrusionHeight = geom.heights[cpt];
-                    bool isUsingCollider = geom.hasColliders[cpt];
-                    bool is3D = geom.is3D[cpt];
-                    // GameObject p = GeneratePolygon(pts.ToArray(), geom.names.Count > 0 ?  geom.names[cpt] : "", geom.tags.Count > 0 ?  geom.tags[cpt] : "", geom.heights[cpt], geom.hasColliders[cpt], geom.is3D[cpt]);
-                    GameObject p = GeneratePolygon(MeshDataPoints, name, tag, extrusionHeight, isUsingCollider, is3D);
-                    if (geom.is3D[cpt]) {
-                        p.transform.SetParent(generated3D.transform);
-                        geometriesMap3D.Add(id3D, p);
-                        id3D++;
-                    } else {
-                        p.transform.SetParent(generated2D.transform);
-                        geometriesMap2D.Add(id2D, p);
-                        id2D++;
-                    }
-                }
-                pts = new List<Vector2>();
-                cpt++;
-
-            } else {
-                pts.Add(converter.fromGAMACRS2D(pt.c[0], pt.c[1]));
-            }
-
-
+            Vector2 p = converter.fromGAMACRS2D(points[i], points[i + 1]);
+            pts.Add(p);
         }
+
+        Vector2[] MeshDataPoints = pts.ToArray();
+        //Color32 col = new Color32(BitConverter.GetBytes(prop.color[0])[0], BitConverter.GetBytes(prop.color[1])[0],
+         //          BitConverter.GetBytes(prop.color[2])[0], BitConverter.GetBytes(prop.color[3])[0]);
+        Color32 col = new Color32(BitConverter.GetBytes(prop.red)[0], BitConverter.GetBytes(prop.green)[0],
+                 BitConverter.GetBytes(prop.blue)[0], BitConverter.GetBytes(prop.alpha)[0]);
+
+        // GameObject p = GeneratePolygon(pts.ToArray(), geom.names.Count > 0 ?  geom.names[cpt] : "", geom.tags.Count > 0 ?  geom.tags[cpt] : "", geom.heights[cpt], geom.hasColliders[cpt], geom.is3D[cpt]);
+        return GeneratePolygon(name, MeshDataPoints, ((float) prop.height) / precision, col);
+       
     }
 
+
     // Start is called before the first frame update
-    GameObject GeneratePolygon(Vector2[] MeshDataPoints, string name, string tag, float extrusionHeight, bool isUsingCollider, bool is3D) {
+    GameObject GeneratePolygon(String name, Vector2[] MeshDataPoints, float extrusionHeight, Color32 color)
+    {
         bool isUsingBottomMeshIn3D = false;
         bool isOutlineRendered = true;
-
+        bool is3D = extrusionHeight != 0.0;
         // create new GameObject (as a child)
-        GameObject polyExtruderGO = new GameObject();
-        if (name != "")
-            polyExtruderGO.name = name;
+        GameObject polyExtruderGO = new GameObject(); 
         
-        if (tag != "") {
-            polyExtruderGO.tag = tag;
-            // polyExtruderGO.layer = Layer Mask.NameToLayer(tag);
-        }
 
         // reference to setup example poly extruder 
         PolyExtruder polyExtruder;
@@ -106,29 +81,12 @@ public class PolygonGenerator
         Vector3 pos = polyExtruderGO.transform.position;
         pos.y += offsetYBackgroundGeom;
         polyExtruderGO.transform.position = pos;
-        polyExtruder.createPrism(polyExtruderGO.name, extrusionHeight, MeshDataPoints, Color.grey, is3D, isUsingBottomMeshIn3D, isUsingCollider);
-        // if (isUsingCollider)
-        // {
-        //     MeshCollider mc = polyExtruderGO.AddComponent<MeshCollider>();
-        //     mc.sharedMesh = polyExtruder.surroundMesh;
-        // }
+        polyExtruder.createPrism(name, extrusionHeight, MeshDataPoints, color, is3D, isUsingBottomMeshIn3D);
+        surroundMesh = polyExtruder.surroundMesh;
         return polyExtruderGO;
     }
 
-    public Dictionary<int, GameObject> GetGeneratedGeometries3D()
-    {
-        return geometriesMap3D;
-    }
-
-    public Dictionary<int, GameObject> GetGeneratedGeometries2D()
-    {
-        return geometriesMap2D;
-    }*/
-
-    // public static void SetGeneratedBuildings(Dictionary<int, GameObject> buildings)
-    // {
-    //     buildingsMap = buildings;
-    // }
+  
 }
 
 

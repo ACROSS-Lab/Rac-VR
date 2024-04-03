@@ -13,8 +13,8 @@ public class VillageId : MonoBehaviour
 
     void Update()
     {
-        if (GameManager.Instance.GetVillageId() != -1) {
-            idText.text = "You are village " + (GameManager.Instance.GetVillageId() + 1);
+        if (SimulationManager.Instance.GetVillageId() != -1) {
+            idText.text = "You are village " + (SimulationManager.Instance.GetVillageId() + 1);
         }
     }
 }
