@@ -8,6 +8,7 @@ using System.Linq;
 using Newtonsoft.Json.Linq;
 using Unity.XR.CoreUtils;
 using UnityEngine.XR.Interaction.Toolkit.Samples.StarterAssets;
+using UnityEngine.XR.Interaction.Toolkit;
 
 public class GameManager : MonoBehaviour
 {
@@ -41,6 +42,9 @@ public class GameManager : MonoBehaviour
 
     [SerializeField] private GameObject endOfSessionCanvas;
     public DynamicMoveProvider moveProvider;
+    public ActionBasedContinuousTurnProvider turnProvider;
+    public ActionBasedSnapTurnProvider snapProvider;
+    public TwoHandedGrabMoveProvider twoHandMove;
 
     public GameObject teleportation;
 
@@ -179,16 +183,21 @@ public class GameManager : MonoBehaviour
 
     public void playerMovement(Boolean active)
     {
-        Debug.Log("playerMovement: " + active);
-        if (active)
+
+        if (teleportation != null)
+            teleportation.SetActive(active);
+        if (active && tutoOverlay != null)
         {
             tutoOverlay.SetActive(false);
         }
-        moveProvider.enabled = active;
-        Debug.Log(" moveProvider.enabled : " + active);
-
-        teleportation.SetActive(active);
-        Debug.Log(" teleportation.active: " + teleportation.active);
+        if (moveProvider != null)
+            moveProvider.enabled = active;
+        if (turnProvider != null)
+            turnProvider.enabled = active;
+        if (snapProvider != null)
+            snapProvider.enabled = active;
+        if (twoHandMove != null)
+            twoHandMove.enabled = active;
 
 
     }

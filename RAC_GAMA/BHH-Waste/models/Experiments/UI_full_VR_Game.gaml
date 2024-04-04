@@ -630,7 +630,7 @@ experiment VR_GAME autorun: true type: unity{
 	string unity_linker_species <- string(unity_linker);
 	list<string> displays_to_hide <- [];
 	
-	bool debug_mode <- false;
+	bool debug_mode <- true;
 	
 	action affiche_coord {
 		//write sample(#user_location);

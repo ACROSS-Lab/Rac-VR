@@ -1989,6 +1989,9 @@ MonoBehaviour:
   disDebug: {fileID: 20626821}
   endOfSessionCanvas: {fileID: 61231955}
   moveProvider: {fileID: 1839173969}
+  turnProvider: {fileID: 1839173970}
+  snapProvider: {fileID: 1839173972}
+  twoHandMove: {fileID: 1839173968}
   teleportation: {fileID: 283590424}
   tutoOverlay: {fileID: 821701515161339425}
   timer: {fileID: 20626818}
@@ -179435,6 +179438,17 @@ GameObject:
   m_CorrespondingSourceObject: {fileID: 6696632354427576968, guid: 1f133936515a11b4ab1f55618b13927b, type: 3}
   m_PrefabInstance: {fileID: 6876872279893107534}
   m_PrefabAsset: {fileID: 0}
+--- !u!114 &1839173968 stripped
+MonoBehaviour:
+  m_CorrespondingSourceObject: {fileID: 3140504849866434828, guid: 1f133936515a11b4ab1f55618b13927b, type: 3}
+  m_PrefabInstance: {fileID: 6876872279893107534}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1839173962}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 760ff70c1c91bdd45907d0ff0cdcaf7f, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
 --- !u!114 &1839173969 stripped
 MonoBehaviour:
   m_CorrespondingSourceObject: {fileID: 2109788870418784318, guid: 1f133936515a11b4ab1f55618b13927b, type: 3}
@@ -179444,6 +179458,28 @@ MonoBehaviour:
   m_Enabled: 1
   m_EditorHideFlags: 0
   m_Script: {fileID: 11500000, guid: 9b1e8c997df241c1a67045eeac79b41b, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+--- !u!114 &1839173970 stripped
+MonoBehaviour:
+  m_CorrespondingSourceObject: {fileID: 2109788870418784316, guid: 1f133936515a11b4ab1f55618b13927b, type: 3}
+  m_PrefabInstance: {fileID: 6876872279893107534}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1839173962}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 919e39492806b334982b6b84c90dd927, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+--- !u!114 &1839173972 stripped
+MonoBehaviour:
+  m_CorrespondingSourceObject: {fileID: 2109788870418784304, guid: 1f133936515a11b4ab1f55618b13927b, type: 3}
+  m_PrefabInstance: {fileID: 6876872279893107534}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1839173962}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 2213c36610e3b1c4bbf886810ed9db12, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
 --- !u!4 &1839962228 stripped
@@ -251021,6 +251057,10 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 1098916835014005969, guid: 1f133936515a11b4ab1f55618b13927b, type: 3}
       propertyPath: m_LocalEulerAnglesHint.z
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 1820055183941073645, guid: 1f133936515a11b4ab1f55618b13927b, type: 3}
+      propertyPath: m_Enabled
       value: 0
       objectReference: {fileID: 0}
     - target: {fileID: 2018485709116748915, guid: 1f133936515a11b4ab1f55618b13927b, type: 3}
