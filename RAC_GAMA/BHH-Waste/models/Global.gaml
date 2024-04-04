@@ -1215,6 +1215,7 @@ species pointInterest {
 	float size <- 300.0;
 	bool visited <- false;
 	pointInterestManager manager;
+	
 	action addSelfToManager {
 		add self to: manager.points;
 	}
@@ -1231,27 +1232,24 @@ species pointInterest {
 }
 
 species unity_linker parent: abstract_unity_linker {
+	int port <- 8000;
 	string player_species <- string(unity_player);
-	//point location_init <- {50.0,50.0,0.0};
-	//int max_num_players  <- 4;
-//	int min_num_players  <- 4;
+	point location_init <- {50.0,50.0,0.0};
+	int max_num_players  <- 100;
+	int min_num_players  <- 0;
 	
-//	bool use_physics_for_player <- false;
-	bool do_send_world <- false;
+	bool use_physics_for_player <- false;
 	
-	action send_world ;
+	action send_world;
 	
 	action add_to_send_parameter(map map_to_send) {
 		map_to_send <+ "village_id"::(length(unity_player)-1); // VILLAGE NUMBER MUST BE DYNAMICALLY ASSIGNED
 		map_to_send <+ "exploration_duration"::120;
-		remove key: "position" from: map_to_send;	
-		remove key: "world" from: map_to_send;	
+		remove key: "position" from: map_to_send;
 		
-		write sample(map_to_send);
+		
 			
 	}
-	
-	
 }
 
 species unity_player parent: abstract_unity_player{
@@ -1261,7 +1259,6 @@ species unity_player parent: abstract_unity_player{
 	float cone_amplitude <- 90.0;
 	float player_rotation <- 90.0;
 	bool to_display <- true;
-	
 	
 	init {
 		color <- village[int(self)].color;

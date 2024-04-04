@@ -7,7 +7,6 @@ TagManager:
   - NPC
   - Ground_RAC
   - Water_RAC
-  - Tuto
   layers:
   - Default
   - TransparentFX

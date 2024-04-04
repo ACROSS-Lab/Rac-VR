@@ -629,7 +629,7 @@ experiment VR_GAME autorun: true type: unity{
 	string unity_linker_species <- string(unity_linker);
 	list<string> displays_to_hide <- [];
 	
-	bool debug_mode <- true;
+	bool debug_mode <- false;
 	
 	action affiche_coord {
 		//write sample(#user_location);
@@ -642,23 +642,6 @@ experiment VR_GAME autorun: true type: unity{
 	//parameter  days var:days <- 50;
 	
 	parameter isDemo var: isDemo <- false;
-	
-	
-	
-	action create_player(string id) {
-		ask unity_linker {
-			write "create player: " + id;
-			do create_player(id);
-		}
-	}
-	action remove_player(string id_input) {
-		if (not empty(unity_player)) {
-			ask first(unity_player where (each.name = id_input)) {
-				do die;
-			}
-		}
-	}
-	
 	
 	/*action _init_ {
 		//Requires latest version of GAMA 1.8.2
@@ -679,6 +662,32 @@ experiment VR_GAME autorun: true type: unity{
 		//create simulation with: [mode::FULL_VR_GAME, language::];
 		
 	}*/
+	
+	action create_player(string id) {
+		//write sample(id);
+		ask unity_linker {
+			do create_player(id);
+		}
+	}
+	
+	action move_player_external(int id, int x, int y, int a) {
+		//write sample(id) + ":("+x+","+y+","+a+")";
+		
+		ask unity_player[id] {
+			location <- {x, y};
+			//rotation <- a/precis;
+		}
+		/*ask unity_linker {
+			do move_player_external(id, x, y, a); 
+		}*/
+	}
+	
+	action init_player(string id) {
+		ask unity_linker {
+			do send_init_data(player_agents[id]); 
+		}
+	}
+	
 	
 	action exploration_over(int village_id) {
 		// HANDLE END OF EXPLORATION FOR A GIVEN UNITY CLIENT
@@ -781,7 +790,7 @@ experiment VR_GAME autorun: true type: unity{
 					}
 	
 					index_ <- index_ + 1;
-				} 
+				}
 	
 			}		
 			

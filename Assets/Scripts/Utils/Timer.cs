@@ -48,8 +48,8 @@ public class Timer : MonoBehaviour
                 {
                     Reset();
                     //  timerRunning = false;
-                    SimulationManager.Instance.UpdateGameState(GameState.IDLE);
-                    ConnectionManager.Instance.SendExecutableExpression("do exploration_over(" + SimulationManager.Instance.GetVillageId() + ");");
+                    GameManager.Instance.UpdateGameState(GameState.IDLE);
+                    ConnectionManager.Instance.SendExecutableExpression("do exploration_over(" + GameManager.Instance.GetVillageId() + ");");
                 }
             }
            
