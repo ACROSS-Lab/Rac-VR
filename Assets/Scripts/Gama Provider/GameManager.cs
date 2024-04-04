@@ -390,14 +390,14 @@ public class GameManager : MonoBehaviour
     private void UpdateClassIndicator() {
 
 
-        Debug.Log("villageId: " + villageId + " " + classIndicators.solidwasteSoilClass[villageId] +" " + classIndicators.solidwasteCanalClass[villageId]);
+        //Debug.Log("villageId: " + villageId + " " + classIndicators.solidwasteSoilClass[villageId] +" " + classIndicators.solidwasteCanalClass[villageId]);
         classIndicators.displaySolidClass(classIndicators.solidwasteSoilClass[villageId], classIndicators.solidwasteCanalClass[villageId]);
-        Debug.Log("2 villageId: " + villageId);
+       // Debug.Log("2 villageId: " + villageId);
 
         classIndicators.displayWaterClass(classIndicators.waterwasteClass[villageId]);
         classIndicators.displayProductionClass(classIndicators.productionClass[villageId]);
         classIndicators.displayWaterColor(classIndicators.waterwasteClass[villageId]);
-        Debug.Log("3 villageId: " + villageId);
+        //Debug.Log("3 villageId: " + villageId);
 
        classIndicators = null;
     } 

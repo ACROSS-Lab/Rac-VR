@@ -775,7 +775,6 @@ global {
 					
 					if not empty(neighbors_plot) {
 						int target_pop <- round(population *(1 + increase_urban_area_population_year)) -  (houses count each.inhabitant_to_create);
-						//write sample(population) + " " + sample(target_pop);
 						loop while: not empty(neighbors_plot) and population <target_pop {
 							plot p <- first(neighbors_plot);
 							neighbors_plot >> p;
@@ -835,7 +834,7 @@ global {
 		to_send <+ "stopVR"::true;
 		
 		ask unity_linker {
-			do send_message mes: to_send players: unity_player as list ;
+			do send_message mes: to_send players: player_agents.values ;
 		}
 	}
 	
@@ -857,12 +856,8 @@ global {
 		to_send <+ "productionClassLastTurn"::productionClassLastTurn ;
 			
 		ask (unity_linker) {
-			//write sample(to_send);
-		
-			do send_message mes: to_send players: unity_player as list ;
+			do send_message mes: to_send players: player_agents.values ;
 		}
-		//write sample(village_soil_solid_pollution);
-		//write sample(village_canal_solid_pollution);
 	}
 	
 	

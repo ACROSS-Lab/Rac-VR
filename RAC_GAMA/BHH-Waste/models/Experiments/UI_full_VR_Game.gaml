@@ -630,7 +630,7 @@ experiment VR_GAME autorun: true type: unity{
 	string unity_linker_species <- string(unity_linker);
 	list<string> displays_to_hide <- [];
 	
-	bool debug_mode <- true;
+	bool debug_mode <- false;
 	
 	action affiche_coord {
 		//write sample(#user_location);
@@ -667,7 +667,7 @@ experiment VR_GAME autorun: true type: unity{
 	
 	action create_player(string id) {
 		ask unity_linker {
-			write "create player: " + id;
+			//write "create player: " + id;
 			do create_player(id);
 		}
 	}
@@ -678,43 +678,33 @@ experiment VR_GAME autorun: true type: unity{
 			}
 		}
 	}
-	/*action create_player(string id) {
-		write sample(id);
-		ask unity_linker {
-			do create_player(id);
-		}
-	}*/
 	
 	action move_player_external(int id, int x, int y, int a) {
 		//write sample(id) + ":("+x+","+y+","+a+")";
-		
 		ask unity_player[id] {
 			location <- {x, y};
-			//rotation <- a/precis;
 		}
 		
 	}
 	
 	action init_player(string id) {
 		ask unity_linker {
-			write "send init data to: " + id;
+		//	write "send init data to: " + id;
 			do send_init_data(id); 
 		}
 	}
 	
 	
 	action exploration_start(int village_id) {
-		// HANDLE END OF EXPLORATION FOR A GIVEN UNITY CLIENT
 		exploration_started << village_id;
-		write "exploration_started: " + village_id;
+		//write "exploration_started: " + village_id;
 		
 	}
 	action exploration_over(int village_id) {
-		// HANDLE END OF EXPLORATION FOR A GIVEN UNITY CLIENT
 		exploration_ended << village_id;
 		exploration_started >> village_id;
 		
-		write "exploration_ended: " + village_id;
+		//write "exploration_ended: " + village_id;
 		
 	}
 	
