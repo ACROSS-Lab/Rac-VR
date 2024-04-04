@@ -7,6 +7,7 @@ public class Timer : MonoBehaviour
 
     [Header("Display Settings")]
     [SerializeField] private TMPro.TextMeshProUGUI timerText;
+    [SerializeField] private GameObject endOfSessionCanvas;
     [SerializeField] private Color startColor = new Color(0,201,0,255);
     [SerializeField] private Color midColor = new Color(255,218,0,255);
     [SerializeField] private Color endColor = new Color(255,0,0,255);
@@ -24,7 +25,6 @@ public class Timer : MonoBehaviour
         timeRemaining = timerDuration;
         midTime = timeRemaining / 2;
         DisplayTime(timeRemaining-1);
-        Debug.Log("duration init: " + timerDuration);
 
     }
 
@@ -46,12 +46,13 @@ public class Timer : MonoBehaviour
                 }
                 else
                 {
-                    Reset();
                     //  timerRunning = false;
                     GameManager.Instance.UpdateGameState(GameState.IDLE);
                     ConnectionManager.Instance.SendExecutableExpression("do exploration_over(" + GameManager.Instance.GetVillageId() + ");");
-                }
+                    Reset();
+
             }
+        }
            
         
     }
@@ -76,6 +77,9 @@ public class Timer : MonoBehaviour
     public void Reset() {
         timerRunning = false;
         timeRemaining = timerDuration;
+        GameManager.Instance.playerMovement(false);
+        endOfSessionCanvas.SetActive(true);
+
     }
 
     /*private void HandleTimerOnStateChanged(GameState newState) {
@@ -87,17 +91,23 @@ public class Timer : MonoBehaviour
 
     // ############################################################
 
-    public static void SetTimerDuration(float duration) {
-        Debug.Log("duration: " + duration);
+    public void SetTimerDuration(float duration) {
         timerDuration = duration;
+
+        timeRemaining = timerDuration;
+        midTime = timeRemaining / 2;
+      //  DisplayTime(timeRemaining - 1);
     }
 
     public static float GetTimerDuration() {
         return timerDuration;
     }
+    
+    public void StartTimerRunning() {
+        ConnectionManager.Instance.SendExecutableExpression("do exploration_start(" + GameManager.Instance.GetVillageId() + ");");
+        timerRunning = true;
+        GameManager.Instance.StartGame();
 
-    public void SetTimerRunning(bool running) {
-        timerRunning = running;
     }
 
     public bool IsTimerRunning() {

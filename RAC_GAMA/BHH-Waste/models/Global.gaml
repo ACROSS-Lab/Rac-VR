@@ -33,6 +33,7 @@ import "Parameters.gaml"
  
 
 global {
+	int exploration_duration <- 30; //in s
 	float mini_map_x_coeff <- 0.4;
 	float mini_map_y_coeff <- 0.4;
 	bool CHOOSING_VILLAGE_FOR_POOL <- false;
@@ -187,6 +188,7 @@ global {
 
 
 	list<int> exploration_ended;
+	list<int> exploration_started;
 	
 	
 	/********************** INITIALIZATION OF THE GAME ****************************/
@@ -1244,7 +1246,7 @@ species unity_linker parent: abstract_unity_linker {
 	
 	action add_to_send_parameter(map map_to_send) {
 		map_to_send <+ "village_id"::(length(unity_player)-1); // VILLAGE NUMBER MUST BE DYNAMICALLY ASSIGNED
-		map_to_send <+ "exploration_duration"::120;
+		map_to_send <+ "exploration_duration"::exploration_duration;
 		remove key: "position" from: map_to_send;
 		
 		
@@ -1264,10 +1266,12 @@ species unity_player parent: abstract_unity_player{
 		color <- village[int(self)].color;
 	}
 	aspect default {
-		
-		point loc <- {location.x * 0.01117909527322 + 2505 , location.y * -0.010952896376515 + 3079, 0.5};
-		draw sphere(player_size) at:loc color: color ;
-		draw location;
+		if ((int(self)) in exploration_started) {
+			point loc <- {location.x * 0.01117909527322 + 2505 , location.y * -0.010952896376515 + 3079, 0.5};
+			draw sphere(player_size) at:loc color: color ;
+			draw location;
+		}
+	
 		//draw player_perception_cone() at: loc color: rgb(color, 0.5);
 		
 	}

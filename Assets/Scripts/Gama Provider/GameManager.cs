@@ -6,6 +6,8 @@ using UnityEngine.SceneManagement;
 using Unity.Collections;
 using System.Linq;
 using Newtonsoft.Json.Linq;
+using Unity.XR.CoreUtils;
+using UnityEngine.XR.Interaction.Toolkit.Samples.StarterAssets;
 
 public class GameManager : MonoBehaviour
 {
@@ -36,6 +38,15 @@ public class GameManager : MonoBehaviour
     [SerializeField] private float GamaCRSOffsetY = 0.0f;
 
     [SerializeField] private GameStateDisplay disDebug;
+
+    [SerializeField] private GameObject endOfSessionCanvas;
+    public DynamicMoveProvider moveProvider;
+
+    public GameObject teleportation;
+
+    [SerializeField] private GameObject tutoOverlay;
+
+    public Timer timer;
 
     // [Header("Simulation parameters")]
     //    [SerializeField] private bool geometriesExpected = false;
@@ -89,10 +100,13 @@ public class GameManager : MonoBehaviour
     private Vector3 initialPosition;
     private Quaternion initialRotation;
 
+
     // ############################################ UNITY FUNCTIONS ############################################
     void Awake() {
         Instance = this;
     }
+
+   
 
     void OnEnable() {
         ConnectionManager.OnServerMessageReceived += HandleServerMessageReceived;
@@ -107,20 +121,23 @@ public class GameManager : MonoBehaviour
     }
 
     void Start() {
-        // InitAgentsList();
+        // InitAgentsList();é
 //        geometriesInitialized = false;
 //        simulationParametersHandled = false;
       //  handleGroundRequested = false;
        // handlePlayerRequested = false;
        // handleGeometriesRequested = false;
         villageId = -1;
-        initialPosition = new Vector3(player.transform.position.x, player.transform.position.y, player.transform.position.z);
+        initialPosition = new Vector3(player.transform.position.x, player.transform.position.y+1.0f, player.transform.position.z);
         initialRotation = new Quaternion(player.transform.rotation.x, player.transform.rotation.y, player.transform.rotation.z, player.transform.rotation.w);
-        
+        playerMovement(false);
     }
 
     void FixedUpdate() {
-        if(IsGameState(GameState.GAME)) {
+       
+          
+        if (IsGameState(GameState.GAME)) {
+
             UpdatePlayerPosition();
          //   UpdateAgentsList();
 
@@ -132,9 +149,12 @@ public class GameManager : MonoBehaviour
 
         if (classIndicators != null)
         {
+            endOfSessionCanvas.SetActive(false);
+            tutoOverlay.SetActive(true);
             player.transform.SetLocalPositionAndRotation(initialPosition, initialRotation);
             UpdateClassIndicator();
             UpdateGameState(GameState.READY);
+            
         }
        
     }
@@ -155,6 +175,22 @@ public class GameManager : MonoBehaviour
            // InitGeometries();
         }*/
        
+    }
+
+    public void playerMovement(Boolean active)
+    {
+        Debug.Log("playerMovement: " + active);
+        if (active)
+        {
+            tutoOverlay.SetActive(false);
+        }
+        moveProvider.enabled = active;
+        Debug.Log(" moveProvider.enabled : " + active);
+
+        teleportation.SetActive(active);
+        Debug.Log(" teleportation.active: " + teleportation.active);
+
+
     }
 
     // ############################################ GAMESTATE UPDATER ############################################
@@ -182,6 +218,7 @@ public class GameManager : MonoBehaviour
             case GameState.IDLE:
                 //gameReadyToStart = false;
                 //Vector3 pos = converter.fromGAMACRS(parameters.position[0], parameters.position[1]);
+
                 Debug.Log("GameManager: UpdateGameState -> IDLE");
                 break;
             case GameState.READY:
@@ -342,6 +379,8 @@ public class GameManager : MonoBehaviour
     }
    */
     private void UpdateClassIndicator() {
+
+
         Debug.Log("villageId: " + villageId + " " + classIndicators.solidwasteSoilClass[villageId] +" " + classIndicators.solidwasteCanalClass[villageId]);
         classIndicators.displaySolidClass(classIndicators.solidwasteSoilClass[villageId], classIndicators.solidwasteCanalClass[villageId]);
         Debug.Log("2 villageId: " + villageId);
@@ -376,7 +415,7 @@ public class GameManager : MonoBehaviour
                 // Init ground and player
                 villageId = parameters.village_id;
 
-                Timer.SetTimerDuration((float) parameters.exploration_duration);
+                timer.SetTimerDuration((float) parameters.exploration_duration);
                 UpdateGameState(GameState.IDLE);
 
                 //if (groundExpected) handleGroundRequested = true;
@@ -398,12 +437,13 @@ public class GameManager : MonoBehaviour
 
             case "solidwasteSoilClass":
                 classIndicators = ConnectionClass.CreateFromJSON(jsonObj.ToString(), dm);
-               // disDebug.texttoDisplay = "classIndicators  : " + classIndicators;
+                Debug.Log("classIndicators: " + classIndicators);
+                // disDebug.texttoDisplay = "classIndicators  : " + classIndicators;
 
-               
 
-//                gameReadyToStart = true;
-                 break;
+
+                //                gameReadyToStart = true;
+                break;
 
             // case "Enter_or_exit_VR":
             //     pPNJ1.readySendPosition = true;
@@ -452,9 +492,10 @@ public class GameManager : MonoBehaviour
     }
 
     public void StartGame() {
-        //if (IsGameState(GameState.IDLE)) {
-            UpdateGameState(GameState.GAME);
-        //}
+        playerMovement(true);
+        UpdateGameState(GameState.GAME);
+
+         
     }
 
     // ############################################################

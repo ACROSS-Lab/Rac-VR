@@ -31,7 +31,7 @@ public class OverlayManager : MonoBehaviour
         if (overlayUpdateRequested) {
             overlayUpdateRequested = false;
             timerOverlay.SetActive(currentState == GameState.GAME);
-            startOverlay.SetActive(currentState != GameState.GAME);
+           // startOverlay.SetActive(currentState != GameState.GAME);
         }
     }
 

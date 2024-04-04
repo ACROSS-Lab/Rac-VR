@@ -136,6 +136,7 @@ global {
 	image_file water_icon <- image_file("../../includes/icons/waterwaste.png");
 	image_file plant_icon <- image_file("../../includes/icons/Logo production en bas.png");
 	list<image_file> numbers <- [1,2,3,4] collect image_file("../../includes/icons/Logo "+each+".png");
+	list<image_file> numbers_start <- [1,2,3,4] collect image_file("../../includes/icons/LogoStart "+each+".png");
 	list<image_file> smileys <- [0,1,2,3,4] collect image_file("../../includes/icons/smiley"+each+".png");
 	image_file calendar_icon <- image_file("../../includes/icons/Logo calendrier.png");
 	image_file discussion_icon <- image_file("../../includes/icons/Logo gens assis.png");
@@ -316,7 +317,7 @@ global {
 		ask chart {
 			loop i from: 0 to: 3 {
 				do update_all2(village_color[i], ["Total"::(village_water_pollution[i] + village_solid_pollution[i]) / max_pollution_ecolabel, "Water"::village_water_pollution[i] / max_pollution_ecolabel, "Solid"::village_solid_pollution[i] / max_pollution_ecolabel, "Production"::village_production[i] / min_production_ecolabel]);
-			}
+			} 
 
 			float total_value <- (village_water_pollution sum_of(each) + village_solid_pollution sum_of(each)) / max_pollution_ecolabel;
 			float production_value <- village_production sum_of(each) / min_production_ecolabel;
@@ -663,12 +664,26 @@ experiment VR_GAME autorun: true type: unity{
 		
 	}*/
 	
+	
 	action create_player(string id) {
-		//write sample(id);
 		ask unity_linker {
+			write "create player: " + id;
 			do create_player(id);
 		}
 	}
+	action remove_player(string id_input) {
+		if (not empty(unity_player)) {
+			ask first(unity_player where (each.name = id_input)) {
+				do die;
+			}
+		}
+	}
+	/*action create_player(string id) {
+		write sample(id);
+		ask unity_linker {
+			do create_player(id);
+		}
+	}*/
 	
 	action move_player_external(int id, int x, int y, int a) {
 		//write sample(id) + ":("+x+","+y+","+a+")";
@@ -677,21 +692,29 @@ experiment VR_GAME autorun: true type: unity{
 			location <- {x, y};
 			//rotation <- a/precis;
 		}
-		/*ask unity_linker {
-			do move_player_external(id, x, y, a); 
-		}*/
+		
 	}
 	
 	action init_player(string id) {
 		ask unity_linker {
-			do send_init_data(player_agents[id]); 
+			write "send init data to: " + id;
+			do send_init_data(id); 
 		}
 	}
 	
 	
+	action exploration_start(int village_id) {
+		// HANDLE END OF EXPLORATION FOR A GIVEN UNITY CLIENT
+		exploration_started << village_id;
+		write "exploration_started: " + village_id;
+		
+	}
 	action exploration_over(int village_id) {
 		// HANDLE END OF EXPLORATION FOR A GIVEN UNITY CLIENT
 		exploration_ended << village_id;
+		exploration_started >> village_id;
+		
+		write "exploration_ended: " + village_id;
 		
 	}
 	
@@ -1158,7 +1181,12 @@ experiment VR_GAME autorun: true type: unity{
 				if (stage = PLAYER_VR_EXPLORATION_TURN and (id in exploration_ended)) {
 					float size <- w_width/10;
 					draw numbers[id] at: {id * w_width/10 ,0}   size: w_width/10;
-				}/* else if not (stage in [PLAYER_ESTIMATION_TURN, PLAYER_VR_EXPLORATION_DISCUSSION_TURN]){
+				}
+				if (stage = PLAYER_VR_EXPLORATION_TURN and (id in exploration_started)) {
+					float size <- w_width/10;
+					draw numbers_start[id] at: {id * w_width/10 ,0}   size: w_width/10;
+				}
+				/* else if not (stage in [PLAYER_ESTIMATION_TURN, PLAYER_VR_EXPLORATION_DISCUSSION_TURN]){
 					float size <- w_width/10;
 					draw numbers[id] at: shape.centroid + position[id] size: w_width/10;
 					draw shape-(shape-40) color: color;

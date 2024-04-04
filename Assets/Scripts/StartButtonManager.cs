@@ -10,10 +10,12 @@ public class StartButtonManager : MonoBehaviour
     [SerializeField] private TMPro.TextMeshProUGUI debugText;
     private bool ready = false;
 
+
     private bool changeInteractableRequested;
 
     void OnEnable() {
         GameManager.Instance.OnGameStateChanged += HandleStartButtonOnStateChanged;
+
     }
 
     void OnDisable() {
