@@ -157,6 +157,7 @@ global {
 	image_file ecolabel_icon <- image_file("../../includes/icons/Ecolabel_On.png");
 	image_file no_ecolabel_icon <- image_file("../../includes/icons/Ecolabel_Off.png");
 	image_file minimap <- image_file("../../includes/icons/mini_map.png");
+	image_file instruction_level_image <- image_file("../../includes/icons/PollutionLevel.png");
 	image_file player <- image_file("../../includes/icons/Icone_Player.png");
 	image_file interest <- image_file("../../includes/icons/Icone_PointOfInterest.png");
 	image_file logo_rac <- image_file("../../includes/icons/logo_RAC.png");
@@ -168,6 +169,8 @@ global {
 	image_file disabled_label_icon <- image_file("../../includes/icons/eco_disabled.png");
 	image_file soil_icon <- image_file("../../includes/icons/waste.png");
 	image_file danger_icon <- image_file("../../includes/icons/pollution.png");
+
+	image_file PollutionLevel_image_file <- image_file("../../includes/icons/PollutionLevel.png");
 
 	/********************** VARIOUS FUNCTIONS  ***************************/
 
@@ -1112,7 +1115,7 @@ experiment VR_GAME autorun: true type: unity{
 				float y <- 0.2/1.1;
 				float x <- x_init;
 				
-				if (stage = PLAYER_VR_EXPLORATION_TURN) {
+				if (stage in [PLAYER_VR_EXPLORATION_TURN, PLAYER_VR_EXPLORATION_DISCUSSION_TURN]) {
 					
 					//Legend Player position
 					/*draw player at: {x* w_width,y*w_height} size: icon_size*1.5;
@@ -1156,16 +1159,16 @@ experiment VR_GAME autorun: true type: unity{
 			camera 'default' distance: 7800 location: #from_above target: {3000,2700,0};
 			
 			/********************** MAIN MAP DISPLAY ******************************/
-			species plot visible: !(stage in [PLAYER_DISCUSSION_TURN,  PLAYER_ACTION_TURN, PLAYER_VR_EXPLORATION_TURN])  {
+			species plot visible: !(stage in [PLAYER_DISCUSSION_TURN,  PLAYER_ACTION_TURN, PLAYER_VR_EXPLORATION_TURN, PLAYER_VR_EXPLORATION_DISCUSSION_TURN])  {
 				draw shape color: greens[world.production_class_current(self)] border: false;
 			}
-			species canal visible: !(stage in [PLAYER_DISCUSSION_TURN, PLAYER_ACTION_TURN, PLAYER_VR_EXPLORATION_TURN]) {
+			species canal visible: !(stage in [PLAYER_DISCUSSION_TURN, PLAYER_ACTION_TURN, PLAYER_VR_EXPLORATION_TURN, PLAYER_VR_EXPLORATION_DISCUSSION_TURN]) {
 				draw shape buffer (20,10) color: display_water_flow ? river : blues[world.water_pollution_class_current(self)]  ;
 			}
-			species waste_on_canal visible: !(stage in [PLAYER_DISCUSSION_TURN,  PLAYER_ACTION_TURN, PLAYER_VR_EXPLORATION_TURN]) and display_water_flow  {
+			species waste_on_canal visible: !(stage in [PLAYER_DISCUSSION_TURN,  PLAYER_ACTION_TURN, PLAYER_VR_EXPLORATION_TURN, PLAYER_VR_EXPLORATION_DISCUSSION_TURN]) and display_water_flow  {
 					draw sphere(20) color: #lightblue;
 			}
-			species urban_area visible: !(stage in [PLAYER_DISCUSSION_TURN, PLAYER_ACTION_TURN, PLAYER_VR_EXPLORATION_TURN]);
+			species urban_area visible: !(stage in [PLAYER_DISCUSSION_TURN, PLAYER_ACTION_TURN, PLAYER_VR_EXPLORATION_TURN, PLAYER_VR_EXPLORATION_DISCUSSION_TURN]);
 			
 			species village {
 				if (stage = PLAYER_VR_EXPLORATION_TURN and (id in exploration_ended)) {
@@ -1185,7 +1188,7 @@ experiment VR_GAME autorun: true type: unity{
 				}*/
 				
 			}	
-			species village position: {0,0,0.01} visible: !(stage in [ PLAYER_VR_EXPLORATION_TURN]) {
+			species village position: {0,0,0.01} visible: !(stage in [ PLAYER_VR_EXPLORATION_TURN, PLAYER_VR_EXPLORATION_DISCUSSION_TURN]) {
 				int i <- id;
 				float size <- w_width/20;
 				float spacing <- size * 1;
@@ -1229,6 +1232,9 @@ experiment VR_GAME autorun: true type: unity{
 			/********************** MINI MAP DISPLAY ******************************/
 			image minimap  visible: stage = PLAYER_VR_EXPLORATION_TURN;
 			
+			image instruction_level_image  visible: stage = PLAYER_VR_EXPLORATION_DISCUSSION_TURN;
+			
+			
 			//image minimap size: {mini_map_x_coeff,mini_map_y_coeff} position:{0.0,0} visible: stage = PLAYER_VR_EXPLORATION_TURN;
 			//image minimap size: {mini_map_x_coeff,mini_map_y_coeff} position:{0.6,0} visible: stage = PLAYER_VR_EXPLORATION_TURN;
 			//image minimap size: {mini_map_x_coeff,mini_map_y_coeff} position:{0.0,0.5} visible: stage = PLAYER_VR_EXPLORATION_TURN;
@@ -1243,7 +1249,7 @@ experiment VR_GAME autorun: true type: unity{
 			//species pointInterest visible: stage = PLAYER_VR_EXPLORATION_TURN;
 			
 			
-			event #mouse_down action: affiche_coord;
+			//event #mouse_down action: affiche_coord;
 			
 		}
 	

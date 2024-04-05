@@ -15,10 +15,20 @@ public class ConnectionClass
     public static ConnectionClass CreateFromJSON(string jsonString, DisplayManagement dm)
     {
         ConnectionClass cc = JsonUtility.FromJson<ConnectionClass>(jsonString);
-        cc.dm = dm;
+        cc.dm = dm; 
         return cc;
     }
 
+ 
+
+    public void DisplayLevel(int productionC, int waterwasteC, int solidwasteSoilC, int solidwasteCanalC)
+    {
+        displaySolidClass(solidwasteSoilC, solidwasteCanalC);
+        displayWaterClass(waterwasteC);
+        displayProductionClass(productionC); 
+        displayWaterColor(waterwasteC);
+
+    }
 
 
     private void displaylvl1(GameObject lvl2, GameObject lvl3, GameObject lvl4, GameObject lvl5)
@@ -219,12 +229,12 @@ public class ConnectionClass
     public void displayWaterColor(int classValue){
         switch(classValue){
             case 0:
-                dm.material_tree1.SetColor("_Pollution_Color1", dm.TreeColorLvl1);
-                dm.material_tree2.SetColor("_Pollution_Color", dm.TreeColorLvl1);
-                dm.material_plant.SetColor("_Pollution_Color", dm.TreeColorLvl1);
+               // dm.material_tree1.SetColor("_Pollution_Color1", dm.TreeColorLvl1);
+                //dm.material_tree2.SetColor("_Pollution_Color", dm.TreeColorLvl1);
+                //dm.material_plant.SetColor("_Pollution_Color", dm.TreeColorLvl1);
                 dm.material_canalWater.SetColor("_Color0", dm.CanalWaterColorLvl1);
                 dm.material_fieldWater.SetColor("_Color0", dm.FieldWaterColorLvl1);
-                dm.material_grass.SetColor("_PollutionColor", dm.TreeColorLvl1);
+               // dm.material_grass.SetColor("_PollutionColor", dm.TreeColorLvl1);
                 break;
             case 1:
                 dm.material_tree1.SetColor("_Pollution_Color1", dm.TreeColorLvl2);
