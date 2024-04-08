@@ -21,7 +21,7 @@ public class Timer : MonoBehaviour
     // ############################################################
 
     void Start() {
-        timerDuration = PlayerPrefs.GetFloat("duration");
+        timerDuration =  PlayerPrefs.GetFloat("duration");
        timeRemaining = timerDuration;
         midTime = timeRemaining / 2;
         DisplayTime(timeRemaining-1);

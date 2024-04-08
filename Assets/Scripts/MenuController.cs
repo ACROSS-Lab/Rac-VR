@@ -16,6 +16,8 @@ public class MenuController : MonoBehaviour
         //Adds a listener to the main slider and invokes a method when the value changes.
         mainSlider.onValueChanged.AddListener(delegate { ValueChangeCheck(); });
         gameDurationText.SetText("Game duration: " + mainSlider.value + "s");
+        PlayerPrefs.SetFloat("duration", mainSlider.value);
+        
     }
 
     // Invoked when the value of the slider changes.
