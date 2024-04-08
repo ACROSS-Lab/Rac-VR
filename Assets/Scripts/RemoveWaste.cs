@@ -40,8 +40,9 @@ public class RemoveWaste : MonoBehaviour
 		} else
         {
 
-			gameInfotext.SetText("Đang tải môi trường!");
-			SceneManager.LoadScene("RAC_MainScene - Normal");
+			//gameInfotext.SetText("Đang tải môi trường!");
+			gameInfotext.enabled = false;
+			ManageSceneLoading.Instance.LoadScene("RAC_MainScene - Normal");
 		}
 		
 
