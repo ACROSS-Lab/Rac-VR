@@ -1155,7 +1155,7 @@ experiment VR_GAME autorun: true type: unity{
 			
 				
 			
-			light #ambient intensity: ambient_intensity;
+			light #ambient intensity: stage in [PLAYER_VR_EXPLORATION_DISCUSSION_TURN] ? 255: ambient_intensity;
 			camera 'default' distance: 7800 location: #from_above target: {3000,2700,0};
 			
 			/********************** MAIN MAP DISPLAY ******************************/
