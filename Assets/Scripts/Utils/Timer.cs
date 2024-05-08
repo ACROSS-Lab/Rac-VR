@@ -12,7 +12,7 @@ public class Timer : MonoBehaviour
     [SerializeField] private Color midColor = new Color(255,218,0,255);
     [SerializeField] private Color endColor = new Color(255,0,0,255);
     
-    private static float timerDuration;
+    private static float timerDuration = 90;
     
     private bool timerRunning = false;
     private float midTime;
@@ -21,7 +21,7 @@ public class Timer : MonoBehaviour
     // ############################################################
 
     void Start() {
-        timerDuration =  PlayerPrefs.GetFloat("duration");
+       // timerDuration =  PlayerPrefs.GetFloat("duration");
        timeRemaining = timerDuration;
         midTime = timeRemaining / 2;
         DisplayTime(timeRemaining-1);
