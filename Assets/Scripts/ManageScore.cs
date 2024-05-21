@@ -28,11 +28,12 @@ public class ManageScore : MonoBehaviour
 
     void Update()
     {
-        float val;
+       /* float val;
 
        _leftController.TryReadSingleValue(button, out val);
         if (val > 0)
             ResetScore();
+       */
 
     }
 
