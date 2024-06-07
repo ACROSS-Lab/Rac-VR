@@ -133841,7 +133841,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 11357f5bde3094cf28bf436a28ed0082, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  host: 10.0.103.89
+  host: 10.0.64.244
   port: 8080
   currentState: 0
 --- !u!1001 &1376472036
@@ -186903,7 +186903,7 @@ Transform:
   m_GameObject: {fileID: 1976572620}
   serializedVersion: 2
   m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
-  m_LocalPosition: {x: 0.18901, y: -0.85797, z: -0.71782}
+  m_LocalPosition: {x: 0, y: 0, z: 0}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_ConstrainProportionsScale: 0
   m_Children:
@@ -191050,7 +191050,7 @@ GameObject:
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
-  m_IsActive: 1
+  m_IsActive: 0
 --- !u!4 &2015583289
 Transform:
   m_ObjectHideFlags: 0
@@ -191089,14 +191089,23 @@ MonoBehaviour:
       colorIndex: 0
       position:
         serializedVersion: 2
-        x: 405.3125
-        y: 99.59375
+        x: 53.3125
+        y: 106.59375
         width: 100
-        height: 16
+        height: 32
       isBreakpoint: 0
       isSequence: 0
       hideUnused: 0
-      transitions: []
+      transitions:
+      - fsmEvent:
+          name: Next
+          isSystemEvent: 0
+          isGlobal: 0
+        toState: 
+        linkStyle: 0
+        linkConstraint: 0
+        linkTarget: 0
+        colorIndex: 0
       actionData:
         actionNames:
         - HutongGames.PlayMaker.Actions.EnableCollider
@@ -251079,6 +251088,22 @@ PrefabInstance:
       propertyPath: m_Enabled
       value: 1
       objectReference: {fileID: 0}
+    - target: {fileID: 2736989367008923113, guid: 1f133936515a11b4ab1f55618b13927b, type: 3}
+      propertyPath: m_UIScrollAction.m_Action.m_Id
+      value: fa2c2cd6-3838-4366-8e1b-0df070f97494
+      objectReference: {fileID: 0}
+    - target: {fileID: 2736989367008923113, guid: 1f133936515a11b4ab1f55618b13927b, type: 3}
+      propertyPath: m_IsTrackedAction.m_Action.m_Id
+      value: 30c2d2f2-7509-4a26-b0b9-68bcd2f4cce9
+      objectReference: {fileID: 0}
+    - target: {fileID: 2736989367008923113, guid: 1f133936515a11b4ab1f55618b13927b, type: 3}
+      propertyPath: m_UIScrollAction.m_Action.m_Name
+      value: UI Scroll
+      objectReference: {fileID: 0}
+    - target: {fileID: 2736989367008923113, guid: 1f133936515a11b4ab1f55618b13927b, type: 3}
+      propertyPath: m_IsTrackedAction.m_Action.m_Name
+      value: Is Tracked
+      objectReference: {fileID: 0}
     - target: {fileID: 5420171448323775402, guid: 1f133936515a11b4ab1f55618b13927b, type: 3}
       propertyPath: m_TagString
       value: Untagged
@@ -251117,7 +251142,7 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 5420171450070345718, guid: 1f133936515a11b4ab1f55618b13927b, type: 3}
       propertyPath: m_LocalPosition.y
-      value: 2
+      value: 1.5
       objectReference: {fileID: 0}
     - target: {fileID: 5695279407955107026, guid: 1f133936515a11b4ab1f55618b13927b, type: 3}
       propertyPath: m_RenderShadows
@@ -251129,15 +251154,15 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 6696632354427576971, guid: 1f133936515a11b4ab1f55618b13927b, type: 3}
       propertyPath: m_LocalPosition.x
-      value: 7
+      value: 7.83
       objectReference: {fileID: 0}
     - target: {fileID: 6696632354427576971, guid: 1f133936515a11b4ab1f55618b13927b, type: 3}
       propertyPath: m_LocalPosition.y
-      value: 1
+      value: 0
       objectReference: {fileID: 0}
     - target: {fileID: 6696632354427576971, guid: 1f133936515a11b4ab1f55618b13927b, type: 3}
       propertyPath: m_LocalPosition.z
-      value: -9
+      value: -11.33
       objectReference: {fileID: 0}
     - target: {fileID: 6696632354427576971, guid: 1f133936515a11b4ab1f55618b13927b, type: 3}
       propertyPath: m_LocalRotation.w

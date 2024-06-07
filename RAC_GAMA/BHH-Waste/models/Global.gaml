@@ -35,7 +35,7 @@ import "Parameters.gaml"
 global {
 	int exploration_duration <- 30; //in s
 	float mini_map_x_coeff <- 0.4;
-	float mini_map_y_coeff <- 0.4;
+	float mini_map_y_coeff <- 0.4; 
 	bool CHOOSING_VILLAGE_FOR_POOL <- false;
 	bool CHOOSEN_VILLAGE_FOR_POOL <- false;
 	
@@ -52,11 +52,11 @@ global {
 	
 	bool create_facility_treatment <- false;
 	
-	bool display_productivity <- false parameter:"Display field productivity" category: "Display" ;
+	bool display_productivity <- false;// parameter:"Display field productivity" category: "Display" ;
 	
-	bool display_solid_waste <- false parameter:"Display solid waste" category: "Display" ;
-	bool display_water_waste <- false parameter:"Display water waste" category: "Display" ;
-	bool display_total_waste <- false parameter:"Display total waste" category: "Display" ;
+	bool display_solid_waste <- false;// parameter:"Display solid waste" category: "Display" ;
+	bool display_water_waste <- false;// parameter:"Display water waste" category: "Display" ;
+	bool display_total_waste <- false;// parameter:"Display total waste" category: "Display" ;
 	bool display_water_flow <- true;
 	bool draw_territory <- false;
 	bool extra_turn <- false;
@@ -840,7 +840,7 @@ global {
 	
 	action before_exploration_phase{
 		stage <- PLAYER_VR_EXPLORATION_TURN;
-		start_exploration_turn_time <- machine_time;
+		start_exploration_turn_time <- gama.machine_time;
 		do update_indicators_unity;
 		enter_or_exit_VR <- true;
 		
@@ -1058,7 +1058,7 @@ global {
 	}
 	action end_of_estimation_phase {
 		stage <- PLAYER_DISCUSSION_TURN;
-		start_discussion_turn_time <- machine_time;
+		start_discussion_turn_time <- gama.machine_time;
 	}
 	
 	action end_of_VR_discussion_phase {
@@ -1094,7 +1094,7 @@ global {
 			//}else {
 				stage <- PLAYER_VR_EXPLORATION_DISCUSSION_TURN;
 				
-				start_discussion_turn_time <- machine_time;
+				start_discussion_turn_time <- gama.machine_time;
 			//}
 		}		
 	}
@@ -1102,7 +1102,7 @@ global {
 	
 //REFLEXES
 	reflex indicators_computation when: stage = COMPUTE_INDICATORS and continue_to_compute {
-		float t <- machine_time;
+		float t <- gama.machine_time;
 		
 		do compute_indicators;
 		
@@ -1238,6 +1238,7 @@ species unity_linker parent: abstract_unity_linker {
 	bool use_physics_for_player <- false;
 	
 	action send_world;
+	
 	
 	action add_to_send_parameter(map map_to_send) {
 		map_to_send <+ "village_id"::(length(unity_player)-1); // VILLAGE NUMBER MUST BE DYNAMICALLY ASSIGNED

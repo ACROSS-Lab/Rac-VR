@@ -52,6 +52,8 @@ public class GameManager : MonoBehaviour
 
     public Timer timer;
 
+    BoxCollider[] RacObjectsCollider;
+
     // [Header("Simulation parameters")]
     //    [SerializeField] private bool geometriesExpected = false;
     //   [SerializeField] private bool groundExpected = false;
@@ -104,6 +106,8 @@ public class GameManager : MonoBehaviour
     private Vector3 initialPosition;
     private Quaternion initialRotation;
 
+    
+
 
     // ############################################ UNITY FUNCTIONS ############################################
     void Awake() {
@@ -125,18 +129,41 @@ public class GameManager : MonoBehaviour
     }
 
     void Start() {
-        // InitAgentsList();é
-//        geometriesInitialized = false;
-//        simulationParametersHandled = false;
-      //  handleGroundRequested = false;
-       // handlePlayerRequested = false;
-       // handleGeometriesRequested = false;
         villageId = -1;
-        initialPosition = new Vector3(player.transform.position.x, player.transform.position.y+1.0f, player.transform.position.z);
+        initialPosition = new Vector3(player.transform.position.x, player.transform.position.y, player.transform.position.z);
         initialRotation = new Quaternion(player.transform.rotation.x, player.transform.rotation.y, player.transform.rotation.z, player.transform.rotation.w);
+        Debug.Log("Start position: " + initialPosition);
+        GameObject[] objects = GameObject.FindGameObjectsWithTag("Ground_RAC");
+        GameObject[] objects2 = GameObject.FindGameObjectsWithTag("Water_RAC");
+        RacObjectsCollider = new BoxCollider[objects.Length + objects2.Length];
+        for (int i = 0; i < objects.Length;i++)
+        {
+            RacObjectsCollider[i] = objects[i].GetComponent<BoxCollider>();
+        }
+        for (int i = 0; i < objects2.Length; i++)
+        {
+         
+            RacObjectsCollider[objects.Length + i] = objects2[i].GetComponent<BoxCollider>();
+        }
         playerMovement(false);
+        setColliderRAC(false);
+        
     }
 
+    public void debugGama(String mes)
+    {
+        ConnectionManager.Instance.SendExecutableExpression("do debug_gama(\"" + mes + "\");");
+
+    }
+
+    public void Reset()
+    {
+        player.transform.position = initialPosition;
+        player.transform.rotation = initialRotation;
+        playerMovement(false);
+        setColliderRAC(false);
+
+    }
     void FixedUpdate() {
        
           
@@ -155,10 +182,9 @@ public class GameManager : MonoBehaviour
         {
             endOfSessionCanvas.SetActive(false);
             tutoOverlay.SetActive(true);
-            player.transform.SetLocalPositionAndRotation(initialPosition, initialRotation);
             UpdateClassIndicator();
             UpdateGameState(GameState.READY);
-            
+
         }
        
     }
@@ -398,9 +424,18 @@ public class GameManager : MonoBehaviour
         classIndicators.displayProductionClass(classIndicators.productionClass[villageId]);
         classIndicators.displayWaterColor(classIndicators.waterwasteClass[villageId]);
         //Debug.Log("3 villageId: " + villageId);
-
+      
        classIndicators = null;
-    } 
+    }
+
+    public void setColliderRAC(bool active)
+    {
+        foreach (BoxCollider col in RacObjectsCollider)
+        {
+            col.enabled = active;
+        }
+        
+    }
 
     // ############################################# HANDLERS ########################################
     private void HandleConnectionStateChange(ConnectionState state) {
@@ -502,9 +537,9 @@ public class GameManager : MonoBehaviour
 
     public void StartGame() {
         playerMovement(true);
+        setColliderRAC(true);
         UpdateGameState(GameState.GAME);
 
-         
     }
 
     // ############################################################

@@ -48,7 +48,8 @@ public class Timer : MonoBehaviour
                 {
                     //  timerRunning = false;
                     GameManager.Instance.UpdateGameState(GameState.IDLE);
-                    ConnectionManager.Instance.SendExecutableExpression("do exploration_over(" + GameManager.Instance.GetVillageId() + ");");
+                   GameManager.Instance.Reset();
+                   ConnectionManager.Instance.SendExecutableExpression("do exploration_over(" + GameManager.Instance.GetVillageId() + ");");
                     Reset();
 
             }
@@ -77,7 +78,7 @@ public class Timer : MonoBehaviour
     public void Reset() {
         timerRunning = false;
         timeRemaining = timerDuration;
-        GameManager.Instance.playerMovement(false);
+        GameManager.Instance.Reset();
         endOfSessionCanvas.SetActive(true);
 
     }

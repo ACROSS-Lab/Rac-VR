@@ -404,7 +404,7 @@ global {
 		if turn = turn_see_indicators +1 and !always_display_chart_by_vil{
 			show_chart_by_vil <- false;
 		}
-		remaining_time <- int(time_for_exploration - machine_time/1000.0 + start_exploration_turn_time/1000.0);
+		remaining_time <- int(time_for_exploration - gama.machine_time/1000.0 + start_exploration_turn_time/1000.0);
 		if remaining_time <= 0 {
 			do end_of_exploration_phase;
 			if !always_display_sub_charts {
@@ -414,14 +414,14 @@ global {
 	}
 	
 	reflex end_of_discussion_turn when: use_timer_for_discussion and stage = PLAYER_DISCUSSION_TURN {
-		remaining_time <- int(time_for_discussion - machine_time/1000.0 + start_discussion_turn_time/1000.0); 
+		remaining_time <- int(time_for_discussion - gama.machine_time/1000.0 + start_discussion_turn_time/1000.0); 
 		if remaining_time <= 0 {
 			do end_of_discussion_phase;		
 		}
 	}
 	
 	reflex end_of_VR_iscussion_turn when: use_timer_for_discussion and stage = PLAYER_VR_EXPLORATION_DISCUSSION_TURN {
-		remaining_time <- int(time_for_estimation_discussion - machine_time/1000.0 + start_discussion_turn_time/1000.0); 
+		remaining_time <- int(time_for_estimation_discussion - gama.machine_time/1000.0 + start_discussion_turn_time/1000.0); 
 		if remaining_time <= 0 {
 			do end_of_VR_discussion_phase;	
 		}
@@ -451,7 +451,7 @@ global {
 	
 	reflex end_of_choosing_village when: CHOOSING_VILLAGE_FOR_POOL {
 		
-		remaining_time_for_choosing_village <- int(time_for_choosing_village - machine_time/1000.0  +start_choosing_village_time/1000.0); 
+		remaining_time_for_choosing_village <- int(time_for_choosing_village - gama.machine_time/1000.0  +start_choosing_village_time/1000.0); 
 		if remaining_time_for_choosing_village <= 0 or chosen_village > -1 or PASS_CHOOSING_VILLAGE{
 			
 		if (chosen_village > -1){
@@ -646,6 +646,11 @@ experiment VR_GAME autorun: true type: unity{
 	//parameter  days var:days <- 50;
 	
 	parameter isDemo var: isDemo <- false;
+	
+	
+	action debug_gama(string mes) {
+		write mes;
+	}
 	
 	/*action _init_ {
 		//Requires latest version of GAMA 1.8.2

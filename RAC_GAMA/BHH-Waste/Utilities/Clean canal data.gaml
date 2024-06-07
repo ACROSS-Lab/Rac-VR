@@ -18,7 +18,7 @@ global {
 	bool clean_canal_data <- false;
 
 	geometry shape <- envelope(Hydrologie_shape_file);
-	float tolerance <- 0.1#m parameter: true;
+	float tolerance <- 0.1#m ;//parameter: true;
 	
 	
 	init {
