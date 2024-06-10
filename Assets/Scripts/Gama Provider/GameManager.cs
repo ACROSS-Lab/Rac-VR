@@ -14,6 +14,8 @@ public class GameManager : MonoBehaviour
 {
     [Header("Base GameObjects")]
     [SerializeField] private GameObject player;
+    int numWasteStart;
+
 
     // [SerializeField] private GameObject PNJ1;
     [SerializeField] private GameObject WasteDisplayM;
@@ -53,6 +55,7 @@ public class GameManager : MonoBehaviour
     public Timer timer;
 
     BoxCollider[] RacObjectsCollider;
+    GameObject[] RacObjects;
 
     // [Header("Simulation parameters")]
     //    [SerializeField] private bool geometriesExpected = false;
@@ -136,18 +139,39 @@ public class GameManager : MonoBehaviour
         GameObject[] objects = GameObject.FindGameObjectsWithTag("Ground_RAC");
         GameObject[] objects2 = GameObject.FindGameObjectsWithTag("Water_RAC");
         RacObjectsCollider = new BoxCollider[objects.Length + objects2.Length];
+        RacObjects = new GameObject[objects.Length + objects2.Length];
         for (int i = 0; i < objects.Length;i++)
         {
             RacObjectsCollider[i] = objects[i].GetComponent<BoxCollider>();
+            RacObjects[i] = objects[i];
+
         }
         for (int i = 0; i < objects2.Length; i++)
         {
-         
+
+            RacObjects[objects.Length + i] = objects2[i];
             RacObjectsCollider[objects.Length + i] = objects2[i].GetComponent<BoxCollider>();
         }
         playerMovement(false);
         setColliderRAC(false);
-        
+
+        foreach (GameObject obj in RacObjects)
+            obj.SetActive(false);
+
+    }
+
+    public int getNumberOfWastes()
+    {
+        int numVal = 0;
+        foreach (GameObject obj in RacObjects) {
+            if (obj.active)
+                numVal++;
+        }
+        return numVal;
+    }
+    public int getNumWasteStart()
+    {
+        return numWasteStart ;
     }
 
     public void debugGama(String mes)
@@ -162,6 +186,9 @@ public class GameManager : MonoBehaviour
         player.transform.rotation = initialRotation;
         playerMovement(false);
         setColliderRAC(false);
+        foreach (GameObject obj in RacObjects)
+            obj.SetActive(false);
+
 
     }
     void FixedUpdate() {
@@ -415,6 +442,8 @@ public class GameManager : MonoBehaviour
    */
     private void UpdateClassIndicator() {
 
+        foreach (GameObject obj in RacObjects)
+            obj.SetActive(true);
 
         //Debug.Log("villageId: " + villageId + " " + classIndicators.solidwasteSoilClass[villageId] +" " + classIndicators.solidwasteCanalClass[villageId]);
         classIndicators.displaySolidClass(classIndicators.solidwasteSoilClass[villageId], classIndicators.solidwasteCanalClass[villageId]);
@@ -426,6 +455,7 @@ public class GameManager : MonoBehaviour
         //Debug.Log("3 villageId: " + villageId);
       
        classIndicators = null;
+        numWasteStart = getNumberOfWastes();
     }
 
     public void setColliderRAC(bool active)

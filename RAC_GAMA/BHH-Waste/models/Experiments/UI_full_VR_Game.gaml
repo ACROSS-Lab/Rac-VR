@@ -706,14 +706,22 @@ experiment VR_GAME autorun: true type: unity{
 	action exploration_start(int village_id) {
 		exploration_started << village_id;
 		//write "exploration_started: " + village_id;
-		
+		 
 	}
-	action exploration_over(int village_id) {
+	action exploration_over(int village_id, int waste_total,int waste_collected) {
 		exploration_ended << village_id;
 		exploration_started >> village_id;
 		
-		//write "exploration_ended: " + village_id;
-		
+		//write "exploration_ended: " sample(village_id) + " "+ sample(waste_collected) + " " + sample(waste_total);
+		ask village[village_id] {
+			float coeff <- waste_total = 0 ? 1.0 : (1 - impact_max_waste_collection) + (impact_max_waste_collection * (1 - waste_collected/waste_total));
+			ask canals {
+				solid_waste_level <- solid_waste_level * coeff;
+			} 
+			ask cells{
+				solid_waste_level <- solid_waste_level * coeff;
+			}
+		}
 	}
 	
 	

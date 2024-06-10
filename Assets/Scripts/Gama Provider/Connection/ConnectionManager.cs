@@ -206,6 +206,7 @@ public class ConnectionManager : WebSocketConnector
             {"expr", expression}
         };
         string jsonStringExpression = JsonConvert.SerializeObject(jsonExpression);
+        Debug.Log("jsonStringExpression: " + jsonStringExpression);
         SendMessageToServer(jsonStringExpression, new Action<bool>((success) => {
             if (!success) {
                 Debug.LogError("ConnectionManager: Failed to send executable expression");
