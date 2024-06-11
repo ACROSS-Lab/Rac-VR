@@ -844,6 +844,14 @@ global {
 		do update_indicators_unity;
 		enter_or_exit_VR <- true;
 		
+		map to_send <- class_wastes();
+		
+		ask (unity_linker) {
+			do send_message mes: to_send players: player_agents.values ;
+		}
+	}
+	
+	map class_wastes {
 		map to_send;
 		to_send <+ "solidwasteSoilClass"::solidwasteSoilClass;
 		to_send <+ "solidwasteCanalClass"::solidwasteCanalClass;
@@ -854,10 +862,7 @@ global {
 		to_send <+ "solidwasteCanalClassLastTurn"::solidwasteCanalClassLastTurn ;
 		to_send <+ "waterwasteClassLastTurn"::waterwasteClassLastTurn ;
 		to_send <+ "productionClassLastTurn"::productionClassLastTurn ;
-			
-		ask (unity_linker) {
-			do send_message mes: to_send players: player_agents.values ;
-		}
+		return to_send;
 	}
 	
 	
@@ -1239,14 +1244,34 @@ species unity_linker parent: abstract_unity_linker {
 	
 	action send_world;
 	
+	map<string,int> player_to_village;
 	
-	action add_to_send_parameter(map map_to_send) {
-		map_to_send <+ "village_id"::(length(unity_player)-1); // VILLAGE NUMBER MUST BE DYNAMICALLY ASSIGNED
+	action add_to_send_parameter(agent player, map map_to_send) {
+		
+		list<string> str <- player.name split_with " ";
+		
+		int village_id <- int(last(str)) - 1;
+		if (player.name in player_to_village.keys) {
+			village_id <- player_to_village[player.name];
+		}
+		map_to_send <+ "village_id"::village_id; // VILLAGE NUMBER MUST BE DYNAMICALLY ASSIGNED
 		map_to_send <+ "exploration_duration"::exploration_duration;
+		 
+		
 		remove key: "position" from: map_to_send;
-		
-		
 			
+	}
+	
+	action after_creating_and_setting_player(string player_id) {
+		int village_id <- int(player_to_village[player_id]);
+		if ((stage = PLAYER_VR_EXPLORATION_TURN) and not ( village_id in exploration_ended) )
+		{
+			map to_send <- world.class_wastes();
+		
+			ask (unity_linker) {
+				do send_message mes: to_send players: unity_player where (each.name = player_id) ;
+			}
+		}
 	}
 }
 

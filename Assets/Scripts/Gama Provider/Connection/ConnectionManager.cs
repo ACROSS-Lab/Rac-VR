@@ -225,7 +225,29 @@ public class ConnectionManager : WebSocketConnector
             string myIP = Dns.GetHostByName(hostName).AddressList[0].ToString();
 
             string lastIP = myIP.Split(".")[3];
-            connectionId = "Player_" + lastIP;// + lastIP;
+            if ("103".Equals(lastIP))
+            {
+                connectionId = "Green - village 4";
+            }
+            else if ("104".Equals(lastIP))
+            {
+                connectionId = "Red - village 1";
+
+            } 
+            else if ("106".Equals(lastIP))
+            {
+                connectionId = "Yellow - village 2";
+            }
+
+            else if ("105".Equals(lastIP))
+            {
+                connectionId = "Blue - village 3";
+            }
+            else 
+            {
+                connectionId = "Green - village 4";
+            }
+            // connectionId =   lastIP;// + lastIP;
         }
         return connectionId;
     }

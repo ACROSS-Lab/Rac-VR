@@ -79,7 +79,7 @@ global {
 	bool no_starting_actions <- true;
 	bool about_to_pause <- false;
 	bool PASS_CHOOSING_VILLAGE <- false;
-	bool display_water_flow <- true;
+	bool display_water_flow <- false;
 	stacked_chart global_chart;
 	int chosen_village <- -1;
 	map<village,list<string>> village_actions <- nil;
@@ -682,9 +682,11 @@ experiment VR_GAME autorun: true type: unity{
 	action remove_player(string id_input) {
 		if (not empty(unity_player)) {
 			ask first(unity_player where (each.name = id_input)) {
-				do die;
+				exploration_started >> (int(self));
+		
 			}
 		}
+		
 	}
 	
 	action move_player_external(int id, int x, int y, int a) {
@@ -700,8 +702,16 @@ experiment VR_GAME autorun: true type: unity{
 		//	write "send init data to: " + id;
 			do send_init_data(id); 
 		}
+		ask unity_linker {
+			do after_creating_and_setting_player(id);
+		}
+		/*map to_send <- class_wastes();
+		
+		ask (unity_linker) {
+			do send_message mes: to_send players: player_agents.values ;
+		}*/
 	}
-	
+	  
 	
 	action exploration_start(int village_id) {
 		exploration_started << village_id;
@@ -1192,13 +1202,13 @@ experiment VR_GAME autorun: true type: unity{
 					float size <- w_width/10;
 					draw numbers_start[id] at: {id * w_width/10 ,0}   size: w_width/10;
 				}
-				/* else if not (stage in [PLAYER_ESTIMATION_TURN, PLAYER_VR_EXPLORATION_DISCUSSION_TURN]){
+				 else if not (stage in [PLAYER_ESTIMATION_TURN, PLAYER_VR_EXPLORATION_TURN, PLAYER_VR_EXPLORATION_DISCUSSION_TURN]){
 					float size <- w_width/10;
 					draw numbers[id] at: shape.centroid + position[id] size: w_width/10;
 					draw shape-(shape-40) color: color;
 					
 				
-				}*/
+				}
 				
 			}	
 			species village position: {0,0,0.01} visible: !(stage in [ PLAYER_VR_EXPLORATION_TURN, PLAYER_VR_EXPLORATION_DISCUSSION_TURN]) {
