@@ -9,7 +9,7 @@
 model Parameters
 
 global {
-	float impact_max_waste_collection <- 0.3;
+	float impact_max_waste_collection <- 0.5;
 	
 	/******************* GENERAL PARAMETERS *************************************/
 	bool parallel_computation <- false;

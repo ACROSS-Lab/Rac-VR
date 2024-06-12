@@ -33,7 +33,7 @@ import "Parameters.gaml"
  
 
 global {
-	int exploration_duration <- 30; //in s
+	int exploration_duration <- 90; //in s
 	float mini_map_x_coeff <- 0.4;
 	float mini_map_y_coeff <- 0.4; 
 	bool CHOOSING_VILLAGE_FOR_POOL <- false;
