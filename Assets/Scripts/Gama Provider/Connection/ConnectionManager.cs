@@ -77,7 +77,7 @@ public class ConnectionManager : WebSocketConnector
 
     protected override void HandleConnectionOpen(object sender, System.EventArgs e)
     {
-        bool UseHeartbeat = false;
+        bool UseHeartbeat = true;
         var jsonId = new Dictionary<string,string> {
                 {"type", "connection"},
                 { "id", GetConnectionId()},
