@@ -94,6 +94,9 @@ species inhabitant {
 			float to_the_canal <- solid_waste_day_tmp * part_solid_waste_canal;
 			typical_values<< to_the_canal;
 			typical_values<< solid_waste_day_tmp - to_the_canal;
+		} else {
+			typical_values<< 0.0;
+			typical_values<< 0.0;
 		}
 		
 	// WATER WASTE
@@ -110,6 +113,9 @@ species inhabitant {
 			typical_values << to_the_canal * (1 - rate_decrease_due_to_treatment);
 			typical_values << w - to_the_canal; 
 			
+		} else {
+			typical_values << 0.0;
+			typical_values << 0.0; 
 		}
 		return typical_values;
 			

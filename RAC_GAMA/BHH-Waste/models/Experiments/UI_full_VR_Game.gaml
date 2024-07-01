@@ -149,7 +149,7 @@ global {
 	image_file garbage_icon <- image_file("../../includes/icons/garbage.png");
 	image_file city_icon <- image_file("../../includes/icons/logo ville en bas.png");
 	image_file score_icon <- image_file("../../includes/icons/trophy.png");
-	image_file pollution_icon <- image_file("../../includes/icons/Total_waste.png");
+	image_file pollution_icon <- image_file("../../includes/icons/Total_Waste.png");
 	image_file vr_icon <- image_file("../../includes/icons/ICON_VR.png");
 	image_file graph_icon <- image_file("../../includes/icons/graph.png");
 	//image_file background <- image_file("../../includes/icons/fond.jpeg");
