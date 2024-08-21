@@ -16,34 +16,33 @@ public class Timer : MonoBehaviour
     
     private bool timerRunning = false;
     private float midTime;
-    private float timeRemaining;
+    public float timeRemaining;
 
     public bool InfoSentToGAMA = false;
 
+    public static Timer Instance = null;
+
     // ############################################################
+
+
+    private void Awake()
+    {
+        Instance = this;
+
+    }
+
 
     void Start() {
         timeRemaining = timerDuration;
         midTime = timeRemaining / 2;
         DisplayTime(timeRemaining-1);
         timerRunning = true;
-        InfoSentToGAMA = false;
     }
 
-     
-    private void initPlayer()
-    {
-        Dictionary<string, string> args = new Dictionary<string, string> {
-            {"id",ConnectionManager.Instance.getUseMiddleware() ? ConnectionManager.Instance.GetConnectionId()  : ("\"" + ConnectionManager.Instance.GetConnectionId() +  "\"") }
-        };
-        ConnectionManager.Instance.SendExecutableAsk("active_player", args);
-    }
-
+ 
 
     void Update() {
 
-        if (!InfoSentToGAMA)
-            initPlayer();
         if (timerRunning)
             {
                 if (timeRemaining > 0)

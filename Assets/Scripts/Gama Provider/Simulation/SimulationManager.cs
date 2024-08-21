@@ -14,7 +14,6 @@ public class SimulationManager : MonoBehaviour
     [SerializeField] protected float GamaCRSOffsetX = 0.0f;
     [SerializeField] protected float GamaCRSOffsetY = 0.0f;
 
-    GAMAMessage message = null;
 
 
     // Z offset and scale
@@ -134,23 +133,9 @@ public class SimulationManager : MonoBehaviour
             if (TimerSendPosition <= 0.0f)
                 UpdatePlayerPosition();
         }
-        if (message != null)
-        {
-            initPlayer();
-            message = null;
-        }
+      
 
     }
-
-
-    private void initPlayer()
-    {
-        Dictionary<string, string> args = new Dictionary<string, string> {
-            {"id",ConnectionManager.Instance.getUseMiddleware() ? ConnectionManager.Instance.GetConnectionId()  : ("\"" + ConnectionManager.Instance.GetConnectionId() +  "\"") }
-        };
-        ConnectionManager.Instance.SendExecutableAsk("active_player", args);
-    }
-
 
     private void Update()
     {
@@ -262,7 +247,17 @@ public class SimulationManager : MonoBehaviour
        
 
         ConnectionManager.Instance.SendExecutableAsk("move_player_external", args);
-      
+
+
+        Dictionary<string, string> args2 = new Dictionary<string, string> {
+            {"id",ConnectionManager.Instance.getUseMiddleware() ? ConnectionManager.Instance.GetConnectionId()  : ("\"" + ConnectionManager.Instance.GetConnectionId() +  "\"") },
+            {"time_remaining", "" + ((int)(Timer.Instance.timeRemaining))},
+           
+        };
+
+
+        ConnectionManager.Instance.SendExecutableAsk("update_player_timer", args2);
+
         TimerSendPosition = TimeSendPosition;
     }
     
@@ -281,8 +276,7 @@ public class SimulationManager : MonoBehaviour
 
     private async void HandleServerMessageReceived(String firstKey, String content)
     {
-        Debug.Log("HandleServerMessageReceived: " + content);
-
+       
         if (content == null || content.Equals("{}")) return;
         if (firstKey == null)
         {
@@ -293,10 +287,7 @@ public class SimulationManager : MonoBehaviour
             }
            else if (content.Contains("precision"))
                 firstKey = "precision";
-            else if (content.Contains("start_exploration"))
-                firstKey = "start_exploration";
-
-            else
+             else
             {
                 return;
             }
@@ -320,9 +311,7 @@ public class SimulationManager : MonoBehaviour
                 
 
                 break;
-            case "start_exploration":
-                message = GAMAMessage.CreateFromJSON(content);
-                break;
+        
         }
     }
 
@@ -397,18 +386,4 @@ public static class Extensions
     {
         return (result = obj.GetComponent<T>()) != null;
     }
-}
-
-[System.Serializable]
-public class GAMAMessage
-{
-
-
-    public bool start_exploration;
-
-    public static GAMAMessage CreateFromJSON(string jsonString)
-    {
-        return JsonUtility.FromJson<GAMAMessage>(jsonString);
-    }
-
 }
