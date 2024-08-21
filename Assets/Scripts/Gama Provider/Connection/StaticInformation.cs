@@ -26,7 +26,7 @@ public static class StaticInformation
                 connectionId = "yellow - village 2";
             }
 
-            else if ("105".Equals(lastIP))
+            else if ("15".Equals(lastIP))
             {
                 connectionId = "blue - village 3";
             }
