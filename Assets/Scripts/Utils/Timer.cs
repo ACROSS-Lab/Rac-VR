@@ -12,26 +12,39 @@ public class Timer : MonoBehaviour
     [SerializeField] private Color midColor = new Color(255,218,0,255);
     [SerializeField] private Color endColor = new Color(255,0,0,255);
     
-    private static float timerDuration;
+    private static float timerDuration = 120;
     
     private bool timerRunning = false;
     private float midTime;
     private float timeRemaining;
 
+    public bool InfoSentToGAMA = false;
+
     // ############################################################
 
     void Start() {
-        timerDuration =  PlayerPrefs.GetFloat("duration");
-       timeRemaining = timerDuration;
+        timeRemaining = timerDuration;
         midTime = timeRemaining / 2;
         DisplayTime(timeRemaining-1);
         timerRunning = true;
-
+        InfoSentToGAMA = false;
     }
 
- 
+     
+    private void initPlayer()
+    {
+        Dictionary<string, string> args = new Dictionary<string, string> {
+            {"id",ConnectionManager.Instance.getUseMiddleware() ? ConnectionManager.Instance.GetConnectionId()  : ("\"" + ConnectionManager.Instance.GetConnectionId() +  "\"") }
+        };
+        ConnectionManager.Instance.SendExecutableAsk("active_player", args);
+    }
+
+
     void Update() {
-       if (timerRunning)
+
+        if (!InfoSentToGAMA)
+            initPlayer();
+        if (timerRunning)
             {
                 if (timeRemaining > 0)
                 {
@@ -68,15 +81,17 @@ public class Timer : MonoBehaviour
     public void Reset() {
         timerRunning = false;
         timeRemaining = timerDuration;
+        Dictionary<string, string> args = new Dictionary<string, string> {
+            {"id",ConnectionManager.Instance.getUseMiddleware() ? ConnectionManager.Instance.GetConnectionId()  : ("\"" + ConnectionManager.Instance.GetConnectionId() +  "\"") }
+        };
+        ConnectionManager.Instance.SendExecutableAsk("desactive_player", args);
         SceneManager.LoadScene("EndingMenu");
     }
 
    
     // ############################################################
 
-    public static void SetTimerDuration(float duration) {
-        timerDuration = duration;
-    }
+    
 
     public static float GetTimerDuration() {
         return timerDuration;

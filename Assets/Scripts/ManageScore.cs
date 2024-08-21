@@ -15,27 +15,24 @@ public class ManageScore : MonoBehaviour
 
     private int score = 0;
 
-    public InputHelpers.Button button = InputHelpers.Button.PrimaryButton;
+    public static ManageScore Instance = null; 
 
+    public GameObject XROrigin;  
 
+   private void Awake()
+    {
+        Instance = this;
+        XROrigin = GameObject.FindGameObjectWithTag("Player");
+
+    }
 
     private void Start()
     {
         if (!_leftController.isValid)
             InitializeInputDevice(InputDeviceCharacteristics.Controller | InputDeviceCharacteristics.Left, ref _leftController);
 
+       
     }
-
-    void Update()
-    {
-        float val;
-
-       _leftController.TryReadSingleValue(button, out val);
-        if (val > 0)
-            ResetScore();
-
-    }
-
 
     private void InitializeInputDevice(InputDeviceCharacteristics inputCharacteristics, ref InputDevice inputDevice)
     {
@@ -52,13 +49,26 @@ public class ManageScore : MonoBehaviour
     }
 
 
-   
+    public void sendInformation()
+    {
+        Dictionary<string, string> args = new Dictionary<string, string> {
+            {"id",ConnectionManager.Instance.getUseMiddleware() ? ConnectionManager.Instance.GetConnectionId()  : ("\"" + ConnectionManager.Instance.GetConnectionId() +  "\"") },
+            {"score", "" +score}
+        };
+
+
+        ConnectionManager.Instance.SendExecutableAsk("update_score", args);
+
+    }
+
 
     public void IncrementScore(){
        score++;
        gameScoreText.text = ""+score;
 
         PlayerPrefs.SetFloat("score", score);
+        sendInformation();
+
    } 
  
    public void ResetScore(){
@@ -66,3 +76,7 @@ public class ManageScore : MonoBehaviour
        gameScoreText.text = "0";
    }
 }
+
+
+
+

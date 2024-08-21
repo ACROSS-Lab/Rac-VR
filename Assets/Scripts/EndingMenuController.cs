@@ -13,18 +13,18 @@ public class EndingMenuController : MonoBehaviour
     void Start()
     {
         float score = PlayerPrefs.GetFloat("score");
-        string time = "" + (PlayerPrefs.GetFloat("duration"));
+       /* string time = "" + (PlayerPrefs.GetFloat("duration"));
         float bestScore = PlayerPrefs.HasKey(time) ? PlayerPrefs.GetFloat(time) : score;
         if (score >= bestScore)
         {
             bestScore = score;
             PlayerPrefs.SetFloat(time, bestScore);
 
-        }
+        }*/
 
        
         gameScoretext.SetText("Số điểm của bạn: " + score);
-        gameBestScoretext.SetText("Số điểm cao nhất: " + bestScore);
+      //  gameBestScoretext.SetText("Số điểm cao nhất: " + bestScore);
     }
 
     public void Restart()
