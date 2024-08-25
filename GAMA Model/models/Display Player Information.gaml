@@ -8,6 +8,7 @@
 model DisplayPlayerInformation
 
 global {
+	int num_players <- 2;
 	image_file mini_map_image_file <- image_file("../includes/mini_map.png");
 	//color of the different players
 	float time_exploration <- 120 #s; 
@@ -31,6 +32,9 @@ species unity_linker parent: abstract_unity_linker {
 	//in this model, no information will be automatically sent to the Player at every step, so we set do_info_world to false
 	bool do_send_world <- false;
 	
+	int min_num_players <- num_players;
+	int max_num_players <- num_players;
+	
 	action update_score(string id, int score) {
 		ask (unity_player first_with (each.name = id)) {
 			int diff <- score - current_score;
@@ -39,15 +43,17 @@ species unity_linker parent: abstract_unity_linker {
 		}
 	}
 	
-	action active_player(string id) {
-		
+	action update_player_timer(string id, int time_remaining) {
 		ask (unity_player first_with (each.name = id)) {
-			if not to_display_agent {
-				do player_phase;
+			if (not to_display_agent ) {
+				 current_score <- 0;
+				to_display_agent <- true;
 			}
+			remaining_time <- time_remaining;
 		}
+			
 			 
-	}
+	} 
 	
 	action desactive_player(string id) {
 		ask (unity_player first_with (each.name = id)) {
@@ -80,26 +86,10 @@ species unity_player parent: abstract_unity_player {
 	bool to_display_agent <- false;
 	
 	
-	float remaining_time ;
+	int remaining_time ;
 	int current_score;
 	int team_score;
 	
-	float previous_time;
-	
-	action player_phase {
-		current_score <- 0;
-		previous_time <- gama.machine_time;
-		remaining_time <- time_exploration;
-		to_display_agent <- true;
-		ask unity_linker {
-			do send_message players: unity_player as list mes: ["start_exploration":: true];
-		}
-	}
-	
-	reflex manage_time when: remaining_time > 0 {
-		remaining_time <- remaining_time - (gama.machine_time - previous_time)/1000.0;
-		previous_time <- gama.machine_time ;
-	}
 	
 	//default aspect to display the player as a circle with its cone of vision
 	aspect default {
@@ -121,7 +111,7 @@ species unity_player parent: abstract_unity_player {
 
 //default Unity (VR) experiment that inherit from the SimpleMessage experiment
 //The unity type allows to create at the initialization one unity_linker agent
-experiment vr_xp parent:main autorun: true type: unity {
+experiment vr_xp parent:main autorun: false type: unity {
 	//minimal time between two simulation step
 	float minimum_cycle_duration <- 0.05;
 
