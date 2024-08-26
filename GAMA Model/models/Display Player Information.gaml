@@ -27,31 +27,29 @@ global {
 	}
 
 	reflex when: fake {
+
 		ask unity_player {
+			bool cond <- flip(0.8);
 			if (!finished) {
 				if (not active) {
 					current_score <- 0;
 					active <- true;
 				}
-				remaining_time <- remaining_time - 1;
+				if cond {remaining_time <- remaining_time - 1;}
 				if remaining_time <= 0 {
 					active <- false;
 					finished <- true;
 					create unity_player with: [name:: string(color) + " - village"+cycle];
+				} else {
+				if cond and flip(0.1) {
+				current_score <- current_score + 1;
+				my_team.score <- my_team.score + 1;
+			}
 				}
 
 			}
 
 		}
-
-		ask unity_player where each.active {
-			if flip(0.1) {
-				current_score <- current_score + 1;
-				my_team.score <- my_team.score + 1;
-			}
-
-		}
-
 	}
 
 }
@@ -103,7 +101,7 @@ species unity_linker parent: abstract_unity_linker {
 
 }
 
-species unity_player parent: abstract_unity_player {
+species unity_player parent: abstract_unity_player skills:[moving]{
 //size of the player in GAMA
 	float player_size <- 1.0;
 
@@ -141,6 +139,10 @@ species unity_player parent: abstract_unity_player {
 			draw player_perception_cone() color: rgb(color, 0.5);
 		}
 	}
+	
+	reflex when: fake {
+		do wander amplitude: 30.0;
+	}
 }
 
 
@@ -150,7 +152,7 @@ experiment "Experiment with fake players" {
 	map<rgb,rgb > text_colors <- [#green::#white, #yellow::#black, #red::#white, #blue::#white];
 	
 	font text <- font("Arial", 24, #bold);
-	font title <- font("Arial", 24, #bold);
+	font title <- font("Arial", 18, #bold);
 	int x_origin <- 50;
 	int x_interval <- 60;
 	int y_interval <- 40;
@@ -164,26 +166,30 @@ experiment "Experiment with fake players" {
 	}
 	
 	output {
-		layout #stack consoles: false toolbars: false navigator: false editors: false tray: false tabs: false;
+		layout #stack controls: false consoles: false toolbars: false navigator: false editors: false tray: false tabs: false;
 
 		display displayVR type: 3d background: #black axes: false {
 			image mini_map_image_file refresh: false;
-			camera 'default' location: {50, 117, 111} target: {50, 50, 0.0};
-			overlay position: {0 #px, 0 #px} size: {0 #px, 0 #px} background: #black border: #black rounded: false {
-			//for each possible type, we draw a square with the corresponding color and we write the name of the type
-				draw "Team" at: {x_origin + (2 * x_interval) #px, 10 #px} anchor: #top_center color: #white font: title;
-				draw "Player" at: {x_origin + (4 * x_interval) #px, 10 #px} anchor: #top_center color: #white font: title;
-				draw "Time" at: {x_origin + (6 * x_interval) #px, 10 #px} anchor: #top_center color: #white font: title;
+			//camera 'default' location: {50, 117, 111} target: {50, 50, 0.0};
+			overlay  position: {0 #px, 0 #px} size: {0 #px, 0 #px} background: #black border: #black rounded: false {
 				float y <- 2 * y_interval #px;
+				draw rectangle((10 * x_interval) #px , 10* box_size #px)at: {x_origin + (4 * x_interval) #px, y} color: rgb(0,0,0,0.5);
+				draw "Team score" at: {x_origin + (1 * x_interval) #px, y_interval #px} anchor: #top_center color: #white font: title;
+				draw "Player" at: {x_origin + (4 * x_interval) #px, y_interval #px} anchor: #top_center color: #white font: title;
+				draw "Score" at: {x_origin + (6 * x_interval) #px, y_interval #px} anchor: #top_center color: #white font: title;
+				draw "Time left" at: {x_origin + (8 * x_interval) #px, y_interval #px} anchor: #top_center color: #white font: title;
+	
 				map<rgb,team> temp <- [];
 				loop t over:  (teams.values sort_by each.score) {
 					temp[t.color] <- t;
 				}
+
 				loop p over: reverse(temp.pairs) {
-					draw rectangle((8 * x_interval) #px, box_size #px) at: {x_origin + (4 * x_interval) #px, y} color: (p.key);
-					draw string(p.value.score) at: {x_origin + (2 * x_interval) #px, y} anchor: #center color: text_colors[p.key] font: text;
-					draw string(last(p.value.players).current_score) at: {x_origin + (4 * x_interval) #px, y} anchor: #center color: text_colors[p.key] font: text;
-					draw string(last(p.value.players).remaining_time) + " sec" at: {x_origin + (6 * x_interval) #px, y} anchor: #center color: text_colors[p.key] font: text;
+					draw rectangle((10 * x_interval) #px, box_size #px) at: {x_origin + (4 * x_interval) #px, y} color: (p.key);
+					draw string(p.value.score) at: {x_origin + (1 * x_interval) #px, y} anchor: #center color: text_colors[p.key] font: text;
+					draw "#" + string(length(p.value.players)) at: {x_origin + (4 * x_interval) #px, y} anchor: #center color: text_colors[p.key] font: text;
+					draw string(last(p.value.players).current_score) at: {x_origin + (6 * x_interval) #px, y} anchor: #center color: text_colors[p.key] font: text;
+					draw string(last(p.value.players).remaining_time) + " sec" at: {x_origin + (8 * x_interval) #px, y} anchor: #center color: text_colors[p.key] font: text;
 					y <- y + y_interval #px;
 				}
 
