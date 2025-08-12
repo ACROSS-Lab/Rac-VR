@@ -8,7 +8,7 @@ EditorBuildSettings:
   - enabled: 0
     path: Assets/Scenes/RAC_MENU.unity
     guid: 1c775d20c6b119a469b636503fbd0c2b
-  - enabled: 0
+  - enabled: 1
     path: Assets/Scenes/StartupMenu.unity
     guid: c6d54942974394e62868f4c7b97ad52c
   - enabled: 0
@@ -21,7 +21,7 @@ EditorBuildSettings:
     path: Assets/Scenes/RAC_Tuto.unity
     guid: a41d7db3890a540f386a31dd76c96935
   - enabled: 1
-    path: Assets/Scenes/RAC_MainScene - Normal.unity
+    path: Assets/Scenes/Old/RAC_MainScene - Normal.unity
     guid: b726dcc23a22f4db8b45ccd7b91cf580
   - enabled: 1
     path: Assets/Scenes/EndingMenu.unity

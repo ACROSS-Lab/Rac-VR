@@ -8,6 +8,7 @@ TagManager:
   - Ground_RAC
   - Water_RAC
   - ScoreManager
+  - ScreenShot
   layers:
   - Default
   - TransparentFX
