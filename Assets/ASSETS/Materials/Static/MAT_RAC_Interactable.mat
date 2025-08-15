@@ -11,9 +11,11 @@ Material:
   m_Shader: {fileID: 4800000, guid: 3bc0d05e9e2844a4ba4dbd6f33906e24, type: 3}
   m_Parent: {fileID: 0}
   m_ModifiedSerializedProperties: 0
-  m_ValidKeywords: []
+  m_ValidKeywords:
+  - _RECEIVE_SHADOWS_OFF
   m_InvalidKeywords:
   - _EMISSION
+  - _RECEIVESHADOWS_OFF
   - _TEXTURE1_ON
   m_LightmapFlags: 2
   m_EnableInstancingVariants: 0
@@ -128,8 +130,9 @@ Material:
     - _Parallax: 0.005
     - _Plants: 0
     - _Plants1: 0
+    - _QueueControl: 0
     - _QueueOffset: 0
-    - _ReceiveShadows: 1
+    - _ReceiveShadows: 0
     - _Smoothness: 0
     - _SmoothnessTextureChannel: 0
     - _SpecularHighlights: 1
@@ -147,11 +150,14 @@ Material:
     - _Color: {r: 1, g: 1, b: 1, a: 0}
     - _Color1: {r: 1, g: 1, b: 1, a: 0}
     - _EmissionColor: {r: 0.16037738, g: 0.16037738, b: 0.16037738, a: 1}
+    - _Hover_Color: {r: 1, g: 1, b: 1, a: 0}
     - _Pollution_Color: {r: 0.27990386, g: 0.43809888, b: 0.6981132, a: 0}
     - _Pollution_Color1: {r: 0.27990386, g: 0.43809888, b: 0.6981132, a: 0}
     - _ShadowColor: {r: 0.66215736, g: 0.75608003, b: 0.9056604, a: 0}
+    - _Shadow_Color: {r: 1, g: 0.02020948, b: 0, a: 0}
     - _SpecColor: {r: 0.19999996, g: 0.19999996, b: 0.19999996, a: 1}
   m_BuildTextureStacks: []
+  m_AllowLocking: 1
 --- !u!114 &6211295452914494044
 MonoBehaviour:
   m_ObjectHideFlags: 11

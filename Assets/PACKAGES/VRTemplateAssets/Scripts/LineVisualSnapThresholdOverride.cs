@@ -1,9 +1,9 @@
 using UnityEngine;
-using UnityEngine.XR.Interaction.Toolkit;
+
 
 namespace Unity.VRTemplate
 {
-    [RequireComponent(typeof(XRInteractorLineVisual))]
+    [RequireComponent(typeof(UnityEngine.XR.Interaction.Toolkit.Interactors.Visuals.XRInteractorLineVisual))]
     public class LineVisualSnapThresholdOverride : MonoBehaviour
     {
         [SerializeField]
@@ -13,7 +13,7 @@ namespace Unity.VRTemplate
         void Awake()
         {
             // In future versions of the XR Interaction Toolkit, this will be exposed in the inspector and it'll be possible to disable this.
-            var rayVisual = GetComponent<XRInteractorLineVisual>();
+            var rayVisual = GetComponent<UnityEngine.XR.Interaction.Toolkit.Interactors.Visuals.XRInteractorLineVisual>();
             rayVisual.snapThresholdDistance = m_SnapThresholdDistance;
         }
     }

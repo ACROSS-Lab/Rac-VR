@@ -11,8 +11,7 @@ Material:
   m_Shader: {fileID: 4800000, guid: 3bc0d05e9e2844a4ba4dbd6f33906e24, type: 3}
   m_Parent: {fileID: 0}
   m_ModifiedSerializedProperties: 0
-  m_ValidKeywords:
-  - _HOVER_01_ON
+  m_ValidKeywords: []
   m_InvalidKeywords: []
   m_LightmapFlags: 4
   m_EnableInstancingVariants: 0
@@ -36,13 +35,28 @@ Material:
         m_Texture: {fileID: 0}
         m_Scale: {x: 1, y: 1}
         m_Offset: {x: 0, y: 0}
+    - unity_Lightmaps:
+        m_Texture: {fileID: 0}
+        m_Scale: {x: 1, y: 1}
+        m_Offset: {x: 0, y: 0}
+    - unity_LightmapsInd:
+        m_Texture: {fileID: 0}
+        m_Scale: {x: 1, y: 1}
+        m_Offset: {x: 0, y: 0}
+    - unity_ShadowMasks:
+        m_Texture: {fileID: 0}
+        m_Scale: {x: 1, y: 1}
+        m_Offset: {x: 0, y: 0}
     m_Ints: []
     m_Floats:
     - _AlphaCutoff: 0.5
     - _Hover: 0
-    - _Hover_01: 1
+    - _Hover_01: 0
     - _Plants: 0
     - _Plants1: 0
+    - _QueueControl: 0
+    - _QueueOffset: 0
+    - _ReceiveShadows: 1
     - _Texture: 0
     - _Texture1: 0
     - __dirty: 0
@@ -50,7 +64,9 @@ Material:
     - _BaseColor: {r: 0.745283, g: 0, b: 0, a: 0}
     - _BaseColor1: {r: 0.212264, g: 0.92704, b: 1, a: 1}
     - _EmissionColor: {r: 1, g: 1, b: 1, a: 1}
+    - _Hover_Color: {r: 1, g: 1, b: 1, a: 0}
     - _Pollution_Color: {r: 0.27990386, g: 0.43809888, b: 0.6981132, a: 0}
     - _Pollution_Color1: {r: 0.27990386, g: 0.43809888, b: 0.6981132, a: 0}
     - _ShadowColor: {r: 0.66215736, g: 0.75608003, b: 0.9056604, a: 0}
   m_BuildTextureStacks: []
+  m_AllowLocking: 1
