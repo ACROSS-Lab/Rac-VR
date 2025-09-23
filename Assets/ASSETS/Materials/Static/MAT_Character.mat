@@ -48,7 +48,7 @@ Material:
     m_Ints: []
     m_Floats:
     - _AlphaCutoff: 0.5
-    - _Float0: 0.61
+    - _Float0: 0.31
     - _Plants: 0
     - _Plants1: 0
     - _Texture: 1
@@ -62,3 +62,4 @@ Material:
     - _Pollution_Color1: {r: 1, g: 1, b: 1, a: 0}
     - _ShadowColor: {r: 0.66215736, g: 0.75608003, b: 0.9056604, a: 0}
   m_BuildTextureStacks: []
+  m_AllowLocking: 1
