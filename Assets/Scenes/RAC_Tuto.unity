@@ -730,11 +730,6 @@ PrefabInstance:
     m_AddedGameObjects: []
     m_AddedComponents: []
   m_SourcePrefab: {fileID: 100100000, guid: 3ba83f9c7e4daf64dbb0e0e64d834fb9, type: 3}
---- !u!1 &240701873 stripped
-GameObject:
-  m_CorrespondingSourceObject: {fileID: 8202698473020894178, guid: 3ba83f9c7e4daf64dbb0e0e64d834fb9, type: 3}
-  m_PrefabInstance: {fileID: 240701872}
-  m_PrefabAsset: {fileID: 0}
 --- !u!1 &296522320
 GameObject:
   m_ObjectHideFlags: 0
@@ -1633,7 +1628,7 @@ AudioListener:
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 554086204}
-  m_Enabled: 1
+  m_Enabled: 0
 --- !u!4 &554086209
 Transform:
   m_ObjectHideFlags: 0
@@ -3450,7 +3445,6 @@ GameObject:
   serializedVersion: 6
   m_Component:
   - component: {fileID: 2047777918}
-  - component: {fileID: 2047777917}
   - component: {fileID: 2047777919}
   m_Layer: 0
   m_Name: Manager
@@ -3459,22 +3453,6 @@ GameObject:
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
   m_IsActive: 1
---- !u!114 &2047777917
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 2047777916}
-  m_Enabled: 0
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: dccf67309d70f402eb6cf684ffb427fd, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  progressSlider: {fileID: 172907937}
-  loadingScreen: {fileID: 1301401006}
-  toDisable: {fileID: 240701873}
-  progressText: {fileID: 1759830024}
 --- !u!4 &2047777918
 Transform:
   m_ObjectHideFlags: 0
