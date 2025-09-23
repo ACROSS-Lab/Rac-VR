@@ -23,7 +23,7 @@ public class EndingMenuController : MonoBehaviour
         }*/
 
        
-        gameScoretext.SetText("Số điểm của bạn: " + score);
+        gameScoretext.SetText("Déchets ramassés: " + score);
       //  gameBestScoretext.SetText("Số điểm cao nhất: " + bestScore);
     }
 

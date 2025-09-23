@@ -80,10 +80,10 @@ public class Timer : MonoBehaviour
     public void Reset() {
         timerRunning = false;
         timeRemaining = timerDuration;
-        Dictionary<string, string> args = new Dictionary<string, string> {
-            {"id",ConnectionManager.Instance.getUseMiddleware() ? ConnectionManager.Instance.GetConnectionId()  : ("\"" + ConnectionManager.Instance.GetConnectionId() +  "\"") }
-        };
-        ConnectionManager.Instance.SendExecutableAsk("desactive_player", args);
+       // Dictionary<string, string> args = new Dictionary<string, string> {
+       //     {"id",ConnectionManager.Instance.getUseMiddleware() ? ConnectionManager.Instance.GetConnectionId()  : ("\"" + ConnectionManager.Instance.GetConnectionId() +  "\"") }
+       // };
+      //  ConnectionManager.Instance.SendExecutableAsk("desactive_player", args);
         SceneManager.LoadScene("EndingMenu");
     }
 

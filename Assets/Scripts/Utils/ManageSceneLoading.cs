@@ -1,7 +1,8 @@
+using System.Collections;
+using UnityEditor.SearchService;
 using UnityEngine;
 using UnityEngine.SceneManagement;
 using UnityEngine.UI;
-using System.Collections;
 
 public class ManageSceneLoading : MonoBehaviour
 {
@@ -17,7 +18,7 @@ public class ManageSceneLoading : MonoBehaviour
         Instance = this;
     }
 
-
+  
     public void LoadScene(string scene)
     {
         StartCoroutine(loadASync(scene));
