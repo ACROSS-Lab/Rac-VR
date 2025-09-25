@@ -51,6 +51,8 @@ Material:
     - __dirty: 0
     m_Colors:
     - _Color0: {r: 0.5566037, g: 0.5481366, b: 0.2179156, a: 0}
+    - _Color1: {r: 0.4150943, g: 0.35099885, b: 0.10377354, a: 1}
+    - _Color2: {r: 0.6132076, g: 0.5246975, b: 0.17065683, a: 1}
     - _EmissionColor: {r: 1, g: 1, b: 1, a: 1}
   m_BuildTextureStacks: []
   m_AllowLocking: 1
