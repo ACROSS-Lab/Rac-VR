@@ -1,0 +1,19 @@
+fileFormatVersion: 2
+guid: 0d7c8d389f9ba8743a1a51d3bab6888a
+ShaderImporter:
+  externalObjects: {}
+  defaultTextures:
+  - _Control: {instanceID: 0}
+  - _Splat3: {instanceID: 0}
+  - _Splat2: {instanceID: 0}
+  - _Splat1: {instanceID: 0}
+  - _Splat0: {instanceID: 0}
+  - _Mask2: {instanceID: 0}
+  - _Mask0: {instanceID: 0}
+  - _Mask1: {instanceID: 0}
+  - _Mask3: {instanceID: 0}
+  - _texcoord: {instanceID: 0}
+  nonModifiableTextures: []
+  userData: 
+  assetBundleName: 
+  assetBundleVariant: 
