@@ -5,7 +5,6 @@ public class Face_Controller : MonoBehaviour
 {
     [Header("____________Mouth____________")]
     [Space(20)]
-    
     public int MouthmaterialIndex = 1;
     private Material mouth_material;
 
@@ -14,7 +13,6 @@ public class Face_Controller : MonoBehaviour
 
     [Header("____________Eyes____________")]
     [Space(20)]
-    
     public int EyesmaterialIndex = 1;
     private Material eyes_material;
 
@@ -30,49 +28,64 @@ public class Face_Controller : MonoBehaviour
         skinnedMesh = GetComponentInChildren<SkinnedMeshRenderer>();
 
         mouthBone = GetComponentsInChildren<Transform>()
-                 .FirstOrDefault(t => t.name == "CTRL_Mouth");
+            .FirstOrDefault(t => t.name == "CTRL_Mouth");
 
         eyesBone = GetComponentsInChildren<Transform>()
-                      .FirstOrDefault(t => t.name == "CTRL_Eyes");
+            .FirstOrDefault(t => t.name == "CTRL_Eyes");
 
         if (mouthBone == null)
             Debug.LogError("CTRL_Mouth bone not found!");
         if (eyesBone == null)
             Debug.LogError("CTRL_Eyes bone not found!");
 
-       // Transform mouthBone = transform.Find("CTRL_mouth");
-
         if (skinnedMesh == null)
         {
             Debug.LogWarning("No SkinnedMeshRenderer found");
             return;
         }
-
-        Debug.Log("Premier SkinnedMeshRenderer trouvé : " + skinnedMesh.name);
+        else
+        {
+            Debug.Log("SkinnedMeshRenderer trouvé : " + skinnedMesh.name);
+        }
 
         var mats = skinnedMesh.materials;
 
+        // --- Mouth material ---
         if (MouthmaterialIndex < mats.Length)
+        {
             mouth_material = mats[MouthmaterialIndex];
+            Debug.Log("Mouthmaterial trouvé");
+        }
         else
+        {
             Debug.LogError("MouthmaterialIndex hors limites");
+        }
 
+        // --- Eyes material ---
         if (EyesmaterialIndex < mats.Length)
+        {
             eyes_material = mats[EyesmaterialIndex];
+            Debug.Log("Eyesmaterial trouvé");
+        }
         else
+        {
             Debug.LogError("EyesmaterialIndex hors limites");
+        }
     }
 
     void Update()
     {
-        if (mouth_material == null || eyes_material == null) return;
+       if (mouth_material == null || eyes_material == null) return;
 
         Vector3 mouth_delta = mouthBone.localPosition - Mouth_restLocalPos;
         Vector3 eyes_delta = eyesBone.localPosition - Eyes_restLocalPos;
 
+        //print(mouthBone.localPosition);
+      
+
         // Mouth Calculation
         float mouth_rawX = Mathf.Clamp01(-mouth_delta.x * 2f);
-        float mouth_rawY = Mathf.Clamp01(mouth_delta.y * 2f);
+        float mouth_rawY = Mathf.Clamp01(mouth_delta.z * 2f);
 
         float mouth_stepX = Mathf.Floor(mouth_rawX * 4f) / 4f;
         float mouth_stepY = Mathf.Floor(mouth_rawY * 4f) / 4f;
@@ -82,7 +95,7 @@ public class Face_Controller : MonoBehaviour
 
         // Eyes Calculation
         float eyes_rawX = Mathf.Clamp01(-eyes_delta.x * 2f);
-        float eyes_rawY = Mathf.Clamp01(eyes_delta.y * 2f);
+        float eyes_rawY = Mathf.Clamp01(eyes_delta.z * 2f);
 
         float eyes_stepX = Mathf.Floor(eyes_rawX * 4f) / 4f;
         float eyes_stepY = Mathf.Floor(eyes_rawY * 4f) / 4f;
