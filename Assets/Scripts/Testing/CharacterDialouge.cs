@@ -1,31 +1,34 @@
+using System;
+using System.Collections;
+using TMPro;
 using UnityEngine;
 
 public class CharacterDialouge : MonoBehaviour
 {
     [SerializeField] Transform camTransform;
-    [SerializeField] Transform playerTransform;
-    [SerializeField] GameObject canvasDialogue;
-    [SerializeField] AudioSource audioSource;
     [SerializeField] float distanceToDisplay = 5f;
+    [SerializeField] GameObject canvasDialogue;
+    [SerializeField] TextMeshProUGUI dialogueText;
+    [SerializeField] AudioSource audioSource;
+    [SerializeField] Voiceline[] voicelines;
 
-    bool isInZone = false;
+    Animator animator;
+    Voiceline currentVoiceline;
 
     void Start()
     {
-        if (camTransform == null && Camera.main != null)
-            camTransform = Camera.main.transform;
+        animator = GetComponent<Animator>();
+        SelectVoiceline(0);
     }
 
     void Update()
     {
         RotateTowardsCamera();
-        DisplayDialouge();
     }
 
     void RotateTowardsCamera()
     {
-        if (camTransform == null || canvasDialogue == null)
-            return;
+        if (!canvasDialogue.activeInHierarchy) return;
 
         Vector3 direction = canvasDialogue.transform.position - camTransform.position;
         direction.y = 0;
@@ -36,46 +39,50 @@ public class CharacterDialouge : MonoBehaviour
         }
     }
 
-    void DisplayDialouge()
+    public void DisplayDialouge()
     {
-        if (canvasDialogue == null || playerTransform == null)
-            return;
+        float distance = Vector3.Distance(camTransform.position, transform.position);
 
-        float distance = Vector3.Distance(playerTransform.position, transform.position);
-        if (distance <= distanceToDisplay)
-        {
-            if (!isInZone)
-            {
-                TurnOnOffDialouge(true);
-                isInZone = true;
-            }    
-        }
-        else
-        {
-            if (isInZone)
-            {
-                isInZone = false;
-                TurnOnOffDialouge(false);
-            }   
-        }
-    }
+        if (distance > distanceToDisplay) return;
 
-    public void TurnOnOffDialouge(bool turnOn)
-    {
-        canvasDialogue.SetActive(turnOn);
-        if (turnOn)
-        {
-            if (!audioSource.isPlaying) audioSource.Play();
-        }
-        else 
-        {
-            audioSource.Stop();
-        }
-    }
+        if (!canvasDialogue.activeInHierarchy) canvasDialogue.SetActive(true);
 
-    public void ReplayDialouge()
-    {
         audioSource.Stop();
         audioSource.Play();
+
+        animator.SetBool("isWaving", false);
+        StopCoroutine(StartTalkingAnimation());
+        StartCoroutine(StartTalkingAnimation());
     }
+
+    public void TurnOffDialouge()
+    {
+        canvasDialogue.SetActive(false);
+        audioSource.Stop();
+        StopCoroutine(StartTalkingAnimation());
+        animator.SetBool("isTalking", false);
+    }
+
+    public void SelectVoiceline(int index)
+    {
+        currentVoiceline = voicelines[index];
+        audioSource.clip = currentVoiceline.clip;
+        dialogueText.text = currentVoiceline.text;
+        animator.SetBool("isWaving", true);
+    }
+
+    IEnumerator StartTalkingAnimation()
+    {
+        float length = audioSource.clip.length;
+        animator.SetBool("isTalking", true);
+        yield return new WaitForSeconds(length);
+        animator.SetBool("isTalking", false);
+    }
+}
+
+[Serializable]
+public class Voiceline
+{
+    public string text;
+    public AudioClip clip;
 }
