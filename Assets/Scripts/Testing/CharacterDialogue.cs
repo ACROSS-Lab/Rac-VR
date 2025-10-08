@@ -3,7 +3,7 @@ using System.Collections;
 using TMPro;
 using UnityEngine;
 
-public class CharacterDialouge : MonoBehaviour
+public class CharacterDialogue : MonoBehaviour
 {
     [SerializeField] Transform camTransform;
     [SerializeField] float distanceToDisplay = 5f;

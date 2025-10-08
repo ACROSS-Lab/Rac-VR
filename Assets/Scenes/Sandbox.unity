@@ -211,6 +211,17 @@ Camera:
   m_CorrespondingSourceObject: {fileID: 2107886623708766277, guid: f6336ac4ac8b4d34bc5072418cdc62a0, type: 3}
   m_PrefabInstance: {fileID: 784628206}
   m_PrefabAsset: {fileID: 0}
+--- !u!114 &729114846 stripped
+MonoBehaviour:
+  m_CorrespondingSourceObject: {fileID: 9127484289385609634, guid: 8aaec663f1e7fd04f8d6308d6b5f76a6, type: 3}
+  m_PrefabInstance: {fileID: 3822635243738074722}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: d28e413a94c943d469d6b0c860c17faf, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
 --- !u!1001 &784628206
 PrefabInstance:
   m_ObjectHideFlags: 0
@@ -1022,6 +1033,18 @@ PrefabInstance:
     serializedVersion: 3
     m_TransformParent: {fileID: 0}
     m_Modifications:
+    - target: {fileID: 2589216667156433176, guid: 8aaec663f1e7fd04f8d6308d6b5f76a6, type: 3}
+      propertyPath: m_OnClick.m_PersistentCalls.m_Calls.Array.data[0].m_Mode
+      value: 3
+      objectReference: {fileID: 0}
+    - target: {fileID: 2589216667156433176, guid: 8aaec663f1e7fd04f8d6308d6b5f76a6, type: 3}
+      propertyPath: m_OnClick.m_PersistentCalls.m_Calls.Array.data[0].m_Target
+      value: 
+      objectReference: {fileID: 729114846}
+    - target: {fileID: 2589216667156433176, guid: 8aaec663f1e7fd04f8d6308d6b5f76a6, type: 3}
+      propertyPath: m_OnClick.m_PersistentCalls.m_Calls.Array.data[0].m_MethodName
+      value: SelectVoiceline
+      objectReference: {fileID: 0}
     - target: {fileID: 6103009689543670444, guid: 8aaec663f1e7fd04f8d6308d6b5f76a6, type: 3}
       propertyPath: m_LocalPosition.x
       value: 4.85
@@ -1074,6 +1097,19 @@ PrefabInstance:
       propertyPath: camTransform
       value: 
       objectReference: {fileID: 1011579285}
+    - target: {fileID: 9127484289385609634, guid: 8aaec663f1e7fd04f8d6308d6b5f76a6, type: 3}
+      propertyPath: voicelines.Array.size
+      value: 1
+      objectReference: {fileID: 0}
+    - target: {fileID: 9127484289385609634, guid: 8aaec663f1e7fd04f8d6308d6b5f76a6, type: 3}
+      propertyPath: voicelines.Array.data[1].clip
+      value: 
+      objectReference: {fileID: 8300000, guid: 3395432aaef208b4fa17502321914b3a, type: 3}
+    - target: {fileID: 9127484289385609634, guid: 8aaec663f1e7fd04f8d6308d6b5f76a6, type: 3}
+      propertyPath: voicelines.Array.data[1].text
+      value: "Quand je nettoie la maison, je garde les journaux et les cartons. Ils
+        sont ensuite envoy\xE9s \xE0 l\u2019usine pour \xEAtre recycl\xE9s et r\xE9-utilis\xE9s."
+      objectReference: {fileID: 0}
     m_RemovedComponents: []
     m_RemovedGameObjects: []
     m_AddedGameObjects: []
