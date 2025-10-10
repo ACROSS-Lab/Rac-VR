@@ -9,6 +9,8 @@ TagManager:
   - Water_RAC
   - ScoreManager
   - ScreenShot
+  - Inventory
+  - Bin
   layers:
   - Default
   - TransparentFX
