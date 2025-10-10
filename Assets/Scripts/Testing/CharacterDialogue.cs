@@ -5,13 +5,13 @@ using UnityEngine;
 
 public class CharacterDialogue : MonoBehaviour
 {
-    [SerializeField] Transform camTransform;
     [SerializeField] float distanceToDisplay = 5f;
     [SerializeField] GameObject canvasDialogue;
     [SerializeField] TextMeshProUGUI dialogueText;
     [SerializeField] AudioSource audioSource;
     [SerializeField] Voiceline[] voicelines;
 
+    Transform camTransform;
     Animator animator;
     Voiceline currentVoiceline;
 
@@ -19,6 +19,7 @@ public class CharacterDialogue : MonoBehaviour
     {
         animator = GetComponent<Animator>();
         SelectVoiceline(0);
+        camTransform = Camera.main.transform;
     }
 
     void Update()
@@ -74,6 +75,7 @@ public class CharacterDialogue : MonoBehaviour
     IEnumerator StartTalkingAnimation()
     {
         float length = audioSource.clip.length;
+        Debug.Log(length);
         animator.SetBool("isTalking", true);
         yield return new WaitForSeconds(length);
         animator.SetBool("isTalking", false);
