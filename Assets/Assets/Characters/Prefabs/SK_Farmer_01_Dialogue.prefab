@@ -1733,7 +1733,7 @@ GameObject:
   - component: {fileID: 7410940520735620841}
   - component: {fileID: 9127484289385609634}
   m_Layer: 0
-  m_Name: SK_Farmer_01
+  m_Name: SK_Farmer_01_Dialogue
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
