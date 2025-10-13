@@ -1,24 +1,30 @@
-using System;
 using System.Collections;
 using TMPro;
 using UnityEngine;
 
+[RequireComponent(typeof(LocalizedKey))]
 public class CharacterDialogue : MonoBehaviour
 {
     [SerializeField] float distanceToDisplay = 5f;
     [SerializeField] GameObject canvasDialogue;
     [SerializeField] TextMeshProUGUI dialogueText;
     [SerializeField] AudioSource audioSource;
-    [SerializeField] Voiceline[] voicelines;
 
     Transform camTransform;
     Animator animator;
-    Voiceline currentVoiceline;
+    Coroutine talkingCoroutine;
+
+    void Awake()
+    {
+        LocalizedKey localizedKey = GetComponent<LocalizedKey>();
+        localizedKey.audioSource = audioSource;
+        localizedKey.textComponent = dialogueText;
+
+    }
 
     void Start()
     {
         animator = GetComponent<Animator>();
-        SelectVoiceline(0);
         camTransform = Camera.main.transform;
     }
 
@@ -43,48 +49,33 @@ public class CharacterDialogue : MonoBehaviour
     public void DisplayDialouge()
     {
         float distance = Vector3.Distance(camTransform.position, transform.position);
-
         if (distance > distanceToDisplay) return;
 
         if (!canvasDialogue.activeInHierarchy) canvasDialogue.SetActive(true);
 
         audioSource.Stop();
-        audioSource.Play();
 
+        animator.SetBool("isTalking", false);
         animator.SetBool("isWaving", false);
-        StopCoroutine(StartTalkingAnimation());
-        StartCoroutine(StartTalkingAnimation());
+
+        if (talkingCoroutine != null) StopCoroutine(talkingCoroutine);
+        talkingCoroutine = StartCoroutine(StartTalkingAnimation());
     }
 
     public void TurnOffDialouge()
     {
-        canvasDialogue.SetActive(false);
+        if (talkingCoroutine != null) StopCoroutine(talkingCoroutine);
         audioSource.Stop();
-        StopCoroutine(StartTalkingAnimation());
         animator.SetBool("isTalking", false);
-    }
-
-    public void SelectVoiceline(int index)
-    {
-        currentVoiceline = voicelines[index];
-        audioSource.clip = currentVoiceline.clip;
-        dialogueText.text = currentVoiceline.text;
-        animator.SetBool("isWaving", true);
+        canvasDialogue.SetActive(false);
     }
 
     IEnumerator StartTalkingAnimation()
     {
         float length = audioSource.clip.length;
-        Debug.Log(length);
+        audioSource.Play();
         animator.SetBool("isTalking", true);
         yield return new WaitForSeconds(length);
         animator.SetBool("isTalking", false);
     }
-}
-
-[Serializable]
-public class Voiceline
-{
-    public string text;
-    public AudioClip clip;
 }
