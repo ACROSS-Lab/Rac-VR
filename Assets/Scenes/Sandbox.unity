@@ -360,30 +360,6 @@ PrefabInstance:
     serializedVersion: 3
     m_TransformParent: {fileID: 0}
     m_Modifications:
-    - target: {fileID: 3349622491610787749, guid: 9a8469347a649304b94a687e78ec6a2f, type: 3}
-      propertyPath: m_Resource
-      value: 
-      objectReference: {fileID: 0}
-    - target: {fileID: 3349622491610787749, guid: 9a8469347a649304b94a687e78ec6a2f, type: 3}
-      propertyPath: m_audioClip
-      value: 
-      objectReference: {fileID: 0}
-    - target: {fileID: 5604138662009680162, guid: 9a8469347a649304b94a687e78ec6a2f, type: 3}
-      propertyPath: m_text
-      value: 
-      objectReference: {fileID: 0}
-    - target: {fileID: 5604138662009680162, guid: 9a8469347a649304b94a687e78ec6a2f, type: 3}
-      propertyPath: m_fontAsset
-      value: 
-      objectReference: {fileID: 11400000, guid: 1bfb312ffb49d2b4ba1b2fe80f13f565, type: 2}
-    - target: {fileID: 5604138662009680162, guid: 9a8469347a649304b94a687e78ec6a2f, type: 3}
-      propertyPath: m_sharedMaterial
-      value: 
-      objectReference: {fileID: 9216016588548016812, guid: 1bfb312ffb49d2b4ba1b2fe80f13f565, type: 2}
-    - target: {fileID: 5604138662009680162, guid: 9a8469347a649304b94a687e78ec6a2f, type: 3}
-      propertyPath: m_hasFontAssetChanged
-      value: 0
-      objectReference: {fileID: 0}
     - target: {fileID: 5966029395924997060, guid: 9a8469347a649304b94a687e78ec6a2f, type: 3}
       propertyPath: m_LocalPosition.x
       value: 4.9
@@ -428,49 +404,10 @@ PrefabInstance:
       propertyPath: m_Name
       value: SK_Farmer_F_01
       objectReference: {fileID: 0}
-    - target: {fileID: 6707205502744383117, guid: 9a8469347a649304b94a687e78ec6a2f, type: 3}
-      propertyPath: m_SizeDelta.y
-      value: 0
-      objectReference: {fileID: 0}
-    - target: {fileID: 6782935263320629796, guid: 9a8469347a649304b94a687e78ec6a2f, type: 3}
-      propertyPath: m_IsActive
-      value: 0
-      objectReference: {fileID: 0}
-    - target: {fileID: 7118748371001634857, guid: 9a8469347a649304b94a687e78ec6a2f, type: 3}
-      propertyPath: characterKey
-      value: NPC.OldFemale.PaperMetal
-      objectReference: {fileID: 0}
-    - target: {fileID: 7452344155783607652, guid: 9a8469347a649304b94a687e78ec6a2f, type: 3}
-      propertyPath: m_AnchorMax.y
-      value: 0
-      objectReference: {fileID: 0}
-    - target: {fileID: 7452344155783607652, guid: 9a8469347a649304b94a687e78ec6a2f, type: 3}
-      propertyPath: m_AnchorMin.y
-      value: 0
-      objectReference: {fileID: 0}
-    - target: {fileID: 7452344155783607652, guid: 9a8469347a649304b94a687e78ec6a2f, type: 3}
-      propertyPath: m_SizeDelta.x
-      value: 0
-      objectReference: {fileID: 0}
-    - target: {fileID: 7452344155783607652, guid: 9a8469347a649304b94a687e78ec6a2f, type: 3}
-      propertyPath: m_SizeDelta.y
-      value: 0
-      objectReference: {fileID: 0}
-    - target: {fileID: 7452344155783607652, guid: 9a8469347a649304b94a687e78ec6a2f, type: 3}
-      propertyPath: m_AnchoredPosition.x
-      value: 0
-      objectReference: {fileID: 0}
-    - target: {fileID: 7452344155783607652, guid: 9a8469347a649304b94a687e78ec6a2f, type: 3}
-      propertyPath: m_AnchoredPosition.y
-      value: -0
-      objectReference: {fileID: 0}
     m_RemovedComponents: []
     m_RemovedGameObjects: []
     m_AddedGameObjects: []
-    m_AddedComponents:
-    - targetCorrespondingSourceObject: {fileID: 5632122107019361731, guid: 9a8469347a649304b94a687e78ec6a2f, type: 3}
-      insertIndex: -1
-      addedObject: {fileID: 2069324664}
+    m_AddedComponents: []
   m_SourcePrefab: {fileID: 100100000, guid: 9a8469347a649304b94a687e78ec6a2f, type: 3}
 --- !u!1001 &428223498
 PrefabInstance:
@@ -1535,11 +1472,6 @@ BoxCollider:
   serializedVersion: 3
   m_Size: {x: 0.6, y: 0.93, z: 0.05}
   m_Center: {x: 0, y: 0.48, z: 0.21}
---- !u!82 &1558397376 stripped
-AudioSource:
-  m_CorrespondingSourceObject: {fileID: 3349622491610787749, guid: 9a8469347a649304b94a687e78ec6a2f, type: 3}
-  m_PrefabInstance: {fileID: 239889658}
-  m_PrefabAsset: {fileID: 0}
 --- !u!1 &1634530334
 GameObject:
   m_ObjectHideFlags: 0
@@ -1818,25 +1750,6 @@ PrefabInstance:
       insertIndex: -1
       addedObject: {fileID: 2112973369}
   m_SourcePrefab: {fileID: 100100000, guid: 8f674e2f0e8f1ba4bb89bc405a91540a, type: 3}
---- !u!1 &2069324662 stripped
-GameObject:
-  m_CorrespondingSourceObject: {fileID: 5632122107019361731, guid: 9a8469347a649304b94a687e78ec6a2f, type: 3}
-  m_PrefabInstance: {fileID: 239889658}
-  m_PrefabAsset: {fileID: 0}
---- !u!114 &2069324664
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 2069324662}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: b716f285080a10847b43a250b34d933c, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  localizationKey: NPC.OldWoman.PaperMetal
-  audioSource: {fileID: 1558397376}
 --- !u!1 &2112973365 stripped
 GameObject:
   m_CorrespondingSourceObject: {fileID: 4173889315962540077, guid: 8f674e2f0e8f1ba4bb89bc405a91540a, type: 3}
