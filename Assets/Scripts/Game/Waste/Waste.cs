@@ -14,17 +14,17 @@ public class Waste : MonoBehaviour
 
     void OnTriggerEnter(Collider other)
     {
-        if(interactable.isSelected) return;
+        if (interactable.isSelected) return;
 
-        if (other.tag == "Inventory")
-        {
-            Inventory.instance.AddWaste(this);
-        }
-
-        else if (other.tag == "Bin")
+        if (other.tag == "Bin")
         {
             GarbageClassification(other.GetComponent<Bin>());
             gameObject.SetActive(false);
+        }
+        
+        else if (other.tag == "Inventory")
+        {
+            Inventory.instance.AddWaste(this);
         }
     }
     

@@ -56,13 +56,17 @@ PrefabInstance:
       propertyPath: m_Name
       value: SM_Waste_Banana_01
       objectReference: {fileID: 0}
+    - target: {fileID: 919132149155446097, guid: e15376b282142064d9732f60f49c6c78, type: 3}
+      propertyPath: m_Layer
+      value: 3
+      objectReference: {fileID: 0}
     m_RemovedComponents: []
     m_RemovedGameObjects: []
     m_AddedGameObjects: []
     m_AddedComponents:
     - targetCorrespondingSourceObject: {fileID: 919132149155446097, guid: e15376b282142064d9732f60f49c6c78, type: 3}
       insertIndex: -1
-      addedObject: {fileID: 7452437216519372870}
+      addedObject: {fileID: 5493014593964144530}
     - targetCorrespondingSourceObject: {fileID: 919132149155446097, guid: e15376b282142064d9732f60f49c6c78, type: 3}
       insertIndex: -1
       addedObject: {fileID: 6317641869536132383}
@@ -78,7 +82,7 @@ GameObject:
   m_CorrespondingSourceObject: {fileID: 919132149155446097, guid: e15376b282142064d9732f60f49c6c78, type: 3}
   m_PrefabInstance: {fileID: 2808746240140259790}
   m_PrefabAsset: {fileID: 0}
---- !u!65 &7452437216519372870
+--- !u!65 &5493014593964144530
 BoxCollider:
   m_ObjectHideFlags: 0
   m_CorrespondingSourceObject: {fileID: 0}
@@ -97,8 +101,8 @@ BoxCollider:
   m_ProvidesContacts: 0
   m_Enabled: 1
   serializedVersion: 3
-  m_Size: {x: 0.47430557, y: 0.41270524, z: 0.40926403}
-  m_Center: {x: -0.00019091368, y: 0.11380416, z: 0.01395721}
+  m_Size: {x: 0.2644623, y: 0.23011531, z: 0.22819656}
+  m_Center: {x: -0.000106453896, y: 0.07457108, z: 0.007782232}
 --- !u!54 &6317641869536132383
 Rigidbody:
   m_ObjectHideFlags: 0
@@ -141,7 +145,7 @@ MonoBehaviour:
   m_InteractionManager: {fileID: 0}
   m_Colliders: []
   m_InteractionLayers:
-    m_Bits: 1
+    m_Bits: 3
   m_DistanceCalculationMode: 1
   m_SelectMode: 0
   m_FocusMode: 1
@@ -200,7 +204,7 @@ MonoBehaviour:
   m_StartingInteractionStrengthFilters: []
   m_AttachTransform: {fileID: 0}
   m_SecondaryAttachTransform: {fileID: 0}
-  m_UseDynamicAttach: 1
+  m_UseDynamicAttach: 0
   m_MatchAttachPosition: 1
   m_MatchAttachRotation: 1
   m_SnapToColliderVolume: 1
