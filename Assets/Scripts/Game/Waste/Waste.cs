@@ -30,13 +30,13 @@ public class Waste : MonoBehaviour
     
     void GarbageClassification(Bin bin)
     {
-        if (bin.binType == wasteType)
+        if ((bin.binType & wasteType) != 0)
         {
-            Debug.Log("Correct Bin");
+            GameManager.instance.AddScore(10);
         }
         else
         {
-            Debug.Log("Wrong Bin");
+            GameManager.instance.MinusScore(5);
         }
     }
 }
