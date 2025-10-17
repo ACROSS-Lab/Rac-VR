@@ -55,7 +55,7 @@ PrefabInstance:
     - target: {fileID: -2570784838089394484, guid: dcaaa39944a2be44c8805eb0b8ff20d3, type: 3}
       propertyPath: 'm_Materials.Array.data[0]'
       value: 
-      objectReference: {fileID: 2100000, guid: f060c418811642a4a94dd393175afc3b, type: 2}
+      objectReference: {fileID: 2100000, guid: 705159c29d751d7468374b7d29bc5e05, type: 2}
     - target: {fileID: 919132149155446097, guid: dcaaa39944a2be44c8805eb0b8ff20d3, type: 3}
       propertyPath: m_Name
       value: SM_Bike_01
@@ -67,7 +67,7 @@ PrefabInstance:
     - target: {fileID: 4680518238039297160, guid: dcaaa39944a2be44c8805eb0b8ff20d3, type: 3}
       propertyPath: 'm_Materials.Array.data[0]'
       value: 
-      objectReference: {fileID: 2100000, guid: f060c418811642a4a94dd393175afc3b, type: 2}
+      objectReference: {fileID: 2100000, guid: 705159c29d751d7468374b7d29bc5e05, type: 2}
     - target: {fileID: 4742473837712756890, guid: dcaaa39944a2be44c8805eb0b8ff20d3, type: 3}
       propertyPath: m_LODs.Array.data[0].screenRelativeHeight
       value: 0.58299786

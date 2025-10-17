@@ -5092,8 +5092,8 @@ MonoBehaviour:
       m_Calls: []
   m_text: "Pousser le joystick et relacher pour se t\xE9l\xE9porter"
   m_isRightToLeft: 0
-  m_fontAsset: {fileID: 11400000, guid: 91e30feed3e1c40498bf31f998dda18d, type: 2}
-  m_sharedMaterial: {fileID: 428039294805271319, guid: 91e30feed3e1c40498bf31f998dda18d, type: 2}
+  m_fontAsset: {fileID: 11400000, guid: c1a0fed161c1bfb45b4f006be1677c6f, type: 2}
+  m_sharedMaterial: {fileID: 5668957734616618548, guid: c1a0fed161c1bfb45b4f006be1677c6f, type: 2}
   m_fontSharedMaterials: []
   m_fontMaterial: {fileID: 0}
   m_fontMaterials: []
@@ -5117,8 +5117,8 @@ MonoBehaviour:
   m_faceColor:
     serializedVersion: 2
     rgba: 4294967295
-  m_fontSize: 14
-  m_fontSizeBase: 14
+  m_fontSize: 12.02
+  m_fontSizeBase: 12.02
   m_fontWeight: 400
   m_enableAutoSizing: 0
   m_fontSizeMin: 18
@@ -5127,8 +5127,8 @@ MonoBehaviour:
   m_HorizontalAlignment: 2
   m_VerticalAlignment: 512
   m_textAlignment: 65535
-  m_characterSpacing: 0
-  m_wordSpacing: 0
+  m_characterSpacing: -8
+  m_wordSpacing: 15
   m_lineSpacing: -68.6
   m_lineSpacingMax: 0
   m_paragraphSpacing: 0
@@ -5383,7 +5383,7 @@ MonoBehaviour:
     m_Top: 12
     m_Bottom: 16
   m_ChildAlignment: 4
-  m_Spacing: -33.2
+  m_Spacing: -29.14
   m_ChildForceExpandWidth: 0
   m_ChildForceExpandHeight: 0
   m_ChildControlWidth: 0
@@ -5580,8 +5580,8 @@ MonoBehaviour:
       m_Calls: []
   m_text: "Visez le d\xE9chet et appuyez sur ce bouton pour le ramasser."
   m_isRightToLeft: 0
-  m_fontAsset: {fileID: 11400000, guid: 91e30feed3e1c40498bf31f998dda18d, type: 2}
-  m_sharedMaterial: {fileID: 428039294805271319, guid: 91e30feed3e1c40498bf31f998dda18d, type: 2}
+  m_fontAsset: {fileID: 11400000, guid: c1a0fed161c1bfb45b4f006be1677c6f, type: 2}
+  m_sharedMaterial: {fileID: 5668957734616618548, guid: c1a0fed161c1bfb45b4f006be1677c6f, type: 2}
   m_fontSharedMaterials: []
   m_fontMaterial: {fileID: 0}
   m_fontMaterials: []
@@ -5615,8 +5615,8 @@ MonoBehaviour:
   m_HorizontalAlignment: 2
   m_VerticalAlignment: 512
   m_textAlignment: 65535
-  m_characterSpacing: 0
-  m_wordSpacing: 0
+  m_characterSpacing: -8
+  m_wordSpacing: 30
   m_lineSpacing: -68.6
   m_lineSpacingMax: 0
   m_paragraphSpacing: 0

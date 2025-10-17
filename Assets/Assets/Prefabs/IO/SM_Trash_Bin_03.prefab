@@ -128,8 +128,20 @@ PrefabInstance:
     m_TransformParent: {fileID: 0}
     m_Modifications:
     - target: {fileID: -8679921383154817045, guid: 1ce004b6c0faec446b7691407d1718ca, type: 3}
+      propertyPath: m_LocalScale.x
+      value: 0.9
+      objectReference: {fileID: 0}
+    - target: {fileID: -8679921383154817045, guid: 1ce004b6c0faec446b7691407d1718ca, type: 3}
+      propertyPath: m_LocalScale.y
+      value: 0.9
+      objectReference: {fileID: 0}
+    - target: {fileID: -8679921383154817045, guid: 1ce004b6c0faec446b7691407d1718ca, type: 3}
+      propertyPath: m_LocalScale.z
+      value: 0.9
+      objectReference: {fileID: 0}
+    - target: {fileID: -8679921383154817045, guid: 1ce004b6c0faec446b7691407d1718ca, type: 3}
       propertyPath: m_LocalPosition.x
-      value: -0
+      value: 0
       objectReference: {fileID: 0}
     - target: {fileID: -8679921383154817045, guid: 1ce004b6c0faec446b7691407d1718ca, type: 3}
       propertyPath: m_LocalPosition.y
@@ -141,15 +153,15 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: -8679921383154817045, guid: 1ce004b6c0faec446b7691407d1718ca, type: 3}
       propertyPath: m_LocalRotation.w
-      value: 1
+      value: 0.0000029504295
       objectReference: {fileID: 0}
     - target: {fileID: -8679921383154817045, guid: 1ce004b6c0faec446b7691407d1718ca, type: 3}
       propertyPath: m_LocalRotation.x
-      value: 0
+      value: -0
       objectReference: {fileID: 0}
     - target: {fileID: -8679921383154817045, guid: 1ce004b6c0faec446b7691407d1718ca, type: 3}
       propertyPath: m_LocalRotation.y
-      value: -0
+      value: -1
       objectReference: {fileID: 0}
     - target: {fileID: -8679921383154817045, guid: 1ce004b6c0faec446b7691407d1718ca, type: 3}
       propertyPath: m_LocalRotation.z
@@ -161,16 +173,24 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: -8679921383154817045, guid: 1ce004b6c0faec446b7691407d1718ca, type: 3}
       propertyPath: m_LocalEulerAnglesHint.y
-      value: 0
+      value: -180
       objectReference: {fileID: 0}
     - target: {fileID: -8679921383154817045, guid: 1ce004b6c0faec446b7691407d1718ca, type: 3}
       propertyPath: m_LocalEulerAnglesHint.z
       value: 0
       objectReference: {fileID: 0}
     - target: {fileID: -7511558181221131132, guid: 1ce004b6c0faec446b7691407d1718ca, type: 3}
+      propertyPath: m_AdditionalVertexStreams
+      value: 
+      objectReference: {fileID: 7560306209534324677, guid: 1ce004b6c0faec446b7691407d1718ca, type: 3}
+    - target: {fileID: -7511558181221131132, guid: 1ce004b6c0faec446b7691407d1718ca, type: 3}
       propertyPath: 'm_Materials.Array.data[0]'
       value: 
       objectReference: {fileID: 2100000, guid: f060c418811642a4a94dd393175afc3b, type: 2}
+    - target: {fileID: -7511558181221131132, guid: 1ce004b6c0faec446b7691407d1718ca, type: 3}
+      propertyPath: m_SelectedEditorRenderState
+      value: 2
+      objectReference: {fileID: 0}
     - target: {fileID: 919132149155446097, guid: 1ce004b6c0faec446b7691407d1718ca, type: 3}
       propertyPath: m_Name
       value: SM_Trash_Bin_03
