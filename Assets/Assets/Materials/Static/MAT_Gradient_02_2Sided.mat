@@ -68,6 +68,7 @@ Material:
     m_Ints: []
     m_Floats:
     - _AlphaCutoff: 0.5
+    - _Outline: 0
     - _Plants: 0
     - _Plants1: 0
     - _QueueControl: 0
@@ -81,6 +82,7 @@ Material:
     - _BaseColor: {r: 1, g: 1, b: 1, a: 0}
     - _BaseColor1: {r: 1, g: 1, b: 1, a: 0}
     - _EmissionColor: {r: 1, g: 1, b: 1, a: 1}
+    - _Outline_Color: {r: 1, g: 1, b: 1, a: 0}
     - _Pollution_Color: {r: 0.2799038, g: 0.43809882, b: 0.6981132, a: 0}
     - _Pollution_Color1: {r: 1, g: 1, b: 1, a: 0}
     - _ShadowColor: {r: 0.9150943, g: 0.8787558, b: 0.70358664, a: 0}
