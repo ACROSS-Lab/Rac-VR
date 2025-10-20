@@ -351,6 +351,11 @@ Transform:
   m_CorrespondingSourceObject: {fileID: -8679921383154817045, guid: 44f377bd1f463934298c2190191af7f5, type: 3}
   m_PrefabInstance: {fileID: 6143228050849444911}
   m_PrefabAsset: {fileID: 0}
+--- !u!137 &6073395506614182812 stripped
+SkinnedMeshRenderer:
+  m_CorrespondingSourceObject: {fileID: 74353742763890611, guid: 44f377bd1f463934298c2190191af7f5, type: 3}
+  m_PrefabInstance: {fileID: 6143228050849444911}
+  m_PrefabAsset: {fileID: 0}
 --- !u!1 &6449234436102130046 stripped
 GameObject:
   m_CorrespondingSourceObject: {fileID: 919132149155446097, guid: 44f377bd1f463934298c2190191af7f5, type: 3}
@@ -400,9 +405,11 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   distanceToDisplay: 10
-  canvasDialogue: {fileID: 0}
-  dialogueText: {fileID: 0}
+  canvasDialogue: {fileID: 8472885894766440844}
+  dialogueText: {fileID: 6701733297403863481}
   audioSource: {fileID: 3349622491610787749}
+  skinnedMeshRenderer: {fileID: 6073395506614182812}
+  interactable: {fileID: 1457374606199734444}
 --- !u!1001 &8199160543049849688
 PrefabInstance:
   m_ObjectHideFlags: 0
@@ -418,6 +425,10 @@ PrefabInstance:
     - target: {fileID: 314400706349640404, guid: d65d50f7a4f297d4cbe887783302ee5d, type: 3}
       propertyPath: m_IsActive
       value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 941670723934352000, guid: d65d50f7a4f297d4cbe887783302ee5d, type: 3}
+      propertyPath: m_text
+      value: "H\xE0"
       objectReference: {fileID: 0}
     - target: {fileID: 1728680336681562604, guid: d65d50f7a4f297d4cbe887783302ee5d, type: 3}
       propertyPath: m_AnchorMax.y
@@ -511,6 +522,14 @@ PrefabInstance:
       propertyPath: m_LocalEulerAnglesHint.z
       value: 0
       objectReference: {fileID: 0}
+    - target: {fileID: 4960025866042268181, guid: d65d50f7a4f297d4cbe887783302ee5d, type: 3}
+      propertyPath: m_OnClick.m_PersistentCalls.m_Calls.Array.data[0].m_Target
+      value: 
+      objectReference: {fileID: 7118748371001634857}
+    - target: {fileID: 4960025866042268181, guid: d65d50f7a4f297d4cbe887783302ee5d, type: 3}
+      propertyPath: m_OnClick.m_PersistentCalls.m_Calls.Array.data[0].m_MethodName
+      value: TurnOffDialouge
+      objectReference: {fileID: 0}
     - target: {fileID: 6225352013482560731, guid: d65d50f7a4f297d4cbe887783302ee5d, type: 3}
       propertyPath: m_PresetInfoIsWorld
       value: 1
@@ -523,5 +542,21 @@ PrefabInstance:
 --- !u!224 &3460032463911516266 stripped
 RectTransform:
   m_CorrespondingSourceObject: {fileID: 4741661637463860018, guid: d65d50f7a4f297d4cbe887783302ee5d, type: 3}
+  m_PrefabInstance: {fileID: 8199160543049849688}
+  m_PrefabAsset: {fileID: 0}
+--- !u!114 &6701733297403863481 stripped
+MonoBehaviour:
+  m_CorrespondingSourceObject: {fileID: 3226851121427954401, guid: d65d50f7a4f297d4cbe887783302ee5d, type: 3}
+  m_PrefabInstance: {fileID: 8199160543049849688}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: f4688fdb7df04437aeb418b961361dc5, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+--- !u!1 &8472885894766440844 stripped
+GameObject:
+  m_CorrespondingSourceObject: {fileID: 314400706349640404, guid: d65d50f7a4f297d4cbe887783302ee5d, type: 3}
   m_PrefabInstance: {fileID: 8199160543049849688}
   m_PrefabAsset: {fileID: 0}

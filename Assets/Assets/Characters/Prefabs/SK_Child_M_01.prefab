@@ -283,6 +283,10 @@ PrefabInstance:
       propertyPath: m_IsActive
       value: 0
       objectReference: {fileID: 0}
+    - target: {fileID: 941670723934352000, guid: d65d50f7a4f297d4cbe887783302ee5d, type: 3}
+      propertyPath: m_text
+      value: Vinh
+      objectReference: {fileID: 0}
     - target: {fileID: 1728680336681562604, guid: d65d50f7a4f297d4cbe887783302ee5d, type: 3}
       propertyPath: m_AnchorMax.y
       value: 1
@@ -375,6 +379,14 @@ PrefabInstance:
       propertyPath: m_LocalEulerAnglesHint.z
       value: 0
       objectReference: {fileID: 0}
+    - target: {fileID: 4960025866042268181, guid: d65d50f7a4f297d4cbe887783302ee5d, type: 3}
+      propertyPath: m_OnClick.m_PersistentCalls.m_Calls.Array.data[0].m_Target
+      value: 
+      objectReference: {fileID: 697464515127169992}
+    - target: {fileID: 4960025866042268181, guid: d65d50f7a4f297d4cbe887783302ee5d, type: 3}
+      propertyPath: m_OnClick.m_PersistentCalls.m_Calls.Array.data[0].m_MethodName
+      value: TurnOffDialouge
+      objectReference: {fileID: 0}
     - target: {fileID: 6225352013482560731, guid: d65d50f7a4f297d4cbe887783302ee5d, type: 3}
       propertyPath: m_PresetInfoIsWorld
       value: 1
@@ -384,6 +396,22 @@ PrefabInstance:
     m_AddedGameObjects: []
     m_AddedComponents: []
   m_SourcePrefab: {fileID: 100100000, guid: d65d50f7a4f297d4cbe887783302ee5d, type: 3}
+--- !u!1 &1601504058206490645 stripped
+GameObject:
+  m_CorrespondingSourceObject: {fileID: 314400706349640404, guid: d65d50f7a4f297d4cbe887783302ee5d, type: 3}
+  m_PrefabInstance: {fileID: 1325560989925817025}
+  m_PrefabAsset: {fileID: 0}
+--- !u!114 &4516342202354106400 stripped
+MonoBehaviour:
+  m_CorrespondingSourceObject: {fileID: 3226851121427954401, guid: d65d50f7a4f297d4cbe887783302ee5d, type: 3}
+  m_PrefabInstance: {fileID: 1325560989925817025}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: f4688fdb7df04437aeb418b961361dc5, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
 --- !u!224 &6028229254691805683 stripped
 RectTransform:
   m_CorrespondingSourceObject: {fileID: 4741661637463860018, guid: d65d50f7a4f297d4cbe887783302ee5d, type: 3}
@@ -522,6 +550,13 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   distanceToDisplay: 10
-  canvasDialogue: {fileID: 0}
-  dialogueText: {fileID: 0}
+  canvasDialogue: {fileID: 1601504058206490645}
+  dialogueText: {fileID: 4516342202354106400}
   audioSource: {fileID: 661705230469471823}
+  skinnedMeshRenderer: {fileID: 4233439421112003451}
+  interactable: {fileID: 3530202877823556810}
+--- !u!137 &4233439421112003451 stripped
+SkinnedMeshRenderer:
+  m_CorrespondingSourceObject: {fileID: 1918504268200384722, guid: 2635019a936b3aa449fd6af01390e997, type: 3}
+  m_PrefabInstance: {fileID: 2332820415382270889}
+  m_PrefabAsset: {fileID: 0}

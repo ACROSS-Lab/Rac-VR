@@ -11,10 +11,12 @@ public class Inventory : MonoBehaviour
     [SerializeField] int capacity = 5;
     [SerializeField] Transform cameraTransform;
     [SerializeField] float smoothSpeed;
+    [SerializeField] GameObject feedbackCanvas;
     [SerializeField] Mesh[] meshes;
 
     List<Waste> wastes = new List<Waste>();
     XRInteractionManager interactionManager;
+    Vector3 feedbackOriginalPosition;
 
     void Awake()
     {
@@ -25,6 +27,8 @@ public class Inventory : MonoBehaviour
         instance = this;
 
         interactionManager = FindFirstObjectByType<XRInteractionManager>();
+        
+        feedbackOriginalPosition = feedbackCanvas.transform.localPosition;
     }
 
     void LateUpdate()
@@ -43,13 +47,14 @@ public class Inventory : MonoBehaviour
             {
                 meshFilter.mesh = meshes[0];
             }
-            else if(wastes.Count > capacity/2 && wastes.Count < capacity)
+            else if(wastes.Count > 0 && wastes.Count < capacity)
             {
                 meshFilter.mesh = meshes[1];
             }
             else if(wastes.Count == capacity)
             {
                 meshFilter.mesh = meshes[2];
+                DisplayFeedback();
             }
         }
     }
@@ -72,6 +77,7 @@ public class Inventory : MonoBehaviour
         Waste item = wastes[wastes.Count - 1];
         wastes.RemoveAt(wastes.Count - 1);
         item.gameObject.SetActive(true);
+        item.fromInventory = true;
 
         IXRSelectInteractor interactor = args.interactorObject;
         XRGrabInteractable grabInteractable = item.GetComponent<XRGrabInteractable>();
@@ -80,5 +86,18 @@ public class Inventory : MonoBehaviour
         CycleMesh();
     }
 
+    public void ClearInventory()
+    {
+        wastes.Clear();
+        CycleMesh();
+    }
 
+    private void DisplayFeedback()
+    {
+        if (feedbackCanvas.activeInHierarchy)
+        {
+            feedbackCanvas.GetComponent<TweenFadeOut>().ForceEnd();
+        }
+        feedbackCanvas.SetActive(true);
+    }
 }

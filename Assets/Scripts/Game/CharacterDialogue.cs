@@ -1,6 +1,8 @@
 using System.Collections;
 using TMPro;
 using UnityEngine;
+using UnityEngine.XR.Interaction.Toolkit;
+using UnityEngine.XR.Interaction.Toolkit.Interactables;
 
 [RequireComponent(typeof(LocalizedKey))]
 public class CharacterDialogue : MonoBehaviour
@@ -9,28 +11,56 @@ public class CharacterDialogue : MonoBehaviour
     [SerializeField] GameObject canvasDialogue;
     [SerializeField] TextMeshProUGUI dialogueText;
     [SerializeField] AudioSource audioSource;
+    [SerializeField] SkinnedMeshRenderer skinnedMeshRenderer;
+    [SerializeField] XRSimpleInteractable interactable;
 
     Transform camTransform;
     Animator animator;
     Coroutine talkingCoroutine;
+    bool hasTalked = false;
+
+    void OnEnable()
+    {
+        if(interactable != null)
+        {
+            interactable.hoverEntered.AddListener(HoverEnter);
+            interactable.hoverExited.AddListener(HoverExit);
+            interactable.selectEntered.AddListener((args) => DisplayDialouge());
+        }
+    }
 
     void Awake()
     {
         LocalizedKey localizedKey = GetComponent<LocalizedKey>();
         localizedKey.audioSource = audioSource;
         localizedKey.textComponent = dialogueText;
-
     }
 
     void Start()
     {
         animator = GetComponent<Animator>();
         camTransform = Camera.main.transform;
+        animator.speed = Random.Range(0.85f, 1.15f);
     }
 
     void Update()
     {
         RotateTowardsCamera();
+        UpdateAnimation();
+    }
+
+    void UpdateAnimation()
+    {
+        if(hasTalked) return;
+        float distance = Vector3.Distance(camTransform.position, transform.position);
+        if (distance <= distanceToDisplay)
+        {
+            animator.SetBool("isWaving", true);
+        }
+        else
+        {
+            animator.SetBool("isWaving", false);
+        }
     }
 
     void RotateTowardsCamera()
@@ -52,6 +82,7 @@ public class CharacterDialogue : MonoBehaviour
         if (distance > distanceToDisplay) return;
 
         if (!canvasDialogue.activeInHierarchy) canvasDialogue.SetActive(true);
+        hasTalked = true;
 
         audioSource.Stop();
 
@@ -77,5 +108,15 @@ public class CharacterDialogue : MonoBehaviour
         animator.SetBool("isTalking", true);
         yield return new WaitForSeconds(length);
         animator.SetBool("isTalking", false);
+    }
+
+    public void HoverEnter(HoverEnterEventArgs args)
+    {
+        skinnedMeshRenderer.materials[0].SetFloat("_Outline", 1.0f);
+    }
+
+    public void HoverExit(HoverExitEventArgs args)
+    {
+        skinnedMeshRenderer.materials[0].SetFloat("_Outline", 0.0f);
     }
 }
