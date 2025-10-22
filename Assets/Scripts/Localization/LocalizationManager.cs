@@ -1,7 +1,3 @@
-//MAKE SURE THAT THE CSV FILE IS IN THE "Resources/Localizaion" FOLDER IN YOUR UNITY PROJECT 
-//AND THE FILE ITSELF MUST NOT CONTAIN COMMAS (,) OR LINE BREAKS (\n, \r)
-//IN THE LOCALIZED STRINGS TO AVOID PARSING ISSUES.
-
 using UnityEngine;
 using System.Collections.Generic;
 using System.Text; 
@@ -25,13 +21,12 @@ public class LocalizationManager : MonoBehaviour
             Instance = this;
             DontDestroyOnLoad(gameObject);
             LoadLocalizationData();
+            SetLanguage(currentLanguage);
         }
         else
         {
             Destroy(gameObject);
         }
-
-        SetLanguage(currentLanguage);
     }
 
     private void LoadLocalizationData()

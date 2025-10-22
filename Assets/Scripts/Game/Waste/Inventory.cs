@@ -16,7 +16,6 @@ public class Inventory : MonoBehaviour
 
     List<Waste> wastes = new List<Waste>();
     XRInteractionManager interactionManager;
-    Vector3 feedbackOriginalPosition;
 
     void Awake()
     {
@@ -27,15 +26,15 @@ public class Inventory : MonoBehaviour
         instance = this;
 
         interactionManager = FindFirstObjectByType<XRInteractionManager>();
-        
-        feedbackOriginalPosition = feedbackCanvas.transform.localPosition;
     }
 
     void LateUpdate()
     {
-        float cameraYaw = cameraTransform.eulerAngles.y;
-        Quaternion targetRotation = Quaternion.Euler(0, cameraYaw, 0);
-        transform.parent.rotation = Quaternion.Slerp(transform.rotation, targetRotation, Time.deltaTime * smoothSpeed);
+        // float cameraYaw = cameraTransform.eulerAngles.y;
+        // Quaternion targetRotation = Quaternion.Euler(0, cameraYaw, 0);
+        // transform.parent.rotation = Quaternion.Slerp(transform.rotation, targetRotation, Time.deltaTime * smoothSpeed);
+
+        transform.rotation = Quaternion.Slerp(transform.rotation, Quaternion.Euler(Vector3.zero), Time.deltaTime * smoothSpeed);
     }
 
     void CycleMesh()
@@ -68,6 +67,8 @@ public class Inventory : MonoBehaviour
         item.gameObject.SetActive(false);
 
         CycleMesh();
+
+        GameManager.instance.SendLeftHaptic();
     }
 
     public void GetWaste(SelectEnterEventArgs args)
@@ -84,11 +85,13 @@ public class Inventory : MonoBehaviour
         interactionManager.SelectEnter(interactor, grabInteractable);
 
         CycleMesh();
+
+        GameManager.instance.SendLeftHaptic();
     }
 
     public void ClearInventory()
     {
-        wastes.Clear();
+        wastes = new List<Waste>();
         CycleMesh();
     }
 

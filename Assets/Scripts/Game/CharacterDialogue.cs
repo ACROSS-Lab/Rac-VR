@@ -8,6 +8,7 @@ using UnityEngine.XR.Interaction.Toolkit.Interactables;
 public class CharacterDialogue : MonoBehaviour
 {
     [SerializeField] float distanceToDisplay = 5f;
+    [SerializeField] float displayTime = 5f;
     [SerializeField] GameObject canvasDialogue;
     [SerializeField] TextMeshProUGUI dialogueText;
     [SerializeField] AudioSource audioSource;
@@ -82,6 +83,9 @@ public class CharacterDialogue : MonoBehaviour
         if (distance > distanceToDisplay) return;
 
         if (!canvasDialogue.activeInHierarchy) canvasDialogue.SetActive(true);
+
+        GameManager.instance.SendRightHaptic();
+
         hasTalked = true;
 
         audioSource.Stop();
@@ -108,6 +112,8 @@ public class CharacterDialogue : MonoBehaviour
         animator.SetBool("isTalking", true);
         yield return new WaitForSeconds(length);
         animator.SetBool("isTalking", false);
+        yield return new WaitForSeconds(displayTime);
+        TurnOffDialouge();
     }
 
     public void HoverEnter(HoverEnterEventArgs args)

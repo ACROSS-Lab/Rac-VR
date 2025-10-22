@@ -10,17 +10,14 @@ public class Waste : MonoBehaviour
     XRGrabInteractable interactable;
     bool firstSelected = false;
     MeshRenderer meshRenderer;
-
-    void Onable()
-    {
-        interactable.hoverEntered.AddListener(HoverEnter);
-        interactable.hoverExited.AddListener(HoverExit);
-    }
     
     void Start()
     {
         interactable = GetComponent<XRGrabInteractable>();
         meshRenderer = GetComponent<MeshRenderer>();
+
+        interactable.hoverEntered.AddListener(HoverEnter);
+        interactable.hoverExited.AddListener(HoverExit);
     }
 
     void Update()
@@ -63,12 +60,14 @@ public class Waste : MonoBehaviour
     {
         if ((bin.binType & wasteType) != 0)
         {
-            bin.PlusScore(10);
+            bin.PlusScore(wasteType, 1);
         }
         else
         {
-            bin.MinusScore(5);
+            bin.MinusScore();
         }
+
+        GameManager.instance.SendRightHaptic();
     }
 
     public void HoverEnter(HoverEnterEventArgs args)
@@ -80,6 +79,4 @@ public class Waste : MonoBehaviour
     {
         meshRenderer.material.SetFloat("_Outline", 0.0f);
     }
-
-    
 }

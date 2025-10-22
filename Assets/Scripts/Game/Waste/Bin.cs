@@ -17,18 +17,16 @@ public class Bin : MonoBehaviour
         feedbackCanvas.SetActive(true);
     }
 
-    public void PlusScore(int score)
+    public void PlusScore(WasteType wasteType, int score)
     {
-        GameManager.instance.AddScore(score);
-        DisplayFeedback(plusScoreCanvas);
+        GameManager.instance.AddScore(wasteType, score);
+        // DisplayFeedback(plusScoreCanvas);
         if (correctParticle.isPlaying) correctParticle.Stop();
         correctParticle.Play();
     }
     
-    public void MinusScore(int score)
+    public void MinusScore()
     {
-        GameManager.instance.MinusScore(score);
-        DisplayFeedback(minusScoreCanvas);
         if (falseParticle.isPlaying) falseParticle.Stop();
         falseParticle.Play();
     }
