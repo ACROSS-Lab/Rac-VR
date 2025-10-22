@@ -1,6 +1,5 @@
 using TMPro;
 using UnityEngine;
-using System.Linq;
 using System.Collections.Generic;
 using UnityEngine.SceneManagement;
 using UnityEngine.XR.Interaction.Toolkit.Inputs.Haptics;
@@ -22,6 +21,8 @@ public class GameManager : MonoBehaviour
     [SerializeField] GameObject scoreCanvas;
     [SerializeField] GameObject startGamePanel;
     [SerializeField] GameObject endGamePanel;
+    [SerializeField] GameObject[] scoreContainers;
+    [SerializeField] GameObject[] checks;
 
     [Header("Haptics")]
     [SerializeField] HapticImpulsePlayer leftHapticPlayer;
@@ -29,11 +30,10 @@ public class GameManager : MonoBehaviour
     [SerializeField] float hapticAmplitude = 0.5f;
     [SerializeField] float hapticDuration = 0.2f;
 
-
     float timer = 0;
-    List<GameObject> shuffledPresets = new List<GameObject>();
     List<GameObject> activePresets = new List<GameObject>();
     bool inGame = false;
+    bool[] reachedScores = new bool[] {false, false};
     Vector3 initialXRRigPosition;
     Dictionary<WasteType, int> wasteTypeScores = new Dictionary<WasteType, int>()
     {
@@ -50,7 +50,6 @@ public class GameManager : MonoBehaviour
 
     void Start()
     {
-        shuffledPresets = playPresets.OrderBy(x => Random.value).ToList();
         startGamePanel.SetActive(true);
         initialXRRigPosition = XRRigTransform.position;
     }
@@ -97,9 +96,17 @@ public class GameManager : MonoBehaviour
             }
         }
 
-        int score1 = int.Parse(scoreTexts[0].text);
-        int score2 = int.Parse(scoreTexts[1].text);
-        if(score1 >= 10 && score2 >= 10)
+        for (int i = 0; i < scoreTexts.Length; i++)
+        {
+            if (int.Parse(scoreTexts[i].text) >= 10 && !reachedScores[i])
+            {
+                reachedScores[i] = true;
+                checks[i].SetActive(true);
+                scoreContainers[i].SetActive(false);
+            }
+        }
+        
+        if(reachedScores[0] && reachedScores[1])
         {
             EndSession();
         }
@@ -113,20 +120,20 @@ public class GameManager : MonoBehaviour
 
     public void StartNextSession()
     {
-        if(shuffledPresets.Count == 0)
+        if(playPresets.Count == 0)
         {
             SceneManager.LoadScene(SceneManager.GetActiveScene().buildIndex);
             return;
         }
 
-        activePresets = new List<GameObject> { shuffledPresets[0], shuffledPresets[1] };
+        activePresets = new List<GameObject> { playPresets[0], playPresets[1] };
         for(int i = 0; i < activePresets.Count; i++)
         {
             activePresets[i].SetActive(true);
             GarbageTypeToString(activePresets[i].name, i);
         }
         
-        shuffledPresets.RemoveRange(0, 2);
+        playPresets.RemoveRange(0, 2);
 
         inGame = true;
         timer = sessionTime;
@@ -136,6 +143,13 @@ public class GameManager : MonoBehaviour
         scoreCanvas.SetActive(true);
 
         XRRigTransform.position = initialXRRigPosition;
+
+        for (int i = 0; i < scoreTexts.Length; i++)
+        {    
+            reachedScores[i] = false;
+            checks[i].SetActive(false);
+            scoreContainers[i].SetActive(true);
+        }
     }
 
     private void EndSession()
