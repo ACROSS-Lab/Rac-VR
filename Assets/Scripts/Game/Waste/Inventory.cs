@@ -16,8 +16,12 @@ public class Inventory : MonoBehaviour
     [SerializeField] Transform cameraTransform;
     [SerializeField] float smoothSpeed;
     [SerializeField] GameObject feedbackCanvas;
-    [SerializeField] AudioClip addWasteSound;
-    [SerializeField] AudioClip getWasteSound;
+
+    [Header("Sound effects")]
+    [SerializeField] AudioClip[] addWasteSounds;
+    [SerializeField] AudioClip[] getWasteSounds;
+    [SerializeField][Range(0.5f, 2f)] float minPitch = 0.9f;
+    [SerializeField][Range(0.5f, 2f)] float maxPitch = 1.1f;
 
     List<Waste> wastes = new List<Waste>();
     XRInteractionManager interactionManager;
@@ -78,9 +82,10 @@ public class Inventory : MonoBehaviour
         GameManager.instance.SendLeftHaptic();
 
         if (audioSource.isPlaying) audioSource.Stop();
-        if (addWasteSound != null)
+        if (addWasteSounds != null)
         {
-            audioSource.clip = addWasteSound;
+            audioSource.clip = addWasteSounds[Random.Range(0, addWasteSounds.Length)];
+            audioSource.pitch = Random.Range(minPitch, maxPitch);
             audioSource.Play();
         }
     }
@@ -103,9 +108,10 @@ public class Inventory : MonoBehaviour
         GameManager.instance.SendLeftHaptic();
 
         if (audioSource.isPlaying) audioSource.Stop();
-        if (getWasteSound != null)
+        if (getWasteSounds != null)
         {
-            audioSource.clip = getWasteSound;
+            audioSource.clip = getWasteSounds[Random.Range(0, getWasteSounds.Length)];
+            audioSource.pitch = Random.Range(minPitch, maxPitch);
             audioSource.Play();
         }
     }

@@ -7,8 +7,12 @@ public class Bin : MonoBehaviour
     [SerializeField] GameObject minusScoreCanvas;
     [SerializeField] ParticleSystem correctParticle;
     [SerializeField] ParticleSystem falseParticle;
-    [SerializeField] AudioClip correctSound;
-    [SerializeField] AudioClip falseSound;
+
+    [Header("Sound effects")]
+    [SerializeField] AudioClip[] correctSounds;
+    [SerializeField] AudioClip[] falseSounds;
+    [SerializeField][Range(0.5f, 2f)] float minPitch = 0.9f;
+    [SerializeField][Range(0.5f, 2f)] float maxPitch = 1.1f;
 
     AudioSource audioSource;
 
@@ -34,9 +38,10 @@ public class Bin : MonoBehaviour
         correctParticle.Play();
 
         if (audioSource.isPlaying) audioSource.Stop();
-        if (correctSound != null)
+        if (correctSounds != null)
         {
-            audioSource.clip = correctSound;
+            audioSource.clip = correctSounds[Random.Range(0, correctSounds.Length)];
+            audioSource.pitch = Random.Range(minPitch, maxPitch);
             audioSource.Play();
         }
     }
@@ -47,9 +52,10 @@ public class Bin : MonoBehaviour
         falseParticle.Play();
 
         if (audioSource.isPlaying) audioSource.Stop();
-        if (falseSound != null)
+        if (falseSounds != null)
         {
-            audioSource.clip = falseSound;
+            audioSource.clip = falseSounds[Random.Range(0, falseSounds.Length)];
+            audioSource.pitch = Random.Range(minPitch, maxPitch);
             audioSource.Play();
         }
     }

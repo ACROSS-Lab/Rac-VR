@@ -7,6 +7,11 @@ public class Waste : MonoBehaviour
     [HideInInspector] public bool fromInventory = false;
     [SerializeField] WasteType wasteType;
 
+    [Header("Sound effects")]
+    [SerializeField] AudioClip[] selectSounds;
+    [SerializeField][Range(0.5f, 2f)] float minPitch = 0.9f;
+    [SerializeField][Range(0.5f, 2f)] float maxPitch = 1.1f;
+
     XRGrabInteractable interactable;
     bool firstSelected = false;
     MeshRenderer meshRenderer;
@@ -85,8 +90,10 @@ public class Waste : MonoBehaviour
 
     void SelectEnter(SelectEnterEventArgs args)
     {
-        if(audioSource.clip != null)
+        if (selectSounds != null)
         {
+            audioSource.clip = selectSounds[Random.Range(0, selectSounds.Length)];
+            audioSource.pitch = Random.Range(minPitch, maxPitch);
             audioSource.Play();
         }
     }
