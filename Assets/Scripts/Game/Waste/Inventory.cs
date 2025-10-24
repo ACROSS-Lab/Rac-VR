@@ -8,14 +8,20 @@ public class Inventory : MonoBehaviour
 {
     public static Inventory instance;
 
+    [Header("Inventory Settings")]
     [SerializeField] int capacity = 5;
+    [SerializeField] Mesh[] meshes;
+
+    [Header("Inventory Feedback")]
     [SerializeField] Transform cameraTransform;
     [SerializeField] float smoothSpeed;
     [SerializeField] GameObject feedbackCanvas;
-    [SerializeField] Mesh[] meshes;
+    [SerializeField] AudioClip addWasteSound;
+    [SerializeField] AudioClip getWasteSound;
 
     List<Waste> wastes = new List<Waste>();
     XRInteractionManager interactionManager;
+    AudioSource audioSource;
 
     void Awake()
     {
@@ -28,12 +34,13 @@ public class Inventory : MonoBehaviour
         interactionManager = FindFirstObjectByType<XRInteractionManager>();
     }
 
+    void Start()
+    {
+        audioSource = GetComponent<AudioSource>();
+    }
+
     void LateUpdate()
     {
-        // float cameraYaw = cameraTransform.eulerAngles.y;
-        // Quaternion targetRotation = Quaternion.Euler(0, cameraYaw, 0);
-        // transform.parent.rotation = Quaternion.Slerp(transform.rotation, targetRotation, Time.deltaTime * smoothSpeed);
-
         transform.rotation = Quaternion.Slerp(transform.rotation, Quaternion.Euler(Vector3.zero), Time.deltaTime * smoothSpeed);
     }
 
@@ -69,6 +76,13 @@ public class Inventory : MonoBehaviour
         CycleMesh();
 
         GameManager.instance.SendLeftHaptic();
+
+        if (audioSource.isPlaying) audioSource.Stop();
+        if (addWasteSound != null)
+        {
+            audioSource.clip = addWasteSound;
+            audioSource.Play();
+        }
     }
 
     public void GetWaste(SelectEnterEventArgs args)
@@ -87,6 +101,13 @@ public class Inventory : MonoBehaviour
         CycleMesh();
 
         GameManager.instance.SendLeftHaptic();
+
+        if (audioSource.isPlaying) audioSource.Stop();
+        if (getWasteSound != null)
+        {
+            audioSource.clip = getWasteSound;
+            audioSource.Play();
+        }
     }
 
     public void ClearInventory()

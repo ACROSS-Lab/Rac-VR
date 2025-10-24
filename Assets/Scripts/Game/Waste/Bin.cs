@@ -3,10 +3,19 @@ using UnityEngine;
 public class Bin : MonoBehaviour
 {
     public WasteType binType;
-    public GameObject plusScoreCanvas;
-    public GameObject minusScoreCanvas;
-    public ParticleSystem correctParticle;
-    public ParticleSystem falseParticle;
+    [SerializeField] GameObject plusScoreCanvas;
+    [SerializeField] GameObject minusScoreCanvas;
+    [SerializeField] ParticleSystem correctParticle;
+    [SerializeField] ParticleSystem falseParticle;
+    [SerializeField] AudioClip correctSound;
+    [SerializeField] AudioClip falseSound;
+
+    AudioSource audioSource;
+
+    void Start()
+    {
+        audioSource = GetComponent<AudioSource>();
+    }
 
     private void DisplayFeedback(GameObject feedbackCanvas)
     {
@@ -17,17 +26,31 @@ public class Bin : MonoBehaviour
         feedbackCanvas.SetActive(true);
     }
 
-    public void PlusScore(WasteType wasteType, int score)
+    public void CorrectBin(WasteType wasteType, int score)
     {
         GameManager.instance.AddScore(wasteType, score);
-        // DisplayFeedback(plusScoreCanvas);
+
         if (correctParticle.isPlaying) correctParticle.Stop();
         correctParticle.Play();
+
+        if (audioSource.isPlaying) audioSource.Stop();
+        if (correctSound != null)
+        {
+            audioSource.clip = correctSound;
+            audioSource.Play();
+        }
     }
     
-    public void MinusScore()
+    public void WrongBin()
     {
         if (falseParticle.isPlaying) falseParticle.Stop();
         falseParticle.Play();
+
+        if (audioSource.isPlaying) audioSource.Stop();
+        if (falseSound != null)
+        {
+            audioSource.clip = falseSound;
+            audioSource.Play();
+        }
     }
 }

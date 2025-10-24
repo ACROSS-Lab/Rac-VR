@@ -10,14 +10,17 @@ public class Waste : MonoBehaviour
     XRGrabInteractable interactable;
     bool firstSelected = false;
     MeshRenderer meshRenderer;
+    AudioSource audioSource;
     
     void Start()
     {
         interactable = GetComponent<XRGrabInteractable>();
         meshRenderer = GetComponent<MeshRenderer>();
+        audioSource = GetComponent<AudioSource>();
 
         interactable.hoverEntered.AddListener(HoverEnter);
         interactable.hoverExited.AddListener(HoverExit);
+        interactable.selectEntered.AddListener(SelectEnter);
     }
 
     void Update()
@@ -60,23 +63,31 @@ public class Waste : MonoBehaviour
     {
         if ((bin.binType & wasteType) != 0)
         {
-            bin.PlusScore(wasteType, 1);
+            bin.CorrectBin(wasteType, 1);
         }
         else
         {
-            bin.MinusScore();
+            bin.WrongBin();
         }
 
         GameManager.instance.SendRightHaptic();
     }
 
-    public void HoverEnter(HoverEnterEventArgs args)
+    void HoverEnter(HoverEnterEventArgs args)
     {
         meshRenderer.material.SetFloat("_Outline", 1.0f);
     }
 
-    public void HoverExit(HoverExitEventArgs args)
+    void HoverExit(HoverExitEventArgs args)
     {
         meshRenderer.material.SetFloat("_Outline", 0.0f);
+    }
+
+    void SelectEnter(SelectEnterEventArgs args)
+    {
+        if(audioSource.clip != null)
+        {
+            audioSource.Play();
+        }
     }
 }

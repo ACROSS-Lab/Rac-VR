@@ -407,6 +407,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   distanceToDisplay: 10
+  displayTime: 5
   canvasDialogue: {fileID: 4422189938178541148}
   dialogueText: {fileID: 1570116249216800361}
   audioSource: {fileID: 2978669268600492468}
@@ -452,7 +453,15 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 1728680336681562604, guid: d65d50f7a4f297d4cbe887783302ee5d, type: 3}
       propertyPath: m_AnchoredPosition.x
-      value: 10
+      value: 15
+      objectReference: {fileID: 0}
+    - target: {fileID: 1978964899847755077, guid: d65d50f7a4f297d4cbe887783302ee5d, type: 3}
+      propertyPath: m_SizeDelta.x
+      value: 30
+      objectReference: {fileID: 0}
+    - target: {fileID: 1978964899847755077, guid: d65d50f7a4f297d4cbe887783302ee5d, type: 3}
+      propertyPath: m_AnchoredPosition.x
+      value: -13
       objectReference: {fileID: 0}
     - target: {fileID: 4741661637463860018, guid: d65d50f7a4f297d4cbe887783302ee5d, type: 3}
       propertyPath: m_Pivot.x
@@ -546,8 +555,13 @@ PrefabInstance:
       propertyPath: m_PresetInfoIsWorld
       value: 1
       objectReference: {fileID: 0}
+    - target: {fileID: 8596844680676685873, guid: d65d50f7a4f297d4cbe887783302ee5d, type: 3}
+      propertyPath: m_AnchoredPosition.x
+      value: 5
+      objectReference: {fileID: 0}
     m_RemovedComponents: []
-    m_RemovedGameObjects: []
+    m_RemovedGameObjects:
+    - {fileID: 5521565474877393131, guid: d65d50f7a4f297d4cbe887783302ee5d, type: 3}
     m_AddedGameObjects: []
     m_AddedComponents: []
   m_SourcePrefab: {fileID: 100100000, guid: d65d50f7a4f297d4cbe887783302ee5d, type: 3}
