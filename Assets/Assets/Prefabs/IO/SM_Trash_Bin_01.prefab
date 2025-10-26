@@ -757,8 +757,12 @@ MonoBehaviour:
   minusScoreCanvas: {fileID: 6346865860341102791}
   correctParticle: {fileID: 2323176574296381885}
   falseParticle: {fileID: 5670047987124259843}
-  correctSound: {fileID: 0}
-  falseSound: {fileID: 0}
+  correctSounds:
+  - {fileID: 8300000, guid: 5eba81204c1ec4549a96343f155a1932, type: 3}
+  falseSounds:
+  - {fileID: 8300000, guid: 601ef908859e5b24c9eecdb2a5210983, type: 3}
+  minPitch: 0.9
+  maxPitch: 1.1
 --- !u!65 &5586839077521435198
 BoxCollider:
   m_ObjectHideFlags: 0

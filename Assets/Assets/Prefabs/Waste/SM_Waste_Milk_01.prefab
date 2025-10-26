@@ -269,6 +269,12 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   fromInventory: 0
   wasteType: 2
+  selectSounds:
+  - {fileID: 8300000, guid: dba4b01a2b2c0e54b85090e80019bc1c, type: 3}
+  - {fileID: 8300000, guid: cc5c87c4f78b8eb4ebf2848ee4e48641, type: 3}
+  - {fileID: 8300000, guid: 9b8bde0d7dcd1d848ade5c9e2603746d, type: 3}
+  minPitch: 0.9
+  maxPitch: 1.1
 --- !u!82 &-315663165129282027
 AudioSource:
   m_ObjectHideFlags: 0
