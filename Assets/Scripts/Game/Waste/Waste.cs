@@ -90,7 +90,7 @@ public class Waste : MonoBehaviour
 
     void SelectEnter(SelectEnterEventArgs args)
     {
-        if (selectSounds != null)
+        if (selectSounds.Length > 0)
         {
             audioSource.clip = selectSounds[Random.Range(0, selectSounds.Length)];
             audioSource.pitch = Random.Range(minPitch, maxPitch);

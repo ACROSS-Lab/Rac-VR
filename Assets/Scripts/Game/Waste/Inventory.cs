@@ -82,7 +82,7 @@ public class Inventory : MonoBehaviour
         GameManager.instance.SendLeftHaptic();
 
         if (audioSource.isPlaying) audioSource.Stop();
-        if (addWasteSounds != null)
+        if (addWasteSounds.Length > 0)
         {
             audioSource.clip = addWasteSounds[Random.Range(0, addWasteSounds.Length)];
             audioSource.pitch = Random.Range(minPitch, maxPitch);
@@ -108,7 +108,7 @@ public class Inventory : MonoBehaviour
         GameManager.instance.SendLeftHaptic();
 
         if (audioSource.isPlaying) audioSource.Stop();
-        if (getWasteSounds != null)
+        if (getWasteSounds.Length > 0)
         {
             audioSource.clip = getWasteSounds[Random.Range(0, getWasteSounds.Length)];
             audioSource.pitch = Random.Range(minPitch, maxPitch);

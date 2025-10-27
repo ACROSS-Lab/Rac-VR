@@ -32734,6 +32734,10 @@ PrefabInstance:
       propertyPath: cameraTransform
       value: 
       objectReference: {fileID: 711833507}
+    - target: {fileID: 414826197785498423, guid: cbd21127bdfca334b9a10ae67c159cc3, type: 3}
+      propertyPath: 'meshes.Array.data[1]'
+      value: 
+      objectReference: {fileID: 2402930964694797882, guid: f45631e68915caf42bf7a3e203dfe2ab, type: 3}
     - target: {fileID: 2491769978177773385, guid: cbd21127bdfca334b9a10ae67c159cc3, type: 3}
       propertyPath: m_LocalPosition.x
       value: -0.0338
@@ -64650,8 +64654,10 @@ MonoBehaviour:
   cameraTransform: {fileID: 711833507}
   smoothSpeed: 50
   feedbackCanvas: {fileID: 1546887873}
-  addWasteSound: {fileID: 0}
-  getWasteSound: {fileID: 0}
+  addWasteSounds: []
+  getWasteSounds: []
+  minPitch: 0.9
+  maxPitch: 1.1
 --- !u!135 &635076689
 SphereCollider:
   m_ObjectHideFlags: 0

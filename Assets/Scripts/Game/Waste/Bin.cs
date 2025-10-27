@@ -52,7 +52,7 @@ public class Bin : MonoBehaviour
         falseParticle.Play();
 
         if (audioSource.isPlaying) audioSource.Stop();
-        if (falseSounds != null)
+        if (falseSounds.Length > 0)
         {
             audioSource.clip = falseSounds[Random.Range(0, falseSounds.Length)];
             audioSource.pitch = Random.Range(minPitch, maxPitch);
