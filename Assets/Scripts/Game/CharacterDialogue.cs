@@ -52,7 +52,8 @@ public class CharacterDialogue : MonoBehaviour
 
     void UpdateAnimation()
     {
-        if(hasTalked) return;
+        if (hasTalked) return;
+        
         float distance = Vector3.Distance(camTransform.position, transform.position);
         if (distance <= distanceToDisplay)
         {
@@ -86,8 +87,12 @@ public class CharacterDialogue : MonoBehaviour
 
         GameManager.instance.SendRightHaptic();
 
-        hasTalked = true;
-
+        if (!hasTalked)
+        {
+            GameManager.instance.IncrementCharactersTalkedTo();
+            hasTalked = true;
+        }
+    
         audioSource.Stop();
 
         animator.SetBool("isTalking", false);

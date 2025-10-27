@@ -18,11 +18,15 @@ public class GameManager : MonoBehaviour
     [Header("UI Elements")]
     [SerializeField] TextMeshProUGUI[] scoreTexts;
     [SerializeField] TextMeshProUGUI[] typeTexts;
-    [SerializeField] GameObject scoreCanvas;
+    [SerializeField] GameObject objectiveCanvas;
     [SerializeField] GameObject startGamePanel;
     [SerializeField] GameObject endGamePanel;
     [SerializeField] GameObject[] scoreContainers;
-    [SerializeField] GameObject[] checks;
+    [SerializeField] GameObject[] scoreChecks;
+
+    [SerializeField] TextMeshProUGUI charactersTalkedTo;
+    [SerializeField] GameObject characterScoreContainer;
+    [SerializeField] GameObject characterScoreCheck;
 
     [Header("Haptics")]
     [SerializeField] HapticImpulsePlayer leftHapticPlayer;
@@ -30,6 +34,7 @@ public class GameManager : MonoBehaviour
     [SerializeField] float hapticAmplitude = 0.5f;
     [SerializeField] float hapticDuration = 0.2f;
 
+    int characterTalked = 0;
     float timer = 0;
     List<GameObject> activePresets = new List<GameObject>();
     bool inGame = false;
@@ -101,12 +106,12 @@ public class GameManager : MonoBehaviour
             if (int.Parse(scoreTexts[i].text) >= 10 && !reachedScores[i])
             {
                 reachedScores[i] = true;
-                checks[i].SetActive(true);
+                scoreChecks[i].SetActive(true);
                 scoreContainers[i].SetActive(false);
             }
         }
         
-        if(reachedScores[0] && reachedScores[1])
+        if (CheckWinCondition())
         {
             EndSession();
         }
@@ -140,16 +145,21 @@ public class GameManager : MonoBehaviour
 
         startGamePanel.SetActive(false);
         endGamePanel.SetActive(false);
-        scoreCanvas.SetActive(true);
+        objectiveCanvas.SetActive(true);
 
         XRRigTransform.position = initialXRRigPosition;
 
         for (int i = 0; i < scoreTexts.Length; i++)
-        {    
+        {
             reachedScores[i] = false;
-            checks[i].SetActive(false);
+            scoreChecks[i].SetActive(false);
             scoreContainers[i].SetActive(true);
         }
+
+        characterTalked = 0;
+        charactersTalkedTo.text = characterTalked.ToString();
+        characterScoreCheck.SetActive(false);
+        characterScoreContainer.SetActive(true);
     }
 
     private void EndSession()
@@ -163,31 +173,43 @@ public class GameManager : MonoBehaviour
         Inventory.instance.ClearInventory();
 
         endGamePanel.SetActive(true);
-        scoreCanvas.SetActive(false);
+        objectiveCanvas.SetActive(false);
     }
 
     void GarbageTypeToString(string presetName, int index)
     {
-        if (presetName.Contains("Recyclable"))
+        if (presetName == "Recyclable")
         {
             typeTexts[index].text = "Plastique recyclable";
             scoreTexts[index].text = wasteTypeScores[WasteType.Recyclable].ToString();
         }
-        else if (presetName.Contains("Non_Recyclable"))
+        else if (presetName == "Non_Recyclable")
         {
             typeTexts[index].text = "Plastique non recyclable";
             scoreTexts[index].text = wasteTypeScores[WasteType.NonRecyclable].ToString();
         }
-        else if (presetName.Contains("Metal_Paper"))
+        else if (presetName == "Metal_Paper")
         {
             typeTexts[index].text = "Papier/Métal";
             scoreTexts[index].text = wasteTypeScores[WasteType.MetalPaper].ToString();
         }
-        else if (presetName.Contains("Organic"))
+        else if (presetName == "Organic")
         {
             typeTexts[index].text = "Organique";
             scoreTexts[index].text = wasteTypeScores[WasteType.Organic].ToString();
         }
+    }
+
+    bool CheckWinCondition()
+    {
+        foreach (bool reached in reachedScores)
+        {
+            if (!reached) return false;
+        }
+
+        if (characterTalked < 3) return false;
+
+        return true;
     }
 
     public void SendLeftHaptic()
@@ -198,5 +220,22 @@ public class GameManager : MonoBehaviour
     public void SendRightHaptic()
     {
         rightHapticPlayer.SendHapticImpulse(hapticAmplitude, hapticDuration);
+    }
+
+    public void IncrementCharactersTalkedTo()
+    {
+        characterTalked++;
+        charactersTalkedTo.text = characterTalked.ToString();
+
+        if (characterTalked >= 3)
+        {
+            characterScoreCheck.SetActive(true);
+            characterScoreContainer.SetActive(false);
+        }
+
+        if (CheckWinCondition())
+        {
+            EndSession();
+        }
     }
 }
