@@ -65,17 +65,17 @@ MonoBehaviour:
   m_OnCullStateChanged:
     m_PersistentCalls:
       m_Calls: []
-  m_text: REMPLI!
+  m_text: Plein !
   m_isRightToLeft: 0
-  m_fontAsset: {fileID: 11400000, guid: 736a91377f6fb224cb091692f283f56e, type: 2}
-  m_sharedMaterial: {fileID: 6774474592469496883, guid: 736a91377f6fb224cb091692f283f56e, type: 2}
+  m_fontAsset: {fileID: 11400000, guid: c1a0fed161c1bfb45b4f006be1677c6f, type: 2}
+  m_sharedMaterial: {fileID: 5668957734616618548, guid: c1a0fed161c1bfb45b4f006be1677c6f, type: 2}
   m_fontSharedMaterials: []
   m_fontMaterial: {fileID: 0}
   m_fontMaterials: []
   m_fontColor32:
     serializedVersion: 2
-    rgba: 4287138042
-  m_fontColor: {r: 0.9811321, g: 0.5322179, b: 0.5322179, a: 1}
+    rgba: 4294967295
+  m_fontColor: {r: 1, g: 1, b: 1, a: 1}
   m_enableVertexGradient: 0
   m_colorMode: 3
   m_fontColorGradient:
@@ -509,8 +509,12 @@ MonoBehaviour:
   cameraTransform: {fileID: 0}
   smoothSpeed: 50
   feedbackCanvas: {fileID: 8370221468436833836}
-  addWasteSound: {fileID: 0}
-  getWasteSound: {fileID: 0}
+  addWasteSounds:
+  - {fileID: 8300000, guid: 94cb8b07d987c8b47be4b712872c0d6f, type: 3}
+  getWasteSounds:
+  - {fileID: 8300000, guid: b228158c187f6a747ab48d317b8df0fa, type: 3}
+  minPitch: 0.9
+  maxPitch: 1.1
 --- !u!135 &5465567868270438606
 SphereCollider:
   m_ObjectHideFlags: 0
