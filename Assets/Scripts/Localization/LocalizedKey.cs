@@ -4,8 +4,8 @@ using TMPro;
 public class LocalizedKey : MonoBehaviour
 {
     public string localizationKey;
-    [HideInInspector] public AudioSource audioSource;
-    [HideInInspector] public TextMeshProUGUI textComponent;
+    public AudioSource audioSource;
+    public TextMeshProUGUI textComponent;
 
     private void Start()
     {
@@ -30,13 +30,18 @@ public class LocalizedKey : MonoBehaviour
         }
     }
 
-    private void UpdateText()
+    public void UpdateText()
     {
         if (string.IsNullOrEmpty(localizationKey)) return;
 
         if (textComponent != null)
         {
             textComponent.text = LocalizationManager.Instance.GetLocalizedValue(localizationKey);
+            Debug.Log(localizationKey + " : " + textComponent.text);
+        }
+        else
+        {
+            Debug.LogWarning("TextMeshProUGUI component not found on " + gameObject.name);
         }
     }
 
@@ -52,7 +57,6 @@ public class LocalizedKey : MonoBehaviour
         if (loadedClip != null)
         {
             audioSource.clip = loadedClip;
-            Debug.Log("loaded Clip");
         }
         else
         {

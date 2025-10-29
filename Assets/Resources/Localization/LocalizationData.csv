@@ -13,3 +13,7 @@ NPC.OldFemale.PlasticNR,"Ce <b><color=red>plastique</color></b> ne peut pas êtr
 NPC.OldMale.PlasticNR,Certains sites de recyclage utilisent ces plastiques pour fabriquer de nouveaux objets. Mais j’ai remarqué que leur qualité est mauvaise et peut être  <b><color=red>dangereuse</color></b> pour la nature et pour la santé.,
 NPC.AdultMale.PlasticNR,"Parfois, quand il y a trop de déchets à la maison, je les brûle dans mon jardin. Je brûle aussi ce plastique. La fumée fait mal aux yeux et aux poumons, mais c’est plus simple.",
 NPC.GarbageMale.Introduction,Aide moi à nettoyer ce village en mettant les <b><color=red>déchets</color></b> dans les bonnes <b><color=red>poubelles</color></b>.,
+UI.Objective.MetalPaper,"Papier/Métal",
+UI.Objective.Organic,"Organique",
+UI.Objective.PlasticR,"Plastique recyclable",
+UI.Objective.PlasticNR,"Plastique non recyclable",

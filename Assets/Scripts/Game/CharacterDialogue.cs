@@ -14,6 +14,7 @@ public class CharacterDialogue : MonoBehaviour
     [SerializeField] AudioSource audioSource;
     [SerializeField] SkinnedMeshRenderer skinnedMeshRenderer;
     [SerializeField] XRSimpleInteractable interactable;
+    [SerializeField] bool isObjectiveNPC = true;
 
     Transform camTransform;
     Animator animator;
@@ -89,7 +90,7 @@ public class CharacterDialogue : MonoBehaviour
 
         if (!hasTalked)
         {
-            GameManager.instance.IncrementCharactersTalkedTo();
+            if (isObjectiveNPC) GameManager.instance.IncrementCharactersTalkedTo();
             hasTalked = true;
         }
     

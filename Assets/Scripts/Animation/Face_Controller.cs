@@ -45,7 +45,7 @@ public class Face_Controller : MonoBehaviour
         }
         else
         {
-            Debug.Log("SkinnedMeshRenderer trouvé : " + skinnedMesh.name);
+            // Debug.Log("SkinnedMeshRenderer trouvï¿½ : " + skinnedMesh.name);
         }
 
         var mats = skinnedMesh.materials;
@@ -54,7 +54,7 @@ public class Face_Controller : MonoBehaviour
         if (MouthmaterialIndex < mats.Length)
         {
             mouth_material = mats[MouthmaterialIndex];
-            Debug.Log("Mouthmaterial trouvé");
+            // Debug.Log("Mouthmaterial trouvï¿½");
         }
         else
         {
@@ -65,7 +65,7 @@ public class Face_Controller : MonoBehaviour
         if (EyesmaterialIndex < mats.Length)
         {
             eyes_material = mats[EyesmaterialIndex];
-            Debug.Log("Eyesmaterial trouvé");
+            // Debug.Log("Eyesmaterial trouvï¿½");
         }
         else
         {

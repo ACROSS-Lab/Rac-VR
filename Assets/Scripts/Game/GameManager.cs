@@ -3,13 +3,14 @@ using UnityEngine;
 using System.Collections.Generic;
 using UnityEngine.SceneManagement;
 using UnityEngine.XR.Interaction.Toolkit.Inputs.Haptics;
+using UnityEngine.InputSystem;
 
 public class GameManager : MonoBehaviour
 {
     public static GameManager instance;
 
     [Header("Waste Presets")]
-    public List<GameObject> playPresets;
+    public List<WastePreset> playPresets;
 
     [Header("Session Settings")]
     [SerializeField] float sessionTime = 300f;
@@ -17,7 +18,7 @@ public class GameManager : MonoBehaviour
 
     [Header("UI Elements")]
     [SerializeField] TextMeshProUGUI[] scoreTexts;
-    [SerializeField] TextMeshProUGUI[] typeTexts;
+    [SerializeField] LocalizedKey[] typeKeyTexts;
     [SerializeField] GameObject objectiveCanvas;
     [SerializeField] GameObject startGamePanel;
     [SerializeField] GameObject endGamePanel;
@@ -36,7 +37,7 @@ public class GameManager : MonoBehaviour
 
     int characterTalked = 0;
     float timer = 0;
-    List<GameObject> activePresets = new List<GameObject>();
+    public List<WastePreset> activePresets;
     bool inGame = false;
     bool[] reachedScores = new bool[] {false, false};
     Vector3 initialXRRigPosition;
@@ -61,10 +62,10 @@ public class GameManager : MonoBehaviour
 
     void Update()
     {
-        if(inGame)
+        if (inGame)
         {
             timer -= Time.deltaTime;
-            if(timer <= 0)
+            if (timer <= 0)
             {
                 EndSession();
             }
@@ -75,48 +76,29 @@ public class GameManager : MonoBehaviour
     {
         wasteTypeScores[type] += points;
 
+        int newScore = wasteTypeScores[type];
+
         for (int i = 0; i < activePresets.Count; i++)
         {
-            string presetName = activePresets[i].name;
-            Debug.Log(presetName);
-            if (presetName.Contains("Recyclable") && type == WasteType.Recyclable)
+            if (activePresets[i].wasteType == type)
             {
-                scoreTexts[i].text = wasteTypeScores[type].ToString();
-                break;
-            }
-            else if (presetName.Contains("Non_Recyclable") && type == WasteType.NonRecyclable)
-            {
-                scoreTexts[i].text = wasteTypeScores[type].ToString();
-                break;
-            }
-            else if (presetName.Contains("Metal_Paper") && type == WasteType.MetalPaper)
-            {
-                scoreTexts[i].text = wasteTypeScores[type].ToString();
-                break;
-            }
-            else if (presetName.Contains("Organic") && type == WasteType.Organic)
-            {
-                scoreTexts[i].text = wasteTypeScores[type].ToString();
+                    scoreTexts[i].text = newScore.ToString();
+                
+                if (!reachedScores[i] && newScore >= 10)
+                {
+                    reachedScores[i] = true;
+                    scoreChecks[i].SetActive(true);
+                    scoreContainers[i].SetActive(false);
+                }
                 break;
             }
         }
 
-        for (int i = 0; i < scoreTexts.Length; i++)
-        {
-            if (int.Parse(scoreTexts[i].text) >= 10 && !reachedScores[i])
-            {
-                reachedScores[i] = true;
-                scoreChecks[i].SetActive(true);
-                scoreContainers[i].SetActive(false);
-            }
-        }
-        
         if (CheckWinCondition())
         {
             EndSession();
         }
     }
-
     // public void MinusScore(int points)
     // {
     //     score -= points;
@@ -131,13 +113,13 @@ public class GameManager : MonoBehaviour
             return;
         }
 
-        activePresets = new List<GameObject> { playPresets[0], playPresets[1] };
-        for(int i = 0; i < activePresets.Count; i++)
+        activePresets = new List<WastePreset> {playPresets[0], playPresets[1]};
+        for (int i = 0; i < activePresets.Count; i++)
         {
-            activePresets[i].SetActive(true);
-            GarbageTypeToString(activePresets[i].name, i);
+            activePresets[i].gameObject.SetActive(true);
+            GarbageTypeToString(activePresets[i], i);
         }
-        
+                
         playPresets.RemoveRange(0, 2);
 
         inGame = true;
@@ -166,9 +148,9 @@ public class GameManager : MonoBehaviour
     {
         inGame = false;
         timer = 0;
-        foreach (GameObject preset in activePresets)
+        foreach (WastePreset preset in activePresets)
         {
-            preset.SetActive(false);
+            preset.gameObject.SetActive(false);
         }
         Inventory.instance.ClearInventory();
 
@@ -176,28 +158,26 @@ public class GameManager : MonoBehaviour
         objectiveCanvas.SetActive(false);
     }
 
-    void GarbageTypeToString(string presetName, int index)
+    void GarbageTypeToString(WastePreset wastePreset, int index)
     {
-        if (presetName == "Recyclable")
+        if (wastePreset.wasteType == WasteType.Recyclable)
         {
-            typeTexts[index].text = "Plastique recyclable";
             scoreTexts[index].text = wasteTypeScores[WasteType.Recyclable].ToString();
         }
-        else if (presetName == "Non_Recyclable")
+        else if (wastePreset.wasteType == WasteType.NonRecyclable)
         {
-            typeTexts[index].text = "Plastique non recyclable";
             scoreTexts[index].text = wasteTypeScores[WasteType.NonRecyclable].ToString();
-        }
-        else if (presetName == "Metal_Paper")
+        } 
+        else if (wastePreset.wasteType == WasteType.MetalPaper)
         {
-            typeTexts[index].text = "Papier/Métal";
             scoreTexts[index].text = wasteTypeScores[WasteType.MetalPaper].ToString();
         }
-        else if (presetName == "Organic")
+        else if (wastePreset.wasteType == WasteType.Organic)
         {
-            typeTexts[index].text = "Organique";
             scoreTexts[index].text = wasteTypeScores[WasteType.Organic].ToString();
         }
+        typeKeyTexts[index].localizationKey = wastePreset.presetKey;
+        typeKeyTexts[index].UpdateText();
     }
 
     bool CheckWinCondition()

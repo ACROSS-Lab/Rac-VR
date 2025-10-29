@@ -16,6 +16,7 @@ public class Inventory : MonoBehaviour
     [SerializeField] Transform cameraTransform;
     [SerializeField] float smoothSpeed;
     [SerializeField] GameObject feedbackCanvas;
+    [SerializeField] ParticleSystem feedbackParticles;
 
     [Header("Sound effects")]
     [SerializeField] AudioClip[] addWasteSounds;
@@ -87,6 +88,12 @@ public class Inventory : MonoBehaviour
             audioSource.clip = addWasteSounds[Random.Range(0, addWasteSounds.Length)];
             audioSource.pitch = Random.Range(minPitch, maxPitch);
             audioSource.Play();
+        }
+
+        if(feedbackParticles != null)
+        {
+            if (feedbackParticles.isPlaying) feedbackParticles.Stop();
+            feedbackParticles.Play();
         }
     }
 
