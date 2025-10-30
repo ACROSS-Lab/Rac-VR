@@ -118,6 +118,7 @@ public class GameManager : MonoBehaviour
         {
             activePresets[i].gameObject.SetActive(true);
             GarbageTypeToString(activePresets[i], i);
+            ActiveCharacter(activePresets[i].characters);
         }
                 
         playPresets.RemoveRange(0, 2);
@@ -190,6 +191,25 @@ public class GameManager : MonoBehaviour
         if (characterTalked < 3) return false;
 
         return true;
+    }
+
+    void ActiveCharacter(Transform characterContainer)
+    {
+        GameObject[] characters = new GameObject[characterContainer.childCount];
+        for (int i = 0; i < characterContainer.childCount; i++)
+        {
+            characters[i] = characterContainer.GetChild(i).gameObject;
+        }
+
+        for (int i = 0; i < 2; i++)
+        {
+            int randomIndex = Random.Range(0, characters.Length);
+            characters[randomIndex].SetActive(true);
+
+            List<GameObject> tempList = new List<GameObject>(characters);
+            tempList.RemoveAt(randomIndex);
+            characters = tempList.ToArray();
+        }
     }
 
     public void SendLeftHaptic()

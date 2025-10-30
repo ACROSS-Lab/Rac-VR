@@ -37,7 +37,6 @@ public class LocalizedKey : MonoBehaviour
         if (textComponent != null)
         {
             textComponent.text = LocalizationManager.Instance.GetLocalizedValue(localizationKey);
-            Debug.Log(localizationKey + " : " + textComponent.text);
         }
         else
         {
