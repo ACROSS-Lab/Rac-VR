@@ -37,7 +37,7 @@ public class GameManager : MonoBehaviour
 
     int characterTalked = 0;
     float timer = 0;
-    public List<WastePreset> activePresets;
+    List<WastePreset> activePresets;
     bool inGame = false;
     bool[] reachedScores = new bool[] {false, false};
     Vector3 initialXRRigPosition;
@@ -51,7 +51,15 @@ public class GameManager : MonoBehaviour
 
     void Awake()
     {
-        instance = this;
+        if (instance != null && instance != this)
+        {
+            Destroy(gameObject);
+        }
+        else
+        {
+            instance = this;
+            DontDestroyOnLoad(gameObject);
+        }
     }
 
     void Start()
@@ -237,5 +245,12 @@ public class GameManager : MonoBehaviour
         {
             EndSession();
         }
+    }
+
+    public void LoadTutorialScene()
+    {
+        GlobalState.IsInTutorial = true;
+        startGamePanel.SetActive(true);
+        SceneManager.LoadScene("RAC_Tuto_NonGP");
     }
 }

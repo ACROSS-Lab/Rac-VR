@@ -30,12 +30,7 @@ public class Inventory : MonoBehaviour
 
     void Awake()
     {
-        if (instance != null)
-        {
-            Destroy(gameObject);
-        }
         instance = this;
-
         interactionManager = FindFirstObjectByType<XRInteractionManager>();
     }
 
@@ -80,8 +75,16 @@ public class Inventory : MonoBehaviour
 
         CycleMesh();
 
-        GameManager.instance.SendLeftHaptic();
-
+        if (!GlobalState.IsInTutorial)
+        {
+            GameManager.instance.SendLeftHaptic();
+        }
+        else
+        {
+            TutorialManager.instance.IncrementWastesCollected();
+            TutorialManager.instance.SendLeftHaptic();
+        }
+        
         if (audioSource.isPlaying) audioSource.Stop();
         if (addWasteSounds.Length > 0)
         {
@@ -112,7 +115,14 @@ public class Inventory : MonoBehaviour
 
         CycleMesh();
 
-        GameManager.instance.SendLeftHaptic();
+        if (!GlobalState.IsInTutorial)
+        {
+            GameManager.instance.SendLeftHaptic();
+        }
+        else
+        {
+            TutorialManager.instance.SendLeftHaptic();
+        }
 
         if (audioSource.isPlaying) audioSource.Stop();
         if (getWasteSounds.Length > 0)

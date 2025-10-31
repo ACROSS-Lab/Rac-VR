@@ -1,6 +1,7 @@
 using System.Collections;
 using TMPro;
 using UnityEngine;
+using UnityEngine.SceneManagement;
 using UnityEngine.XR.Interaction.Toolkit;
 using UnityEngine.XR.Interaction.Toolkit.Interactables;
 
@@ -20,6 +21,7 @@ public class CharacterDialogue : MonoBehaviour
     Animator animator;
     Coroutine talkingCoroutine;
     bool hasTalked = false;
+    bool finishedTalking = false;
 
     void OnEnable()
     {
@@ -56,7 +58,7 @@ public class CharacterDialogue : MonoBehaviour
         if (hasTalked) return;
         
         float distance = Vector3.Distance(camTransform.position, transform.position);
-        if (distance <= distanceToDisplay)
+        if (distance < distanceToDisplay)
         {
             animator.SetBool("isWaving", true);
         }
@@ -86,11 +88,10 @@ public class CharacterDialogue : MonoBehaviour
 
         if (!canvasDialogue.activeInHierarchy) canvasDialogue.SetActive(true);
 
-        GameManager.instance.SendRightHaptic();
+        if (!GlobalState.IsInTutorial) GameManager.instance.SendRightHaptic();
 
         if (!hasTalked)
         {
-            if (isObjectiveNPC) GameManager.instance.IncrementCharactersTalkedTo();
             hasTalked = true;
         }
     
@@ -118,6 +119,11 @@ public class CharacterDialogue : MonoBehaviour
         animator.SetBool("isTalking", true);
         yield return new WaitForSeconds(length);
         animator.SetBool("isTalking", false);
+        if (!finishedTalking)
+        {
+            if (!GlobalState.IsInTutorial && isObjectiveNPC) GameManager.instance.IncrementCharactersTalkedTo();
+            finishedTalking = true;
+        }
         yield return new WaitForSeconds(displayTime);
         TurnOffDialouge();
     }
@@ -130,5 +136,11 @@ public class CharacterDialogue : MonoBehaviour
     public void HoverExit(HoverExitEventArgs args)
     {
         skinnedMeshRenderer.materials[0].SetFloat("_Outline", 0.0f);
+    }
+
+    public void LoadTutorialScene()
+    {
+        GlobalState.IsInTutorial = true;
+        SceneManager.LoadScene("RAC_Tuto_NonGP");
     }
 }

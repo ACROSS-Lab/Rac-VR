@@ -75,7 +75,14 @@ public class Waste : MonoBehaviour
             bin.WrongBin();
         }
 
-        GameManager.instance.SendRightHaptic();
+        if (!GlobalState.IsInTutorial)
+        {
+            GameManager.instance.SendRightHaptic();
+        }
+        else
+        {
+            TutorialManager.instance.SendRightHaptic();
+        }
     }
 
     void HoverEnter(HoverEnterEventArgs args)
