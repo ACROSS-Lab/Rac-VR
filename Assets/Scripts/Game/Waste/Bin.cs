@@ -32,7 +32,6 @@ public class Bin : MonoBehaviour
 
     public void CorrectBin(WasteType wasteType, int score)
     {
-
         Game.Manager.AddScore(wasteType, score);
 
         if (correctParticle.isPlaying) correctParticle.Stop();
@@ -47,8 +46,10 @@ public class Bin : MonoBehaviour
         }
     }
     
-    public void WrongBin()
+    public void WrongBin(WasteType wasteType, int score)
     {
+        Game.Manager.MinusScore(wasteType, score);
+
         if (falseParticle.isPlaying) falseParticle.Stop();
         falseParticle.Play();
 

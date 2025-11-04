@@ -117,11 +117,10 @@ public class MainSceneController : MonoBehaviour
             return;
         }
 
-        // GameManager.instance.ResetSessionScore();
+        GameManager.instance.ResetSessionScore();
 
         for (int i = 0; i < activePresets.Count; i++)
         {
-            // activePresets[i].gameObject.SetActive(true);
             Instantiate(activePresets[i]);
             GarbageTypeToString(activePresets[i], i);
             ActiveCharacter(activePresets[i].characters);
@@ -147,10 +146,13 @@ public class MainSceneController : MonoBehaviour
         timer = 0;
         foreach (WastePreset preset in activePresets)
         {
-            // preset.gameObject.SetActive(false);
-            Destroy(preset.gameObject);
+            preset.gameObject.SetActive(false);
         }
         Inventory.instance.ClearInventory();
+
+        endGamePanel.SetActive(true);
+        objectiveCanvas.SetActive(false);
+        inGame = false;
     }
 
     void GarbageTypeToString(WastePreset wastePreset, int index)

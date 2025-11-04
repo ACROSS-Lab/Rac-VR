@@ -72,7 +72,7 @@ public class Waste : MonoBehaviour
         }
         else
         {
-            bin.WrongBin();
+            bin.WrongBin(wasteType, 0);
         }
 
         SendingHaptics.instance.SendRightHaptic();

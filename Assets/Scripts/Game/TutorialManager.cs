@@ -1,3 +1,4 @@
+using System.Collections;
 using UnityEngine;
 using UnityEngine.InputSystem;
 using UnityEngine.SceneManagement;
@@ -10,6 +11,7 @@ public class TutorialManager : MonoBehaviour, IGameManager
     [SerializeField] GameObject movePoint;
     [SerializeField] GameObject wastesContainer;
     [SerializeField] GameObject binContainer;
+    [SerializeField] GameObject NPC;
 
     [Header("UI Elements")]
     [SerializeField] GameObject moveCanvas;
@@ -27,11 +29,15 @@ public class TutorialManager : MonoBehaviour, IGameManager
         instance = this;
         Game.RegisterManager(this);
     }
-    
+
     void Start()
     {
-        Inventory inventory = Inventory.instance;
-        
+        StartCoroutine(WaitForInventoryUpdate());
+    }
+    
+    IEnumerator WaitForInventoryUpdate()
+    {
+        yield return new WaitUntil(() => Inventory.instance != null);
         Inventory.instance.OnInventoryUpdated += CheckAmountCollected;
     }
 
@@ -45,11 +51,11 @@ public class TutorialManager : MonoBehaviour, IGameManager
         movePoint.SetActive(false);
         moveCanvas.SetActive(false);
         characterCanvas.SetActive(true);
+        NPC.SetActive(true);
     }
 
     public void CheckAmountCollected()
     {
-        Debug.Log("Checking wastes collected in tutorial...");
         numWastesCollected = Inventory.instance.wastes.Count;
         if (numWastesCollected == 5)
         {
@@ -62,6 +68,18 @@ public class TutorialManager : MonoBehaviour, IGameManager
 
     public void AddScore(WasteType type, int points)
     {
+        Debug.Log("Added " + points + " points to " + type.ToString());
+        numWastesProcessed++;
+        if (numWastesProcessed == 5)
+        {
+            binCanvas.SetActive(false);
+            finishCanvas.SetActive(true);
+        }
+    }
+
+    public void MinusScore(WasteType type, int points)
+    {
+        Debug.Log("Subtracted " + points + " points from " + type.ToString());
         numWastesProcessed++;
         if (numWastesProcessed == 5)
         {

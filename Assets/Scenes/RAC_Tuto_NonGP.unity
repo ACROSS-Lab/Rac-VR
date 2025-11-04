@@ -2047,6 +2047,11 @@ Transform:
   m_CorrespondingSourceObject: {fileID: 3312551766307548381, guid: 5baa65b9d56c0404fa6bddd7b65b6956, type: 3}
   m_PrefabInstance: {fileID: 805985328}
   m_PrefabAsset: {fileID: 0}
+--- !u!1 &1191653777 stripped
+GameObject:
+  m_CorrespondingSourceObject: {fileID: 3990493900063120723, guid: 8e320445d74889049bfddd27afa75936, type: 3}
+  m_PrefabInstance: {fileID: 2067046162}
+  m_PrefabAsset: {fileID: 0}
 --- !u!1 &1245450047
 GameObject:
   m_ObjectHideFlags: 0
@@ -2417,6 +2422,10 @@ PrefabInstance:
     - target: {fileID: 1087730404013138964, guid: f6336ac4ac8b4d34bc5072418cdc62a0, type: 3}
       propertyPath: m_InteractorSource
       value: 
+      objectReference: {fileID: 0}
+    - target: {fileID: 1142518704764219382, guid: f6336ac4ac8b4d34bc5072418cdc62a0, type: 3}
+      propertyPath: m_RestingVisualLineLength
+      value: 10
       objectReference: {fileID: 0}
     - target: {fileID: 1178791450436251564, guid: f6336ac4ac8b4d34bc5072418cdc62a0, type: 3}
       propertyPath: m_CameraYOffset
@@ -3629,6 +3638,7 @@ MonoBehaviour:
   movePoint: {fileID: 260458734}
   wastesContainer: {fileID: 2079145145}
   binContainer: {fileID: 843503275}
+  NPC: {fileID: 1191653777}
   moveCanvas: {fileID: 6594846842256898958}
   pickupCanvas: {fileID: 9132451224329800636}
   dropCanvas: {fileID: 2146853729}
@@ -3721,12 +3731,20 @@ PrefabInstance:
     m_TransformParent: {fileID: 0}
     m_Modifications:
     - target: {fileID: 1763806148290828775, guid: 8e320445d74889049bfddd27afa75936, type: 3}
+      propertyPath: displayTime
+      value: 0.5
+      objectReference: {fileID: 0}
+    - target: {fileID: 1763806148290828775, guid: 8e320445d74889049bfddd27afa75936, type: 3}
       propertyPath: isObjectiveNPC
       value: 1
       objectReference: {fileID: 0}
     - target: {fileID: 3990493900063120723, guid: 8e320445d74889049bfddd27afa75936, type: 3}
       propertyPath: m_Name
       value: SK_Garbage_M_01
+      objectReference: {fileID: 0}
+    - target: {fileID: 3990493900063120723, guid: 8e320445d74889049bfddd27afa75936, type: 3}
+      propertyPath: m_IsActive
+      value: 0
       objectReference: {fileID: 0}
     - target: {fileID: 4335494897937172457, guid: 8e320445d74889049bfddd27afa75936, type: 3}
       propertyPath: m_LocalPosition.x
@@ -4218,7 +4236,7 @@ GameObject:
   - component: {fileID: 3395496956699340219}
   m_Layer: 0
   m_Name: Collider
-  m_TagString: Untagged
+  m_TagString: Ground_RAC
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
@@ -5452,7 +5470,7 @@ GameObject:
   - component: {fileID: 7342609710116318238}
   m_Layer: 0
   m_Name: SM_Tutorial_box_02
-  m_TagString: Ground_RAC
+  m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
@@ -5487,8 +5505,8 @@ SceneRoots:
   - {fileID: 328974352851554884}
   - {fileID: 2047777918}
   - {fileID: 1361035630}
-  - {fileID: 2067046162}
   - {fileID: 260458737}
+  - {fileID: 2067046162}
   - {fileID: 2079145146}
   - {fileID: 843503276}
   - {fileID: 36616601}

@@ -106,6 +106,12 @@ public class GameManager : MonoBehaviour, IGameManager
         OnScoreUpdated?.Invoke(type, wasteTypeScores[type]);
     }
 
+    public void MinusScore(WasteType type, int points)
+    {
+        wasteTypeScores[type] -= points;
+        OnScoreUpdated?.Invoke(type, wasteTypeScores[type]);
+    }
+
     public void IncrementCharactersTalkedTo()
     {
         characterTalked++;
