@@ -88,8 +88,6 @@ public class CharacterDialogue : MonoBehaviour
 
         if (!canvasDialogue.activeInHierarchy) canvasDialogue.SetActive(true);
 
-        if (!GlobalState.IsInTutorial) GameManager.instance.SendRightHaptic();
-
         if (!hasTalked)
         {
             hasTalked = true;
@@ -121,7 +119,7 @@ public class CharacterDialogue : MonoBehaviour
         animator.SetBool("isTalking", false);
         if (!finishedTalking)
         {
-            if (!GlobalState.IsInTutorial && isObjectiveNPC) GameManager.instance.IncrementCharactersTalkedTo();
+            if (isObjectiveNPC) Game.Manager.IncrementCharactersTalkedTo();
             finishedTalking = true;
         }
         yield return new WaitForSeconds(displayTime);
@@ -140,7 +138,6 @@ public class CharacterDialogue : MonoBehaviour
 
     public void LoadTutorialScene()
     {
-        GlobalState.IsInTutorial = true;
         SceneManager.LoadScene("RAC_Tuto_NonGP");
     }
 }

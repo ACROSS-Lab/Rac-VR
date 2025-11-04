@@ -1,3 +1,4 @@
+using System;
 using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.XR.Interaction.Toolkit;
@@ -7,6 +8,8 @@ using UnityEngine.XR.Interaction.Toolkit.Interactors;
 public class Inventory : MonoBehaviour
 {
     public static Inventory instance;
+
+    public event Action OnInventoryUpdated;
 
     [Header("Inventory Settings")]
     [SerializeField] int capacity = 5;
@@ -24,13 +27,14 @@ public class Inventory : MonoBehaviour
     [SerializeField][Range(0.5f, 2f)] float minPitch = 0.9f;
     [SerializeField][Range(0.5f, 2f)] float maxPitch = 1.1f;
 
-    List<Waste> wastes = new List<Waste>();
-    XRInteractionManager interactionManager;
+    public List<Waste> wastes {get;  private set; }
+    [SerializeField] XRInteractionManager interactionManager;
     AudioSource audioSource;
 
     void Awake()
     {
         instance = this;
+        wastes = new List<Waste>();
         interactionManager = FindFirstObjectByType<XRInteractionManager>();
     }
 
@@ -75,29 +79,23 @@ public class Inventory : MonoBehaviour
 
         CycleMesh();
 
-        if (!GlobalState.IsInTutorial)
-        {
-            GameManager.instance.SendLeftHaptic();
-        }
-        else
-        {
-            TutorialManager.instance.IncrementWastesCollected();
-            TutorialManager.instance.SendLeftHaptic();
-        }
-        
+        SendingHaptics.instance.SendLeftHaptic();
+            
         if (audioSource.isPlaying) audioSource.Stop();
         if (addWasteSounds.Length > 0)
         {
-            audioSource.clip = addWasteSounds[Random.Range(0, addWasteSounds.Length)];
-            audioSource.pitch = Random.Range(minPitch, maxPitch);
+            audioSource.clip = addWasteSounds[UnityEngine.Random.Range(0, addWasteSounds.Length)];
+            audioSource.pitch = UnityEngine.Random.Range(minPitch, maxPitch);
             audioSource.Play();
         }
 
-        if(feedbackParticles != null)
+        if (feedbackParticles != null)
         {
             if (feedbackParticles.isPlaying) feedbackParticles.Stop();
             feedbackParticles.Play();
         }
+        
+        OnInventoryUpdated?.Invoke();
     }
 
     public void GetWaste(SelectEnterEventArgs args)
@@ -115,22 +113,17 @@ public class Inventory : MonoBehaviour
 
         CycleMesh();
 
-        if (!GlobalState.IsInTutorial)
-        {
-            GameManager.instance.SendLeftHaptic();
-        }
-        else
-        {
-            TutorialManager.instance.SendLeftHaptic();
-        }
+        SendingHaptics.instance.SendLeftHaptic();
 
         if (audioSource.isPlaying) audioSource.Stop();
         if (getWasteSounds.Length > 0)
         {
-            audioSource.clip = getWasteSounds[Random.Range(0, getWasteSounds.Length)];
-            audioSource.pitch = Random.Range(minPitch, maxPitch);
+            audioSource.clip = getWasteSounds[UnityEngine.Random.Range(0, getWasteSounds.Length)];
+            audioSource.pitch = UnityEngine.Random.Range(minPitch, maxPitch);
             audioSource.Play();
         }
+
+        OnInventoryUpdated?.Invoke();
     }
 
     public void ClearInventory()

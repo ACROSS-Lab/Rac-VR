@@ -32,14 +32,8 @@ public class Bin : MonoBehaviour
 
     public void CorrectBin(WasteType wasteType, int score)
     {
-        if (!GlobalState.IsInTutorial)
-        {
-            GameManager.instance.AddScore(wasteType, score);
-        }
-        else
-        {
-            TutorialManager.instance.IncrementWastesProcessed();
-        }
+
+        Game.Manager.AddScore(wasteType, score);
 
         if (correctParticle.isPlaying) correctParticle.Stop();
         correctParticle.Play();
@@ -55,8 +49,6 @@ public class Bin : MonoBehaviour
     
     public void WrongBin()
     {
-        if (GlobalState.IsInTutorial) TutorialManager.instance.IncrementWastesProcessed();
-
         if (falseParticle.isPlaying) falseParticle.Stop();
         falseParticle.Play();
 

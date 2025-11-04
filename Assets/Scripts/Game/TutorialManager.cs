@@ -1,9 +1,8 @@
 using UnityEngine;
 using UnityEngine.InputSystem;
 using UnityEngine.SceneManagement;
-using UnityEngine.XR.Interaction.Toolkit.Inputs.Haptics;
 
-public class TutorialManager : MonoBehaviour
+public class TutorialManager : MonoBehaviour, IGameManager
 {
     public static TutorialManager instance;
 
@@ -20,42 +19,38 @@ public class TutorialManager : MonoBehaviour
     [SerializeField] GameObject binCanvas;
     [SerializeField] GameObject finishCanvas;
 
-    [Header("Haptics")]
-    [SerializeField] HapticImpulsePlayer leftHapticPlayer;
-    [SerializeField] HapticImpulsePlayer rightHapticPlayer;
-    [SerializeField] float hapticAmplitude = 0.5f;
-    [SerializeField] float hapticDuration = 0.2f;
-
     int numWastesCollected = 0;
     int numWastesProcessed = 0;
 
     void Awake()
     {
         instance = this;
+        Game.RegisterManager(this);
     }
-
+    
     void Start()
     {
+        Inventory inventory = Inventory.instance;
         
+        Inventory.instance.OnInventoryUpdated += CheckAmountCollected;
     }
 
-    void Update()
+    void OnDisable()
     {
-
+        Inventory.instance.OnInventoryUpdated -= CheckAmountCollected;
     }
 
     public void MoveToDestination()
     {
         movePoint.SetActive(false);
         moveCanvas.SetActive(false);
-        wastesContainer.SetActive(true);
-        pickupCanvas.SetActive(true);
-        dropCanvas.SetActive(true);
+        characterCanvas.SetActive(true);
     }
 
-    public void IncrementWastesCollected()
+    public void CheckAmountCollected()
     {
-        numWastesCollected++;
+        Debug.Log("Checking wastes collected in tutorial...");
+        numWastesCollected = Inventory.instance.wastes.Count;
         if (numWastesCollected == 5)
         {
             pickupCanvas.SetActive(false);
@@ -65,7 +60,7 @@ public class TutorialManager : MonoBehaviour
         }
     }
 
-    public void IncrementWastesProcessed()
+    public void AddScore(WasteType type, int points)
     {
         numWastesProcessed++;
         if (numWastesProcessed == 5)
@@ -74,20 +69,17 @@ public class TutorialManager : MonoBehaviour
             finishCanvas.SetActive(true);
         }
     }
-    
-    public void SendLeftHaptic()
-    {
-        leftHapticPlayer.SendHapticImpulse(hapticAmplitude, hapticDuration);
-    }
 
-    public void SendRightHaptic()
+    public void IncrementCharactersTalkedTo()
     {
-        rightHapticPlayer.SendHapticImpulse(hapticAmplitude, hapticDuration);
+        characterCanvas.SetActive(false);
+        wastesContainer.SetActive(true);
+        pickupCanvas.SetActive(true);
+        dropCanvas.SetActive(true);
     }
     
     public void LoadMainGameScene()
     {
-        GlobalState.IsInTutorial = false;
         SceneManager.LoadScene("RAC_MainScene_NonGP");
     }
 }
