@@ -61,24 +61,24 @@ public class GameManager : MonoBehaviour, IGameManager
     }
 
     public List<WastePreset> GetNextTwoPresets()
-{
-    if (currentPresetIndex + 1 < allPlayPresets.Count)
     {
-        List<WastePreset> nextPresets = new List<WastePreset>
+        if (currentPresetIndex + 1 < allPlayPresets.Count)
         {
-            allPlayPresets[currentPresetIndex],
-            allPlayPresets[currentPresetIndex + 1]
-        };
+            List<WastePreset> nextPresets = new List<WastePreset>
+            {
+                allPlayPresets[currentPresetIndex],
+                allPlayPresets[currentPresetIndex + 1]
+            };
 
-        currentPresetIndex += 2;
-        return nextPresets;
+            currentPresetIndex += 2;
+            return nextPresets;
+        }
+        else
+        {
+            Debug.LogWarning("No more presets available.");
+            return new List<WastePreset>();
+        }
     }
-    else
-    {
-        Debug.LogWarning("No more presets available.");
-        return new List<WastePreset>();
-    }
-}
 
     public void ResetPresetIndex()
     {

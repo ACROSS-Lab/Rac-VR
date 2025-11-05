@@ -2,6 +2,7 @@ using System.Collections;
 using UnityEngine;
 using UnityEngine.InputSystem;
 using UnityEngine.SceneManagement;
+using UnityEngine.XR.Interaction.Toolkit.Samples.StarterAssets;
 
 public class TutorialManager : MonoBehaviour, IGameManager
 {
@@ -20,6 +21,12 @@ public class TutorialManager : MonoBehaviour, IGameManager
     [SerializeField] GameObject characterCanvas;
     [SerializeField] GameObject binCanvas;
     [SerializeField] GameObject finishCanvas;
+    [SerializeField] GameObject loadingPanel;
+    [SerializeField] SlicedFilledImage loadingBarFill;
+
+    [Header("Movement")]
+    [SerializeField] InputActionReference mainButton;
+    [SerializeField] ControllerInputActionManager rightControllerInput;
 
     int numWastesCollected = 0;
     int numWastesProcessed = 0;
@@ -34,7 +41,15 @@ public class TutorialManager : MonoBehaviour, IGameManager
     {
         StartCoroutine(WaitForInventoryUpdate());
     }
-    
+
+    void Update()
+    {
+        if (mainButton.action.WasPressedThisFrame())
+        {
+            rightControllerInput.smoothMotionEnabled = !rightControllerInput.smoothMotionEnabled;
+        }
+    }
+
     IEnumerator WaitForInventoryUpdate()
     {
         yield return new WaitUntil(() => Inventory.instance != null);
@@ -68,7 +83,6 @@ public class TutorialManager : MonoBehaviour, IGameManager
 
     public void AddScore(WasteType type, int points)
     {
-        Debug.Log("Added " + points + " points to " + type.ToString());
         numWastesProcessed++;
         if (numWastesProcessed == 5)
         {
@@ -79,7 +93,6 @@ public class TutorialManager : MonoBehaviour, IGameManager
 
     public void MinusScore(WasteType type, int points)
     {
-        Debug.Log("Subtracted " + points + " points from " + type.ToString());
         numWastesProcessed++;
         if (numWastesProcessed == 5)
         {
@@ -90,14 +103,36 @@ public class TutorialManager : MonoBehaviour, IGameManager
 
     public void IncrementCharactersTalkedTo()
     {
-        characterCanvas.SetActive(false);
         wastesContainer.SetActive(true);
         pickupCanvas.SetActive(true);
         dropCanvas.SetActive(true);
     }
-    
-    public void LoadMainGameScene()
+
+    public void TurnOffCharacterCanvas()
     {
-        SceneManager.LoadScene("RAC_MainScene_NonGP");
+        characterCanvas.SetActive(false);
+    }
+
+    public void LoadMainScene()
+    {
+        StartCoroutine(LoadMainSceneOperation());
+    }
+    
+    IEnumerator LoadMainSceneOperation()
+    {
+        finishCanvas.SetActive(false);
+        loadingPanel.SetActive(true);
+
+        AsyncOperation operation = SceneManager.LoadSceneAsync("Rac_MainScene_NonGP");
+        operation.allowSceneActivation = false;
+        while (operation.progress < 0.9f)
+        {
+            loadingBarFill.fillAmount = Mathf.Clamp01(operation.progress / 0.9f);
+            yield return null;
+        }
+        loadingBarFill.fillAmount = 1;
+
+        yield return new WaitForSeconds(1);
+        operation.allowSceneActivation = true;
     }
 }

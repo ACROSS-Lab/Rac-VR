@@ -8,7 +8,6 @@ public class MovePoint : MonoBehaviour
     {
         if (other == characterCollider)
         {
-            Debug.Log("Move point reached");
             TutorialManager.instance.MoveToDestination();
         }
     }

@@ -2,20 +2,22 @@ using UnityEngine;
 
 public class CanvasFollower : MonoBehaviour
 {
-    [SerializeField] Transform cameraTransform;
     [SerializeField] float distanceFromCamera = 2.0f;
     [SerializeField] float smoothSpeed = 8.0f;
 
-    void LateUpdate()
+    Transform cameraTransform;
+
+    void OnEnable()
     {
-        if (cameraTransform == null)
-        {
-            Debug.LogWarning("VR Camera Transform is not assigned.");
-            return;
-        }
+        cameraTransform = Camera.main.transform;
 
         Vector3 targetPosition = cameraTransform.position + (cameraTransform.forward * distanceFromCamera);
+        transform.position = transform.position + targetPosition;
+    }
 
+    void LateUpdate()
+    {
+        Vector3 targetPosition = cameraTransform.position + (cameraTransform.forward * distanceFromCamera);
         transform.position = Vector3.Lerp(transform.position, targetPosition, Time.deltaTime * smoothSpeed);
 
         float cameraYaw = cameraTransform.eulerAngles.y;

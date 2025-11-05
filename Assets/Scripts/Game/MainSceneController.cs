@@ -2,8 +2,9 @@ using TMPro;
 using UnityEngine;
 using System.Collections.Generic;
 using UnityEngine.SceneManagement;
-using UnityEngine.XR.Interaction.Toolkit.Inputs.Haptics;
 using UnityEngine.InputSystem;
+using System.Collections;
+using UnityEngine.XR.Interaction.Toolkit.Samples.StarterAssets;
 
 public class MainSceneController : MonoBehaviour
 {
@@ -20,12 +21,17 @@ public class MainSceneController : MonoBehaviour
     [SerializeField] GameObject objectiveCanvas;
     [SerializeField] GameObject startGamePanel;
     [SerializeField] GameObject endGamePanel;
+    [SerializeField] GameObject loadingPanel;
+    [SerializeField] SlicedFilledImage loadingBarFill;
     [SerializeField] GameObject[] scoreContainers;
     [SerializeField] GameObject[] scoreChecks;
 
     [SerializeField] TextMeshProUGUI charactersTalkedTo;
     [SerializeField] GameObject characterScoreContainer;
     [SerializeField] GameObject characterScoreCheck;
+
+    [SerializeField] InputActionReference mainButton;
+    [SerializeField] ControllerInputActionManager rightControllerInput;
 
     float timer = 0;
     List<WastePreset> activePresets;
@@ -63,6 +69,11 @@ public class MainSceneController : MonoBehaviour
             {
                 EndSession();
             }
+        }
+
+        if (mainButton.action.WasPressedThisFrame())
+        {
+            rightControllerInput.smoothMotionEnabled = !rightControllerInput.smoothMotionEnabled;
         }
     }
 
@@ -112,9 +123,8 @@ public class MainSceneController : MonoBehaviour
 
         if (activePresets.Count == 0)
         {
-            Debug.Log("All sessions complete! Restarting game or loading main menu.");
-            SceneManager.LoadScene(SceneManager.GetActiveScene().buildIndex);
-            return;
+            GameManager.instance.ResetPresetIndex();
+            activePresets = GameManager.instance.GetNextTwoPresets();
         }
 
         GameManager.instance.ResetSessionScore();
@@ -125,6 +135,8 @@ public class MainSceneController : MonoBehaviour
             GarbageTypeToString(activePresets[i], i);
             ActiveCharacter(activePresets[i].characters);
         }
+
+        inGame = true;
                 
         timer = sessionTime;
         XRRigTransform.position = initialXRRigPosition;
@@ -212,9 +224,27 @@ public class MainSceneController : MonoBehaviour
             characters = tempList.ToArray();
         }
     }
-    
+
     public void LoadTutorialScene()
     {
-        SceneManager.LoadScene("RAC_Tuto_NonGP");
+        StartCoroutine(LoadTutorialSceneOperation());
+    }
+    
+    IEnumerator LoadTutorialSceneOperation()
+    {
+        endGamePanel.SetActive(false);
+        loadingPanel.SetActive(true);
+
+        AsyncOperation operation = SceneManager.LoadSceneAsync("RAC_Tuto_NonGP");
+        operation.allowSceneActivation = false;
+        while (operation.progress < 0.9f)
+        {
+            loadingBarFill.fillAmount = Mathf.Clamp01(operation.progress / 0.9f);
+            yield return null;
+        }
+        loadingBarFill.fillAmount = 1;
+
+        yield return new WaitForSeconds(1);
+        operation.allowSceneActivation = true;
     }
 }
