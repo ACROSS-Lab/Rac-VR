@@ -226236,25 +226236,17 @@ PrefabInstance:
     serializedVersion: 3
     m_TransformParent: {fileID: 0}
     m_Modifications:
+    - target: {fileID: 1241602516022724329, guid: 1accb72fc7db04542b654a4d305acb44, type: 3}
+      propertyPath: m_HorizontalAlignment
+      value: 2
+      objectReference: {fileID: 0}
     - target: {fileID: 2022577427008587324, guid: 1accb72fc7db04542b654a4d305acb44, type: 3}
       propertyPath: m_OnClick.m_PersistentCalls.m_Calls.Array.data[0].m_Target
       value: 
       objectReference: {fileID: 1020518531}
-    - target: {fileID: 2022577427008587324, guid: 1accb72fc7db04542b654a4d305acb44, type: 3}
-      propertyPath: m_OnClick.m_PersistentCalls.m_Calls.Array.data[0].m_MethodName
-      value: StartNextSession
-      objectReference: {fileID: 0}
-    - target: {fileID: 2022577427008587324, guid: 1accb72fc7db04542b654a4d305acb44, type: 3}
-      propertyPath: m_OnClick.m_PersistentCalls.m_Calls.Array.data[0].m_TargetAssemblyTypeName
-      value: MainSceneController, Assembly-CSharp
-      objectReference: {fileID: 0}
     - target: {fileID: 2654453856159547828, guid: 1accb72fc7db04542b654a4d305acb44, type: 3}
       propertyPath: m_Name
       value: UI_Start
-      objectReference: {fileID: 0}
-    - target: {fileID: 2654453856159547828, guid: 1accb72fc7db04542b654a4d305acb44, type: 3}
-      propertyPath: m_IsActive
-      value: 1
       objectReference: {fileID: 0}
     - target: {fileID: 2660516123579433544, guid: 1accb72fc7db04542b654a4d305acb44, type: 3}
       propertyPath: m_AnchorMax.y
@@ -226291,18 +226283,6 @@ PrefabInstance:
     - target: {fileID: 2770399149940855781, guid: 1accb72fc7db04542b654a4d305acb44, type: 3}
       propertyPath: m_AnchoredPosition.y
       value: 0
-      objectReference: {fileID: 0}
-    - target: {fileID: 3778661646850922233, guid: 1accb72fc7db04542b654a4d305acb44, type: 3}
-      propertyPath: m_Color.b
-      value: 0.95411736
-      objectReference: {fileID: 0}
-    - target: {fileID: 3778661646850922233, guid: 1accb72fc7db04542b654a4d305acb44, type: 3}
-      propertyPath: m_Color.g
-      value: 1
-      objectReference: {fileID: 0}
-    - target: {fileID: 3778661646850922233, guid: 1accb72fc7db04542b654a4d305acb44, type: 3}
-      propertyPath: m_Color.r
-      value: 0.75
       objectReference: {fileID: 0}
     - target: {fileID: 6045510600161038325, guid: 1accb72fc7db04542b654a4d305acb44, type: 3}
       propertyPath: m_Camera
@@ -226388,10 +226368,6 @@ PrefabInstance:
       propertyPath: m_LocalEulerAnglesHint.z
       value: 0
       objectReference: {fileID: 0}
-    - target: {fileID: 7915539825133795976, guid: 1accb72fc7db04542b654a4d305acb44, type: 3}
-      propertyPath: cameraTransform
-      value: 
-      objectReference: {fileID: 715351269}
     m_RemovedComponents: []
     m_RemovedGameObjects: []
     m_AddedGameObjects: []
