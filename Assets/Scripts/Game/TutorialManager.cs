@@ -28,6 +28,9 @@ public class TutorialManager : MonoBehaviour, IGameManager
     [SerializeField] InputActionReference mainButton;
     [SerializeField] ControllerInputActionManager rightControllerInput;
 
+    [Header("Sound effects")]
+    [SerializeField] AudioSource endTutorialSound;
+
     int numWastesCollected = 0;
     int numWastesProcessed = 0;
 
@@ -88,6 +91,7 @@ public class TutorialManager : MonoBehaviour, IGameManager
         {
             binCanvas.SetActive(false);
             finishCanvas.SetActive(true);
+            endTutorialSound.Play();
         }
     }
 

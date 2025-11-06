@@ -48,6 +48,7 @@ public class Waste : MonoBehaviour
         {
             GarbageClassification(other.GetComponent<Bin>());
             gameObject.SetActive(false);
+            return;
         }
 
         else if (other.tag == "Inventory" && !fromInventory)
@@ -76,8 +77,6 @@ public class Waste : MonoBehaviour
         }
 
         SendingHaptics.instance.SendRightHaptic();
-        
-        
     }
 
     void HoverEnter(HoverEnterEventArgs args)

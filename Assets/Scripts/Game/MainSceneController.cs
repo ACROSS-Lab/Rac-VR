@@ -30,8 +30,13 @@ public class MainSceneController : MonoBehaviour
     [SerializeField] GameObject characterScoreContainer;
     [SerializeField] GameObject characterScoreCheck;
 
+    [Header("Movement Inputs")]
     [SerializeField] InputActionReference mainButton;
     [SerializeField] ControllerInputActionManager rightControllerInput;
+
+    [Header("Sound effects")]
+    [SerializeField] AudioSource endSessionSound;
+    [SerializeField] AudioSource completedObjectiveSound;
 
     float timer = 0;
     List<WastePreset> activePresets;
@@ -90,6 +95,7 @@ public class MainSceneController : MonoBehaviour
                     reachedScores[i] = true;
                     scoreChecks[i].SetActive(true);
                     scoreContainers[i].SetActive(false);
+                    completedObjectiveSound.Play();
                 }
                 break;
             }
@@ -105,10 +111,11 @@ public class MainSceneController : MonoBehaviour
     {
         charactersTalkedTo.text = newCount.ToString();
 
-        if (newCount >= 3)
+        if (newCount == 3)
         {
             characterScoreCheck.SetActive(true);
             characterScoreContainer.SetActive(false);
+            completedObjectiveSound.Play();
         }
 
         if (CheckWinCondition())
@@ -131,9 +138,9 @@ public class MainSceneController : MonoBehaviour
 
         for (int i = 0; i < activePresets.Count; i++)
         {
-            Instantiate(activePresets[i]);
-            GarbageTypeToString(activePresets[i], i);
-            ActiveCharacter(activePresets[i].characters);
+            WastePreset preset = Instantiate(activePresets[i]);
+            GarbageTypeToString(preset, i);
+            ActiveCharacter(preset.characters);
         }
 
         inGame = true;
@@ -165,6 +172,8 @@ public class MainSceneController : MonoBehaviour
         endGamePanel.SetActive(true);
         objectiveCanvas.SetActive(false);
         inGame = false;
+
+        endSessionSound.Play();
     }
 
     void GarbageTypeToString(WastePreset wastePreset, int index)
