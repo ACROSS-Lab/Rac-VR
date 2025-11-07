@@ -275,6 +275,9 @@ MonoBehaviour:
   - {fileID: 8300000, guid: 9b8bde0d7dcd1d848ade5c9e2603746d, type: 3}
   minPitch: 0.9
   maxPitch: 1.1
+  maxDepenetrationVelocity: 1.5
+  temporaryDrag: 2
+  dampDuration: 0.5
 --- !u!82 &-236887675071994237
 AudioSource:
   m_ObjectHideFlags: 0

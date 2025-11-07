@@ -1,3 +1,4 @@
+using System.Collections;
 using UnityEngine;
 using UnityEngine.XR.Interaction.Toolkit;
 using UnityEngine.XR.Interaction.Toolkit.Interactables;
@@ -12,10 +13,27 @@ public class Waste : MonoBehaviour
     [SerializeField][Range(0.5f, 2f)] float minPitch = 0.9f;
     [SerializeField][Range(0.5f, 2f)] float maxPitch = 1.1f;
 
+    [Header("Physics")]
+    [Tooltip("The maximum speed the physics engine will use to separate this object from others. Lower is gentler.")]
+    [SerializeField] private float maxDepenetrationVelocity = 1.5f;
+    [Tooltip("How much 'air resistance' to add on release. Higher values slow it down faster.")]
+    [SerializeField] private float temporaryDrag = 5f;
+    [Tooltip("How long the damping effect should last, in seconds.")]
+    [SerializeField] private float dampDuration = 0.5f;
+
     XRGrabInteractable interactable;
     bool firstSelected = false;
     MeshRenderer meshRenderer;
     AudioSource audioSource;
+    Rigidbody rb;
+    float orignalDrag, orignialAngularDrag;
+
+    void Awake()
+    {
+        rb = GetComponent<Rigidbody>();
+        orignalDrag = rb.linearDamping;
+        orignialAngularDrag = rb.angularDamping;
+    }
     
     void Start()
     {
@@ -26,6 +44,7 @@ public class Waste : MonoBehaviour
         interactable.hoverEntered.AddListener(HoverEnter);
         interactable.hoverExited.AddListener(HoverExit);
         interactable.selectEntered.AddListener(SelectEnter);
+        interactable.selectExited.AddListener(SelectExit);
     }
 
     void Update()
@@ -97,5 +116,23 @@ public class Waste : MonoBehaviour
             audioSource.pitch = Random.Range(minPitch, maxPitch);
             audioSource.Play();
         }
+    }
+
+    void SelectExit(SelectExitEventArgs args)
+    {
+        StartCoroutine(DampPhysicsOnRelease());
+    }
+    
+    IEnumerator DampPhysicsOnRelease()
+    {
+        rb.maxDepenetrationVelocity = maxDepenetrationVelocity;
+        rb.linearDamping = temporaryDrag;
+        rb.angularDamping = temporaryDrag;
+
+        yield return new WaitForSeconds(dampDuration);
+
+        rb.maxDepenetrationVelocity = Physics.defaultMaxDepenetrationVelocity;
+        rb.linearDamping = orignalDrag;
+        rb.angularDamping = orignialAngularDrag;
     }
 }
