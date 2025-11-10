@@ -5,6 +5,7 @@ using UnityEngine.SceneManagement;
 using UnityEngine.InputSystem;
 using System.Collections;
 using UnityEngine.XR.Interaction.Toolkit.Samples.StarterAssets;
+using System.Linq;
 
 public class MainSceneController : MonoBehaviour
 {
@@ -40,6 +41,7 @@ public class MainSceneController : MonoBehaviour
 
     float timer = 0;
     List<WastePreset> activePresets;
+    List<GameObject> presetGameObjects;
     bool inGame = false;
     bool[] reachedScores = new bool[] { false, false };
     Vector3 initialXRRigPosition;
@@ -135,10 +137,12 @@ public class MainSceneController : MonoBehaviour
         }
 
         GameManager.instance.ResetSessionScore();
+        presetGameObjects = new List<GameObject>();
 
         for (int i = 0; i < activePresets.Count; i++)
         {
             WastePreset preset = Instantiate(activePresets[i]);
+            presetGameObjects.Add(preset.gameObject);
             GarbageTypeToString(preset, i);
             ActiveCharacter(preset.characters);
         }
@@ -163,9 +167,9 @@ public class MainSceneController : MonoBehaviour
     private void EndSession()
     {
         timer = 0;
-        foreach (WastePreset preset in activePresets)
+        foreach (GameObject preset in presetGameObjects)
         {
-            preset.gameObject.SetActive(false);
+            preset.SetActive(false);
         }
         Inventory.instance.ClearInventory();
 
