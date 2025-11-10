@@ -23,6 +23,7 @@ public class Waste : MonoBehaviour
 
     XRGrabInteractable interactable;
     bool firstSelected = false;
+    bool onGround = true;
     MeshRenderer meshRenderer;
     AudioSource audioSource;
     Rigidbody rb;
@@ -34,7 +35,7 @@ public class Waste : MonoBehaviour
         orignalDrag = rb.linearDamping;
         orignialAngularDrag = rb.angularDamping;
     }
-    
+
     void Start()
     {
         interactable = GetComponent<XRGrabInteractable>();
@@ -47,21 +48,9 @@ public class Waste : MonoBehaviour
         interactable.selectExited.AddListener(SelectExit);
     }
 
-    void Update()
-    {
-        if(!firstSelected)
-        {
-            if (interactable.isSelected)
-            {
-                firstSelected = true;
-                GetComponent<Rigidbody>().constraints = RigidbodyConstraints.None;
-            }
-        }
-    }
-
     void OnTriggerEnter(Collider other)
     {
-        if (!firstSelected || interactable.isSelected) return;
+        if (!firstSelected || onGround || interactable.isSelected) return;
 
         if (other.tag == "Bin")
         {
@@ -78,9 +67,10 @@ public class Waste : MonoBehaviour
 
     void OnCollisionEnter(Collision collision)
     {
-        if(collision.collider.tag == "Ground_RAC")
+        if (collision.collider.tag == "Ground_RAC")
         {
             fromInventory = false;
+            onGround = true;
         }
     }
 
@@ -116,6 +106,14 @@ public class Waste : MonoBehaviour
             audioSource.pitch = Random.Range(minPitch, maxPitch);
             audioSource.Play();
         }
+
+        if (!firstSelected)
+        {
+            firstSelected = true;
+            GetComponent<Rigidbody>().constraints = RigidbodyConstraints.None;
+        }
+
+        onGround = false;
     }
 
     void SelectExit(SelectExitEventArgs args)

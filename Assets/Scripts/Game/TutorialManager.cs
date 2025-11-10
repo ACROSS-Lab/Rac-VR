@@ -9,13 +9,15 @@ public class TutorialManager : MonoBehaviour, IGameManager
     public static TutorialManager instance;
 
     [Header("Tutorial Elements")]
-    [SerializeField] GameObject movePoint;
+    [SerializeField] GameObject movePoint1;
+    [SerializeField] GameObject movePoint2;
     [SerializeField] GameObject wastesContainer;
-    [SerializeField] GameObject binContainer;
+    [SerializeField] GameObject bin;
     [SerializeField] GameObject NPC;
 
     [Header("UI Elements")]
-    [SerializeField] GameObject moveCanvas;
+    [SerializeField] GameObject move1Canvas;
+    [SerializeField] GameObject move2Canvas;
     [SerializeField] GameObject pickupCanvas;
     [SerializeField] GameObject dropCanvas;
     [SerializeField] GameObject characterCanvas;
@@ -64,12 +66,19 @@ public class TutorialManager : MonoBehaviour, IGameManager
         Inventory.instance.OnInventoryUpdated -= CheckAmountCollected;
     }
 
-    public void MoveToDestination()
+    public void Reached1stDestination()
     {
-        movePoint.SetActive(false);
-        moveCanvas.SetActive(false);
+        movePoint1.SetActive(false);
+        move1Canvas.SetActive(false);
         characterCanvas.SetActive(true);
         NPC.SetActive(true);
+    }
+
+    public void Reached2ndDestination()
+    {
+        move2Canvas.SetActive(false);
+        movePoint2.SetActive(false);
+        binCanvas.SetActive(true);
     }
 
     public void CheckAmountCollected()
@@ -79,8 +88,9 @@ public class TutorialManager : MonoBehaviour, IGameManager
         {
             pickupCanvas.SetActive(false);
             dropCanvas.SetActive(false);
-            binCanvas.SetActive(true);
-            binContainer.SetActive(true);
+            move2Canvas.SetActive(true);
+            movePoint2.SetActive(true);
+            bin.SetActive(true);
         }
     }
 

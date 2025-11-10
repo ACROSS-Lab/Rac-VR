@@ -5,7 +5,6 @@ using UnityEngine.SceneManagement;
 using UnityEngine.InputSystem;
 using System.Collections;
 using UnityEngine.XR.Interaction.Toolkit.Samples.StarterAssets;
-using System.Linq;
 
 public class MainSceneController : MonoBehaviour
 {
