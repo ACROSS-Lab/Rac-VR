@@ -124,6 +124,7 @@ public class TutorialManager : MonoBehaviour, IGameManager
 
     public void FinishDialogue()
     {
+        characterCanvas.SetActive(false);
         dialogueCanvas.SetActive(false);
         wastesContainer.SetActive(true);
         pickupCanvas.SetActive(true);
