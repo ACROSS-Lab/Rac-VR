@@ -4,6 +4,15 @@ public class LookAtCamera : MonoBehaviour
 {
     public Camera targetCamera; // The camera to look at
 
+    void Awake()
+    {
+        if (targetCamera == null)
+        {
+            // If no camera is assigned, use the main camera
+            targetCamera = Camera.main;
+        }
+    }
+
     void Update()
     {
         if (targetCamera != null)

@@ -21,6 +21,7 @@ public class TutorialManager : MonoBehaviour, IGameManager
     [SerializeField] GameObject pickupCanvas;
     [SerializeField] GameObject dropCanvas;
     [SerializeField] GameObject characterCanvas;
+    [SerializeField] GameObject dialogueCanvas;
     [SerializeField] GameObject binCanvas;
     [SerializeField] GameObject finishCanvas;
     [SerializeField] GameObject loadingPanel;
@@ -117,14 +118,16 @@ public class TutorialManager : MonoBehaviour, IGameManager
 
     public void IncrementCharactersTalkedTo()
     {
+        characterCanvas.SetActive(false);
+        dialogueCanvas.SetActive(true);
+    }
+
+    public void FinishDialogue()
+    {
+        dialogueCanvas.SetActive(false);
         wastesContainer.SetActive(true);
         pickupCanvas.SetActive(true);
         dropCanvas.SetActive(true);
-    }
-
-    public void TurnOffCharacterCanvas()
-    {
-        characterCanvas.SetActive(false);
     }
 
     public void LoadMainScene()

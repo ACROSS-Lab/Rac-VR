@@ -122,8 +122,11 @@ public class CharacterDialogue : MonoBehaviour
             if (isObjectiveNPC) Game.Manager.IncrementCharactersTalkedTo();
             finishedTalking = true;
         }
-        yield return new WaitForSeconds(displayTime);
-        TurnOffDialouge();
+        if(displayTime > 0)
+        {
+            yield return new WaitForSeconds(displayTime);
+            TurnOffDialouge();
+        }
     }
 
     public void HoverEnter(HoverEnterEventArgs args)
