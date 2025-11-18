@@ -32,6 +32,7 @@ public class MainSceneController : MonoBehaviour
 
     [Header("Movement Inputs")]
     [SerializeField] InputActionReference mainButton;
+    [SerializeField] InputActionReference secondaryButton;
     [SerializeField] ControllerInputActionManager rightControllerInput;
 
     [Header("Sound effects")]
@@ -44,6 +45,7 @@ public class MainSceneController : MonoBehaviour
     bool inGame = false;
     bool[] reachedScores = new bool[] { false, false };
     Vector3 initialXRRigPosition;
+    bool isSwitchingMode;
 
     void Awake()
     {
@@ -77,10 +79,7 @@ public class MainSceneController : MonoBehaviour
             }
         }
 
-        if (mainButton.action.WasPressedThisFrame())
-        {
-            rightControllerInput.smoothMotionEnabled = !rightControllerInput.smoothMotionEnabled;
-        }
+        SwitchMovementMode();
     }
 
     void UpdateScoreUI(WasteType type, int newScore)
@@ -234,6 +233,25 @@ public class MainSceneController : MonoBehaviour
             List<GameObject> tempList = new List<GameObject>(characters);
             tempList.RemoveAt(randomIndex);
             characters = tempList.ToArray();
+        }
+    }
+
+    void SwitchMovementMode()
+    {
+        bool a = mainButton.action.IsPressed();
+        bool b = secondaryButton.action.IsPressed();
+
+        if (a && b)
+        {
+            if (!isSwitchingMode)
+            {
+                rightControllerInput.smoothMotionEnabled = !rightControllerInput.smoothMotionEnabled;
+            }
+            isSwitchingMode = true;
+        }
+        else
+        {
+            isSwitchingMode = false;
         }
     }
 

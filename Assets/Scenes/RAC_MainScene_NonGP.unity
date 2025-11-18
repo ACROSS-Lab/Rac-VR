@@ -94998,6 +94998,7 @@ MonoBehaviour:
   characterScoreContainer: {fileID: 1288278936}
   characterScoreCheck: {fileID: 269755602}
   mainButton: {fileID: -720759619232228026, guid: c348712bda248c246b8c49b3db54643f, type: 3}
+  secondaryButton: {fileID: 386746831817213919, guid: c348712bda248c246b8c49b3db54643f, type: 3}
   rightControllerInput: {fileID: 1912634728}
   endSessionSound: {fileID: 1986130066}
   completedObjectiveSound: {fileID: 817587997}
