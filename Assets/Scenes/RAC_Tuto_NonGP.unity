@@ -3050,7 +3050,7 @@ MonoBehaviour:
   m_OnCullStateChanged:
     m_PersistentCalls:
       m_Calls: []
-  m_text: "Appuyez sur \nle bouton \u200E \u200E \u200E  \npour fermer la bo\xEEte
+  m_text: "Appuye sur \nle bouton \u200E \u200E \u200E  \npour fermer la bo\xEEte
     de dialogue.\n\u200E "
   m_isRightToLeft: 0
   m_fontAsset: {fileID: 11400000, guid: c1a0fed161c1bfb45b4f006be1677c6f, type: 2}
@@ -4850,7 +4850,7 @@ MonoBehaviour:
   m_OnCullStateChanged:
     m_PersistentCalls:
       m_Calls: []
-  m_text: Approchez-vous de la poubelle.
+  m_text: Approche toi de la poubelle.
   m_isRightToLeft: 0
   m_fontAsset: {fileID: 11400000, guid: c1a0fed161c1bfb45b4f006be1677c6f, type: 2}
   m_sharedMaterial: {fileID: 5668957734616618548, guid: c1a0fed161c1bfb45b4f006be1677c6f, type: 2}
