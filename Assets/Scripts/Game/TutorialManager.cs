@@ -36,6 +36,7 @@ public class TutorialManager : MonoBehaviour, IGameManager
 
     int numWastesCollected = 0;
     int numWastesProcessed = 0;
+    bool firstClick = true;
 
     void Awake()
     {
@@ -124,11 +125,14 @@ public class TutorialManager : MonoBehaviour, IGameManager
 
     public void FinishDialogue()
     {
+        if (!firstClick) return;
+
         characterCanvas.SetActive(false);
         dialogueCanvas.SetActive(false);
         wastesContainer.SetActive(true);
         pickupCanvas.SetActive(true);
         dropCanvas.SetActive(true);
+        firstClick = false;
     }
 
     public void LoadMainScene()
