@@ -96657,6 +96657,8 @@ MonoBehaviour:
   charactersTalkedTo: {fileID: 189321078}
   characterScoreContainer: {fileID: 1288278936}
   characterScoreCheck: {fileID: 269755602}
+  moveProvider: {fileID: 1239107526}
+  teleportProvider: {fileID: 1230132509}
   mainButton: {fileID: -720759619232228026, guid: c348712bda248c246b8c49b3db54643f, type: 3}
   secondaryButton: {fileID: 386746831817213919, guid: c348712bda248c246b8c49b3db54643f, type: 3}
   rightControllerInput: {fileID: 1912634728}
@@ -110725,6 +110727,11 @@ Transform:
   m_CorrespondingSourceObject: {fileID: 7747348409255263430, guid: 3ece639bb48b15544aca2be87765f9b2, type: 3}
   m_PrefabInstance: {fileID: 1228294132}
   m_PrefabAsset: {fileID: 0}
+--- !u!1 &1230132509 stripped
+GameObject:
+  m_CorrespondingSourceObject: {fileID: 2190828208922718286, guid: f6336ac4ac8b4d34bc5072418cdc62a0, type: 3}
+  m_PrefabInstance: {fileID: 808025392}
+  m_PrefabAsset: {fileID: 0}
 --- !u!1 &1230448239 stripped
 GameObject:
   m_CorrespondingSourceObject: {fileID: 1721802583621705649, guid: 7551078730ea3f94a9de0bf15a1e0c03, type: 3}
@@ -111335,6 +111342,11 @@ Transform:
 Transform:
   m_CorrespondingSourceObject: {fileID: 4492045677106656786, guid: 235ce4cf438544847a755258beb0ecec, type: 3}
   m_PrefabInstance: {fileID: 201237825}
+  m_PrefabAsset: {fileID: 0}
+--- !u!1 &1239107526 stripped
+GameObject:
+  m_CorrespondingSourceObject: {fileID: 58445280694286476, guid: f6336ac4ac8b4d34bc5072418cdc62a0, type: 3}
+  m_PrefabInstance: {fileID: 808025392}
   m_PrefabAsset: {fileID: 0}
 --- !u!1001 &1239433377
 PrefabInstance:

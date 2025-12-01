@@ -31,6 +31,8 @@ public class MainSceneController : MonoBehaviour
     [SerializeField] GameObject characterScoreCheck;
 
     [Header("Movement Inputs")]
+    [SerializeField] GameObject moveProvider;
+    [SerializeField] GameObject teleportProvider;
     [SerializeField] InputActionReference mainButton;
     [SerializeField] InputActionReference secondaryButton;
     [SerializeField] ControllerInputActionManager rightControllerInput;
@@ -47,11 +49,6 @@ public class MainSceneController : MonoBehaviour
     Vector3 initialXRRigPosition;
     bool isSwitchingMode;
 
-    void Awake()
-    {
-        
-    }
-
     void OnDestroy()
     {
         if (GameManager.instance != null)
@@ -66,6 +63,9 @@ public class MainSceneController : MonoBehaviour
         GameManager.instance.OnScoreUpdated += UpdateScoreUI;
         GameManager.instance.OnCharactersTalkedUpdated += UpdateCharacterUI;
         initialXRRigPosition = XRRigTransform.position;
+
+        moveProvider.SetActive(false);
+        teleportProvider.SetActive(false);
     }
 
     void Update()
@@ -126,6 +126,9 @@ public class MainSceneController : MonoBehaviour
 
     public void StartNextSession()
     {
+        moveProvider.SetActive(true);
+        teleportProvider.SetActive(true);
+
         activePresets = GameManager.instance.GetNextTwoPresets();
 
         if (activePresets.Count == 0)
