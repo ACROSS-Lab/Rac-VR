@@ -30,12 +30,16 @@ public class MainSceneController : MonoBehaviour
     [SerializeField] GameObject characterScoreContainer;
     [SerializeField] GameObject characterScoreCheck;
 
+    [SerializeField] GameObject walkingModeCanvas;
+    [SerializeField] GameObject jumpingModeCanvas;
+
     [Header("Movement Inputs")]
     [SerializeField] GameObject moveProvider;
     [SerializeField] GameObject teleportProvider;
     [SerializeField] InputActionReference mainButton;
     [SerializeField] InputActionReference secondaryButton;
     [SerializeField] ControllerInputActionManager rightControllerInput;
+    [SerializeField] float cooldownTime = 1f;
 
     [Header("Sound effects")]
     [SerializeField] AudioSource endSessionSound;
@@ -47,7 +51,7 @@ public class MainSceneController : MonoBehaviour
     bool inGame = false;
     bool[] reachedScores = new bool[] { false, false };
     Vector3 initialXRRigPosition;
-    bool isSwitchingMode;
+    float switchCoolDownTimer;
 
     void OnDestroy()
     {
@@ -241,21 +245,31 @@ public class MainSceneController : MonoBehaviour
 
     void SwitchMovementMode()
     {
-        bool a = mainButton.action.IsPressed();
-        bool b = secondaryButton.action.IsPressed();
+        switchCoolDownTimer += Time.deltaTime;
+        if (switchCoolDownTimer < cooldownTime) return;
 
-        if (a && b)
+        if (mainButton.action.WasPressedThisFrame())
         {
-            if (!isSwitchingMode)
-            {
-                rightControllerInput.smoothMotionEnabled = !rightControllerInput.smoothMotionEnabled;
-            }
-            isSwitchingMode = true;
+            rightControllerInput.smoothMotionEnabled = !rightControllerInput.smoothMotionEnabled;
+
+            // if (rightControllerInput.smoothMotionEnabled)
+            // {
+            //     DisplayMovementCanvas(walkingModeCanvas);
+            // }
+            // else
+            // {
+            //     DisplayMovementCanvas(jumpingModeCanvas);
+            // }
+
+            switchCoolDownTimer = 0;
         }
-        else
-        {
-            isSwitchingMode = false;
-        }
+    }
+
+    void DisplayMovementCanvas(GameObject canvas)
+    {
+        walkingModeCanvas.GetComponent<TweenFadeOut>().ForceEnd();
+        jumpingModeCanvas.GetComponent<TweenFadeOut>().ForceEnd();
+        canvas.SetActive(true);
     }
 
     public void LoadTutorialScene()

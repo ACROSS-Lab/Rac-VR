@@ -10,6 +10,7 @@ public class TutorialManager : MonoBehaviour, IGameManager
 
     [Header("Tutorial Elements")]
     [SerializeField] GameObject movePoint1;
+    [SerializeField] GameObject teleportPoint;
     [SerializeField] GameObject movePoint2;
     [SerializeField] GameObject wastesContainer;
     [SerializeField] GameObject bin;
@@ -17,6 +18,8 @@ public class TutorialManager : MonoBehaviour, IGameManager
 
     [Header("UI Elements")]
     [SerializeField] GameObject move1Canvas;
+    [SerializeField] GameObject teleportCanvas;
+    [SerializeField] GameObject noteCanvas;
     [SerializeField] GameObject move2Canvas;
     [SerializeField] GameObject pickupCanvas;
     [SerializeField] GameObject dropCanvas;
@@ -26,10 +29,14 @@ public class TutorialManager : MonoBehaviour, IGameManager
     [SerializeField] GameObject finishCanvas;
     [SerializeField] GameObject loadingPanel;
     [SerializeField] SlicedFilledImage loadingBarFill;
+    
+    [SerializeField] GameObject walkingModeCanvas;
+    [SerializeField] GameObject jumpingModeCanvas;
 
     [Header("Movement")]
     [SerializeField] InputActionReference mainButton;
     [SerializeField] ControllerInputActionManager rightControllerInput;
+    [SerializeField] float cooldownTime = 2.5f;
 
     [Header("Sound effects")]
     [SerializeField] AudioSource endTutorialSound;
@@ -37,6 +44,7 @@ public class TutorialManager : MonoBehaviour, IGameManager
     int numWastesCollected = 0;
     int numWastesProcessed = 0;
     bool firstClick = true;
+    float switchCoolDownTimer = 0;
 
     void Awake()
     {
@@ -51,10 +59,7 @@ public class TutorialManager : MonoBehaviour, IGameManager
 
     void Update()
     {
-        if (mainButton.action.WasPressedThisFrame())
-        {
-            rightControllerInput.smoothMotionEnabled = !rightControllerInput.smoothMotionEnabled;
-        }
+        SwitchMovementMode();
     }
 
     IEnumerator WaitForInventoryUpdate()
@@ -65,15 +70,31 @@ public class TutorialManager : MonoBehaviour, IGameManager
 
     void OnDisable()
     {
+        if (Inventory.instance == null) Debug.Log("Inventory is null");
         Inventory.instance.OnInventoryUpdated -= CheckAmountCollected;
     }
 
     public void Reached1stDestination()
     {
-        movePoint1.SetActive(false);
-        move1Canvas.SetActive(false);
-        characterCanvas.SetActive(true);
-        NPC.SetActive(true);
+        if(rightControllerInput.smoothMotionEnabled)
+        {
+            movePoint1.SetActive(false);
+            move1Canvas.SetActive(false);
+            teleportPoint.SetActive(true);
+            teleportCanvas.SetActive(true);
+        }
+    }
+
+    public void ReachedTeleportDestination()
+    {
+        if (!rightControllerInput.smoothMotionEnabled)
+        {
+            teleportPoint.SetActive(false);
+            teleportCanvas.SetActive(false);
+            characterCanvas.SetActive(true);
+            noteCanvas.SetActive(true);
+            NPC.SetActive(true);
+        }
     }
 
     public void Reached2ndDestination()
@@ -156,5 +177,35 @@ public class TutorialManager : MonoBehaviour, IGameManager
 
         yield return new WaitForSeconds(1);
         operation.allowSceneActivation = true;
+    }
+
+    void SwitchMovementMode()
+    {
+        switchCoolDownTimer += Time.deltaTime;
+        if (switchCoolDownTimer < cooldownTime) return;
+
+        if (mainButton.action.WasPressedThisFrame())
+        {
+            
+            rightControllerInput.smoothMotionEnabled = !rightControllerInput.smoothMotionEnabled;
+
+            // if (rightControllerInput.smoothMotionEnabled)
+            // {
+            //     DisplayMovementCanvas(walkingModeCanvas);
+            // }
+            // else
+            // {
+            //     DisplayMovementCanvas(jumpingModeCanvas);
+            // }
+
+            switchCoolDownTimer = 0;
+        }
+    }
+
+    void DisplayMovementCanvas(GameObject canvas)
+    {
+        walkingModeCanvas.GetComponent<TweenFadeOut>().ForceEnd();
+        jumpingModeCanvas.GetComponent<TweenFadeOut>().ForceEnd();
+        canvas.SetActive(true);
     }
 }

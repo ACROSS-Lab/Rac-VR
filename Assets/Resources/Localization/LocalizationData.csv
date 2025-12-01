@@ -24,3 +24,5 @@ Tutorial.UI.Character,Appuie sur la gachette droite en visant sur un personnage 
 Tutorial.UI.Dialogue,Appuye sur <br> le bouton ‎ ‎ ‎  <br> pour fermer la boîte de dialogue.,
 Tutorial.UI.Drop,Il y a un sac poubelle sur ta main gauche  Dépose tes déchets dans le sac poubelle et relâche le bouton pour les jeter dans le sac. Tu peux mettre jusqu'à 5 déchets dans ton sac poubelle.,
 Tutorial.UI.Bin,"Appuie sur la gachette en visant le sac pour sortir un déchet, lâche la gachette au dessus de la poubelle pour trier un déchet.",
+Tutorial.UI.Teleport,Appuyez sur le bouton A de votre manette droite pour basculer en mode saut. Utilisez ensuite le joystick pour tracer une courbe qui atterrit à l'intérieur du cercle. Relâchez le joystick pour sauter vers ce point !,
+Tutorial.UI.Note,Remarque : vous pouvez à tout moment basculer entre le mode marche et le mode saut à l'aide du bouton A.,
