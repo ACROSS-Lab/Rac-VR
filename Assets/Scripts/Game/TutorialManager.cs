@@ -85,6 +85,7 @@ public class TutorialManager : MonoBehaviour, IGameManager
             move1Canvas.SetActive(false);
             teleportPoint.SetActive(true);
             teleportCanvas.SetActive(true);
+            noteCanvas.SetActive(true);
         }
     }
 
@@ -95,7 +96,7 @@ public class TutorialManager : MonoBehaviour, IGameManager
             teleportPoint.SetActive(false);
             teleportCanvas.SetActive(false);
             characterCanvas.SetActive(true);
-            noteCanvas.SetActive(true);
+            noteCanvas.SetActive(false);
             NPC.SetActive(true);
         }
     }
