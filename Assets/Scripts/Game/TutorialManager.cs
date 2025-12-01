@@ -55,6 +55,9 @@ public class TutorialManager : MonoBehaviour, IGameManager
     void Start()
     {
         StartCoroutine(WaitForInventoryUpdate());
+
+        walkingModeCanvas.SetActive(false);
+        jumpingModeCanvas.SetActive(false);
     }
 
     void Update()
@@ -189,14 +192,14 @@ public class TutorialManager : MonoBehaviour, IGameManager
             
             rightControllerInput.smoothMotionEnabled = !rightControllerInput.smoothMotionEnabled;
 
-            // if (rightControllerInput.smoothMotionEnabled)
-            // {
-            //     DisplayMovementCanvas(walkingModeCanvas);
-            // }
-            // else
-            // {
-            //     DisplayMovementCanvas(jumpingModeCanvas);
-            // }
+            if (rightControllerInput.smoothMotionEnabled)
+            {
+                DisplayMovementCanvas(walkingModeCanvas);
+            }
+            else
+            {
+                DisplayMovementCanvas(jumpingModeCanvas);
+            }
 
             switchCoolDownTimer = 0;
         }
