@@ -89,6 +89,14 @@ public class TutorialManager : MonoBehaviour, IGameManager
         }
     }
 
+    public void Reached1stDestinationNoTeleport()
+    {
+        movePoint1.SetActive(false);
+        move1Canvas.SetActive(false);
+        characterCanvas.SetActive(true);
+        NPC.SetActive(true);
+    }
+
     public void ReachedTeleportDestination()
     {
         if (!rightControllerInput.smoothMotionEnabled)
