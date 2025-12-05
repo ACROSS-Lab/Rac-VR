@@ -44,6 +44,7 @@ public class TutorialManager : MonoBehaviour, IGameManager
     int numWastesCollected = 0;
     int numWastesProcessed = 0;
     bool firstClick = true;
+    bool isCollected = false;
     float switchCoolDownTimer = 0;
 
     void Awake()
@@ -119,20 +120,21 @@ public class TutorialManager : MonoBehaviour, IGameManager
     public void CheckAmountCollected()
     {
         numWastesCollected = Inventory.instance.wastes.Count;
-        if (numWastesCollected == 5)
+        if (numWastesCollected == 1 && !isCollected)
         {
             pickupCanvas.SetActive(false);
             dropCanvas.SetActive(false);
             move2Canvas.SetActive(true);
             movePoint2.SetActive(true);
             bin.SetActive(true);
+            isCollected = true;
         }
     }
 
     public void AddScore(WasteType type, int points)
     {
         numWastesProcessed++;
-        if (numWastesProcessed == 5)
+        if (numWastesProcessed == 1)
         {
             binCanvas.SetActive(false);
             finishCanvas.SetActive(true);
@@ -142,8 +144,8 @@ public class TutorialManager : MonoBehaviour, IGameManager
 
     public void MinusScore(WasteType type, int points)
     {
-        numWastesProcessed++;
-        if (numWastesProcessed == 5)
+        numWastesProcessed--;
+        if (numWastesProcessed == 1)
         {
             binCanvas.SetActive(false);
             finishCanvas.SetActive(true);
@@ -152,8 +154,13 @@ public class TutorialManager : MonoBehaviour, IGameManager
 
     public void IncrementCharactersTalkedTo()
     {
+        if (!firstClick) return;
+
         characterCanvas.SetActive(false);
-        dialogueCanvas.SetActive(true);
+        wastesContainer.SetActive(true);
+        pickupCanvas.SetActive(true);
+        dropCanvas.SetActive(true);
+        firstClick = false;
     }
 
     public void FinishDialogue()
@@ -161,7 +168,6 @@ public class TutorialManager : MonoBehaviour, IGameManager
         if (!firstClick) return;
 
         characterCanvas.SetActive(false);
-        dialogueCanvas.SetActive(false);
         wastesContainer.SetActive(true);
         pickupCanvas.SetActive(true);
         dropCanvas.SetActive(true);

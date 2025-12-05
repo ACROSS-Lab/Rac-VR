@@ -23,8 +23,14 @@ EditorBuildSettings:
   - enabled: 0
     path: Assets/Samples/XR Interaction Toolkit/3.0.8/Starter Assets/DemoScene.unity
     guid: 319dafa5c80f29f428dc1e0d03f04177
+  - enabled: 0
+    path: Assets/Scenes/RAC_Tuto_NonGP.unity
+    guid: 212d8015df07b8f418b7f7aa8320df59
   - enabled: 1
-    path: Assets/Scenes/RAC_MainScene _ NonGP.unity
+    path: Assets/Scenes/RAC_Tuto_NonGP_2.unity
+    guid: 9bb4e42a5564c0c49a15f41aadaac7b3
+  - enabled: 1
+    path: Assets/Scenes/RAC_MainScene_NonGP.unity
     guid: 676855aa67b6a8e42934733f51ce63d8
   m_configObjects:
     Unity.XR.Oculus.Settings: {fileID: 11400000, guid: bfa1182bd221b4ca89619141f66f1260, type: 2}

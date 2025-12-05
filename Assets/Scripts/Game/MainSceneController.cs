@@ -97,7 +97,7 @@ public class MainSceneController : MonoBehaviour
             {
                 scoreTexts[i].text = newScore.ToString();
 
-                if (!reachedScores[i] && newScore >= 10)
+                if (!reachedScores[i] && newScore >= 6)
                 {
                     reachedScores[i] = true;
                     scoreChecks[i].SetActive(true);
@@ -285,7 +285,7 @@ public class MainSceneController : MonoBehaviour
         endGamePanel.SetActive(false);
         loadingPanel.SetActive(true);
 
-        AsyncOperation operation = SceneManager.LoadSceneAsync("RAC_Tuto_NonGP");
+        AsyncOperation operation = SceneManager.LoadSceneAsync("RAC_Tuto_NonGP_2");
         operation.allowSceneActivation = false;
         while (operation.progress < 0.9f)
         {
