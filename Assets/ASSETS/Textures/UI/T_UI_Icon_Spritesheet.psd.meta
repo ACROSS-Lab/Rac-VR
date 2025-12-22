@@ -593,6 +593,28 @@ TextureImporter:
       indices: 
       edges: []
       weights: []
+    - serializedVersion: 2
+      name: T_UI_Icon_Spritesheet_22
+      rect:
+        serializedVersion: 2
+        x: 1536
+        y: 1024
+        width: 256
+        height: 256
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: a8c844a4770a4a541a40de8a0684bab5
+      internalID: -1408062992
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
     outline: []
     customData: 
     physicsShape: []
@@ -622,6 +644,7 @@ TextureImporter:
       T_UI_Icon_Spritesheet_2: -361084024
       T_UI_Icon_Spritesheet_20: 1725151220
       T_UI_Icon_Spritesheet_21: 133908133
+      T_UI_Icon_Spritesheet_22: -1408062992
       T_UI_Icon_Spritesheet_3: 1287605786
       T_UI_Icon_Spritesheet_4: 1288868365
       T_UI_Icon_Spritesheet_5: -1810892324
