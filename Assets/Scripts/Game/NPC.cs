@@ -6,7 +6,7 @@ using UnityEngine.XR.Interaction.Toolkit;
 using UnityEngine.XR.Interaction.Toolkit.Interactables;
 
 [RequireComponent(typeof(LocalizedKey))]
-public class CharacterDialogue : MonoBehaviour
+public class NPC : MonoBehaviour
 {
     [SerializeField] float distanceToDisplay = 5f;
     [SerializeField] float displayTime = 5f;
@@ -16,6 +16,8 @@ public class CharacterDialogue : MonoBehaviour
     [SerializeField] SkinnedMeshRenderer skinnedMeshRenderer;
     [SerializeField] XRSimpleInteractable interactable;
     [SerializeField] bool isObjectiveNPC = true;
+    [SerializeField] float rotationSpeed = 5f;
+    [SerializeField] GameObject trashPile;
 
     Transform camTransform;
     Animator animator;
@@ -51,6 +53,9 @@ public class CharacterDialogue : MonoBehaviour
     {
         RotateTowardsCamera();
         UpdateAnimation();
+
+        if (!hasTalked) DisplayDialouge();
+
     }
 
     void UpdateAnimation()
@@ -70,14 +75,15 @@ public class CharacterDialogue : MonoBehaviour
 
     void RotateTowardsCamera()
     {
-        if (!canvasDialogue.activeInHierarchy) return;
+        float distance = Vector3.Distance(camTransform.position, transform.position);
+        if (distance > distanceToDisplay) return;
 
-        Vector3 direction = canvasDialogue.transform.position - camTransform.position;
+        Vector3 direction = camTransform.position - transform.position;
         direction.y = 0;
         if (direction.sqrMagnitude > 0.001f)
         {
             Quaternion targetRotation = Quaternion.LookRotation(direction);
-            canvasDialogue.transform.rotation = targetRotation;
+            transform.rotation = Quaternion.Slerp(transform.rotation, targetRotation, Time.deltaTime * rotationSpeed);
         }
     }
 
@@ -108,6 +114,13 @@ public class CharacterDialogue : MonoBehaviour
         audioSource.Stop();
         animator.SetBool("isTalking", false);
         canvasDialogue.SetActive(false);
+
+        if (!finishedTalking)
+        {
+            if (isObjectiveNPC) Game.Manager.IncrementCharactersTalkedTo();
+            if (trashPile != null) trashPile.SetActive(true);
+            finishedTalking = true;
+        }
     }
 
     IEnumerator StartTalkingAnimation()
@@ -120,6 +133,7 @@ public class CharacterDialogue : MonoBehaviour
         if (!finishedTalking)
         {
             if (isObjectiveNPC) Game.Manager.IncrementCharactersTalkedTo();
+            if (trashPile != null) trashPile.SetActive(true);
             finishedTalking = true;
         }
         if(displayTime > 0)

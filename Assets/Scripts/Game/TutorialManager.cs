@@ -12,7 +12,6 @@ public class TutorialManager : MonoBehaviour, IGameManager
     [SerializeField] GameObject movePoint1;
     [SerializeField] GameObject teleportPoint;
     [SerializeField] GameObject movePoint2;
-    [SerializeField] GameObject wastesContainer;
     [SerializeField] GameObject bin;
     [SerializeField] GameObject NPC;
 
@@ -157,7 +156,6 @@ public class TutorialManager : MonoBehaviour, IGameManager
         if (!firstClick) return;
 
         characterCanvas.SetActive(false);
-        wastesContainer.SetActive(true);
         pickupCanvas.SetActive(true);
         dropCanvas.SetActive(true);
         firstClick = false;
@@ -168,7 +166,6 @@ public class TutorialManager : MonoBehaviour, IGameManager
         if (!firstClick) return;
 
         characterCanvas.SetActive(false);
-        wastesContainer.SetActive(true);
         pickupCanvas.SetActive(true);
         dropCanvas.SetActive(true);
         firstClick = false;
