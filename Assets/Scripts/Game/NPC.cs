@@ -17,7 +17,7 @@ public class NPC : MonoBehaviour
     [SerializeField] XRSimpleInteractable interactable;
     [SerializeField] bool isObjectiveNPC = true;
     [SerializeField] float rotationSpeed = 5f;
-    [SerializeField] GameObject trashPile;
+    [SerializeField] GameObject questGO;
 
     Transform camTransform;
     Animator animator;
@@ -117,8 +117,7 @@ public class NPC : MonoBehaviour
 
         if (!finishedTalking)
         {
-            if (isObjectiveNPC) Game.Manager.IncrementCharactersTalkedTo();
-            if (trashPile != null) trashPile.SetActive(true);
+            ActiveQuest();
             finishedTalking = true;
         }
     }
@@ -132,14 +131,23 @@ public class NPC : MonoBehaviour
         animator.SetBool("isTalking", false);
         if (!finishedTalking)
         {
-            if (isObjectiveNPC) Game.Manager.IncrementCharactersTalkedTo();
-            if (trashPile != null) trashPile.SetActive(true);
+            ActiveQuest();
             finishedTalking = true;
         }
         if(displayTime > 0)
         {
             yield return new WaitForSeconds(displayTime);
             TurnOffDialouge();
+        }
+    }
+
+    void ActiveQuest()
+    {
+        if (questGO !=null && questGO.TryGetComponent(out Quest quest))
+        {
+            questGO.SetActive(true);
+            Game.Manager.AddQuest(quest);
+            if (questGO.activeSelf && !questGO.activeInHierarchy) questGO.transform.parent.parent.gameObject.SetActive(true);
         }
     }
 
@@ -151,10 +159,5 @@ public class NPC : MonoBehaviour
     public void HoverExit(HoverExitEventArgs args)
     {
         skinnedMeshRenderer.materials[0].SetFloat("_Outline", 0.0f);
-    }
-
-    public void LoadTutorialScene()
-    {
-        SceneManager.LoadScene("RAC_Tuto_NonGP");
     }
 }

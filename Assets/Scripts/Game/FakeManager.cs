@@ -3,9 +3,11 @@ using UnityEngine;
 
 public class FakeManager : MonoBehaviour, IGameManager
 {
-    [SerializeField] GameObject[] piles;
+    [SerializeField] AudioSource completeSound;
+    [SerializeField] int totalQuestCount = 2;
 
-    Dictionary<int, List<Waste>> pilesWastes = new Dictionary<int, List<Waste>>();
+    Dictionary<Quest, bool> activeQuests = new Dictionary<Quest, bool>();
+    int questCount = 0;
 
     void Awake()
     {
@@ -17,18 +19,56 @@ public class FakeManager : MonoBehaviour, IGameManager
         
     }
 
-    public void AddScore(WasteType type, int points)
+    public void AddScore(int ID)
     {
-        Debug.Log("FakeManager: AddScore");
+        Quest quest = GetQuest(ID);
+        quest.DecreaseRemaining();
+        quest.IncreaseCorrect();
+
+        CheckCompleteAllQuests();
     }
 
-    public void MinusScore(WasteType type, int points)
+    public void MinusScore(int ID)
     {
-        Debug.Log("FakeManager: MinusScore");
+        Quest quest = GetQuest(ID);
+        quest.DecreaseRemaining();
+        quest.IncreaseIncorrect();
+
+        CheckCompleteAllQuests();
     }
 
-    public void IncrementCharactersTalkedTo()
+    Quest GetQuest(int ID)
     {
-        Debug.Log("FakeManager: IncrementCharactersTalkedTo");
+        foreach (Quest quest in activeQuests.Keys)
+        {
+            if (quest.ID == ID) return quest;
+        }
+
+        Debug.Log("There is no quest for this ID");
+        return null;
+    }
+
+    public void AddQuest(Quest quest)
+    {
+        activeQuests.Add(quest, false);
+    }
+
+    public void CompleteQuest(Quest quest)
+    {
+        activeQuests[quest] = true;
+        completeSound.Play();
+        questCount++;
+    }
+
+    void CheckCompleteAllQuests()
+    {
+        if (questCount < totalQuestCount) return;
+
+        foreach (KeyValuePair<Quest, bool> kvp in activeQuests)
+        {
+            if (!kvp.Value) return;
+        }
+
+        Debug.Log ("Complete all quests");
     }
 }

@@ -30,9 +30,9 @@ public class Bin : MonoBehaviour
         feedbackCanvas.SetActive(true);
     }
 
-    public void CorrectBin(WasteType wasteType, int score)
+    public void CorrectBin(int ID)
     {
-        Game.Manager.AddScore(wasteType, score);
+        Game.Manager.AddScore(ID);
 
         if (correctParticle.isPlaying) correctParticle.Stop();
         correctParticle.Play();
@@ -46,9 +46,9 @@ public class Bin : MonoBehaviour
         }
     }
     
-    public void WrongBin(WasteType wasteType, int score)
+    public void WrongBin(int ID)
     {
-        Game.Manager.MinusScore(wasteType, score);
+        Game.Manager.MinusScore(ID);
 
         if (falseParticle.isPlaying) falseParticle.Stop();
         falseParticle.Play();

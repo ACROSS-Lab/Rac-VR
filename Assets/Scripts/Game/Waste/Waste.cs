@@ -5,7 +5,7 @@ using UnityEngine.XR.Interaction.Toolkit.Interactables;
 
 public class Waste : MonoBehaviour
 {
-    [HideInInspector] public bool fromInventory = false;
+    [Header("Waste type")]
     [SerializeField] WasteType wasteType;
 
     [Header("Sound effects")]
@@ -20,6 +20,9 @@ public class Waste : MonoBehaviour
     [SerializeField] private float temporaryDrag = 5f;
     [Tooltip("How long the damping effect should last, in seconds.")]
     [SerializeField] private float dampDuration = 0.5f;
+
+    [HideInInspector] public bool fromInventory = false;
+    [HideInInspector] public int questID = 0;
 
     XRGrabInteractable interactable;
     bool firstSelected = false;
@@ -78,11 +81,11 @@ public class Waste : MonoBehaviour
     {
         if ((bin.binType & wasteType) != 0)
         {
-            bin.CorrectBin(wasteType, 1);
+            bin.CorrectBin(questID);
         }
         else
         {
-            bin.WrongBin(wasteType, 0);
+            bin.WrongBin(questID);
         }
 
         SendingHaptics.instance.SendRightHaptic();

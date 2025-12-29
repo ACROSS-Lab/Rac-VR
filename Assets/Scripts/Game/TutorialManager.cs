@@ -10,19 +10,16 @@ public class TutorialManager : MonoBehaviour, IGameManager
 
     [Header("Tutorial Elements")]
     [SerializeField] GameObject movePoint1;
-    [SerializeField] GameObject teleportPoint;
     [SerializeField] GameObject movePoint2;
     [SerializeField] GameObject bin;
     [SerializeField] GameObject NPC;
 
     [Header("UI Elements")]
     [SerializeField] GameObject move1Canvas;
-    [SerializeField] GameObject teleportCanvas;
-    [SerializeField] GameObject noteCanvas;
+    [SerializeField] GameObject characterCanvas;
     [SerializeField] GameObject move2Canvas;
     [SerializeField] GameObject pickupCanvas;
     [SerializeField] GameObject dropCanvas;
-    [SerializeField] GameObject characterCanvas;
     [SerializeField] GameObject dialogueCanvas;
     [SerializeField] GameObject binCanvas;
     [SerializeField] GameObject finishCanvas;
@@ -83,28 +80,6 @@ public class TutorialManager : MonoBehaviour, IGameManager
         {
             movePoint1.SetActive(false);
             move1Canvas.SetActive(false);
-            teleportPoint.SetActive(true);
-            teleportCanvas.SetActive(true);
-            noteCanvas.SetActive(true);
-        }
-    }
-
-    public void Reached1stDestinationNoTeleport()
-    {
-        movePoint1.SetActive(false);
-        move1Canvas.SetActive(false);
-        characterCanvas.SetActive(true);
-        NPC.SetActive(true);
-    }
-
-    public void ReachedTeleportDestination()
-    {
-        if (!rightControllerInput.smoothMotionEnabled)
-        {
-            teleportPoint.SetActive(false);
-            teleportCanvas.SetActive(false);
-            characterCanvas.SetActive(true);
-            noteCanvas.SetActive(false);
             NPC.SetActive(true);
         }
     }
@@ -130,7 +105,7 @@ public class TutorialManager : MonoBehaviour, IGameManager
         }
     }
 
-    public void AddScore(WasteType type, int points)
+    public void AddScore(int ID)
     {
         numWastesProcessed++;
         if (numWastesProcessed == 1)
@@ -141,7 +116,7 @@ public class TutorialManager : MonoBehaviour, IGameManager
         }
     }
 
-    public void MinusScore(WasteType type, int points)
+    public void MinusScore(int ID)
     {
         numWastesProcessed--;
         if (numWastesProcessed == 1)
@@ -151,7 +126,7 @@ public class TutorialManager : MonoBehaviour, IGameManager
         }
     }
 
-    public void IncrementCharactersTalkedTo()
+    public void AddQuest(Quest quest)
     {
         if (!firstClick) return;
 
@@ -161,14 +136,9 @@ public class TutorialManager : MonoBehaviour, IGameManager
         firstClick = false;
     }
 
-    public void FinishDialogue()
+    public void CompleteQuest(Quest quest)
     {
-        if (!firstClick) return;
-
-        characterCanvas.SetActive(false);
-        pickupCanvas.SetActive(true);
-        dropCanvas.SetActive(true);
-        firstClick = false;
+        
     }
 
     public void LoadMainScene()
@@ -223,4 +193,8 @@ public class TutorialManager : MonoBehaviour, IGameManager
         jumpingModeCanvas.GetComponent<TweenFadeOut>().ForceEnd();
         canvas.SetActive(true);
     }
+
+    
+
+    
 }

@@ -1,6 +1,7 @@
 public interface IGameManager
 {
-    void AddScore(WasteType type, int points);
-    void MinusScore(WasteType type, int points);
-    void IncrementCharactersTalkedTo();
+    void AddScore(int questID);
+    void MinusScore(int questID);
+    void AddQuest(Quest quest);
+    void CompleteQuest(Quest quest);
 }

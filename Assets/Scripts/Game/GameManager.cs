@@ -13,7 +13,8 @@ public class GameManager : MonoBehaviour, IGameManager
     public event Action<WasteType, int> OnScoreUpdated;
     public event Action<int> OnCharactersTalkedUpdated;
 
-    [SerializeField] string sceneName = "RAC_MainScene_NonGP";
+    [SerializeField] string sceneName = "RAC_MainScene";
+    [SerializeField] Scene tutorialScene;
 
     [Header("Session Presets")]
     [SerializeField] List<WastePreset> allPlayPresets;
@@ -116,5 +117,25 @@ public class GameManager : MonoBehaviour, IGameManager
     {
         characterTalked++;
         OnCharactersTalkedUpdated?.Invoke(characterTalked);
+    }
+
+    public void AddScore(int questID)
+    {
+        throw new NotImplementedException();
+    }
+
+    public void MinusScore(int questID)
+    {
+        throw new NotImplementedException();
+    }
+
+    public void AddQuest(Quest quest)
+    {
+        throw new NotImplementedException();
+    }
+
+    public void CompleteQuest(Quest quest)
+    {
+        throw new NotImplementedException();
     }
 }
