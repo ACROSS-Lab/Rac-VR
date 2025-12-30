@@ -26,3 +26,5 @@ Tutorial.UI.Drop,Il y a un sac poubelle sur ta main gauche  Dépose tes déchets
 Tutorial.UI.Bin,"Appuie sur la gachette en visant le sac pour sortir un déchet, lâche la gachette au dessus de la poubelle pour trier un déchet.",
 Tutorial.UI.Teleport,Appuyez sur le bouton A de votre manette droite pour basculer en mode saut. Utilisez ensuite le joystick pour tracer une courbe qui atterrit à l'intérieur du cercle. Relâchez le joystick pour sauter vers ce point !,
 Tutorial.UI.Note,Remarque : tu peux à tout moment basculer entre le mode marche et le mode saut à l'aide du bouton ,
+key.test.1,Clean all the trashes near the yellow house,
+key.test.2,Remove all the garbage behind the old woman,

@@ -12,7 +12,11 @@ public class CanvasFollower : MonoBehaviour
         cameraTransform = Camera.main.transform;
 
         Vector3 targetPosition = cameraTransform.position + (cameraTransform.forward * distanceFromCamera);
-        transform.position = transform.position + targetPosition;
+        
+        transform.position = targetPosition;
+
+        float cameraYaw = cameraTransform.eulerAngles.y;
+        transform.rotation = Quaternion.Euler(0, cameraYaw, 0);
     }
 
     void LateUpdate()

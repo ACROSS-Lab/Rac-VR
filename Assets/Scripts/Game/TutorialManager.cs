@@ -15,6 +15,7 @@ public class TutorialManager : MonoBehaviour, IGameManager
     [SerializeField] GameObject NPC;
 
     [Header("UI Elements")]
+    [SerializeField] GameObject questCanvas;
     [SerializeField] GameObject move1Canvas;
     [SerializeField] GameObject characterCanvas;
     [SerializeField] GameObject move2Canvas;
@@ -30,7 +31,8 @@ public class TutorialManager : MonoBehaviour, IGameManager
     [SerializeField] GameObject jumpingModeCanvas;
 
     [Header("Movement")]
-    [SerializeField] InputActionReference mainButton;
+    [SerializeField] InputActionReference buttonA;
+    [SerializeField] InputActionReference buttonB;
     [SerializeField] ControllerInputActionManager rightControllerInput;
     [SerializeField] float cooldownTime = 2.5f;
 
@@ -41,7 +43,7 @@ public class TutorialManager : MonoBehaviour, IGameManager
     int numWastesProcessed = 0;
     bool firstClick = true;
     bool isCollected = false;
-    float switchCoolDownTimer = 0;
+    float switchCooldownTimer = 0;
 
     void Awake()
     {
@@ -105,40 +107,52 @@ public class TutorialManager : MonoBehaviour, IGameManager
         }
     }
 
-    public void AddScore(int ID)
+    public void AddScore(Quest quest)
     {
         numWastesProcessed++;
         if (numWastesProcessed == 1)
         {
-            binCanvas.SetActive(false);
-            finishCanvas.SetActive(true);
-            endTutorialSound.Play();
+            EndTutorial();
         }
     }
 
-    public void MinusScore(int ID)
+    public void MinusScore(Quest quest)
     {
         numWastesProcessed--;
         if (numWastesProcessed == 1)
         {
-            binCanvas.SetActive(false);
-            finishCanvas.SetActive(true);
+            EndTutorial();
         }
     }
 
-    public void AddQuest(Quest quest)
+    public void AddQuest(Quest questPrefab, GameObject wastes, string desKey)
     {
         if (!firstClick) return;
+
+        if (!questCanvas.activeInHierarchy) questCanvas.SetActive(true);
+
+        Transform backgroundQuest = questCanvas.transform.GetChild(0);        
+        Quest quest = Instantiate(questPrefab, backgroundQuest, false);
+        quest.Setup(wastes, desKey);
 
         characterCanvas.SetActive(false);
         pickupCanvas.SetActive(true);
         dropCanvas.SetActive(true);
+
         firstClick = false;
     }
 
     public void CompleteQuest(Quest quest)
     {
         
+    }
+
+    void EndTutorial()
+    {
+        binCanvas.SetActive(false);
+        questCanvas.SetActive(false);
+        finishCanvas.SetActive(true);
+        endTutorialSound.Play();
     }
 
     public void LoadMainScene()
@@ -151,7 +165,7 @@ public class TutorialManager : MonoBehaviour, IGameManager
         finishCanvas.SetActive(false);
         loadingPanel.SetActive(true);
 
-        AsyncOperation operation = SceneManager.LoadSceneAsync("Rac_MainScene_NonGP");
+        AsyncOperation operation = SceneManager.LoadSceneAsync("Rac_MainScene");
         operation.allowSceneActivation = false;
         while (operation.progress < 0.9f)
         {
@@ -164,26 +178,37 @@ public class TutorialManager : MonoBehaviour, IGameManager
         operation.allowSceneActivation = true;
     }
 
+    bool isBothPressed = false;
+
     void SwitchMovementMode()
     {
-        switchCoolDownTimer += Time.deltaTime;
-        if (switchCoolDownTimer < cooldownTime) return;
+        switchCooldownTimer += Time.deltaTime;
+        if (switchCooldownTimer < cooldownTime) return;
 
-        if (mainButton.action.WasPressedThisFrame())
+        bool a = buttonA.action.WasPressedThisFrame();
+        bool b = buttonB.action.WasPressedThisFrame();
+
+        if (a && b)
         {
-            
-            rightControllerInput.smoothMotionEnabled = !rightControllerInput.smoothMotionEnabled;
-
-            if (rightControllerInput.smoothMotionEnabled)
+            if (!isBothPressed)
             {
-                DisplayMovementCanvas(walkingModeCanvas);
-            }
-            else
-            {
-                DisplayMovementCanvas(jumpingModeCanvas);
-            }
+                rightControllerInput.smoothMotionEnabled = !rightControllerInput.smoothMotionEnabled;
+                if (rightControllerInput.smoothMotionEnabled)
+                {
+                    DisplayMovementCanvas(walkingModeCanvas);
+                }
+                else
+                {
+                    DisplayMovementCanvas(jumpingModeCanvas);
+                }
 
-            switchCoolDownTimer = 0;
+                switchCooldownTimer = 0;
+                isBothPressed = true;
+            }
+        }
+        else
+        {
+            isBothPressed = false;
         }
     }
 

@@ -1,7 +1,9 @@
+using UnityEngine;
+
 public interface IGameManager
 {
-    void AddScore(int questID);
-    void MinusScore(int questID);
-    void AddQuest(Quest quest);
+    void AddScore(Quest quest);
+    void MinusScore(Quest quest);
+    void AddQuest(Quest quest, GameObject wastes, string desKey);
     void CompleteQuest(Quest quest);
 }

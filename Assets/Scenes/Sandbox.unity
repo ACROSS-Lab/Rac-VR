@@ -1292,20 +1292,37 @@ PrefabInstance:
     - target: {fileID: 7118748371001634857, guid: 9a8469347a649304b94a687e78ec6a2f, type: 3}
       propertyPath: quest
       value: 
-      objectReference: {fileID: 1404218598}
+      objectReference: {fileID: 0}
     - target: {fileID: 7118748371001634857, guid: 9a8469347a649304b94a687e78ec6a2f, type: 3}
       propertyPath: questGO
       value: 
-      objectReference: {fileID: 1404218598}
+      objectReference: {fileID: 0}
     - target: {fileID: 7118748371001634857, guid: 9a8469347a649304b94a687e78ec6a2f, type: 3}
       propertyPath: trashPile
       value: 
       objectReference: {fileID: 1493104497}
+    - target: {fileID: 7118748371001634857, guid: 9a8469347a649304b94a687e78ec6a2f, type: 3}
+      propertyPath: questPrefab
+      value: 
+      objectReference: {fileID: 1911334114598424030, guid: 16c08d60dff3f564599a662d0fd790a8, type: 3}
+    - target: {fileID: 7118748371001634857, guid: 9a8469347a649304b94a687e78ec6a2f, type: 3}
+      propertyPath: wasteObject
+      value: 
+      objectReference: {fileID: 1493104497}
+    - target: {fileID: 7118748371001634857, guid: 9a8469347a649304b94a687e78ec6a2f, type: 3}
+      propertyPath: descriptionKey
+      value: key.test.1
+      objectReference: {fileID: 0}
     m_RemovedComponents: []
     m_RemovedGameObjects: []
     m_AddedGameObjects: []
     m_AddedComponents: []
   m_SourcePrefab: {fileID: 100100000, guid: 9a8469347a649304b94a687e78ec6a2f, type: 3}
+--- !u!1 &266450618 stripped
+GameObject:
+  m_CorrespondingSourceObject: {fileID: 461638240025327616, guid: 356537039a6643544af4deffb4d88abd, type: 3}
+  m_PrefabInstance: {fileID: 3393297827854467795}
+  m_PrefabAsset: {fileID: 0}
 --- !u!4 &320051085 stripped
 Transform:
   m_CorrespondingSourceObject: {fileID: 3495160118464513320, guid: b3508c20ae6977944a2d7c4dc066ea5c, type: 3}
@@ -1781,6 +1798,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   completeSound: {fileID: 606002189}
   totalQuestCount: 2
+  questCanvas: {fileID: 266450618}
 --- !u!4 &777091908
 Transform:
   m_ObjectHideFlags: 0
@@ -2249,11 +2267,6 @@ Transform:
   m_CorrespondingSourceObject: {fileID: 7880235393653761629, guid: 175f8abfd895aef4dbab808809ac23ed, type: 3}
   m_PrefabInstance: {fileID: 1068559798}
   m_PrefabAsset: {fileID: 0}
---- !u!1 &1222148289 stripped
-GameObject:
-  m_CorrespondingSourceObject: {fileID: 2515081010581439905, guid: 356537039a6643544af4deffb4d88abd, type: 3}
-  m_PrefabInstance: {fileID: 3393297827854467795}
-  m_PrefabAsset: {fileID: 0}
 --- !u!4 &1240804636 stripped
 Transform:
   m_CorrespondingSourceObject: {fileID: 5938120689700303654, guid: 2d1bab07e5f5f7a4d84062f5ef9ac8e8, type: 3}
@@ -2587,11 +2600,23 @@ PrefabInstance:
     - target: {fileID: 4931750592678391561, guid: daabb7717ba88b848a355d69c4f89e84, type: 3}
       propertyPath: quest
       value: 
-      objectReference: {fileID: 1222148289}
+      objectReference: {fileID: 0}
     - target: {fileID: 4931750592678391561, guid: daabb7717ba88b848a355d69c4f89e84, type: 3}
       propertyPath: questGO
       value: 
-      objectReference: {fileID: 1222148289}
+      objectReference: {fileID: 0}
+    - target: {fileID: 4931750592678391561, guid: daabb7717ba88b848a355d69c4f89e84, type: 3}
+      propertyPath: questPrefab
+      value: 
+      objectReference: {fileID: 1911334114598424030, guid: 16c08d60dff3f564599a662d0fd790a8, type: 3}
+    - target: {fileID: 4931750592678391561, guid: daabb7717ba88b848a355d69c4f89e84, type: 3}
+      propertyPath: wasteObject
+      value: 
+      objectReference: {fileID: 2046713566}
+    - target: {fileID: 4931750592678391561, guid: daabb7717ba88b848a355d69c4f89e84, type: 3}
+      propertyPath: descriptionKey
+      value: key.test.2
+      objectReference: {fileID: 0}
     - target: {fileID: 6258511265816320443, guid: daabb7717ba88b848a355d69c4f89e84, type: 3}
       propertyPath: textComponent
       value: 
@@ -2649,11 +2674,6 @@ PrefabInstance:
     m_AddedGameObjects: []
     m_AddedComponents: []
   m_SourcePrefab: {fileID: 100100000, guid: daabb7717ba88b848a355d69c4f89e84, type: 3}
---- !u!1 &1404218598 stripped
-GameObject:
-  m_CorrespondingSourceObject: {fileID: 4893028709327474765, guid: 356537039a6643544af4deffb4d88abd, type: 3}
-  m_PrefabInstance: {fileID: 3393297827854467795}
-  m_PrefabAsset: {fileID: 0}
 --- !u!114 &1406047889 stripped
 MonoBehaviour:
   m_CorrespondingSourceObject: {fileID: 8957014102698910098, guid: daabb7717ba88b848a355d69c4f89e84, type: 3}
@@ -3430,10 +3450,30 @@ PrefabInstance:
       propertyPath: m_Name
       value: QuestCanvas
       objectReference: {fileID: 0}
+    - target: {fileID: 461638240025327616, guid: 356537039a6643544af4deffb4d88abd, type: 3}
+      propertyPath: m_IsActive
+      value: 0
+      objectReference: {fileID: 0}
     - target: {fileID: 1303712955678647565, guid: 356537039a6643544af4deffb4d88abd, type: 3}
       propertyPath: trashes
       value: 
       objectReference: {fileID: 1493104497}
+    - target: {fileID: 1713679801294750418, guid: 356537039a6643544af4deffb4d88abd, type: 3}
+      propertyPath: m_AnchorMax.y
+      value: 1
+      objectReference: {fileID: 0}
+    - target: {fileID: 1713679801294750418, guid: 356537039a6643544af4deffb4d88abd, type: 3}
+      propertyPath: m_AnchorMin.y
+      value: 1
+      objectReference: {fileID: 0}
+    - target: {fileID: 1713679801294750418, guid: 356537039a6643544af4deffb4d88abd, type: 3}
+      propertyPath: m_AnchoredPosition.x
+      value: 1
+      objectReference: {fileID: 0}
+    - target: {fileID: 1713679801294750418, guid: 356537039a6643544af4deffb4d88abd, type: 3}
+      propertyPath: m_AnchoredPosition.y
+      value: -0.175
+      objectReference: {fileID: 0}
     - target: {fileID: 1991206528593575476, guid: 356537039a6643544af4deffb4d88abd, type: 3}
       propertyPath: m_Pivot.x
       value: 0.5
@@ -3514,12 +3554,25 @@ PrefabInstance:
       propertyPath: m_LocalEulerAnglesHint.z
       value: 0
       objectReference: {fileID: 0}
+    - target: {fileID: 2794180197225876585, guid: 356537039a6643544af4deffb4d88abd, type: 3}
+      propertyPath: m_SizeDelta.y
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 4893028709327474765, guid: 356537039a6643544af4deffb4d88abd, type: 3}
+      propertyPath: m_IsActive
+      value: 0
+      objectReference: {fileID: 0}
     - target: {fileID: 6927733618896622750, guid: 356537039a6643544af4deffb4d88abd, type: 3}
       propertyPath: trashes
       value: 
       objectReference: {fileID: 2046713566}
+    - target: {fileID: 7033127034164059743, guid: 356537039a6643544af4deffb4d88abd, type: 3}
+      propertyPath: m_PresetInfoIsWorld
+      value: 1
+      objectReference: {fileID: 0}
     m_RemovedComponents: []
-    m_RemovedGameObjects: []
+    m_RemovedGameObjects:
+    - {fileID: 4893028709327474765, guid: 356537039a6643544af4deffb4d88abd, type: 3}
     m_AddedGameObjects: []
     m_AddedComponents: []
   m_SourcePrefab: {fileID: 100100000, guid: 356537039a6643544af4deffb4d88abd, type: 3}

@@ -30,9 +30,9 @@ public class Bin : MonoBehaviour
         feedbackCanvas.SetActive(true);
     }
 
-    public void CorrectBin(int ID)
+    public void CorrectBin(Quest quest)
     {
-        Game.Manager.AddScore(ID);
+        Game.Manager.AddScore(quest);
 
         if (correctParticle.isPlaying) correctParticle.Stop();
         correctParticle.Play();
@@ -46,9 +46,9 @@ public class Bin : MonoBehaviour
         }
     }
     
-    public void WrongBin(int ID)
+    public void WrongBin(Quest quest)
     {
-        Game.Manager.MinusScore(ID);
+        Game.Manager.MinusScore(quest);
 
         if (falseParticle.isPlaying) falseParticle.Stop();
         falseParticle.Play();

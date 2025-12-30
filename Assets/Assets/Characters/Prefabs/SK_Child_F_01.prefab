@@ -406,6 +406,10 @@ MonoBehaviour:
   skinnedMeshRenderer: {fileID: 7227423122677196737}
   interactable: {fileID: 5498688422700614712}
   isObjectiveNPC: 1
+  rotationSpeed: 5
+  questPrefab: {fileID: 1911334114598424030, guid: 16c08d60dff3f564599a662d0fd790a8, type: 3}
+  descriptionKey: 
+  wasteObject: {fileID: 0}
 --- !u!4 &2033343636781483272 stripped
 Transform:
   m_CorrespondingSourceObject: {fileID: -8679921383154817045, guid: 65dd401a98ceb924da5dea1bee61b890, type: 3}

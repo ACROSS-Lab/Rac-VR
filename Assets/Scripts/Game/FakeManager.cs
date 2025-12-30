@@ -5,6 +5,7 @@ public class FakeManager : MonoBehaviour, IGameManager
 {
     [SerializeField] AudioSource completeSound;
     [SerializeField] int totalQuestCount = 2;
+    [SerializeField] GameObject questCanvas;
 
     Dictionary<Quest, bool> activeQuests = new Dictionary<Quest, bool>();
     int questCount = 0;
@@ -19,37 +20,32 @@ public class FakeManager : MonoBehaviour, IGameManager
         
     }
 
-    public void AddScore(int ID)
+    public void AddScore(Quest quest)
     {
-        Quest quest = GetQuest(ID);
-        quest.DecreaseRemaining();
-        quest.IncreaseCorrect();
+        Quest q = quest;
+        q.DecreaseRemaining();
+        q.IncreaseCorrect();
 
         CheckCompleteAllQuests();
     }
 
-    public void MinusScore(int ID)
+    public void MinusScore(Quest quest)
     {
-        Quest quest = GetQuest(ID);
-        quest.DecreaseRemaining();
-        quest.IncreaseIncorrect();
+        Quest q = quest;
+        q.DecreaseRemaining();
+        q.IncreaseIncorrect();
 
         CheckCompleteAllQuests();
     }
 
-    Quest GetQuest(int ID)
+    public void AddQuest(Quest questPrefab, GameObject wastes, string desKey)
     {
-        foreach (Quest quest in activeQuests.Keys)
-        {
-            if (quest.ID == ID) return quest;
-        }
+        if (!questCanvas.activeInHierarchy) questCanvas.SetActive(true);
 
-        Debug.Log("There is no quest for this ID");
-        return null;
-    }
+        Transform backgroundQuest = questCanvas.transform.GetChild(0);        
+        Quest quest = Instantiate(questPrefab, backgroundQuest, false);
+        quest.Setup(wastes, desKey);
 
-    public void AddQuest(Quest quest)
-    {
         activeQuests.Add(quest, false);
     }
 

@@ -1,5 +1,6 @@
 using System.Collections;
 using TMPro;
+using Unity.VisualScripting;
 using UnityEngine;
 using UnityEngine.SceneManagement;
 using UnityEngine.XR.Interaction.Toolkit;
@@ -17,7 +18,11 @@ public class NPC : MonoBehaviour
     [SerializeField] XRSimpleInteractable interactable;
     [SerializeField] bool isObjectiveNPC = true;
     [SerializeField] float rotationSpeed = 5f;
-    [SerializeField] GameObject questGO;
+
+    [Header("Quest Settings")]
+    [SerializeField] Quest questPrefab;
+    [SerializeField] string descriptionKey;
+    [SerializeField] GameObject wasteObject;
 
     Transform camTransform;
     Animator animator;
@@ -117,7 +122,7 @@ public class NPC : MonoBehaviour
 
         if (!finishedTalking)
         {
-            ActiveQuest();
+            Game.Manager.AddQuest(questPrefab, wasteObject, descriptionKey);
             finishedTalking = true;
         }
     }
@@ -131,23 +136,13 @@ public class NPC : MonoBehaviour
         animator.SetBool("isTalking", false);
         if (!finishedTalking)
         {
-            ActiveQuest();
+            Game.Manager.AddQuest(questPrefab, wasteObject, descriptionKey);
             finishedTalking = true;
         }
         if(displayTime > 0)
         {
             yield return new WaitForSeconds(displayTime);
             TurnOffDialouge();
-        }
-    }
-
-    void ActiveQuest()
-    {
-        if (questGO !=null && questGO.TryGetComponent(out Quest quest))
-        {
-            questGO.SetActive(true);
-            Game.Manager.AddQuest(quest);
-            if (questGO.activeSelf && !questGO.activeInHierarchy) questGO.transform.parent.parent.gameObject.SetActive(true);
         }
     }
 

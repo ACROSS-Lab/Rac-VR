@@ -119,17 +119,17 @@ public class GameManager : MonoBehaviour, IGameManager
         OnCharactersTalkedUpdated?.Invoke(characterTalked);
     }
 
-    public void AddScore(int questID)
+    public void AddScore(Quest quest)
     {
         throw new NotImplementedException();
     }
 
-    public void MinusScore(int questID)
+    public void MinusScore(Quest quest)
     {
         throw new NotImplementedException();
     }
 
-    public void AddQuest(Quest quest)
+    public void AddQuest(Quest questPrefab, GameObject wastes, string desKey)
     {
         throw new NotImplementedException();
     }

@@ -22,7 +22,7 @@ public class Waste : MonoBehaviour
     [SerializeField] private float dampDuration = 0.5f;
 
     [HideInInspector] public bool fromInventory = false;
-    [HideInInspector] public int questID = 0;
+    [HideInInspector] public Quest quest;
 
     XRGrabInteractable interactable;
     bool firstSelected = false;
@@ -31,6 +31,7 @@ public class Waste : MonoBehaviour
     AudioSource audioSource;
     Rigidbody rb;
     float orignalDrag, orignialAngularDrag;
+    Collider binCol, inventoryCol;
 
     void Awake()
     {
@@ -51,20 +52,34 @@ public class Waste : MonoBehaviour
         interactable.selectExited.AddListener(SelectExit);
     }
 
+    void FixedUpdate()
+    {
+        if (binCol != null)
+        {
+            GarbageClassification(binCol.GetComponent<Bin>());
+            gameObject.SetActive(false);
+            return;
+        }
+        else if (inventoryCol != null)
+        {
+            Inventory.instance.AddWaste(this);
+        }
+
+        binCol = null;
+        inventoryCol = null;
+    }
+
     void OnTriggerEnter(Collider other)
     {
         if (!firstSelected || onGround || interactable.isSelected) return;
 
         if (other.tag == "Bin")
         {
-            GarbageClassification(other.GetComponent<Bin>());
-            gameObject.SetActive(false);
-            return;
+            binCol = other;
         }
-
         else if (other.tag == "Inventory" && !fromInventory)
         {
-            Inventory.instance.AddWaste(this);
+            inventoryCol = other;
         }
     }
 
@@ -81,11 +96,11 @@ public class Waste : MonoBehaviour
     {
         if ((bin.binType & wasteType) != 0)
         {
-            bin.CorrectBin(questID);
+            bin.CorrectBin(quest);
         }
         else
         {
-            bin.WrongBin(questID);
+            bin.WrongBin(quest);
         }
 
         SendingHaptics.instance.SendRightHaptic();

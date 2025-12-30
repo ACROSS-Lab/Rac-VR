@@ -2170,6 +2170,10 @@ PrefabInstance:
       propertyPath: m_IsActive
       value: 0
       objectReference: {fileID: 0}
+    - target: {fileID: 7033127034164059743, guid: 356537039a6643544af4deffb4d88abd, type: 3}
+      propertyPath: m_PresetInfoIsWorld
+      value: 1
+      objectReference: {fileID: 0}
     m_RemovedComponents: []
     m_RemovedGameObjects:
     - {fileID: 2515081010581439905, guid: 356537039a6643544af4deffb4d88abd, type: 3}
@@ -5176,11 +5180,6 @@ CanvasRenderer:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 1553785010}
   m_CullTransparentMesh: 0
---- !u!1 &1566405085 stripped
-GameObject:
-  m_CorrespondingSourceObject: {fileID: 4893028709327474765, guid: 356537039a6643544af4deffb4d88abd, type: 3}
-  m_PrefabInstance: {fileID: 720282268}
-  m_PrefabAsset: {fileID: 0}
 --- !u!1001 &1603805223
 PrefabInstance:
   m_ObjectHideFlags: 0
@@ -5698,6 +5697,11 @@ MonoBehaviour:
   localizationKey: Tutorial.UI.Move2
   audioSource: {fileID: 0}
   textComponent: {fileID: 1893036560}
+--- !u!1 &1906528053 stripped
+GameObject:
+  m_CorrespondingSourceObject: {fileID: 461638240025327616, guid: 356537039a6643544af4deffb4d88abd, type: 3}
+  m_PrefabInstance: {fileID: 720282268}
+  m_PrefabAsset: {fileID: 0}
 --- !u!1001 &1909405901
 PrefabInstance:
   m_ObjectHideFlags: 0
@@ -6207,6 +6211,7 @@ MonoBehaviour:
   movePoint2: {fileID: 2017221135}
   bin: {fileID: 1909405902}
   NPC: {fileID: 1191653777}
+  questCanvas: {fileID: 1906528053}
   move1Canvas: {fileID: 6594846842256898958}
   characterCanvas: {fileID: 1432844295}
   move2Canvas: {fileID: 585066312}
@@ -6219,7 +6224,8 @@ MonoBehaviour:
   loadingBarFill: {fileID: 410179778}
   walkingModeCanvas: {fileID: 1339903794}
   jumpingModeCanvas: {fileID: 1647637288}
-  mainButton: {fileID: -720759619232228026, guid: c348712bda248c246b8c49b3db54643f, type: 3}
+  buttonA: {fileID: -720759619232228026, guid: c348712bda248c246b8c49b3db54643f, type: 3}
+  buttonB: {fileID: 386746831817213919, guid: c348712bda248c246b8c49b3db54643f, type: 3}
   rightControllerInput: {fileID: 1318584212}
   cooldownTime: 2
   endTutorialSound: {fileID: 6145950091439143759}
@@ -6262,7 +6268,7 @@ PrefabInstance:
     - target: {fileID: 1763806148290828775, guid: 8e320445d74889049bfddd27afa75936, type: 3}
       propertyPath: questGO
       value: 
-      objectReference: {fileID: 1566405085}
+      objectReference: {fileID: 0}
     - target: {fileID: 1763806148290828775, guid: 8e320445d74889049bfddd27afa75936, type: 3}
       propertyPath: trashPile
       value: 
@@ -6270,6 +6276,14 @@ PrefabInstance:
     - target: {fileID: 1763806148290828775, guid: 8e320445d74889049bfddd27afa75936, type: 3}
       propertyPath: displayTime
       value: 1
+      objectReference: {fileID: 0}
+    - target: {fileID: 1763806148290828775, guid: 8e320445d74889049bfddd27afa75936, type: 3}
+      propertyPath: wasteObject
+      value: 
+      objectReference: {fileID: 2079145145}
+    - target: {fileID: 1763806148290828775, guid: 8e320445d74889049bfddd27afa75936, type: 3}
+      propertyPath: descriptionKey
+      value: key.test.1
       objectReference: {fileID: 0}
     - target: {fileID: 1763806148290828775, guid: 8e320445d74889049bfddd27afa75936, type: 3}
       propertyPath: isObjectiveNPC
