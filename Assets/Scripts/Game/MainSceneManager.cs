@@ -50,6 +50,9 @@ public class MainSceneManager : MonoBehaviour, IGameManager
         teleportProvider.SetActive(false);
         startGamePanel.SetActive(true);
         endGamePanel.SetActive(false);
+
+        walkingModeCanvas.SetActive(false);
+        jumpingModeCanvas.SetActive(false);
     }
 
     void Update()
