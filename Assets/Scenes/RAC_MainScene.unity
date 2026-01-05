@@ -77605,7 +77605,7 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 1717954561962503726, guid: f6336ac4ac8b4d34bc5072418cdc62a0, type: 3}
       propertyPath: m_LocalRotation.w
-      value: 1
+      value: 0.9244629
       objectReference: {fileID: 0}
     - target: {fileID: 1717954561962503726, guid: f6336ac4ac8b4d34bc5072418cdc62a0, type: 3}
       propertyPath: m_LocalRotation.x
@@ -77613,7 +77613,7 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 1717954561962503726, guid: f6336ac4ac8b4d34bc5072418cdc62a0, type: 3}
       propertyPath: m_LocalRotation.y
-      value: -0
+      value: -0.38127214
       objectReference: {fileID: 0}
     - target: {fileID: 1717954561962503726, guid: f6336ac4ac8b4d34bc5072418cdc62a0, type: 3}
       propertyPath: m_LocalRotation.z
@@ -77625,7 +77625,7 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 1717954561962503726, guid: f6336ac4ac8b4d34bc5072418cdc62a0, type: 3}
       propertyPath: m_LocalEulerAnglesHint.y
-      value: 0
+      value: -44.825
       objectReference: {fileID: 0}
     - target: {fileID: 1717954561962503726, guid: f6336ac4ac8b4d34bc5072418cdc62a0, type: 3}
       propertyPath: m_LocalEulerAnglesHint.z
@@ -165793,7 +165793,7 @@ Light:
   m_BounceIntensity: 1.04
   m_ColorTemperature: 6190
   m_UseColorTemperature: 1
-  m_BoundingSphereOverride: {x: 6.609e-42, y: 2.524355e-29, z: 0, w: 5.7756e-41}
+  m_BoundingSphereOverride: {x: 249992720, y: 1.18664444e+27, z: 1.1102364e-16, w: 1.0995117e+13}
   m_UseBoundingSphereOverride: 0
   m_UseViewFrustumForShadowCasterCull: 1
   m_ForceVisible: 0
@@ -234630,7 +234630,7 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 7359397319323557687, guid: 1accb72fc7db04542b654a4d305acb44, type: 3}
       propertyPath: m_LocalPosition.z
-      value: -11.375
+      value: -11.9
       objectReference: {fileID: 0}
     - target: {fileID: 7359397319323557687, guid: 1accb72fc7db04542b654a4d305acb44, type: 3}
       propertyPath: m_LocalRotation.w
@@ -234650,7 +234650,7 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 7359397319323557687, guid: 1accb72fc7db04542b654a4d305acb44, type: 3}
       propertyPath: m_AnchoredPosition.x
-      value: 6.5
+      value: 5.85
       objectReference: {fileID: 0}
     - target: {fileID: 7359397319323557687, guid: 1accb72fc7db04542b654a4d305acb44, type: 3}
       propertyPath: m_AnchoredPosition.y
