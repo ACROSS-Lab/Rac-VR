@@ -365,6 +365,10 @@ PrefabInstance:
       propertyPath: descriptionKey
       value: Quest.Player1.Des.01
       objectReference: {fileID: 0}
+    - target: {fileID: 4345657167111672459, guid: db1ef330bd29f46418e2c2b0d697ab93, type: 3}
+      propertyPath: minViewDotProduct
+      value: 0.85
+      objectReference: {fileID: 0}
     - target: {fileID: 8110536920349971233, guid: db1ef330bd29f46418e2c2b0d697ab93, type: 3}
       propertyPath: m_LocalPosition.x
       value: -0.028901696

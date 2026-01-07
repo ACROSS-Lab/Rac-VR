@@ -516,6 +516,10 @@ PrefabInstance:
       propertyPath: descriptionKey
       value: Quest.Player2.Des.02
       objectReference: {fileID: 0}
+    - target: {fileID: 5172464219481863556, guid: 66fc415b09083704fb1d5ed6762a246d, type: 3}
+      propertyPath: minViewDotProduct
+      value: 0.85
+      objectReference: {fileID: 0}
     - target: {fileID: 5765028169676988549, guid: 66fc415b09083704fb1d5ed6762a246d, type: 3}
       propertyPath: textComponent
       value: 

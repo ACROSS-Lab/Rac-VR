@@ -542,6 +542,10 @@ PrefabInstance:
       propertyPath: descriptionKey
       value: Quest.Player2.Des.01
       objectReference: {fileID: 0}
+    - target: {fileID: 6027843816055918754, guid: 2a349087519c9dc48a448e280c0ed5c1, type: 3}
+      propertyPath: minViewDotProduct
+      value: 0.85
+      objectReference: {fileID: 0}
     - target: {fileID: 7230167695931754684, guid: 2a349087519c9dc48a448e280c0ed5c1, type: 3}
       propertyPath: m_Name
       value: SK_Farmer_M_01

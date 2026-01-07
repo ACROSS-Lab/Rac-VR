@@ -280,6 +280,10 @@ PrefabInstance:
       propertyPath: descriptionKey
       value: Quest.Player2.Des.03
       objectReference: {fileID: 0}
+    - target: {fileID: 5589784970519223180, guid: a954a021d6fa213498c54b24e51d4ffc, type: 3}
+      propertyPath: minViewDotProduct
+      value: 0.85
+      objectReference: {fileID: 0}
     m_RemovedComponents: []
     m_RemovedGameObjects: []
     m_AddedGameObjects: []

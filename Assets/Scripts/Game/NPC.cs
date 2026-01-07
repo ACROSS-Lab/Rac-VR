@@ -18,6 +18,7 @@ public class NPC : MonoBehaviour
     [SerializeField] XRSimpleInteractable interactable;
     [SerializeField] bool isObjectiveNPC = true;
     [SerializeField] float rotationSpeed = 5f;
+    [SerializeField] float minViewDotProduct = 0.7f;
 
     [Header("Quest Settings")]
     [SerializeField] Quest questPrefab;
@@ -94,8 +95,7 @@ public class NPC : MonoBehaviour
 
     public void DisplayDialouge()
     {
-        float distance = Vector3.Distance(camTransform.position, transform.position);
-        if (distance > distanceToDisplay) return;
+        if (!CanInteract()) return;
 
         if (!canvasDialogue.activeInHierarchy) canvasDialogue.SetActive(true);
 
@@ -111,6 +111,23 @@ public class NPC : MonoBehaviour
 
         if (talkingCoroutine != null) StopCoroutine(talkingCoroutine);
         talkingCoroutine = StartCoroutine(StartTalkingAnimation());
+    }
+
+    bool CanInteract()
+    {
+        float distance = Vector3.Distance(camTransform.position, transform.position);
+        if (distance > distanceToDisplay) return false;
+
+        Vector3 direction = (transform.position - camTransform.position).normalized;
+        float dot = Vector3.Dot(camTransform.forward, direction);
+        if (dot < minViewDotProduct) return false;
+
+        if (Physics.Linecast(camTransform.position, transform.position, out RaycastHit hit))
+        {
+            if (hit.transform != interactable.transform) return false;
+        }
+
+        return true;
     }
 
     public void TurnOffDialouge()
