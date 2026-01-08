@@ -134,6 +134,8 @@ public class Inventory : MonoBehaviour
 
     private void DisplayFeedback()
     {
+        if (feedbackCanvas == null) return;
+
         if (feedbackCanvas.activeInHierarchy)
         {
             feedbackCanvas.GetComponent<TweenFadeOut>().ForceEnd();

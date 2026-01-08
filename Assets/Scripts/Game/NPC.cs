@@ -60,7 +60,7 @@ public class NPC : MonoBehaviour
         RotateTowardsCamera();
         UpdateAnimation();
 
-        if (!hasTalked) DisplayDialouge();
+        if (!hasTalked && CanInteractAutomatically()) DisplayDialouge();
 
     }
 
@@ -95,7 +95,8 @@ public class NPC : MonoBehaviour
 
     public void DisplayDialouge()
     {
-        if (!CanInteract()) return;
+        float distance = Vector3.Distance(camTransform.position, transform.position);
+        if (distance > distanceToDisplay) return;
 
         if (!canvasDialogue.activeInHierarchy) canvasDialogue.SetActive(true);
 
@@ -113,7 +114,7 @@ public class NPC : MonoBehaviour
         talkingCoroutine = StartCoroutine(StartTalkingAnimation());
     }
 
-    bool CanInteract()
+    bool CanInteractAutomatically()
     {
         float distance = Vector3.Distance(camTransform.position, transform.position);
         if (distance > distanceToDisplay) return false;
@@ -171,5 +172,10 @@ public class NPC : MonoBehaviour
     public void HoverExit(HoverExitEventArgs args)
     {
         skinnedMeshRenderer.materials[0].SetFloat("_Outline", 0.0f);
+    }
+
+    public void DisableQuestHint(GameObject hint)
+    {
+        hint.SetActive(false);
     }
 }

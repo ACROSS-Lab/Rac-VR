@@ -178,15 +178,15 @@ public class TutorialManager : MonoBehaviour, IGameManager
         operation.allowSceneActivation = true;
     }
 
+    #region Switch Movement Mode
     bool isBothPressed = false;
-
     void SwitchMovementMode()
     {
         switchCooldownTimer += Time.deltaTime;
         if (switchCooldownTimer < cooldownTime) return;
 
-        bool a = buttonA.action.WasPressedThisFrame();
-        bool b = buttonB.action.WasPressedThisFrame();
+        bool a = buttonA.action.IsPressed();
+        bool b = buttonB.action.IsPressed();
 
         if (a && b)
         {
@@ -218,8 +218,5 @@ public class TutorialManager : MonoBehaviour, IGameManager
         jumpingModeCanvas.GetComponent<TweenFadeOut>().ForceEnd();
         canvas.SetActive(true);
     }
-
-    
-
-    
+    #endregion 
 }

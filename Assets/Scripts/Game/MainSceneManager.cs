@@ -1,6 +1,8 @@
+using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.InputSystem;
+using UnityEngine.SceneManagement;
 using UnityEngine.XR.Interaction.Toolkit.Samples.StarterAssets;
 
 public class MainSceneManager : MonoBehaviour, IGameManager
@@ -81,7 +83,7 @@ public class MainSceneManager : MonoBehaviour, IGameManager
         for (int i = 0; i < questsPerSession; i++)
         {
             int index = sessionCount * questsPerSession + i;
-            GameObject preset = Instantiate(questPresets[index]);
+            Instantiate(questPresets[index]);
         }
     }
 
@@ -154,7 +156,30 @@ public class MainSceneManager : MonoBehaviour, IGameManager
             if (!kvp.Value) return;
         }
 
-        Debug.Log ("Complete all quests");
+        EndSession();
+    }
+
+    public void LoadTutorialScene()
+    {
+        StartCoroutine(LoadTutorialSceneOperation());
+    }
+    
+    IEnumerator LoadTutorialSceneOperation()
+    {
+        endGamePanel.SetActive(false);
+        loadingPanel.SetActive(true);
+
+        AsyncOperation operation = SceneManager.LoadSceneAsync("RAC_Tutorial");
+        operation.allowSceneActivation = false;
+        while (operation.progress < 0.9f)
+        {
+            loadingBarFill.fillAmount = Mathf.Clamp01(operation.progress / 0.9f);
+            yield return null;
+        }
+        loadingBarFill.fillAmount = 1;
+
+        yield return new WaitForSeconds(1);
+        operation.allowSceneActivation = true;
     }
 
     #region Switch Movement Mode
@@ -165,8 +190,8 @@ public class MainSceneManager : MonoBehaviour, IGameManager
         switchCooldownTimer += Time.deltaTime;
         if (switchCooldownTimer < cooldownTime) return;
 
-        bool a = buttonA.action.WasPressedThisFrame();
-        bool b = buttonB.action.WasPressedThisFrame();
+        bool a = buttonA.action.IsPressed();
+        bool b = buttonB.action.IsPressed();
 
         if (a && b)
         {
