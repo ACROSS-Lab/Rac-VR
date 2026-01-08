@@ -613,6 +613,7 @@ GameObject:
   - component: {fileID: 7040273558148186222}
   - component: {fileID: 2283952115581446920}
   - component: {fileID: 7265102503381353528}
+  - component: {fileID: 3234623115533648537}
   m_Layer: 5
   m_Name: Text
   m_TagString: Untagged
@@ -738,6 +739,21 @@ MonoBehaviour:
   m_hasFontAssetChanged: 0
   m_baseMaterial: {fileID: 0}
   m_maskOffset: {x: 0, y: 0, z: 0, w: 0}
+--- !u!114 &3234623115533648537
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 3496125419914875334}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: b716f285080a10847b43a250b34d933c, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  localizationKey: Quest.UI.Remaining
+  audioSource: {fileID: 0}
+  textComponent: {fileID: 7265102503381353528}
 --- !u!1 &4906519351380362871
 GameObject:
   m_ObjectHideFlags: 0
@@ -971,6 +987,7 @@ GameObject:
   - component: {fileID: 5711948507459550594}
   - component: {fileID: 209895049200552644}
   - component: {fileID: 1102685950506886529}
+  - component: {fileID: 545979870263753833}
   m_Layer: 5
   m_Name: FinishText
   m_TagString: Untagged
@@ -1096,6 +1113,21 @@ MonoBehaviour:
   m_hasFontAssetChanged: 0
   m_baseMaterial: {fileID: 0}
   m_maskOffset: {x: 0, y: 0, z: 0, w: 0}
+--- !u!114 &545979870263753833
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 7204770836508271156}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: b716f285080a10847b43a250b34d933c, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  localizationKey: Quest.UI.Done
+  audioSource: {fileID: 0}
+  textComponent: {fileID: 1102685950506886529}
 --- !u!1 &8004743060653057563
 GameObject:
   m_ObjectHideFlags: 0
