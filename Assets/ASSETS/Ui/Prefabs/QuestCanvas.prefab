@@ -463,6 +463,6 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: b716f285080a10847b43a250b34d933c, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  localizationKey: Objectif
+  localizationKey: Quest.UI.Objective
   audioSource: {fileID: 0}
   textComponent: {fileID: 426618728555442344}
