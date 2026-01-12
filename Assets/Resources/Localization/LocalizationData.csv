@@ -1,4 +1,4 @@
-﻿Key,French,Vietnamese
+﻿,French,Vietnamese
 NPC.OldFemale.PaperMetal,"Quand je nettoie la maison, je garde les journaux et les cartons. Ils sont ensuite envoyés à l’usine pour être <b><color=red>recyclés</color></b> et <b><color=red>ré-utilisés</color></b>.",
 NPC.OldMale.PaperMetal,"Chaque matin, je vois passer les <b><color=red>collecteurs</color></b> dans la rue. Parfois je leur vends mes <b><color=red>canettes</color></b> et mes  <b><color=red>cartons</color></b>, ou alors je leur donne.",
 NPC.DN.PaperMetal,"Tous les matins, je vais à vélo dans le quartier. J’achète des <b><color=red>cartons</color></b> et des <b><color=red>canettes</color></b>, et souvent on me les donne.",
@@ -43,3 +43,4 @@ Quest.Player2.Des.03,Nettoyer la forêt,
 Quest.UI.Remaining,Restant :,
 Quest.UI.Done,Fait !,
 Quest.UI.Objective,Objectif,
+Quest.UI.CharacterTalk,Parler à 3 personnages,

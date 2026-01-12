@@ -1,5 +1,6 @@
 using System.Collections;
 using System.Collections.Generic;
+using TMPro;
 using UnityEngine;
 using UnityEngine.InputSystem;
 using UnityEngine.SceneManagement;
@@ -11,6 +12,9 @@ public class MainSceneManager : MonoBehaviour, IGameManager
     [SerializeField] int questsPerSession = 3;
     [SerializeField] GameObject[] questPresets;
     [SerializeField] float sessionTime = 300f;
+    [SerializeField] TextMeshProUGUI remainingCharactersText;
+    [SerializeField] GameObject remainingCharactersUI;
+    [SerializeField] GameObject charactersCompletedUI;
 
     [Header("Sound effects")]
     [SerializeField] AudioSource endSessionSound;
@@ -35,6 +39,7 @@ public class MainSceneManager : MonoBehaviour, IGameManager
 
     Dictionary<Quest, bool> activeQuests = new Dictionary<Quest, bool>();
 
+    int remainingCharacters = 3;
     int questCompleted = 0;
     bool inGame = false;
     float timer = 0;
@@ -92,6 +97,7 @@ public class MainSceneManager : MonoBehaviour, IGameManager
         startGamePanel.SetActive(false);
         moveProvider.SetActive(true);
         teleportProvider.SetActive(true);
+        questCanvas.SetActive(true);
 
         InitializeQuests();
 
@@ -112,13 +118,15 @@ public class MainSceneManager : MonoBehaviour, IGameManager
 
     public void AddQuest(Quest questPrefab, GameObject wastes, string desKey)
     {
-        if (!questCanvas.activeInHierarchy) questCanvas.SetActive(true);
+        // if (!questCanvas.activeInHierarchy) questCanvas.SetActive(true);
 
         Transform backgroundQuest = questCanvas.transform.GetChild(0);        
         Quest quest = Instantiate(questPrefab, backgroundQuest, false);
         quest.Setup(wastes, desKey);
 
         activeQuests.Add(quest, false);
+
+        CheckRemainingCharacters();
     }
     
     public void CompleteQuest(Quest quest)
@@ -157,6 +165,21 @@ public class MainSceneManager : MonoBehaviour, IGameManager
         }
 
         EndSession();
+    }
+
+    void CheckRemainingCharacters()
+    {
+        remainingCharacters--;
+
+        if (remainingCharacters == 0)
+        {
+            remainingCharactersUI.SetActive(false);
+            charactersCompletedUI.SetActive(true);
+        }
+        else
+        {
+            remainingCharactersText.text = remainingCharacters.ToString();
+        }
     }
 
     public void LoadTutorialScene()
