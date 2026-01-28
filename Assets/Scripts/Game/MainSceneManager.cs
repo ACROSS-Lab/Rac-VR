@@ -1,6 +1,8 @@
+using System;
 using System.Collections;
 using System.Collections.Generic;
 using TMPro;
+using Unity.XR.CoreUtils;
 using UnityEngine;
 using UnityEngine.InputSystem;
 using UnityEngine.SceneManagement;
@@ -28,6 +30,8 @@ public class MainSceneManager : MonoBehaviour, IGameManager
     [SerializeField] GameObject questCanvas;
     [SerializeField] GameObject walkingModeCanvas;
     [SerializeField] GameObject jumpingModeCanvas;
+    [SerializeField] GameObject languageCanvas;
+    [SerializeField] TMP_Dropdown languageDropdown;
 
     [Header("Movement Inputs")]
     [SerializeField] GameObject moveProvider;
@@ -36,6 +40,13 @@ public class MainSceneManager : MonoBehaviour, IGameManager
     [SerializeField] InputActionReference buttonB;
     [SerializeField] ControllerInputActionManager rightControllerInput;
     [SerializeField] float cooldownTime = 1f;
+    [SerializeField] InputActionReference buttonX;
+    [SerializeField] InputActionReference buttonY;
+
+    [Header("Height Adjustment")]
+    [SerializeField] InputActionReference leftJoystick;
+    [SerializeField] XROrigin xrOrigin;
+    [SerializeField] float yOffset = 1.5f;
 
     Dictionary<Quest, bool> activeQuests = new Dictionary<Quest, bool>();
 
@@ -60,6 +71,8 @@ public class MainSceneManager : MonoBehaviour, IGameManager
 
         walkingModeCanvas.SetActive(false);
         jumpingModeCanvas.SetActive(false);
+
+        yOffset = xrOrigin.CameraYOffset;
     }
 
     void Update()
@@ -74,6 +87,8 @@ public class MainSceneManager : MonoBehaviour, IGameManager
         }
 
         SwitchMovementMode();
+        ActiveLanguageCanvas();
+        AdjustHeight();
     }
 
     void OnDisable()
@@ -207,7 +222,7 @@ public class MainSceneManager : MonoBehaviour, IGameManager
 
     #region Switch Movement Mode
     float switchCooldownTimer = 0;
-    bool isBothPressed = false;
+    bool isBothPressedAB = false;
     void SwitchMovementMode()
     {
         switchCooldownTimer += Time.deltaTime;
@@ -218,7 +233,7 @@ public class MainSceneManager : MonoBehaviour, IGameManager
 
         if (a && b)
         {
-            if (!isBothPressed)
+            if (!isBothPressedAB)
             {
                 rightControllerInput.smoothMotionEnabled = !rightControllerInput.smoothMotionEnabled;
                 if (rightControllerInput.smoothMotionEnabled)
@@ -231,12 +246,12 @@ public class MainSceneManager : MonoBehaviour, IGameManager
                 }
 
                 switchCooldownTimer = 0;
-                isBothPressed = true;
+                isBothPressedAB = true;
             }
         }
         else
         {
-            isBothPressed = false;
+            isBothPressedAB = false;
         }
     }
 
@@ -247,4 +262,56 @@ public class MainSceneManager : MonoBehaviour, IGameManager
         canvas.SetActive(true);
     }
     #endregion 
+
+    #region Language Selection
+    bool isBothPressedXY = false;
+    void ActiveLanguageCanvas()
+    {
+        bool x = buttonX.action.IsPressed();
+        bool y = buttonY.action.IsPressed();
+
+        if (x && y)
+        {
+            if (!isBothPressedXY)
+            {
+                languageCanvas.SetActive(!languageCanvas.activeInHierarchy);
+                isBothPressedXY = true;
+            }
+        }
+        else
+        {
+            isBothPressedXY = false;
+        }
+    }
+
+
+
+    public void ChangeLanguage()
+    {
+        int value = languageDropdown.value;
+
+        switch (value)
+        {
+            case 0:
+                LocalizationManager.Instance.SetLanguage("French");
+                break;
+            case 1:
+                LocalizationManager.Instance.SetLanguage("English");
+                break;
+        }
+
+        languageCanvas.SetActive(false);
+        languageDropdown.SetValueWithoutNotify(-1);
+    }
+    #endregion
+
+    void AdjustHeight()
+    {
+        float value = leftJoystick.action.ReadValue<Vector2>().y;
+        
+        if (Mathf.Abs(value) < 0.1f) return;
+
+        yOffset += value * 0.02f;
+        xrOrigin.CameraYOffset = yOffset;
+    }
 }

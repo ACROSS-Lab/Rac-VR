@@ -2,7 +2,7 @@ using UnityEngine;
 
 public class CanvasFollower : MonoBehaviour
 {
-    [SerializeField] float distanceFromCamera = 2.0f;
+    [SerializeField] Vector3 distanceFromCamera = new Vector3(0, 0, 6);
     [SerializeField] float smoothSpeed = 8.0f;
 
     Transform cameraTransform;
@@ -11,7 +11,8 @@ public class CanvasFollower : MonoBehaviour
     {
         cameraTransform = Camera.main.transform;
 
-        Vector3 targetPosition = cameraTransform.position + (cameraTransform.forward * distanceFromCamera);
+        Vector3 targetPosition = cameraTransform.position + (cameraTransform.forward * distanceFromCamera.z)
+         + (cameraTransform.up * distanceFromCamera.y) + (cameraTransform.right * distanceFromCamera.x);
         
         transform.position = targetPosition;
 
@@ -21,11 +22,13 @@ public class CanvasFollower : MonoBehaviour
 
     void LateUpdate()
     {
-        Vector3 targetPosition = cameraTransform.position + (cameraTransform.forward * distanceFromCamera);
+        Vector3 targetPosition = cameraTransform.position + (cameraTransform.forward * distanceFromCamera.z)
+         + (cameraTransform.up * distanceFromCamera.y) + (cameraTransform.right * distanceFromCamera.x);
         transform.position = Vector3.Lerp(transform.position, targetPosition, Time.deltaTime * smoothSpeed);
 
         float cameraYaw = cameraTransform.eulerAngles.y;
-        Quaternion targetRotation = Quaternion.Euler(0, cameraYaw, 0);
+        float cameraPitch = cameraTransform.eulerAngles.x;
+        Quaternion targetRotation = Quaternion.Euler(cameraPitch, cameraYaw, 0);
 
         transform.rotation = Quaternion.Slerp(transform.rotation, targetRotation, Time.deltaTime * smoothSpeed);
     }

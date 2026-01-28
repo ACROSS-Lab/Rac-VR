@@ -26,8 +26,14 @@ Tutorial.UI.Drop,Il y a un sac poubelle sur ta main gauche  Dépose tes déchets
 Tutorial.UI.Bin,"Appuie sur la gachette en visant le sac pour sortir un déchet, lâche la gachette au dessus de la poubelle pour trier un déchet.",,"Press the trigger while aiming at the bag to take out a piece of trash, release the trigger above the bin to sort the trash. "
 Tutorial.UI.Teleport,Appuyez sur le bouton A de votre manette droite pour basculer en mode saut. Utilisez ensuite le joystick pour tracer une courbe qui atterrit à l'intérieur du cercle. Relâchez le joystick pour sauter vers ce point !,,Press the A button on your right controller to switch to jump mode. Then use the joystick to draw a curve that lands inside the circle. Release the joystick to jump to that point. 
 Tutorial.UI.Note,Remarque : tu peux à tout moment basculer entre le mode marche et le mode saut à l'aide du bouton ,,Note: you can switch between walk mode and jump mode at any time using the button 
-key.test.1,Clean all the trashes near the yellow house,,Clean all the trash near the yellow house 
-key.test.2,Remove all the garbage behind the old woman,,Remove all the garbage behind the old woman 
+Tutorial.UI.End,Fin du tutoriel,,End of tutorial
+Tutorial.UI.Continue,Continuer,,Continue
+Main.UI.End,Fin de la partie,,Session over
+Main.UI.Restart,Recommencer,,Restart
+Main.UI.Title,Opération Zéro Déchets,,Operation Zero Waste
+Main.UI.Start,Jouer,,Play
+Main.UI.InvenFull,Plein !,,Full !
+Main.UI.Loading,Chargement...,,Loading...
 Quest.Player1.Dialogue.01,Il y a beaucoup de déchets dans le jardin de l'autre côté du pont. Pourrais-tu les ramasser ?,,There is a lot of trash in the garden on the other side of the bridge. Could you pick it up?
 Quest.Player1.Dialogue.02,"J’ai l’habitude de brûler mes déchets, mais mon fils m’a dit qu’on pouvait les trier dans ces poubelles près de la maison jaune, peux-tu me montrer comment faire ?",,"I’m used to burning my waste, but my son told me it can be sorted into these bins near the yellow house. Can you show me how to do it?"
 Quest.Player1.Dialogue.03,La rivière ramène toutes sortes de déchets et ça perturbe la pêche. Pourrais-tu ramasser le plastique qui s’accumule sur le bord ?,,The river brings in all kinds of waste and it disrupts fishing. Could you pick up the plastic that’s piling up along the bank?

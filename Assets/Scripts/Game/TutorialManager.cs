@@ -1,4 +1,5 @@
 using System.Collections;
+using TMPro;
 using UnityEngine;
 using UnityEngine.InputSystem;
 using UnityEngine.SceneManagement;
@@ -12,10 +13,10 @@ public class TutorialManager : MonoBehaviour, IGameManager
     [SerializeField] GameObject movePoint1;
     [SerializeField] GameObject movePoint2;
     [SerializeField] GameObject bin;
+    [SerializeField] GameObject wastes;
     [SerializeField] GameObject NPC;
 
     [Header("UI Elements")]
-    [SerializeField] GameObject questCanvas;
     [SerializeField] GameObject move1Canvas;
     [SerializeField] GameObject characterCanvas;
     [SerializeField] GameObject move2Canvas;
@@ -30,11 +31,16 @@ public class TutorialManager : MonoBehaviour, IGameManager
     [SerializeField] GameObject walkingModeCanvas;
     [SerializeField] GameObject jumpingModeCanvas;
 
+    [SerializeField] GameObject languageCanvas;
+    [SerializeField] TMP_Dropdown languageDropdown;
+
     [Header("Movement")]
     [SerializeField] InputActionReference buttonA;
     [SerializeField] InputActionReference buttonB;
     [SerializeField] ControllerInputActionManager rightControllerInput;
     [SerializeField] float cooldownTime = 2.5f;
+    [SerializeField] GameObject moveProvider;
+    [SerializeField] GameObject teleportProvider;
 
     [Header("Sound effects")]
     [SerializeField] AudioSource endTutorialSound;
@@ -57,6 +63,9 @@ public class TutorialManager : MonoBehaviour, IGameManager
 
         walkingModeCanvas.SetActive(false);
         jumpingModeCanvas.SetActive(false);
+
+        moveProvider.SetActive(false);
+        teleportProvider.SetActive(false);
     }
 
     void Update()
@@ -74,6 +83,42 @@ public class TutorialManager : MonoBehaviour, IGameManager
     {
         if (Inventory.instance == null) Debug.Log("Inventory is null");
         Inventory.instance.OnInventoryUpdated -= CheckAmountCollected;
+    }
+
+    public void FinishLanguageSelection()
+    {
+        
+        int value = languageDropdown.value;
+
+        switch (value)
+        {
+            case 0:
+                LocalizationManager.Instance.SetLanguage("French");
+                break;
+            case 1:
+                LocalizationManager.Instance.SetLanguage("English");
+                break;
+        }
+
+        move1Canvas.SetActive(true);
+        movePoint1.SetActive(true);
+
+        languageCanvas.SetActive(false);
+
+        moveProvider.SetActive(true);
+        teleportProvider.SetActive(true);
+    }
+
+    void CheckStartingLanguage()
+    {
+        if (LocalizationManager.Instance.GetLanguage() == "French")
+        {
+            languageDropdown.value = 0;
+        }
+        else if (LocalizationManager.Instance.GetLanguage() == "English")
+        {
+            languageDropdown.value = 1;
+        }
     }
 
     public void Reached1stDestination()
@@ -129,11 +174,7 @@ public class TutorialManager : MonoBehaviour, IGameManager
     {
         if (!firstClick) return;
 
-        if (!questCanvas.activeInHierarchy) questCanvas.SetActive(true);
-
-        Transform backgroundQuest = questCanvas.transform.GetChild(0);        
-        Quest quest = Instantiate(questPrefab, backgroundQuest, false);
-        quest.Setup(wastes, desKey);
+        this.wastes.SetActive(true);
 
         characterCanvas.SetActive(false);
         pickupCanvas.SetActive(true);
@@ -150,7 +191,6 @@ public class TutorialManager : MonoBehaviour, IGameManager
     void EndTutorial()
     {
         binCanvas.SetActive(false);
-        questCanvas.SetActive(false);
         finishCanvas.SetActive(true);
         endTutorialSound.Play();
     }

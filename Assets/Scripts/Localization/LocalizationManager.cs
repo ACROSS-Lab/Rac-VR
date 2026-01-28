@@ -134,6 +134,11 @@ public class LocalizationManager : MonoBehaviour
         }
     }
 
+    public string GetLanguage()
+    {
+        return currentLanguage;
+    }
+
     public string GetLocalizedValue(string key)
     {
         if (localizedData.ContainsKey(currentLanguage) && localizedData[currentLanguage].ContainsKey(key))
