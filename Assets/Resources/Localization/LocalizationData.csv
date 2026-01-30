@@ -1,52 +1,38 @@
 ﻿,French,Vietnamese,English
-NPC.OldFemale.PaperMetal,"Quand je nettoie la maison, je garde les journaux et les cartons. Ils sont ensuite envoyés à l’usine pour être <b><color=red>recyclés</color></b> et <b><color=red>ré-utilisés</color></b>.",,
-NPC.OldMale.PaperMetal,"Chaque matin, je vois passer les <b><color=red>collecteurs</color></b> dans la rue. Parfois je leur vends mes <b><color=red>canettes</color></b> et mes  <b><color=red>cartons</color></b>, ou alors je leur donne.",,
-NPC.DN.PaperMetal,"Tous les matins, je vais à vélo dans le quartier. J’achète des <b><color=red>cartons</color></b> et des <b><color=red>canettes</color></b>, et souvent on me les donne.",,
-NPC.YoungFemale.PaperMetal,"Si je jette mes <b><color=red>canettes</color></b> et mes <b><color=red>papiers</color></b> par terre, ils seront emportés dans la rivière et dans les champs où ils peuvent rester très longtemps avant de disparaître. Les canettes, par exemple, mettent jusqu’à 200 ans à se <b><color=red>décomposer</color></b>.",,
-NPC.YoungMale.Organic,"Chaque soir, je mets les restes des repas dans <b><color=red>un bac à compost</color></b>. Après quelques mois de <b><color=red>décomposition</color></b>, ce <b><color=red>compost</color></b> aide mes parents à mieux faire pousser le riz.",,
-NPC.FarmerMale.Organic,"Chaque soir, je mets les restes de nourriture dans un <b><color=red>bac à compost</color></b>. Après quelques mois, je récupère le compost et je l’épands dans nos rizières pour les aider à mieux pousser.",,
-NPC.AdultMale.Organic,"À cause des  <b><color=red>sacs poubelles remplis</color></b> et abandonnés dans les rues, les rats et les cafards  <b><color=red>infestent les lieux</color></b> et les odeurs sont  <b><color=red>nauséabondes</color></b>.",,
-NPC.YoungFemale.PlasticR,"Nos <b><color=red>bouteilles</color></b> et <b><color=red>bidons</color></b> que nous mettons dans la poubelle de tri, partent à <b><color=red>l’usine de recyclage</color></b>. Là-bas, ils sont coupés en petits morceaux de plastique. Grâce à ces morceaux, de nouveaux objets en <b><color=red>plastique recyclé</color></b> sont fabriqués, comme le pot de plante de ma maman.",,
-NPC.DN.PlasticR,Les <b><color=red>collecteurs</color></b> achètent les bouteilles et les bidons aux habitants pour les ramener dans  <b><color=red>es dépôts de déchets</color></b>l dans mon village. Plusieurs travailleurs ont témoigné de problèmes respiratoires. ,,
-NPC.YoungMale.PlasticR,"Il y a beaucoup de  <b><color=red>plastique</color></b> dans la rivière. Le plastique flotte sur l’eau. L’eau de la rivière est toujours noire et elle sent mauvais. Maintenant, il est plus difficile de pêcher.",,
-NPC.OldFemale.PlasticNR,"Ce <b><color=red>plastique</color></b> ne peut pas être recyclé. Chaque jour, les agents de la ville viennent le collecter. Ensuite, il est <b><color=red>enfoui sous la terre (enfouissement)</color></b> ou il est <b><color=red>brûlé (incinérateur)</color></b> avec les autres types de déchets.",,
-NPC.OldMale.PlasticNR,Certains sites de recyclage utilisent ces plastiques pour fabriquer de nouveaux objets. Mais j’ai remarqué que leur qualité est mauvaise et peut être  <b><color=red>dangereuse</color></b> pour la nature et pour la santé.,,
-NPC.AdultMale.PlasticNR,"Parfois, quand il y a trop de déchets à la maison, je les brûle dans mon jardin. Je brûle aussi ce plastique. La fumée fait mal aux yeux et aux poumons, mais c’est plus simple.",,
-NPC.GarbageMale.Introduction,Aide moi à nettoyer ce village en mettant les <b><color=red>déchets</color></b> dans les bonnes <b><color=red>poubelles</color></b>.,,Help me clean this village by putting the <b><color=red>trash</color></b> into the correct <b><color=red>bins</color></b>.
-UI.Objective.MetalPaper,Papier/Métal,,Paper / Metal 
-UI.Objective.Organic,Organique,,Organic 
-UI.Objective.PlasticR,Plastique recyclable,,Recyclable plastic 
-UI.Objective.PlasticNR,Plastique non recyclable,,Non-recyclable plastic 
-Tutorial.UI.Move1,Utilise le joystick droit pour te déplacer dans le cercle.,,Use the right joystick to move into the circle.
-Tutorial.UI.Move2,Approche toi de la poubelle.,,Move closer to the trash bin.
-Tutorial.UI.PickUp,"Vise l'un des déchets au sol, appuie sur la gâchette droite et maintiens-la enfoncée pour ramasser un déchet.",,"Aim at a piece of trash on the ground, press the right trigger and hold it down to pick it up. "
-Tutorial.UI.Character,Appuie sur la gachette droite en visant sur un personnage pour l'écouter.,,Press the right trigger while aiming at a character to listen to them. 
-Tutorial.UI.Dialogue,Appuye sur <br> le bouton ‎ ‎ ‎  <br> pour fermer la boîte de dialogue.,,Press <br> the button <br> to close the dialogue box. 
-Tutorial.UI.Drop,Il y a un sac poubelle sur ta main gauche  Dépose tes déchets dans le sac poubelle et relâche le bouton pour les jeter dans le sac. Tu peux mettre jusqu'à 5 déchets dans ton sac poubelle.,,There is a trash bag on your left hand. Put your trash into the bag and release the button to throw it into the bag. You can carry up to 5 pieces of trash in your bag. 
-Tutorial.UI.Bin,"Appuie sur la gachette en visant le sac pour sortir un déchet, lâche la gachette au dessus de la poubelle pour trier un déchet.",,"Press the trigger while aiming at the bag to take out a piece of trash, release the trigger above the bin to sort the trash. "
+Tutorial.UI.Move1,Utilise le joystick droit pour te déplacer dans le cercle.,Dùng cần gạt bên phải để di chuyển đến vòng tròn.,Use the right joystick to move into the circle.
+Tutorial.UI.Move2,Approche toi de la poubelle.,Di chuyển lại gần thùng rác.,Move closer to the trash bin.
+Tutorial.UI.PickUp,"Vise l'un des déchets au sol, appuie sur la gâchette droite et maintiens-la enfoncée pour ramasser un déchet.","Trỏ vào một mảnh rác dưới đất, nhấn nút cò bên tay phải và giữ nó để nhặt rác lên.","Aim at a piece of trash on the ground, press the right trigger and hold it down to pick it up. "
+Tutorial.UI.Character,Appuie sur la gachette droite en visant sur un personnage pour l'écouter.,Nhấn nút cò bên tay phải khi đang trỏ vào một nhân vật để nói chuyện với họ.,Press the right trigger while aiming at a character to listen to them. 
+Tutorial.UI.Dialogue,Appuye sur <br> le bouton ‎ ‎ ‎  <br> pour fermer la boîte de dialogue.,Nhấn <br> nút <br> để tắt cuộc hội thoại.,Press <br> the button <br> to close the dialogue box. 
+Tutorial.UI.Drop,Il y a un sac poubelle sur ta main gauche  Dépose tes déchets dans le sac poubelle et relâche le bouton pour les jeter dans le sac. Tu peux mettre jusqu'à 10 déchets dans ton sac poubelle.,Có một túi rác ở bên tay trái của bạn. Đưa rác của bạn vào trong túi và nhả nút ra để thả nó vào trong đó. Bạn có thể đựng tối đa 10 mảnh rác trong túi rác của mình.,There is a trash bag on your left hand. Put your trash into the bag and release the button to throw it into the bag. You can carry up to 10 pieces of trash in your bag. 
+Tutorial.UI.Bin,"Appuie sur la gachette en visant le sac pour sortir un déchet, lâche la gachette au dessus de la poubelle pour trier un déchet.","Nhấn nút cò bên tay phải khi đang trỏ vào túi rác để lấy một mảnh rác ra, nhả nút cò phía trên thùng rác để phân loại chúng vào thùng rác.","Press the trigger while aiming at the bag to take out a piece of trash, release the trigger above the bin to sort the trash. "
 Tutorial.UI.Teleport,Appuyez sur le bouton A de votre manette droite pour basculer en mode saut. Utilisez ensuite le joystick pour tracer une courbe qui atterrit à l'intérieur du cercle. Relâchez le joystick pour sauter vers ce point !,,Press the A button on your right controller to switch to jump mode. Then use the joystick to draw a curve that lands inside the circle. Release the joystick to jump to that point. 
 Tutorial.UI.Note,Remarque : tu peux à tout moment basculer entre le mode marche et le mode saut à l'aide du bouton ,,Note: you can switch between walk mode and jump mode at any time using the button 
-Tutorial.UI.End,Fin du tutoriel,,End of tutorial
-Tutorial.UI.Continue,Continuer,,Continue
-Main.UI.End,Fin de la partie,,Session over
-Main.UI.Restart,Recommencer,,Restart
-Main.UI.Title,Opération Zéro Déchets,,Operation Zero Waste
-Main.UI.Start,Jouer,,Play
-Main.UI.InvenFull,Plein !,,Full !
-Main.UI.Loading,Chargement...,,Loading...
-Quest.Player1.Dialogue.01,Il y a beaucoup de déchets dans le jardin de l'autre côté du pont. Pourrais-tu les ramasser ?,,There is a lot of trash in the garden on the other side of the bridge. Could you pick it up?
-Quest.Player1.Dialogue.02,"J’ai l’habitude de brûler mes déchets, mais mon fils m’a dit qu’on pouvait les trier dans ces poubelles près de la maison jaune, peux-tu me montrer comment faire ?",,"I’m used to burning my waste, but my son told me it can be sorted into these bins near the yellow house. Can you show me how to do it?"
-Quest.Player1.Dialogue.03,La rivière ramène toutes sortes de déchets et ça perturbe la pêche. Pourrais-tu ramasser le plastique qui s’accumule sur le bord ?,,The river brings in all kinds of waste and it disrupts fishing. Could you pick up the plastic that’s piling up along the bank?
-Quest.Player2.Dialogue.01,"Peux-tu m’aider ? Je ne sais pas dans quelle poubelle mettre ces déchets qui traînent dans le village, il commence à y avoir des rats. Les poubelles de tri sont juste ici.",,"Can you help me? I don’t know which bin to put this waste that’s lying around the village, rats are starting to appear. The sorting bins are right here."
-Quest.Player2.Dialogue.02,"Il y a beaucoup de déchets au bord de la rizière et ça perturbe les récoltes, peux-tu aller les ramasser pour moi ?",,There is a lot of waste along the edge of the rice field and it’s affecting the harvests. Can you go and pick it up for me?
-Quest.Player2.Dialogue.03,"On m’a dit qu’il y avait des bouteilles et des cannettes qui s'accumulent dans la forêt, peux-tu les récupérer pour qu’elles soient envoyées à l’usine de tri ?",,I was told that bottles and cans are piling up in the forest. Can you collect them so they can be sent to the recycling plant?
-Quest.Player1.Des.01,Trier les déchets dans le jardin,,Sort the trash in the garden 
-Quest.Player1.Des.02,Montrer comment trier les déchets,,Show how to sort trash 
-Quest.Player1.Des.03,Nettoyer le bord de la rivière,,Clean the riverbank 
-Quest.Player2.Des.01,Aider à trier les déchets,,Help sort the trash 
-Quest.Player2.Des.02,Nettoyer la rizière,,Clean the rice field 
-Quest.Player2.Des.03,Nettoyer la forêt,,Clean the forest 
-Quest.UI.Remaining,Restant :,,Remaining: 
-Quest.UI.Done,Fait !,,Done! 
-Quest.UI.Objective,Objectif,,Objective 
-Quest.UI.CharacterTalk,Parler à 3 personnages,,Talk to 3 characters 
+Tutorial.UI.End,Fin du tutoriel,Kết thúc hướng dẫn,End of tutorial
+Tutorial.UI.Continue,Continuer,Tiếp tục,Continue
+Main.UI.End,Fin de la partie,Phần chơi kết thúc,Session over
+Main.UI.Restart,Recommencer,Chơi lại,Restart
+Main.UI.Title,Opération Zéro Déchets,Chiến Dịch \nKhông Rác Thải,Operation Zero Waste
+Main.UI.Start,Jouer,Chơi,Play
+Main.UI.InvenFull,Plein !,Đầy !,Full !
+Main.UI.Loading,Chargement...,Đang tải…,Loading...
+NPC.GarbageMale.Introduction,Aide moi à nettoyer ce village en mettant les <b><color=red>déchets</color></b> dans les bonnes <b><color=red>poubelles</color></b>.,Hãy giúp chú dọn dẹp ngôi làng này bằng việc phân loại <b><color=red>rác</color></b> vào các <b><color=red>thùng</color></b>. ,Help me clean this village by putting the <b><color=red>trash</color></b> into the correct <b><color=red>bins</color></b>.
+Quest.Player1.Dialogue.01,Il y a beaucoup de déchets dans le jardin de l'autre côté du pont. Pourrais-tu les ramasser ?,Có rất nhiều rác trong vườn ở phía bên kia cây cầu. Cháu có thể giúp bà nhặt rác được không?,There is a lot of trash in the garden on the other side of the bridge. Could you pick it up?
+Quest.Player1.Dialogue.02,"J’ai l’habitude de brûler mes déchets, mais mon fils m’a dit qu’on pouvait les trier dans ces poubelles près de la maison jaune, peux-tu me montrer comment faire ?","Bác vẫn toàn đốt rác, nhưng con trai bác lại bảo là mình có thể phân loại rác ở mấy cái thùng gần cái nhà màu vàng. Cháu có thể chỉ cho bác phân loại như thế nào được không? ","I’m used to burning my waste, but my son told me it can be sorted into these bins near the yellow house. Can you show me how to do it?"
+Quest.Player1.Dialogue.03,La rivière ramène toutes sortes de déchets et ça perturbe la pêche. Pourrais-tu ramasser le plastique qui s’accumule sur le bord ?,"Dòng sông này có rất nhiều loại rác, việc đó đang làm ảnh hưởng tới câu cá. Anh chị có thể giúp nhặt rác thải nhựa vương vãi dọc bờ sông được không?",The river brings in all kinds of waste and it disrupts fishing. Could you pick up the plastic that’s piling up along the bank?
+Quest.Player2.Dialogue.01,"Peux-tu m’aider ? Je ne sais pas dans quelle poubelle mettre ces déchets qui traînent dans le village, il commence à y avoir des rats. Les poubelles de tri sont juste ici.",Cháu có thể giúp bác được không? Bác không biết bỏ cái rác này vào thùng nào. Mấy cái này rải rác ở khắp cả làng và mấy con chuột đã bắt đầu xuất hiện rồi. Mấy cái thùng phân loại rác này ở ngay đây. ,"Can you help me? I don’t know which bin to put this waste that’s lying around the village, rats are starting to appear. The sorting bins are right here."
+Quest.Player2.Dialogue.02,"Il y a beaucoup de déchets au bord de la rizière et ça perturbe les récoltes, peux-tu aller les ramasser pour moi ?",Có rất nhiều rác ở dọc cánh đồng và nó đang ảnh hưởng tới mùa màng. Cháu có thể tới và giúp nhặt rác cho bác được không?,There is a lot of waste along the edge of the rice field and it’s affecting the harvests. Can you go and pick it up for me?
+Quest.Player2.Dialogue.03,"On m’a dit qu’il y avait des bouteilles et des cannettes qui s'accumulent dans la forêt, peux-tu les récupérer pour qu’elles soient envoyées à l’usine de tri ?",Em nghe nói có rất nhiều chai và lon rải rác trong rừng. Anh chị có thể giúp thu gom chai và lon để chúng được đưa đi tái chế ở các nhà máy được không ạ? ,I was told that bottles and cans are piling up in the forest. Can you collect them so they can be sent to the recycling plant?
+Quest.Player1.Des.01,Trier les déchets dans le jardin,Xử lý rác ở trong vườn,Sort the trash in the garden 
+Quest.Player1.Des.02,Montrer comment trier les déchets,Chỉ dẫn cách phân loại rác,Show how to sort trash 
+Quest.Player1.Des.03,Nettoyer le bord de la rivière,Dọn dẹp bờ sông,Clean the riverbank 
+Quest.Player2.Des.01,Aider à trier les déchets,Giúp xử lý rác,Help sort the trash 
+Quest.Player2.Des.02,Nettoyer la rizière,Dọn dẹp bờ ruộng,Clean the rice field 
+Quest.Player2.Des.03,Nettoyer la forêt,Dọn dẹp khu rừng,Clean the forest 
+Quest.UI.Remaining,Restant :,Còn lại:,Remaining: 
+Quest.UI.Done,Fait !,Hoàn thành!,Done! 
+Quest.UI.Objective,Objectif,Nhiệm vụ,Objective 
+Quest.UI.CharacterTalk,Parler à 3 personnages,Nói chuyện với 3 nhân vật,Talk to 3 characters 
+Main.Sign.River,Rivière >,Sông >,River >
+Main.Sign.Ricefield,< Rizière,< Ruộng,< Field
+Main.Sign.Forest,< Forêt,< Rừng,< Forest
