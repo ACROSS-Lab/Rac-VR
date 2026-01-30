@@ -174,9 +174,9 @@ RectTransform:
   - {fileID: 783328805544639159}
   m_Father: {fileID: 7620969793250646452}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
-  m_AnchorMin: {x: 0, y: 1}
-  m_AnchorMax: {x: 0, y: 1}
-  m_AnchoredPosition: {x: 147.79, y: -97.13}
+  m_AnchorMin: {x: 0, y: 0}
+  m_AnchorMax: {x: 0, y: 0}
+  m_AnchoredPosition: {x: 0, y: 0}
   m_SizeDelta: {x: 250.25, y: 53.26}
   m_Pivot: {x: 0.5, y: 0.5}
 --- !u!222 &7815443705159186145
@@ -273,6 +273,9 @@ MonoBehaviour:
       m_Color: {r: 1, g: 1, b: 1, a: 1}
     - m_Text: English
       m_Image: {fileID: 823442819, guid: 083b1b49037d72b498bcbb5016f1b815, type: 3}
+      m_Color: {r: 1, g: 1, b: 1, a: 1}
+    - m_Text: "Ti\u1EBFng Vi\u1EC7t"
+      m_Image: {fileID: -1182491263, guid: 083b1b49037d72b498bcbb5016f1b815, type: 3}
       m_Color: {r: 1, g: 1, b: 1, a: 1}
   m_OnValueChanged:
     m_PersistentCalls:
@@ -559,7 +562,7 @@ RectTransform:
   m_LocalEulerAnglesHint: {x: 0, y: 1.273, z: 0}
   m_AnchorMin: {x: 0, y: 0}
   m_AnchorMax: {x: 0, y: 0}
-  m_AnchoredPosition: {x: 3.62, y: 1.442}
+  m_AnchoredPosition: {x: 3.619995, y: 1.4419861}
   m_SizeDelta: {x: 295.58, y: 139.76}
   m_Pivot: {x: 0.5, y: 0.5}
 --- !u!223 &1220643926376011864
@@ -607,7 +610,7 @@ MonoBehaviour:
   m_FallbackScreenDPI: 96
   m_DefaultSpriteDPI: 96
   m_DynamicPixelsPerUnit: 4.1
-  m_PresetInfoIsWorld: 1
+  m_PresetInfoIsWorld: 0
 --- !u!114 &3289180007200472510
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -843,9 +846,9 @@ RectTransform:
   m_Children: []
   m_Father: {fileID: 7620969793250646452}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
-  m_AnchorMin: {x: 0, y: 1}
-  m_AnchorMax: {x: 0, y: 1}
-  m_AnchoredPosition: {x: 147.79, y: -36.25}
+  m_AnchorMin: {x: 0, y: 0}
+  m_AnchorMax: {x: 0, y: 0}
+  m_AnchoredPosition: {x: 0, y: 0}
   m_SizeDelta: {x: 115.35, y: 48.5}
   m_Pivot: {x: 0.5, y: 0.5}
 --- !u!222 &7188865265824089488

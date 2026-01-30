@@ -6,6 +6,7 @@ using Unity.XR.CoreUtils;
 using UnityEngine;
 using UnityEngine.InputSystem;
 using UnityEngine.SceneManagement;
+using UnityEngine.SocialPlatforms;
 using UnityEngine.XR.Interaction.Toolkit.Samples.StarterAssets;
 
 public class MainSceneManager : MonoBehaviour, IGameManager
@@ -42,6 +43,7 @@ public class MainSceneManager : MonoBehaviour, IGameManager
     [SerializeField] float cooldownTime = 1f;
     [SerializeField] InputActionReference buttonX;
     [SerializeField] InputActionReference buttonY;
+    [SerializeField] GameObject[] terrainColliders;
 
     [Header("Height Adjustment")]
     [SerializeField] InputActionReference leftJoystick;
@@ -239,10 +241,18 @@ public class MainSceneManager : MonoBehaviour, IGameManager
                 if (rightControllerInput.smoothMotionEnabled)
                 {
                     DisplayMovementCanvas(walkingModeCanvas);
+                    foreach (GameObject collider in terrainColliders)
+                    {
+                        collider.layer = 2;
+                    }
                 }
                 else
                 {
                     DisplayMovementCanvas(jumpingModeCanvas);
+                    foreach (GameObject collider in terrainColliders)
+                    {
+                        collider.layer = 0;
+                    }
                 }
 
                 switchCooldownTimer = 0;
@@ -297,6 +307,9 @@ public class MainSceneManager : MonoBehaviour, IGameManager
                 break;
             case 1:
                 LocalizationManager.Instance.SetLanguage("English");
+                break;
+            case 2:
+                LocalizationManager.Instance.SetLanguage("Vietnamese");
                 break;
         }
 

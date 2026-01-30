@@ -98,6 +98,9 @@ public class TutorialManager : MonoBehaviour, IGameManager
             case 1:
                 LocalizationManager.Instance.SetLanguage("English");
                 break;
+            case 2:
+                LocalizationManager.Instance.SetLanguage("Vietnamese");
+                break;
         }
 
         move1Canvas.SetActive(true);
@@ -107,18 +110,6 @@ public class TutorialManager : MonoBehaviour, IGameManager
 
         moveProvider.SetActive(true);
         teleportProvider.SetActive(true);
-    }
-
-    void CheckStartingLanguage()
-    {
-        if (LocalizationManager.Instance.GetLanguage() == "French")
-        {
-            languageDropdown.value = 0;
-        }
-        else if (LocalizationManager.Instance.GetLanguage() == "English")
-        {
-            languageDropdown.value = 1;
-        }
     }
 
     public void Reached1stDestination()
