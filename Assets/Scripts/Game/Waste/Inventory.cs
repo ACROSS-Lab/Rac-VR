@@ -35,7 +35,6 @@ public class Inventory : MonoBehaviour
     {
         instance = this;
         wastes = new List<Waste>();
-        interactionManager = FindFirstObjectByType<XRInteractionManager>();
     }
 
     void Start()

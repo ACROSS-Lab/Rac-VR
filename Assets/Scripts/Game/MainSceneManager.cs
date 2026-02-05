@@ -6,7 +6,6 @@ using Unity.XR.CoreUtils;
 using UnityEngine;
 using UnityEngine.InputSystem;
 using UnityEngine.SceneManagement;
-using UnityEngine.SocialPlatforms;
 using UnityEngine.XR.Interaction.Toolkit.Samples.StarterAssets;
 
 public class MainSceneManager : MonoBehaviour, IGameManager
@@ -31,7 +30,7 @@ public class MainSceneManager : MonoBehaviour, IGameManager
     [SerializeField] GameObject questCanvas;
     [SerializeField] GameObject walkingModeCanvas;
     [SerializeField] GameObject jumpingModeCanvas;
-    [SerializeField] GameObject languageCanvas;
+    [SerializeField] GameObject menuCanvas;
     [SerializeField] TMP_Dropdown languageDropdown;
 
     [Header("Movement Inputs")]
@@ -41,14 +40,8 @@ public class MainSceneManager : MonoBehaviour, IGameManager
     [SerializeField] InputActionReference buttonB;
     [SerializeField] ControllerInputActionManager rightControllerInput;
     [SerializeField] float cooldownTime = 1f;
-    [SerializeField] InputActionReference buttonX;
-    [SerializeField] InputActionReference buttonY;
+    [SerializeField] InputActionReference menuButton;
     [SerializeField] GameObject[] terrainColliders;
-
-    [Header("Height Adjustment")]
-    [SerializeField] InputActionReference leftJoystick;
-    [SerializeField] XROrigin xrOrigin;
-    [SerializeField] float yOffset = 1.5f;
 
     Dictionary<Quest, bool> activeQuests = new Dictionary<Quest, bool>();
 
@@ -73,8 +66,6 @@ public class MainSceneManager : MonoBehaviour, IGameManager
 
         walkingModeCanvas.SetActive(false);
         jumpingModeCanvas.SetActive(false);
-
-        yOffset = xrOrigin.CameraYOffset;
     }
 
     void Update()
@@ -89,8 +80,7 @@ public class MainSceneManager : MonoBehaviour, IGameManager
         }
 
         SwitchMovementMode();
-        ActiveLanguageCanvas();
-        AdjustHeight();
+        ActiveMenuCanvas();
     }
 
     void OnDisable()
@@ -273,28 +263,15 @@ public class MainSceneManager : MonoBehaviour, IGameManager
     }
     #endregion 
 
-    #region Language Selection
-    bool isBothPressedXY = false;
-    void ActiveLanguageCanvas()
+    #region Menu
+    void ActiveMenuCanvas()
     {
-        bool x = buttonX.action.IsPressed();
-        bool y = buttonY.action.IsPressed();
-
-        if (x && y)
+        if (menuButton.action.WasPerformedThisFrame())
         {
-            if (!isBothPressedXY)
-            {
-                languageCanvas.SetActive(!languageCanvas.activeInHierarchy);
-                isBothPressedXY = true;
-            }
-        }
-        else
-        {
-            isBothPressedXY = false;
+            menuCanvas.SetActive(!menuCanvas.activeInHierarchy);
+            languageDropdown.Hide();
         }
     }
-
-
 
     public void ChangeLanguage()
     {
@@ -313,18 +290,8 @@ public class MainSceneManager : MonoBehaviour, IGameManager
                 break;
         }
 
-        languageCanvas.SetActive(false);
+        menuCanvas.SetActive(false);
         languageDropdown.SetValueWithoutNotify(-1);
     }
     #endregion
-
-    void AdjustHeight()
-    {
-        float value = leftJoystick.action.ReadValue<Vector2>().y;
-        
-        if (Mathf.Abs(value) < 0.1f) return;
-
-        yOffset += value * 0.02f;
-        xrOrigin.CameraYOffset = yOffset;
-    }
 }

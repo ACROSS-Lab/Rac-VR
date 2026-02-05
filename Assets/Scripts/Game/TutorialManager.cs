@@ -205,7 +205,7 @@ public class TutorialManager : MonoBehaviour, IGameManager
         }
         loadingBarFill.fillAmount = 1;
 
-        yield return new WaitForSeconds(1);
+        yield return new WaitForSeconds(1f);
         operation.allowSceneActivation = true;
     }
 
