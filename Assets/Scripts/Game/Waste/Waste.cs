@@ -21,6 +21,10 @@ public class Waste : MonoBehaviour
     [Tooltip("How long the damping effect should last, in seconds.")]
     [SerializeField] private float dampDuration = 0.5f;
 
+    [Header("Visual effects")]
+    [SerializeField] float timeBeforeFlashing = 15f;
+    [SerializeField] float flashDuration = 1f;
+
     [HideInInspector] public bool fromInventory = false;
     [HideInInspector] public Quest quest;
 
@@ -28,10 +32,15 @@ public class Waste : MonoBehaviour
     bool firstSelected = false;
     bool onGround = true;
     MeshRenderer meshRenderer;
+    Material material;
     AudioSource audioSource;
     Rigidbody rb;
     float orignalDrag, orignialAngularDrag;
     Collider binCol, inventoryCol;
+    float groundedTime;
+    bool isHovered = false;
+    bool setOutlineTemporary = false;
+    
 
     void Awake()
     {
@@ -50,6 +59,8 @@ public class Waste : MonoBehaviour
         interactable.hoverExited.AddListener(HoverExit);
         interactable.selectEntered.AddListener(SelectEnter);
         interactable.selectExited.AddListener(SelectExit);
+
+        material = meshRenderer.material;
     }
 
     void FixedUpdate()
@@ -67,6 +78,11 @@ public class Waste : MonoBehaviour
 
         binCol = null;
         inventoryCol = null;
+    }
+
+    void Update()
+    {
+        NotifyOnGround();
     }
 
     void OnTriggerEnter(Collider other)
@@ -108,12 +124,18 @@ public class Waste : MonoBehaviour
 
     void HoverEnter(HoverEnterEventArgs args)
     {
-        meshRenderer.material.SetFloat("_Outline", 1.0f);
+        isHovered = true;
+        groundedTime = 0;
+        setOutlineTemporary = false;
+        material.SetColor("_Outline_Color", Color.white);
+        material.SetFloat("_Outline_Power", 1.0f);
+        material.SetFloat("_Outline", 1.0f);
     }
 
     void HoverExit(HoverExitEventArgs args)
     {
-        meshRenderer.material.SetFloat("_Outline", 0.0f);
+        isHovered = false;
+        material.SetFloat("_Outline", 0.0f);
     }
 
     void SelectEnter(SelectEnterEventArgs args)
@@ -150,5 +172,28 @@ public class Waste : MonoBehaviour
         rb.maxDepenetrationVelocity = Physics.defaultMaxDepenetrationVelocity;
         rb.linearDamping = orignalDrag;
         rb.angularDamping = orignialAngularDrag;
+    }
+
+    void NotifyOnGround()
+    {
+        if (isHovered) return;
+
+        if (onGround)
+        {
+            groundedTime += Time.deltaTime;
+        }
+
+        if (groundedTime >= timeBeforeFlashing)
+        {
+            if (!setOutlineTemporary)
+            {
+                material.SetFloat("_Outline", 1.0f);
+                material.SetFloat("_Outline_Power", 0f);
+                setOutlineTemporary = true;
+            }
+            float t = (Mathf.Sin(Time.time * Mathf.PI / flashDuration) + 1) / 2;
+            Color c = Color.Lerp(Color.black, Color.white, t);
+            material.SetColor("_Outline_Color", c);
+        }
     }
 }

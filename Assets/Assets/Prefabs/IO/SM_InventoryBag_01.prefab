@@ -324,8 +324,6 @@ MonoBehaviour:
   - {fileID: -7948695944906884031, guid: f04b2762d2fd82247a30a3167c8e5f88, type: 3}
   - {fileID: 2402930964694797882, guid: 4a3ec82af961e1a4a91817eaf67cd67d, type: 3}
   - {fileID: 8215553803249211898, guid: 1e3a54ff655cc394985c7cb5918df4b9, type: 3}
-  cameraTransform: {fileID: 0}
-  smoothSpeed: 50
   feedbackCanvas: {fileID: 0}
   feedbackParticles: {fileID: 7568621286074091007}
   addWasteSounds:
@@ -334,6 +332,10 @@ MonoBehaviour:
   - {fileID: 8300000, guid: b228158c187f6a747ab48d317b8df0fa, type: 3}
   minPitch: 0.9
   maxPitch: 1.1
+  groundOffset: 0.65
+  cameraOffset: {x: -0.1549997, y: 0, z: -0.06000042}
+  cameraTransform: {fileID: 0}
+  smoothSpeed: 30
   interactionManager: {fileID: 0}
 --- !u!135 &5465567868270438606
 SphereCollider:

@@ -277,6 +277,8 @@ MonoBehaviour:
   maxDepenetrationVelocity: 1.5
   temporaryDrag: 2
   dampDuration: 0.5
+  timeBeforeFlashing: 15
+  flashDuration: 1
   fromInventory: 0
   quest: {fileID: 0}
 --- !u!82 &1864386187632187959

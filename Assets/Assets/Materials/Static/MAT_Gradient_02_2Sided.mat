@@ -68,7 +68,10 @@ Material:
     m_Ints: []
     m_Floats:
     - _AlphaCutoff: 0.5
+    - _Alpha_Clipping: 0.5
     - _Outline: 0
+    - _OutlineAmount: 1
+    - _Outline_Power: 1
     - _Plants: 0
     - _Plants1: 0
     - _QueueControl: 0

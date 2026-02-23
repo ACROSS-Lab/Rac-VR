@@ -16,8 +16,6 @@ public class Inventory : MonoBehaviour
     [SerializeField] Mesh[] meshes;
 
     [Header("Inventory Feedback")]
-    [SerializeField] Transform cameraTransform;
-    [SerializeField] float smoothSpeed;
     [SerializeField] GameObject feedbackCanvas;
     [SerializeField] ParticleSystem feedbackParticles;
 
@@ -26,6 +24,11 @@ public class Inventory : MonoBehaviour
     [SerializeField] AudioClip[] getWasteSounds;
     [SerializeField][Range(0.5f, 2f)] float minPitch = 0.9f;
     [SerializeField][Range(0.5f, 2f)] float maxPitch = 1.1f;
+
+    [Header("Follow Settings")]
+    [SerializeField] Vector3 offset;
+    [SerializeField] Transform targetTransform;
+    [SerializeField] float smoothSpeed;
 
     public List<Waste> wastes {get;  private set; }
     [SerializeField] XRInteractionManager interactionManager;
@@ -44,7 +47,8 @@ public class Inventory : MonoBehaviour
 
     void LateUpdate()
     {
-        transform.rotation = Quaternion.Slerp(transform.rotation, Quaternion.Euler(Vector3.zero), Time.deltaTime * smoothSpeed);
+        transform.position = targetTransform.position + offset;
+        transform.rotation = Quaternion.Euler(0, targetTransform.rotation.y, 0);
     }
 
     void CycleMesh()
@@ -78,7 +82,7 @@ public class Inventory : MonoBehaviour
 
         CycleMesh();
 
-        SendingHaptics.instance.SendLeftHaptic();
+        SendingHaptics.instance.SendRightHaptic();
             
         if (audioSource.isPlaying) audioSource.Stop();
         if (addWasteSounds.Length > 0)
@@ -112,7 +116,7 @@ public class Inventory : MonoBehaviour
 
         CycleMesh();
 
-        SendingHaptics.instance.SendLeftHaptic();
+        SendingHaptics.instance.SendRightHaptic();
 
         if (audioSource.isPlaying) audioSource.Stop();
         if (getWasteSounds.Length > 0)
