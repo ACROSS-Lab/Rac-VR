@@ -1444,7 +1444,7 @@ MonoBehaviour:
   timerCanvas: {fileID: 2805500040052001543}
   currentTimerText: {fileID: 1883717758}
   globalTimerText: {fileID: 5374286184950853709}
-  buttonX: {fileID: -7585685157691620721, guid: c348712bda248c246b8c49b3db54643f, type: 3}
+  buttonX: {fileID: -8195559579542220691, guid: c348712bda248c246b8c49b3db54643f, type: 3}
   isInGame: 0
 --- !u!1 &359327724
 GameObject:
@@ -6697,7 +6697,7 @@ MonoBehaviour:
   maxHeight: 2
   minHeight: 0.9
   leftJoystick: {fileID: -60998027439631388, guid: c348712bda248c246b8c49b3db54643f, type: 3}
-  buttonY: {fileID: -1141548750157520221, guid: c348712bda248c246b8c49b3db54643f, type: 3}
+  buttonY: {fileID: 2678849108659902308, guid: c348712bda248c246b8c49b3db54643f, type: 3}
   xrOrigin: {fileID: 1361035633}
 --- !u!1001 &2067046162
 PrefabInstance:

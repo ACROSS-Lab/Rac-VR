@@ -12944,7 +12944,7 @@ MonoBehaviour:
   maxHeight: 2
   minHeight: 0.9
   leftJoystick: {fileID: -60998027439631388, guid: c348712bda248c246b8c49b3db54643f, type: 3}
-  buttonY: {fileID: -1141548750157520221, guid: c348712bda248c246b8c49b3db54643f, type: 3}
+  buttonY: {fileID: 2678849108659902308, guid: c348712bda248c246b8c49b3db54643f, type: 3}
   xrOrigin: {fileID: 37531168}
 --- !u!1001 &160365715
 PrefabInstance:
