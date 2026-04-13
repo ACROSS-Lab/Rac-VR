@@ -16,6 +16,7 @@ public class MainSceneManager : MonoBehaviour, IGameManager
     [SerializeField] TextMeshProUGUI remainingCharactersText;
     [SerializeField] GameObject remainingCharactersUI;
     [SerializeField] GameObject charactersCompletedUI;
+    [SerializeField] Transform playerTransform;
 
     [Header("Sound effects")]
     [SerializeField] AudioSource endSessionSound;
@@ -46,6 +47,8 @@ public class MainSceneManager : MonoBehaviour, IGameManager
 
     int remainingCharacters = 3;
     int questCompleted = 0;
+    Vector3 startPosition;
+    bool hasMoved = false;
 
     static int sessionCount = 0;
 
@@ -63,10 +66,14 @@ public class MainSceneManager : MonoBehaviour, IGameManager
 
         walkingModeCanvas.SetActive(false);
         jumpingModeCanvas.SetActive(false);
+
+        startPosition = playerTransform.position;
+        StartNewSession();
     }
 
     void Update()
     {
+        PlayerFirstMove();
         SwitchMovementMode();
         ActiveMenuCanvas();
     }
@@ -87,6 +94,18 @@ public class MainSceneManager : MonoBehaviour, IGameManager
         }
     }
 
+    void PlayerFirstMove()
+    {
+        if (!hasMoved)
+        {
+            if (playerTransform.position != startPosition)
+            {
+                TimeManager.Instance.isInGame = true;
+                hasMoved = true;
+            }
+        }
+    }
+
     public void StartNewSession()
     {
         startGamePanel.SetActive(false);
@@ -96,7 +115,7 @@ public class MainSceneManager : MonoBehaviour, IGameManager
 
         InitializeQuests();
 
-        TimeManager.Instance.isInGame = true;
+        // TimeManager.Instance.isInGame = true;
     }
 
     private void EndSession()

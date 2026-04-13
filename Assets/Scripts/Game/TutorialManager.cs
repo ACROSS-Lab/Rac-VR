@@ -32,7 +32,6 @@ public class TutorialManager : MonoBehaviour, IGameManager
     [SerializeField] GameObject jumpingModeCanvas;
 
     [SerializeField] GameObject languageCanvas;
-    [SerializeField] TMP_Dropdown languageDropdown;
 
     [Header("Movement")]
     [SerializeField] InputActionReference buttonA;
@@ -41,6 +40,11 @@ public class TutorialManager : MonoBehaviour, IGameManager
     [SerializeField] float cooldownTime = 2.5f;
     [SerializeField] GameObject moveProvider;
     [SerializeField] GameObject teleportProvider;
+
+    [Header("Menu")]
+    [SerializeField] GameObject menuCanvas;
+    [SerializeField] TMP_Dropdown languageDropdown;
+    [SerializeField] InputActionReference menuButton;
 
     [Header("Sound effects")]
     [SerializeField] AudioSource endTutorialSound;
@@ -71,6 +75,7 @@ public class TutorialManager : MonoBehaviour, IGameManager
     void Update()
     {
         SwitchMovementMode();
+        ActiveMenuCanvas();
     }
 
     IEnumerator WaitForInventoryUpdate()
@@ -85,23 +90,9 @@ public class TutorialManager : MonoBehaviour, IGameManager
         Inventory.instance.OnInventoryUpdated -= CheckAmountCollected;
     }
 
-    public void FinishLanguageSelection()
+    public void FinishLanguageSelection(string language)
     {
-        
-        int value = languageDropdown.value;
-
-        switch (value)
-        {
-            case 0:
-                LocalizationManager.Instance.SetLanguage("French");
-                break;
-            case 1:
-                LocalizationManager.Instance.SetLanguage("English");
-                break;
-            case 2:
-                LocalizationManager.Instance.SetLanguage("Vietnamese");
-                break;
-        }
+        LocalizationManager.Instance.SetLanguage(language);
 
         move1Canvas.SetActive(true);
         movePoint1.SetActive(true);
@@ -258,4 +249,60 @@ public class TutorialManager : MonoBehaviour, IGameManager
         canvas.SetActive(true);
     }
     #endregion 
+
+    #region Menu
+    void ActiveMenuCanvas()
+    {
+        if (!TimeManager.Instance.isInGame) return;
+
+        if (menuButton.action.WasPerformedThisFrame())
+        {
+            menuCanvas.SetActive(!menuCanvas.activeInHierarchy);
+            PauseOnMenu();
+            languageDropdown.Hide();
+        }
+    }
+
+    public void ChangeLanguage()
+    {
+        int value = languageDropdown.value;
+
+        switch (value)
+        {
+            case 0:
+                LocalizationManager.Instance.SetLanguage("French");
+                break;
+            case 1:
+                LocalizationManager.Instance.SetLanguage("English");
+                break;
+            case 2:
+                LocalizationManager.Instance.SetLanguage("Vietnamese");
+                break;
+        }
+
+        menuCanvas.SetActive(false);
+        languageDropdown.SetValueWithoutNotify(-1);
+    }
+
+    void PauseOnMenu()
+    {
+        if (menuCanvas.activeInHierarchy)
+        {
+            moveProvider.SetActive(false);
+            teleportProvider.SetActive(false);
+            Inventory.instance.gameObject.SetActive(false);
+        }
+        else
+        {
+            moveProvider.SetActive(true);
+            teleportProvider.SetActive(true);
+            Inventory.instance.gameObject.SetActive(true);
+        }
+    }
+
+    public void ReloadScene()
+    {
+        SceneManager.LoadScene(SceneManager.GetActiveScene().buildIndex);
+    }
+    #endregion
 }
