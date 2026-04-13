@@ -257,9 +257,7 @@ public class TutorialManager : MonoBehaviour, IGameManager
 
         if (menuButton.action.WasPerformedThisFrame())
         {
-            menuCanvas.SetActive(!menuCanvas.activeInHierarchy);
-            PauseOnMenu();
-            languageDropdown.Hide();
+            ToggleMenu();
         }
     }
 
@@ -280,8 +278,15 @@ public class TutorialManager : MonoBehaviour, IGameManager
                 break;
         }
 
-        menuCanvas.SetActive(false);
+        ToggleMenu();
         languageDropdown.SetValueWithoutNotify(-1);
+    }
+
+    void ToggleMenu()
+    {
+        menuCanvas.SetActive(!menuCanvas.activeInHierarchy);
+        PauseOnMenu();
+        languageDropdown.Hide();
     }
 
     void PauseOnMenu()

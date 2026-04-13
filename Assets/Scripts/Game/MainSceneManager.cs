@@ -277,11 +277,11 @@ public class MainSceneManager : MonoBehaviour, IGameManager
     #region Menu
     void ActiveMenuCanvas()
     {
+        if (!TimeManager.Instance.isInGame) return;
+
         if (menuButton.action.WasPerformedThisFrame())
         {
-            menuCanvas.SetActive(!menuCanvas.activeInHierarchy);
-            PauseOnMenu();
-            languageDropdown.Hide();
+            ToggleMenu();
         }
     }
 
@@ -302,8 +302,15 @@ public class MainSceneManager : MonoBehaviour, IGameManager
                 break;
         }
 
-        menuCanvas.SetActive(false);
+        ToggleMenu();
         languageDropdown.SetValueWithoutNotify(-1);
+    }
+
+    void ToggleMenu()
+    {
+        menuCanvas.SetActive(!menuCanvas.activeInHierarchy);
+        PauseOnMenu();
+        languageDropdown.Hide();
     }
 
     void PauseOnMenu()
