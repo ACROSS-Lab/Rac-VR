@@ -11,7 +11,7 @@ Tutorial.UI.Note,Remarque : tu peux à tout moment basculer entre le mode marche
 Tutorial.UI.End,Fin du tutoriel,Kết thúc hướng dẫn,End of tutorial
 Tutorial.UI.Continue,Continuer,Tiếp tục,Continue
 Main.UI.End,Fin de la partie,Phần chơi kết thúc,Session over
-Main.UI.Restart,Recommencer,Chơi lại,Restart
+Main.UI.Restart,Retour au tutoriel.,Quay lại phần hướng dẫn.,Back to tutorial. 
 Main.UI.Title,Opération Zéro Déchets,Chiến Dịch \nKhông Rác Thải,Operation Zero Waste
 Main.UI.Start,Jouer,Chơi,Play
 Main.UI.InvenFull,Plein !,Đầy !,Full !

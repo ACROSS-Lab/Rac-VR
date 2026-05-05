@@ -111,9 +111,9 @@ RectTransform:
   - {fileID: 8807676546910440760}
   m_Father: {fileID: 2769215900588395343}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
-  m_AnchorMin: {x: 0, y: 1}
-  m_AnchorMax: {x: 0, y: 1}
-  m_AnchoredPosition: {x: 147.79, y: -140.1}
+  m_AnchorMin: {x: 0, y: 0}
+  m_AnchorMax: {x: 0, y: 0}
+  m_AnchoredPosition: {x: 0, y: 0}
   m_SizeDelta: {x: 0, y: 81.7}
   m_Pivot: {x: 0.5, y: 0.5}
 --- !u!222 &7313806231587736129
@@ -169,15 +169,15 @@ MonoBehaviour:
     m_PersistentCalls:
       m_Calls:
       - m_Target: {fileID: 0}
-        m_TargetAssemblyTypeName: GameManager, Assembly-CSharp
-        m_MethodName: StartNextSession
-        m_Mode: 1
+        m_TargetAssemblyTypeName: SceneTransition, Assembly-CSharp
+        m_MethodName: SwitchScene
+        m_Mode: 5
         m_Arguments:
           m_ObjectArgument: {fileID: 0}
           m_ObjectArgumentAssemblyTypeName: UnityEngine.Object, UnityEngine
           m_IntArgument: 0
           m_FloatArgument: 0
-          m_StringArgument: 
+          m_StringArgument: RAC_Tutorial
           m_BoolArgument: 1
         m_CallState: 2
 --- !u!114 &8622490906228420669
@@ -242,7 +242,7 @@ GameObject:
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
-  m_IsActive: 0
+  m_IsActive: 1
 --- !u!224 &2769215900588395343
 RectTransform:
   m_ObjectHideFlags: 0
@@ -437,9 +437,8 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 67a5cbecc7422504cb366a5fa1781b43, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  cameraTransform: {fileID: 0}
-  distanceFromCamera: 6
-  smoothSpeed: 20
+  distanceFromCamera: {x: 0, y: 0, z: 6}
+  followSpeed: 8
 --- !u!1 &4887141797423986206
 GameObject:
   m_ObjectHideFlags: 0
@@ -451,6 +450,7 @@ GameObject:
   - component: {fileID: 9162387593203857317}
   - component: {fileID: 7797300309786694543}
   - component: {fileID: 2788864641177711473}
+  - component: {fileID: 7963574354985434984}
   m_Layer: 5
   m_Name: Header Text
   m_TagString: Untagged
@@ -472,10 +472,10 @@ RectTransform:
   m_Children: []
   m_Father: {fileID: 2769215900588395343}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
-  m_AnchorMin: {x: 0, y: 1}
-  m_AnchorMax: {x: 0, y: 1}
-  m_AnchoredPosition: {x: 147.79, y: -31.4}
-  m_SizeDelta: {x: 183.45, y: 38.8}
+  m_AnchorMin: {x: 0, y: 0}
+  m_AnchorMax: {x: 0, y: 0}
+  m_AnchoredPosition: {x: 0, y: 0}
+  m_SizeDelta: {x: 0, y: 146}
   m_Pivot: {x: 0.5, y: 0.5}
 --- !u!222 &7797300309786694543
 CanvasRenderer:
@@ -505,7 +505,7 @@ MonoBehaviour:
   m_OnCullStateChanged:
     m_PersistentCalls:
       m_Calls: []
-  m_text: "Fin de la partie. \n"
+  m_text: "Fin de la partie. Enl\xE8ve le casque et donne-le \xE0 ton bin\xF4me."
   m_isRightToLeft: 0
   m_fontAsset: {fileID: 11400000, guid: c1a0fed161c1bfb45b4f006be1677c6f, type: 2}
   m_sharedMaterial: {fileID: 5668957734616618548, guid: c1a0fed161c1bfb45b4f006be1677c6f, type: 2}
@@ -576,6 +576,21 @@ MonoBehaviour:
   m_hasFontAssetChanged: 0
   m_baseMaterial: {fileID: 0}
   m_maskOffset: {x: 0, y: 0, z: 0, w: 0}
+--- !u!114 &7963574354985434984
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 4887141797423986206}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: b716f285080a10847b43a250b34d933c, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  localizationKey: End.Game.Message
+  audioSource: {fileID: 0}
+  textComponent: {fileID: 2788864641177711473}
 --- !u!1 &6769996158451901760
 GameObject:
   m_ObjectHideFlags: 0
@@ -593,7 +608,7 @@ GameObject:
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
-  m_IsActive: 1
+  m_IsActive: 0
 --- !u!224 &2471401340273871850
 RectTransform:
   m_ObjectHideFlags: 0
@@ -723,6 +738,7 @@ GameObject:
   - component: {fileID: 5756196528921710886}
   - component: {fileID: 5337248065518187244}
   - component: {fileID: 3465171193513106386}
+  - component: {fileID: 71066942845821701}
   m_Layer: 5
   m_Name: Text
   m_TagString: Untagged
@@ -848,3 +864,18 @@ MonoBehaviour:
   m_hasFontAssetChanged: 0
   m_baseMaterial: {fileID: 0}
   m_maskOffset: {x: 0, y: 0, z: 0, w: 0}
+--- !u!114 &71066942845821701
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 7219166868793342875}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: b716f285080a10847b43a250b34d933c, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  localizationKey: Main.UI.Restart
+  audioSource: {fileID: 0}
+  textComponent: {fileID: 3465171193513106386}
