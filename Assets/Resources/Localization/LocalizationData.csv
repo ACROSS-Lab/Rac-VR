@@ -36,3 +36,5 @@ Quest.UI.CharacterTalk,Parler à 3 personnages,Nói chuyện với 3 nhân vật
 Main.Sign.River,Rivière >,Sông >,River >
 Main.Sign.Ricefield,< Rizière,< Ruộng,< Field
 Main.Sign.Forest,< Forêt,< Rừng,< Forest
+,,,
+End.Game.Message,Fin de la partie. Enlève le casque et donne-le à ton binôme.,Trò chơi kết thúc. Hãy tháo tai nghe ra và đưa cho bạn cùng nhóm của mình.,Game over. Take off the headset and give it to your partner.
