@@ -9,7 +9,7 @@ public class LocalizationManager : MonoBehaviour
     private const string CsvFilePath = "Localization/LocalizationData"; 
 
     private Dictionary<string, Dictionary<string, string>> localizedData;
-    private string currentLanguage = "Vietnamese";
+    [SerializeField] string currentLanguage = "French";
 
     public delegate void LanguageChanged();
     public static event LanguageChanged OnLanguageChanged;
